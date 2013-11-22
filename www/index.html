@@ -4,12 +4,10 @@
 		<title>HTWK App</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1"> 
 
-		<link rel="stylesheet" href="themes/htwk.css" />
-		<link rel="stylesheet" href="themes/jq.min.css" />
-		<link rel="stylesheet" href="themes/htwk_fix.css" />
+		<link rel="stylesheet" href="themes/jquery.mobile-1.4.0-rc.1.min.css" /> 
 		<script type='application/javascript' src='js/fastclick.js'></script>
-		<script type='application/javascript' src="js/jquery-1.10.2.min.js"></script>
-		<script type='application/javascript' src="js/jquery.mobile-1.3.2.min.js"></script>
+		<script type='application/javascript' src="js/jquery-2.0.3.min.js"></script>
+		<script type='application/javascript' src="js/jquery.mobile-1.4.0-rc.1.min.js"></script>
 		
 		<style>
 			#news_content_list img {
@@ -30,13 +28,20 @@
 	</head>
 
 	<body>
-		<div data-role="page" id="news" data-theme="a" data-content-theme="a">
-			<div data-role="panel" id="menue" data-theme="b" ></div>
-			<div data-role="header" id="header">
-				<h1>News</h1>
-				<a id="menue_btn" href="#menue" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>
+	
+		<div data-role="panel" id="menue" data-theme="b" >
+			<div id="panellist" data-role="listview"  data-theme="b">
+				<li> <a href="index.html" >News</a> </li>
+				<li> <a href="mensa.html" id="news_btn">Mensa</a> </li>
 			</div>
-
+		</div>
+		
+		<div data-role="header" id="header" data-theme="a">
+			<h1 id="heading">News</h1>
+			<a id="header_btn" href="#menue" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>
+		</div>
+		
+		<div data-role="page" id="news" data-theme="a" data-content-theme="a">
 			<div data-role="content" id="news_content">
 				<ul data-role="listview" id="news_content_list" data-inset="true"> 
 				</ul>
@@ -80,7 +85,7 @@
 			// dyn aufbau der unterseite
 			pattern = 
 				'<div data-role="page" id="news_'+pageHash+'" data-theme="a" data-content-theme="a">'+
-					'<div data-role="header" id="news_header">'+
+					'<div data-role="header" id="header">'+
 						'<h1>News</h1>'+
 						'<a href="#news" data-icon="back" data-mini="true" class="ui-btn-left">Zurück</a>'+
 					'</div>'+
@@ -89,7 +94,7 @@
 						'<h2>'+header+'</h2><h3>'+date+'</h3><p>'+content+'</p>'+
 					'</div>'+
 				'</div>';
-			$('body').append(pattern).trigger("create")
+			$('body').append(pattern).trigger("create");
 		}
 
 		$( document ).ready(function() {
@@ -102,14 +107,6 @@
 			window.addEventListener('load', function() {
 			    new FastClick(document.body);
 			}, false);
-			// Load Mensa Page into the DOM
-			$.mobile.loadPage("mensa.html");
-		});
-		// insert Menue Items into the Panel
-		$(document).on("pagebeforeshow", function() {
-		  $('#menue').load("menue.html", function(data) {
-				$.mobile.activePage.trigger("pagecreate");  
-			   });
 		});
 
 		</script>	
