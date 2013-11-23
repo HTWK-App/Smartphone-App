@@ -1,0 +1,23 @@
+<div data-role="page" id="info" data-title="Info-Center" data-theme="a" data-content-theme="a">
+	<style>
+		#info_content img{
+			width: 5em;
+			height: 5em;
+		}
+		#info_content a{
+			width: 50%;		
+			margin-left: 25%;
+		}
+	</style>
+	<div data-role="content" id="info_content" class="toblur">
+		<a href="#" data-role="button"><img src="themes/images/icons-app/prof.png"><p>Professoren</p></a>
+		<a href="#" data-role="button"><img src="themes/images/icons-app/building.svg"><p>Gebäudeplan</p></a>
+		<a href="#" data-role="button"><img src="themes/images/icons-app/wlan.png"><p>WLan-Konfiguration</p></a>
+	</div>
+	<!-- <div data-role="footer" id="footer" class="toblur" data-position="fixed">
+	</div> -->
+	<script>
+		$( document ).on( "pagecreate", "[data-title='Info-Center']", function() {
+		});
+	</script>
+</div>

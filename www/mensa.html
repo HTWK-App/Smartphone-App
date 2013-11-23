@@ -20,11 +20,44 @@
 		<form>
 			<div class="ui-field-contain">
 			    <label for="select-native-1">Mensa:</label>
-			    <select name="select-native-1" id="select-native-1" data-mini="true">
-					<option value="1">Mensa Academica</option>
-					<option value="2">Mensa am Park</option>
+			    <select name="select-native-1" id="select-native-1">
 			    </select>
 			</div>
 		</form>
 	</div>
+	<script>
+		var filled = false;
+		
+		$( document ).on( "pagecreate", "[data-title='Mensa']", function() {
+			if(filled != true){
+				fillMensaDay("mo","Nudeln","Nudeln sind geil",new Array("1,90","3,40","5"));
+				fillMensaDay("mo","Huhn","Hühner sind meist versalzen",new Array("5,90","3,40","1"));
+				fillMensaList(new Array("Mensa Academica","Mensa am Park","Mensa Wächterstraße"));
+				filled = true;
+			}
+		});
+		
+		function fillMensaDay( day, dishName, dishDescr, prices){
+			var pattern = 
+				'<h3>'+dishName+'</h3><p>'+dishDescr+'</p>'+
+					'<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-disabled">'+
+					'<a data-role="button">Student: '+prices[0]+'€  </a>'+
+					'<a data-role="button">Mitarbeiter: '+prices[1]+'€  </a>'+
+					'<a data-role="button">Extern: '+prices[2]+'€  </a></div><hr>';
+			$( '#'+day+'' ).append(pattern).trigger("create");
+		}
+		
+		function fillMensaList(places){
+			var list = $( "#select-native-1" );
+			for(var i in places){
+				var s = parseInt(i)+1;
+				var sel = "";
+				if(s == 1){
+					sel = 'selected="selected"';
+				}
+				list.append('<option value="'+s+'" '+sel+'>'+places[i]+'</option>');
+			} 	
+			$( "#select-native-1" ).selectmenu( "refresh" );
+		}
+	</script>
 </div>
