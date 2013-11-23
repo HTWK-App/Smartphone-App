@@ -36,12 +36,12 @@
 			</div>
 		</div>
 		
-		<div data-role="header" id="header" data-theme="a">
-			<h1 id="heading">News</h1>
+		<div data-role="header" id="header" class="toblur" data-theme="a">
+			<h1>News</h1>
 			<a id="header_btn" href="#menue" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>
 		</div>
 		
-		<div data-role="page" id="news" data-theme="a" data-content-theme="a">
+		<div data-role="page" id="news" class="toblur" data-title="News" data-theme="a" data-content-theme="a">
 			<div data-role="content" id="news_content">
 				<ul data-role="listview" id="news_content_list" data-inset="true"> 
 				</ul>
@@ -53,13 +53,11 @@
 		var NEWS_COUNTER = 0;
 		
 		function toggleMenueBlur(){
-			var n = $("#news_content,#header,#footer,#mensa_content"); // $("#ID").methode(); $("#ID").andereMethode(); --> vermeiden , eher : a = $("#ID"); a.methode; a.andereMethode; Lokup--> sehr teuer
-			var c = "blur";
-			var m = "#menue";
-			if(n.hasClass(c)){
-				n.removeClass(c);
+			var n = $( ".toblur" );
+			if(n.hasClass("blur")){
+				n.removeClass("blur");
 			} else {
-				n.addClass(c); 
+				n.addClass("blur"); 
 			}
 		}
 			
@@ -84,17 +82,13 @@
 
 			// dyn aufbau der unterseite
 			pattern = 
-				'<div data-role="page" id="news_'+pageHash+'" data-theme="a" data-content-theme="a">'+
-					'<div data-role="header" id="header">'+
-						'<h1>News</h1>'+
-						'<a href="#news" data-icon="back" data-mini="true" class="ui-btn-left">Zurück</a>'+
-					'</div>'+
+				'<div data-role="page" id="news_'+pageHash+'" data-title="back" data-theme="a" data-content-theme="a">'+
 					'<div data-role="content" id="news_content">'+
 						'<img src="data:image/png;base64,'+picture+'" />'+
 						'<h2>'+header+'</h2><h3>'+date+'</h3><p>'+content+'</p>'+
 					'</div>'+
 				'</div>';
-			$('body').append(pattern).trigger("create");
+			$( "body" ).append(pattern).trigger( "create" );
 		}
 
 		$( document ).ready(function() {
@@ -107,6 +101,27 @@
 			window.addEventListener('load', function() {
 			    new FastClick(document.body);
 			}, false);
+		});
+		
+		$(function() {
+			$( "[data-role='navbar']" ).navbar();
+			$( "[data-role='header'], [data-role='footer']" ).toolbar();
+		});
+		
+		// Update the contents of the toolbars
+		$( document ).on( "pageshow", "[data-role='page']", function() {
+			// on page: <div data-role="page" data-title="Info">
+			var current = $( this ).jqmData( "title" );
+			// Change the heading
+			if( current == "back"){
+				$( "[data-role='header'] a" ).remove();	
+				$( "[data-role='header']" ).append('<a data-role="button" data-rel="back" data-icon="back" data-mini="true" class="ui-btn-left">Zurück</a>');
+			}
+			if( current != "back"){
+				$( "[data-role='header'] h1" ).text( current );
+				$( "[data-role='header'] a" ).remove();	
+				$( "[data-role='header']" ).append('<a href="#menue" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>');
+			}
 		});
 
 		</script>	
