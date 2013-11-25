@@ -1,0 +1,40 @@
+<div data-role="page" id="profs" data-title="Professoren" data-theme="a" data-content-theme="a">
+	<div data-role="content" id="profs_content" class="toblur">
+		<ul data-role="listview" id="profsList" data-autodividers="true" data-filter="true" data-inset="true">
+		</ul>
+	</div>
+	<!-- <div data-role="footer" id="footer" class="toblur" data-position="fixed">
+	</div> -->
+	<script>
+
+		$( document ).on( "pagecreate", "[data-title='Professoren']", function() {
+			addProf("Karsten Weicker","IMN","");
+			addProf("Alfons Geser","IMN","");
+			addProf("Klaus Gaber","Bau","");
+			$("#profsList").listview("refresh");
+		});
+		
+		$( document ).on( "pageinit", "[data-title='Professoren']", function() {
+			$("#profsList").listview({
+				autodividers: true,
+				autodividersSelector: function (li) {
+					var out = li.attr("data-department");
+					return out;
+				}
+			}).listview("refresh");
+		});
+
+		$( document ).on( "pagehide", "[data-title='Professoren']", function() {
+			//$("#profsList").empty();
+		});
+
+		function addProf(name, department, picture){
+			if(picture == "") { 
+				picture = NEWS_DEFAULT_IMAGE ;
+			}
+			var pattern = 
+				'<li data-department="'+department+'"><a href="#"><img src="data:image/png;base64,'+picture+'"/>'+name+'</a></li>';
+			$( "#profsList" ).append(pattern);
+		}
+	</script>
+</div>

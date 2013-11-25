@@ -1,0 +1,21 @@
+<div data-role="page" id="wlan" data-title="WLan Konfiguration" data-theme="a" data-content-theme="a">
+	<div data-role="content" id="profs_content" class="toblur">
+		<p>Netzwerkname(SSID): eduroam</p>
+		<p>Sicherheit: WPA2-Enterprise</p>
+		<p>Authentifizierung: EAP-TTLS</p>
+		<p>Verschlüsselung: AES</p>
+		<p>außere Identität: anonymous@htwk-leipzig.de</p>
+		<p>innere Identität: HRZ-Dienst-Login@htwk-leipzig.de</p>
+		<p>Passwort: HRZ-Dienste-Passwort</p>
+	</div>
+	<!-- <div data-role="footer" id="footer" class="toblur" data-position="fixed">
+	</div> -->
+	<script>
+
+		$( document ).on( "pagecreate", "[data-title='WLan Konfiguration']", function() {
+		});
+
+		$( document ).on( "pagehide", "[data-title='WLan Konfiguration']", function() {
+		});
+	</script>
+</div>
