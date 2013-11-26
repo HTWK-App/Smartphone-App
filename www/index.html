@@ -46,7 +46,7 @@
 		
 		<div data-role="page" id="news" class="toblur" data-title="News" data-theme="a" data-content-theme="a">
 			<div data-role="content" id="news_content">
-				<ul data-role="listview" id="news_content_list" data-inset="true"> 
+				<ul data-role="listview" id="news_content_list"> 
 				</ul>
 			</div>
 		</div>
@@ -71,7 +71,7 @@
 		$( document ).on( "panelbeforeopen", function( event, ui ) {toggleMenueBlur();});
 		$( document ).on( "panelbeforeclose", function( event, ui ) {toggleMenueBlur();})
 		$( document ).on( "pagecreate", "#news", function() {
-			newsCreateNewsElement("","Überschrift","Lorem ipsum  asda asd t dolor amet sdadsda sdaas",'20.01.2013');
+			newsCreateNewsElement("","Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift ","Lorem ipsum  asda asd t dolor amet sdadsda sdaas",'20.01.2013');
 			newsCreateNewsElement("","Überschrift","Lorem ipsum sit dolor amet sdadsda sda sd asdaas",'20.01.2013');
 		});
 		
@@ -107,8 +107,9 @@
 			var pattern = 
 				'<li><a href="#news_'+pageHash+'">'+
 					'<img src="data:image/png;base64,'+picture+'"/>'+
-					'<h3>'+header+'</h3><p>'+content+'</p>'+
-					'<span class="ui-li-aside">'+date+'</span>'+
+					'<h3>'+header+'</h3>'+
+					'<p>'+content+'</p>'+
+					'<p><small>'+date+'</small></p>'+
 				'</a></li>';
 			clist = $('#news_content_list');
 			clist.append(pattern);
