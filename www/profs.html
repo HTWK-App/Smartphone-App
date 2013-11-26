@@ -1,20 +1,19 @@
-<div data-role="page" id="profs" data-title="Professoren" data-theme="a" data-content-theme="a">
+<div data-role="page" id="profs" data-title="back" data-theme="a" data-content-theme="a">
 	<div data-role="content" id="profs_content" class="toblur">
 		<ul data-role="listview" id="profsList" data-autodividers="true" data-filter="true" data-inset="true">
 		</ul>
 	</div>
-	<!-- <div data-role="footer" id="footer" class="toblur" data-position="fixed">
-	</div> -->
-	<script>
 
-		$( document ).on( "pagecreate", "[data-title='Professoren']", function() {
+	<script>
+		$( document ).on( "pagecreate", '[id="profs"]', function() {
+			$("#profsList").empty();
 			addProf("Karsten Weicker","IMN","");
 			addProf("Alfons Geser","IMN","");
 			addProf("Klaus Gaber","Bau","");
 			$("#profsList").listview("refresh");
 		});
 		
-		$( document ).on( "pageinit", "[data-title='Professoren']", function() {
+		$( document ).on( "pageinit", '[id="profs"]', function() {
 			$("#profsList").listview({
 				autodividers: true,
 				autodividersSelector: function (li) {
@@ -22,10 +21,6 @@
 					return out;
 				}
 			}).listview("refresh");
-		});
-
-		$( document ).on( "pagehide", "[data-title='Professoren']", function() {
-			//$("#profsList").empty();
 		});
 
 		function addProf(name, department, picture){

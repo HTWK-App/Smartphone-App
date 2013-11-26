@@ -1,26 +1,22 @@
 <div data-role="page" data-title="QIS" data-theme="a" data-content-theme="a">
 	</style>
 	<div data-role="content" id="qis_content" class="toblur">
-		<div data-role="collapsible-set" data-content-theme="a" id="set">
+		<div data-role="collapsible-set" data-content-theme="a" id="qis-set">
 		</div>
 	</div>
-	<!-- <div data-role="footer" id="footer" class="toblur" data-position="fixed">
-	</div> -->
+
 	<script>
-		var filled = false;
-		
-		$( document ).on( "pagecreate", "[data-title='QIS']", function() {
-			if(filled == false){
-				for (var i = 1; i<6; i++) {
-					createSemester(i,
-						new Array("Mathe","Physik","AOP"), new Array("Weicker","Waldi","Petermann"),
-						new Array("1","3","1"));
-				}
+		$( document ).on( "pagecreate", '[data-title="QIS"]', function() {
+			$( "#qis-set" ).empty();
+			for (var i = 1; i<6; i++) {
+				createSemester(i,
+					new Array("Mathe","Physik","AOP"), new Array("Weicker","Waldi","Petermann"),
+					new Array("1","3","1"));
 			}
 		});
 		
 		function createSemester(number,subjects,profs,grades){
-			var con = $( "#set" );
+			var con = $( "#qis-set" );
 			var pattern =
 					'<div data-role="collapsible" data-theme="a" data-content-theme="a" '+
 					'data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u" '+

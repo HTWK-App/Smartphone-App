@@ -10,9 +10,9 @@
 					<li><a href="#Fr" data-ajax="false">Freitag</a></li>
 				</ul>
 			</div>
-			<div id="mo">
+			<div id="mo" class="tabs">
 			</div>
-			<div id="tu">
+			<div id="tu" class="tabs">
 			</div>
 		</div>
 	</div>
@@ -26,15 +26,11 @@
 		</form>
 	</div>
 	<script>
-		var filled = false;
-		
-		$( document ).on( "pagecreate", "[data-title='Mensa']", function() {
-			if(filled != true){
-				fillMensaDay("mo","Nudeln","Nudeln sind geil",new Array("1,90","3,40","5"));
-				fillMensaDay("mo","Huhn","Hühner sind meist versalzen",new Array("5,90","3,40","1"));
-				fillMensaList(new Array("Mensa Academica","Mensa am Park","Mensa Wächterstraße"));
-				filled = true;
-			}
+		$( document ).on( "pagecreate", '[data-title="Mensa"]', function() {
+			$(".tabs").empty(); $( "#select-native-1" ).empty();
+			fillMensaDay("mo","Nudeln","Nudeln sind geil",new Array("1,90","3,40","5"));
+			fillMensaDay("mo","Huhn","Hühner sind meist versalzen",new Array("5,90","3,40","1"));
+			fillMensaList(new Array("Mensa Academica","Mensa am Park","Mensa Wächterstraße"));
 		});
 		
 		function fillMensaDay( day, dishName, dishDescr, prices){
