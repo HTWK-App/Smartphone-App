@@ -3,6 +3,11 @@
 	margin-top:1.2em;
 }
 
+.pcoll {
+	margin-top: -9px;
+	margin-bottom: -8px;
+}
+
 .blur {
 	-moz-filter: blur(2px);
 	-webkit-filter: blur(2px);

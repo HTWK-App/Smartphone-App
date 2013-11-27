@@ -1,4 +1,4 @@
-<div data-role="page" id="profs" data-title="back" data-theme="a" data-content-theme="a">
+<div data-role="page" id="profs" data-title="Professoren" data-theme="a" data-content-theme="a">
 	<div data-role="content" id="profs_content" class="toblur">
 		<ul data-role="listview" id="profsList" data-autodividers="true" data-filter="true" data-inset="true">
 		</ul>
@@ -28,7 +28,7 @@
 				picture = NEWS_DEFAULT_IMAGE ;
 			}
 			var pattern = 
-				'<li data-department="'+department+'"><a href="#"><img src="data:image/png;base64,'+picture+'"/>'+name+'</a></li>';
+				'<li data-department="'+department+'"><a href="#">'+name+'</a></li>';
 			$( "#profsList" ).append(pattern);
 		}
 	</script>

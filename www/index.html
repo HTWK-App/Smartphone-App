@@ -15,13 +15,21 @@
 	<body>
 	
 		<div data-role="panel" id="menue" data-theme="b" >
-			<div id="panellist" data-role="listview"  data-theme="b">
-				<li> <a href="index.html" ><img src="themes/images/icons-app/news.png">News</a> </li>
-				<li> <a href="mail.html" ><img src="themes/images/icons-app/mail.png">Postfach</a> </li>
-				<li> <a href="mensa.html" ><img src="themes/images/icons-app/mensa.png">Mensa</a> </li>
-				<li> <a href="qis.html" ><img src="themes/images/icons-app/qis.svg">QIS</a> </li>
-				<li> <a href="info.html" ><img src="themes/images/icons-app/info.png">Info-Center</a> </li>
-				<li> <a href="settings.html" ><img src="themes/images/icons-app/settings.png">Einstellungen</a> </li>
+			<div id="panellist" data-role="listview" data-inset="true" data-theme="b">
+				<li> <a href="index.html" 	>News</a> </li>
+				<li> <a href="mensa.html" 	>Mensa</a> </li>
+				<li> <a href="mail.html" 	>Postfach</a> </li>
+				<li> <a href="qis.html" 	>QIS</a> </li>
+				<li> <a href="sport.html" 	>Hochschulsport</a> </li>
+				<li><div data-role="collapsible" class="pcoll" data-inset="false" data-iconpos="right" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b">
+				    <h4>Info-Center</h4>
+				    <ul data-role="listview">
+					<li><a href="profs.html">Professoren</a></li>
+					<li><a href="#">Gebäudeplan</a></li>
+					<li><a href="wlan.html">WLan-Konfiguration</a></li>
+				    </ul>
+				</div></li>
+				<li> <a href="settings.html" >Einstellungen</a> </li>
 			</div>
 		</div>
 		
@@ -57,6 +65,7 @@
 		$( document ).on( "panelbeforeopen", function( event, ui ) {toggleMenueBlur();});
 		$( document ).on( "panelbeforeclose", function( event, ui ) {toggleMenueBlur();})
 		$( document ).on( "pagecreate", "#news", function() {
+			
 			newsCreateNewsElement("","Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift ","Lorem ipsum  asda asd t dolor amet sdadsda sdaas",'20.01.2013');
 			newsCreateNewsElement("","Überschrift","Lorem ipsum sit dolor amet sdadsda sda sd asdaas",'20.01.2013');
 		});
