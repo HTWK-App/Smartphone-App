@@ -65,21 +65,18 @@
 		
 		$( document ).on( "panelbeforeopen", function( event, ui ) {toggleMenueBlur();});
 		$( document ).on( "panelbeforeclose", function( event, ui ) {toggleMenueBlur();})
-		$( document ).on( "pagecreate", "#news", function() {
-			newsCreateNewsElement("","Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift Überschrift ","Lorem ipsum  asda asd t dolor amet sdadsda sdaas",'20.01.2013');
-			newsCreateNewsElement("","Überschrift","Lorem ipsum sit dolor amet sdadsda sda sd asdaas",'20.01.2013');
-			var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-			  $.getJSON( flickerAPI, {
-			    tags: "mount rainier",
-			    tagmode: "any",
-			    format: "json"
-			  }).done(function(){console.log("sucess");});
-			$.getJSON( SERVER_URL+'news/get?feed=rss.htwk.1').done( function(data) {
-				console.log("sucess");
-				/*$.each( data.responseData.entries, function( i, item ) {
-					newsCreateNewsElement("",item.title,item.content,item.publishedDate);		
-				}*/
+		$( document ).on( "pagebeforecreate", "#news", function() {	
+			$("body").trigger("create");	
+			$.getJSON( SERVER_URL+'news/get?feed=rss.htwk.1', function(data) {
+				$('#news_content_list').empty();
+				$.each( data.responseData.feed.entries, function( i, item ) {
+					newsCreateNewsElement("",item.title,item.contentSnippet,item.content,item.publishedDate);		
+				});
+				$.mobile.loading('hide'); 
 			});
+		});
+		$( document ).on( "pageshow", "#news", function() {
+			$.mobile.loading('show');
 		});
 		
 		/* Update the contents of the toolbars*/
@@ -105,7 +102,7 @@
 			}
 		}
 
-		function newsCreateNewsElement(picture,header,content,date){
+		function newsCreateNewsElement(picture,header,contentSnippet,content,date){
 			var pageHash = ++NEWS_COUNTER;
 			if(picture == "") { 
 				picture = NEWS_DEFAULT_IMAGE ;
@@ -114,7 +111,7 @@
 				'<li><a href="#news_'+pageHash+'">'+
 					'<img src="data:image/png;base64,'+picture+'"/>'+
 					'<h3>'+header+'</h3>'+
-					'<p>'+content+'</p>'+
+					'<p>'+contentSnippet+'</p>'+
 					'<p><small>'+date+'</small></p>'+
 				'</a></li>';
 			clist = $('#news_content_list');
