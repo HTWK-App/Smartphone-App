@@ -47,13 +47,9 @@
 			var list = $( "#select-native-1" );
 			for(var i in places){
 				var s = parseInt(i)+1;
-				var sel = "";
-				if(s == 1){
-					sel = 'selected="selected"';
-				}
-				list.append('<option value="'+s+'" '+sel+'>'+places[i]+'</option>');
+				list.append('<option value="'+s+'" >'+places[i]+'</option>');
 			} 	
-			$( "#select-native-1" ).selectmenu( "refresh" );
+			list.selectmenu( "refresh" );
 		}
 	</script>
 </div>

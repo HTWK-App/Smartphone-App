@@ -1,9 +1,25 @@
 <div data-role="page" id="sport" data-title="Hochschulsport" data-theme="a" data-content-theme="a">
 	<div data-role="content" id="sport_content" class="toblur">
+		<ul data-role="listview" id="sport_content_list" data-filter="true" data-inset="true"> 
+		</ul>
 	</div>
 
 	<script>
 		$( document ).on( "pagecreate", '[data-title="Hochschulsport"]', function() {
+			$( '#sport_content_list' ).empty();
+			createSport("Badminton","bsdbgsdhfiosjdfoi");
+			createSport("Fußball","bsdbgsdhfiosjdfoi");
 		});
+
+		function createSport(header,content){
+			var pattern = 
+				'<li><a href="#">'+
+					'<h3>'+header+'</h3>'+
+					'<p>'+content+'</p>'+
+				'</a></li>';
+			clist = $('#sport_content_list');
+			clist.append(pattern);
+			clist.listview('refresh');
+		}
 	</script>
 </div>
