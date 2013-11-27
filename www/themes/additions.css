@@ -1,6 +1,5 @@
-#news_content_list img {
-	margin-left:0.4em;
-	margin-top:1.2em;
+#news_content img {
+	width: 100%;
 }
 
 .pcoll {
