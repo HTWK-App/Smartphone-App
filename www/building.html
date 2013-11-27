@@ -1,0 +1,27 @@
+<div data-role="page" id="building" data-title="Gebäude" data-theme="a" data-content-theme="a">
+	<div data-role="content" id="building_content" class="toblur">
+		<form>
+			<div data-role="fieldcontain">
+			    <label for="select-building1">Gebäude:</label>
+			    <select name="select-building1" id="select-building">
+			    </select>
+			</div>
+		</form>
+	</div>
+
+	<script>
+		$( document ).on( "pagecreate", '[data-title="Gebäude"]', function() {
+			$( '#select-building' ).empty();
+			fillBuildings(new Array("Lipsius-Bau","Zuse-Bau","Geutebrück-Bau"));
+		});
+
+		function fillBuildings(names){
+			var list = $('#select-building');
+			for(var i in names){
+				var s = parseInt(i)+1;
+				list.append('<option value="'+s+'">'+names[i]+'</option>');
+			}
+			list.selectmenu( "refresh" );
+		}
+	</script>
+</div>
