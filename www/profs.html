@@ -18,6 +18,9 @@
 				}
 			}).listview("refresh");
 		});
+		$(document).on("pageshow",'[id="profs"]', function() {
+			$('#profpage').detach();
+		});
 
 		function getProfs(){
 			showLoader();
@@ -41,19 +44,34 @@
 				var pattern = 
 				'<div data-role="page" id="profpage" data-title="back" data-theme="a" data-content-theme="a">'+
 					'<div data-role="content" id="prof_content">'+
-						'<h1>'+data.name+'</h1>'+
+						'<img src="" id="prof-img"/>'+
+						'<h1>'+data.name+'</h1><hl>'+
+						'<p>Grad: '+data.degree+'</p>'+
+						'<p>Bereich: '+data.faculty+'<br>Objekt: '+data.location+'</p>'+
+						'<p>Beschreibung: '+data.description+'</p>'+
+						'<p>E-Mail: <a href="mailto:'+data.email+'">'+data.email+'</a></p>'+
+						'<p>Telefon: <a href="tel:'+data.telephone+'">'+data.telephone+'</a></p>'+
+						'<p>Fax: '+data.telefax+'</p>'+
+						'<p><strong>Links:</strong><br><a href="'+data.detailLink+'">Details zur Person</a><br>'+
+						'<a href="'+data.vcardLink+'">V-Card</a></p>'
 					'</div>'+
 				'</div>';
-				$( "body" ).append(pattern).trigger( "create" );
+				$( "body" ).append(pattern)
+				$("#profpage").trigger( "create" );
+				$.getJSON( SERVER_URL+'info/staff/'+id+'/pic').done( function(data,a,b) {
+					console.log("data");
+					//$( "#prof-img" ).append(data);
+				});
+				$("#profpage").trigger( "create" );
 				$.mobile.loading('hide'); 
 				showLoading = false;
-				$.mobile.changePage('#profpage');
+				window.location.href="#profpage";
 			});
 		}
 
 		function addProf(name, degree, department, id){
 			var pattern = 
-				'<li data-department="'+department+'" ><a href="#" class="prof" data-id="'+id+'">'+name+', '+degree+'</a></li>';
+				'<li data-department="'+department+'" ><a class="prof" data-id="'+id+'">'+name+', '+degree+'</a></li>';
 			$( "#profsList" ).append(pattern);
 		}
 	</script>
