@@ -16,11 +16,11 @@
 			</div>
 		</div>
 	</div>
-	<div data-role="footer" id="footer" class="toblur" data-position="fixed">
+	<div data-role="footer" id="footer_mensa" class="toblur" data-position="fixed">
 		<form>
 			<div class="ui-field-contain">
-			    <label for="select-native-1">Mensa:</label>
-			    <select name="select-native-1" id="select-native-1">
+			    <label for="select-mensa">Mensa:</label>
+			    <select name="select-mensa" id="select-mensa">
 			    </select>
 			</div>
 		</form>
@@ -44,7 +44,7 @@
 		}
 		
 		function fillMensaList(places){
-			var list = $( "#select-native-1" );
+			var list = $( "#select-mensa" );
 			for(var i in places){
 				var s = parseInt(i)+1;
 				list.append('<option value="'+s+'" >'+places[i]+'</option>');
