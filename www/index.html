@@ -11,7 +11,7 @@
 		<link rel="stylesheet" type="text/css" href="themes/additions.css" /> 
 		<script type="application/javascript" src="js/fastclick.js" ></script>
 		<script type="application/javascript" src="js/jquery-2.0.3.min.js" ></script>
-		<script type="application/javascript" src="js/jquery.mobile-1.4.0-rc.1.min.js" ></script>
+		<script type="application/javascript" src="js/jquery.mobile-1.4.0-rc.1.js" ></script>
 	</head>
 
 	<body>
@@ -42,17 +42,14 @@
 		
 		<div data-role="page" id="news" class="toblur" data-title="News" data-theme="a" data-content-theme="a">
 			<div data-role="content" id="news_content" >
+				<div data-role="fieldcontain">
+				    <label for="select-news">Kategorie:</label>
+				    <select name="select-news" id="select-news" data-mini="true">
+				    </select>
+				</div>
 				<ul data-role="listview" id="news_content_list" data-inset="true"> 
 				</ul>
-			</div>
-			<div data-role="footer" id="info_footer" class="toblur" data-position="fixed">
-				<form>
-					<div class="ui-field-contain">
-					    <label for="select-news">Kategorie:</label>
-					    <select name="select-news" id="select-news">
-					    </select>
-					</div>
-				</form>
+				<a data-role="button" id="news-more">Mehr</a>
 			</div>
 		</div>
 
@@ -82,11 +79,20 @@
 		$( document ).on( "panelbeforeopen", function( event, ui ) {toggleMenueBlur();});
 		$( document ).on( "panelbeforeclose", function( event, ui ) {toggleMenueBlur();})
 		$( document ).on( "pagebeforecreate", "#news", function() {	
-			$("body").trigger("create");
 			fillNewsCategories();
-			fillNewsContent("rss.htwk.1");
+			fillNewsContent("");
 		});
 		$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
+
+		$('#select-news').change(function() {
+			$("#news_content_list").empty();
+			$( ".newpage" ).detach();
+			NEWS_COUNTER = 0;
+			fillNewsContent($(this).val());
+		});
+		$('#news-more').click(function () {
+			fillNewsContent("rss.htwk.1");
+		});
 		
 		/* Update the contents of the toolbars*/
 		$( document ).on( "pageshow", '[data-role="page"]', function() {
@@ -115,14 +121,13 @@
 
 		function fillNewsCategories() {
 			$.getJSON( SERVER_URL+'news').done( function(data) {
-				//$.each( data, createNewsCategory(i, item));
-				//alert(data);
+				$.each( data, createNewsCategory);
 			});
 		}
 
 		function fillNewsContent(feed){
 			showLoader();
-			$.getJSON( SERVER_URL+'news/get?',{feed: feed}).done( function(data) {
+			$.getJSON( SERVER_URL+'news/get?',{feed: feed}).done( function(data,a,b) {
 				$('#news_content_list').empty();
 				$.each( data.responseData.feed.entries, function( i, item ) {
 					newsCreateNewsElement("",item.title,item.contentSnippet,item.content,item.publishedDate);		
@@ -150,7 +155,7 @@
 				help = '<img src="data:image/png;base64,'+picture+'" />';
 			}
 			pattern = 
-				'<div data-role="page" id="news_'+pageHash+'" data-title="back" data-theme="a" data-content-theme="a">'+
+				'<div data-role="page" class="newpage" id="news_'+pageHash+'" data-title="back" data-theme="a" data-content-theme="a">'+
 					'<div data-role="content" id="news_content">'+
 						help+
 						'<h2>'+header+'</h2><h4><small>'+date+'</small></h4><p>'+content+'</p>'+
@@ -158,10 +163,15 @@
 				'</div>';
 			$( "body" ).append(pattern).trigger( "create" );
 		}
-		function createNewsCategory(i, item){
+
+		function createNewsCategory(key, item){
 			var list = $( "#select-news" );
-			var s = parseInt(i)+1;
-			list.append('<option value="'+s+'" >'+item+'</option>');
+			var help = key.split(".");	
+			var name = help[1].substr(0,1).toUpperCase()+help[1].substring(1,help[1].length);
+			var number = ""; var sel = "";
+			if(help.length == 3){number = help[2];}else{number = "";}
+			if(key == "rss.htwk.4") {sel = 'selected="selected"';}
+			list.append('<option value="'+key+'" '+sel+'>'+name+' '+number+'</option>');
 			list.selectmenu( "refresh" );
 		}
 		</script>	
