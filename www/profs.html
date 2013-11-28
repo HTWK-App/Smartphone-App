@@ -6,11 +6,7 @@
 
 	<script>
 		$( document ).on( "pagecreate", '[id="profs"]', function() {
-			$("#profsList").empty();
-			addProf("Karsten Weicker","IMN","");
-			addProf("Alfons Geser","IMN","");
-			addProf("Klaus Gaber","Bau","");
-			$("#profsList").listview("refresh");
+			getProfs();
 		});
 		
 		$( document ).on( "pageinit", '[id="profs"]', function() {
@@ -23,12 +19,41 @@
 			}).listview("refresh");
 		});
 
-		function addProf(name, department, picture){
-			if(picture == "") { 
-				picture = NEWS_DEFAULT_IMAGE ;
-			}
+		function getProfs(){
+			showLoader();
+			$.getJSON( SERVER_URL+'info/staff/').done( function(data,a,b) {
+				$("#profsList").empty();
+				$.each( data, function( key, item ) {
+					addProf(item.name,item.degree,item.faculty,item.cuid);
+				});
+				$("#profsList").listview("refresh");
+				$.mobile.loading('hide'); 
+				$('.prof').bind("click",function (e){
+					changeToProf($(this).attr("data-id"));
+				});
+				showLoading = false;
+			});
+		}
+
+		function changeToProf(id){
+			showLoader();
+			$.getJSON( SERVER_URL+'info/staff/'+id).done( function(data,a,b) {
+				var pattern = 
+				'<div data-role="page" id="profpage" data-title="back" data-theme="a" data-content-theme="a">'+
+					'<div data-role="content" id="prof_content">'+
+						'<h1>'+data.name+'</h1>'+
+					'</div>'+
+				'</div>';
+				$( "body" ).append(pattern).trigger( "create" );
+				$.mobile.loading('hide'); 
+				showLoading = false;
+				$.mobile.changePage('#profpage');
+			});
+		}
+
+		function addProf(name, degree, department, id){
 			var pattern = 
-				'<li data-department="'+department+'"><a href="#">'+name+'</a></li>';
+				'<li data-department="'+department+'" ><a href="#" class="prof" data-id="'+id+'">'+name+', '+degree+'</a></li>';
 			$( "#profsList" ).append(pattern);
 		}
 	</script>
