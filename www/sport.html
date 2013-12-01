@@ -9,6 +9,10 @@
 			fillSports();
 		});
 
+		$(document).on("pageshow",'[id="sport"]', function() {
+			$('#sportpage').detach();
+		});
+
 		function fillSports () {
 			$( '#sport_content_list' ).empty();
 			showLoader();
@@ -20,16 +24,45 @@
 				});
 				pos.listview("refresh");
 				$.mobile.loading('hide'); 
-				/*$('.prof').bind("click",function (e){
-					changeToProf($(this).attr("data-id"));
-				});*/
+				$('.sport').bind("click",function (e){
+					changeToSport($(this).attr("data-id"));
+				});
 				showLoading = false;
+			});
+		}
+
+		function changeToSport(id){
+			showLoader();
+			console.log(id);
+			$.getJSON( SERVER_URL+'info/sport/'+id).done( function(data,a,b) {
+				var pattern = 
+				'<div data-role="page" id="sportpage" data-title="back" data-theme="a" data-content-theme="a">'+
+					'<div data-role="content" id="sport_content">'+
+						'<img src="" id="prof-img"/>'+
+						'<h1>'+data.title+'</h1><hl>'+
+						'<p><b>Zeitspanne:</b> '+data.time+', <b>Geschlecht:</b> '+data.gender+'</a></p>'+
+						'<p><b>Beschreibung:</b> '+data.description+'<hr></p>'+
+						'<p><b>Ort:</b> '+data.location+'</p>'+
+						'<p><b>Zeiten:</b> '+data.cycle+'</p>'+
+						'<p><b>Betreuer/in:</b> '+data.leader+'</a></p>'+
+						'<p><b>Hinweise:</b></p>';
+				/*for (var i in item.hints){
+					pattern = pattern + '<p>'+item.hints[i]+'</p>';
+				}*/
+				pattern = pattern + '<p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
+					'</div>'+
+				'</div>';
+				$( "body" ).append(pattern);
+				$("#sportage").trigger( "create" );
+				$.mobile.loading('hide'); 
+				showLoading = false;
+				window.location.href="#sportpage";
 			});
 		}
 
 		function createSport(pos, id, header, content){
 			var pattern = 
-				'<li data-id='+id+'><a href="#">'+
+				'<li ><a href="#" data-id='+id+' class="sport">'+
 					'<h3>'+header+'</h3>'+
 					'<p>'+content+'</p>'+
 				'</a></li>';
