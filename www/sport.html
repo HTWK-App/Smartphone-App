@@ -6,20 +6,34 @@
 
 	<script>
 		$( document ).on( "pagecreate", '[data-title="Hochschulsport"]', function() {
-			$( '#sport_content_list' ).empty();
-			createSport("Badminton","bsdbgsdhfiosjdfoi");
-			createSport("Fußball","bsdbgsdhfiosjdfoi");
+			fillSports();
 		});
 
-		function createSport(header,content){
+		function fillSports () {
+			$( '#sport_content_list' ).empty();
+			showLoader();
+			$.getJSON( SERVER_URL+'info/sport').done( function(data,a,b) {
+				var pos = $('#sport_content_list');
+				pos.empty();
+				$.each( data, function( key, item ) {
+					createSport(pos, item.id, item.title, item.description);
+				});
+				pos.listview("refresh");
+				$.mobile.loading('hide'); 
+				/*$('.prof').bind("click",function (e){
+					changeToProf($(this).attr("data-id"));
+				});*/
+				showLoading = false;
+			});
+		}
+
+		function createSport(pos, id, header, content){
 			var pattern = 
-				'<li><a href="#">'+
+				'<li data-id='+id+'><a href="#">'+
 					'<h3>'+header+'</h3>'+
 					'<p>'+content+'</p>'+
 				'</a></li>';
-			clist = $('#sport_content_list');
-			clist.append(pattern);
-			clist.listview('refresh');
+			pos.append(pattern);
 		}
 	</script>
 </div>
