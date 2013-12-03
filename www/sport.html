@@ -37,9 +37,9 @@
 				var pattern = 
 				'<div data-role="page" id="sportpage" data-title="back" data-theme="a" data-content-theme="a">'+
 					'<div data-role="content" id="sport_content">'+
-						'<img src="" id="prof-img"/>'+
-						'<h1>'+data.title+'</h1><hl>'+
-						'<p><b>Zeitspanne:</b> '+data.time+', <b>Geschlecht:</b> '+data.gender+'</a></p>'+
+						'<h1><img src="'+SERVER_URL+'info/sport/'+data.id+'/pic" '+
+						'id="sport-img" style="float:right;"/>'+data.title+'</h1>'+
+						'<p><b>Zeitspanne:</b> '+data.time+'<br> <b>Geschlecht:</b> '+data.gender+'</p>'+
 						'<p><b>Beschreibung:</b> '+data.description+'<hr></p>'+
 						'<p><b>Ort:</b> '+data.location+'</p>'+
 						'<p><b>Zeiten:</b> '+data.cycle+'</p>'+
@@ -48,7 +48,7 @@
 				$.each( data.hints, function (key, item){
 					pattern = pattern + '<li>'+item+'</li>';
 				});
-				pattern = pattern + '</ul><p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
+				pattern = pattern + '</ul><p><b>Auslastung des Kurses:<br></b>'+data.competitor+'</p>'+
 					'</div>'+
 				'</div>';
 				$( "body" ).append(pattern);
