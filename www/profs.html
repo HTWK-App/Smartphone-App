@@ -1,6 +1,6 @@
 <div data-role="page" id="profs" data-title="Professoren" data-theme="a" data-content-theme="a">
 	<div data-role="content" id="profs_content" class="toblur">
-		<ul data-role="listview" id="profsList" data-autodividers="true" data-filter="true" data-inset="true">
+		<ul data-role="listview" id="profsList" data-filter="true" data-filter-placeholder="Search professors..." data-inset="true">
 		</ul>
 	</div>
 
@@ -9,15 +9,6 @@
 			fillProfs();
 		});
 		
-		$( document ).on( "pageinit", '[id="profs"]', function() {
-			$('#profsList').listview({
-				autodividers: true,
-				autodividersSelector: function (li) {
-					var out = li.attr("data-department");
-					return out;
-				}
-			}).listview("refresh");
-		});
 		$(document).on("pageshow",'[id="profs"]', function() {
 			$('#profpage').detach();
 		});
@@ -29,6 +20,13 @@
 				pos.empty();
 				$.each( data, function( key, item ) {
 					addProf(pos, item.name, item.degree, item.faculty, item.cuid);
+				});
+				pos.listview({
+					autodividers: true,
+					autodividersSelector: function (li) {
+						var out = li.attr("data-department");
+						return out;
+					}
 				});
 				pos.listview("refresh");
 				$('.prof').bind("click",function (e){
