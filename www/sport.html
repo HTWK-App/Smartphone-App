@@ -14,8 +14,8 @@
 		});
 
 		function fillSports () {
-			$( '#sport_content_list' ).empty();
 			showLoader();
+			$( '#sport_content_list' ).empty();
 			$.getJSON( SERVER_URL+'info/sport').done( function(data,a,b) {
 				var pos = $('#sport_content_list');
 				pos.empty();
@@ -33,7 +33,6 @@
 
 		function changeToSport(id){
 			showLoader();
-			console.log(id);
 			$.getJSON( SERVER_URL+'info/sport/'+id).done( function(data,a,b) {
 				var pattern = 
 				'<div data-role="page" id="sportpage" data-title="back" data-theme="a" data-content-theme="a">'+
@@ -45,11 +44,11 @@
 						'<p><b>Ort:</b> '+data.location+'</p>'+
 						'<p><b>Zeiten:</b> '+data.cycle+'</p>'+
 						'<p><b>Betreuer/in:</b> '+data.leader+'</a></p>'+
-						'<p><b>Hinweise:</b></p>';
-				/*for (var i in item.hints){
-					pattern = pattern + '<p>'+item.hints[i]+'</p>';
-				}*/
-				pattern = pattern + '<p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
+						'<p><b>Hinweise:</b></p><ul>';
+				$.each( data.hints, function (key, item){
+					pattern = pattern + '<li>'+item+'</li>';
+				});
+				pattern = pattern + '</ul><p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
 					'</div>'+
 				'</div>';
 				$( "body" ).append(pattern);
