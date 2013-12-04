@@ -1,6 +1,6 @@
-<div data-role="page" id="sport" data-title="Hochschulsport" data-theme="a" data-content-theme="a">
+<div data-role="page" id="sport" data-title="Hochschulsport" data-theme="a" data-content-theme="a" data-dom-cache="true">
 	<div data-role="content" id="sport_content" class="toblur">
-		<ul data-role="listview" id="sport_content_list" data-filter="true" data-inset="true"> 
+		<ul data-role="listview" id="sport_content_list" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true"> 
 		</ul>
 	</div>
 
@@ -22,11 +22,12 @@
 				$.each( data, function( key, item ) {
 					createSport(pos, item.id, item.title, item.description);
 				});
-				pos.listview("refresh");
-				$.mobile.loading('hide'); 
 				$('.sport').bind("click",function (e){
 					changeToSport($(this).attr("data-id"));
 				});
+				pos.listview("refresh");
+				pos.trigger( "updatelayout");
+				$.mobile.loading('hide'); 
 				showLoading = false;
 			});
 		}
@@ -52,10 +53,10 @@
 					'</div>'+
 				'</div>';
 				$( "body" ).append(pattern);
-				$("#sportage").trigger( "create" );
+				$.mobile.initializePage();
 				$.mobile.loading('hide'); 
 				showLoading = false;
-				window.location.href="#sportpage";
+				$.mobile.changePage('#sportpage');
 			});
 		}
 

@@ -1,6 +1,6 @@
-<div data-role="page" id="profs" data-title="Professoren" data-theme="a" data-content-theme="a">
+<div data-role="page" id="profs" data-title="Mitarbeiter" data-theme="a" data-content-theme="a" data-dom-cache="true">
 	<div data-role="content" id="profs_content" class="toblur">
-		<ul data-role="listview" id="profsList" data-filter="true" data-filter-placeholder="Search professors..." data-inset="true">
+		<ul data-role="listview" id="profsList" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Mitarbeiter..." data-inset="true">
 		</ul>
 	</div>
 
@@ -21,17 +21,11 @@
 				$.each( data, function( key, item ) {
 					addProf(pos, item.name, item.degree, item.faculty, item.cuid);
 				});
-				pos.listview({
-					autodividers: true,
-					autodividersSelector: function (li) {
-						var out = li.attr("data-department");
-						return out;
-					}
-				});
-				pos.listview("refresh");
 				$('.prof').bind("click",function (e){
 					changeToProf($(this).attr("data-id"));
 				});
+				pos.listview("refresh");
+				pos.trigger( "updatelayout");
 				$.mobile.loading('hide');
 				showLoading = false;
 			});
@@ -52,26 +46,21 @@
 						'<p><b>Telefon:</b> <a href="tel:'+data.telephone+'">'+data.telephone+'</a></p>'+
 						'<p><b>Fax:</b> '+data.telefax+'</p>'+
 						'<p><b>Links:</b><br><a href="'+data.detailLink+'">Details zur Person</a><br>'+
-						'<a href="'+data.vcardLink+'">V-Card</a></p>'
+						'<a href="'+data.vcardLink+'">V-Card</a></p>'+
 					'</div>'+
 				'</div>';
-				$( "body" ).append(pattern)
-				$("#profpage").trigger( "create" );
-				$.getJSON( SERVER_URL+'info/staff/'+id+'/pic').done( function(data,a,b) {
-					console.log("data");
-					//$( "#prof-img" ).append(data);
-					//$("#profpage").trigger( "create" );
-				});
+				$( "body" ).append(pattern);
+				$.mobile.initializePage();
 				$.mobile.loading('hide'); 
 				showLoading = false;
-				window.location.href="#profpage";
+				$.mobile.changePage('#profpage');
 			});
 		}
 
 		function addProf(pos, name, degree, department, id){
 			var help = name.split(", ");
 			var pattern = 
-				'<li data-department="'+department+'" ><a class="prof" data-id="'+id+'">'+help[1]+' '+help[0]+', '+degree+'</a></li>';
+				'<li class="ui-screen-hidden"><a class="prof" data-id="'+id+'">'+help[1]+' '+help[0]+', '+degree+'<p>'+department+'</p></a></li>';
 			pos.append(pattern);
 		}
 	</script>
