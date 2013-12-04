@@ -78,12 +78,13 @@
 		
 		$( document ).on( "panelbeforeopen", function( event, ui ) {toggleMenueBlur();});
 		$( document ).on( "panelbeforeclose", function( event, ui ) {toggleMenueBlur();})
-		$( document ).on( "pagebeforecreate", "#news", function() {	
+		$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
+
+		$( '#news' ).on( "pagebeforecreate", function() {	
 			fillNewsCategories();
 			fillNewsContent("");
 		});
-		$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
-
+		$( '#news' ).on('pageshow', function () {$("#news_content_list li a").removeClass("ui-btn-active");});
 		$('#select-news').change(function() {
 			$("#news_content_list").empty();
 			$( ".newpage" ).detach();
@@ -149,6 +150,7 @@
 			clist = $('#news_content_list');
 			clist.append(pattern);
 			clist.listview('refresh');
+			clist.trigger('updatelayout');
 
 			var help = "";
 			if(picture != "") {
@@ -161,7 +163,8 @@
 						'<h2>'+header+'</h2><h4><small>'+date+'</small></h4><p>'+content+'</p>'+
 					'</div>'+
 				'</div>';
-			$( "body" ).append(pattern).trigger( "create" );
+			$( "body" ).append(pattern).trigger("create");
+			$.mobile.initializePage();
 		}
 
 		function createNewsCategory(key, item){
