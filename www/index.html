@@ -51,6 +51,9 @@
 				</ul>
 				<a data-role="button" id="news-more">Mehr</a>
 			</div>
+			<div data-role="popup" id="news_popup">
+				<p>Zu dieser News Meldung existiert leider kein Inhalt, nur die Überschrift ist Verfügbar</p>
+			</div>
 		</div>
 
 	<script>
@@ -140,9 +143,11 @@
 
 		function newsCreateNewsElement(picture,header,contentSnippet,content,date){
 
-			var pageHash = ++NEWS_COUNTER;
+			var link = "";
+			if (content == ""){ link = 'popup" data-rel="popup"';
+			}else { link =  ++NEWS_COUNTER + '"';}
 			var pattern = 
-				'<li><a href="#news_'+pageHash+'">'+
+				'<li><a href="#news_'+link+'>'+
 					'<h3>'+header+'</h3>'+
 					'<p>'+contentSnippet+'</p>'+
 					'<p><small>'+date+'</small></p>'+
@@ -151,20 +156,21 @@
 			clist.append(pattern);
 			clist.listview('refresh');
 			clist.trigger('updatelayout');
-
-			var help = "";
-			if(picture != "") {
-				help = '<img src="data:image/png;base64,'+picture+'" />';
+			if(content != ""){
+				var help = "";
+				if(picture != "") {
+					help = '<img src="data:image/png;base64,'+picture+'" />';
+				}
+				pattern = 
+					'<div data-role="page" class="newpage" id="news_'+link+' data-title="back" data-theme="a" data-content-theme="a">'+
+						'<div data-role="content" id="news_content">'+
+							help+
+							'<h2>'+header+'</h2><h4><small>'+date+'</small></h4><p>'+content+'</p>'+
+						'</div>'+
+					'</div>';
+				$( "body" ).append(pattern).trigger("create");
+				$.mobile.initializePage();
 			}
-			pattern = 
-				'<div data-role="page" class="newpage" id="news_'+pageHash+'" data-title="back" data-theme="a" data-content-theme="a">'+
-					'<div data-role="content" id="news_content">'+
-						help+
-						'<h2>'+header+'</h2><h4><small>'+date+'</small></h4><p>'+content+'</p>'+
-					'</div>'+
-				'</div>';
-			$( "body" ).append(pattern).trigger("create");
-			$.mobile.initializePage();
 		}
 
 		function createNewsCategory(key, item){
