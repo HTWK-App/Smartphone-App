@@ -18,10 +18,12 @@
 			$( '#sport_content_list' ).empty();
 			$.getJSON( SERVER_URL+'info/sport').done( function(data,a,b) {
 				var pos = $('#sport_content_list');
+				var pattern = "";
 				pos.empty();
 				$.each( data, function( key, item ) {
-					createSport(pos, item.id, item.title, item.description);
+					pattern += createSport(item.id, item.title, item.description);
 				});
+				pos.append(pattern);
 				$('.sport').bind("click",function (e){
 					changeToSport($(this).attr("data-id"));
 				});
@@ -60,13 +62,13 @@
 			});
 		}
 
-		function createSport(pos, id, header, content){
+		function createSport(id, header, content){
 			var pattern = 
 				'<li ><a href="#" data-id='+id+' class="sport">'+
 					'<h3>'+header+'</h3>'+
 					'<p>'+content+'</p>'+
 				'</a></li>';
-			pos.append(pattern);
+			return pattern;
 		}
 	</script>
 </div>

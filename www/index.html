@@ -79,8 +79,8 @@
 			$( '[data-role="header"], [data-role="footer"]' ).toolbar();
 		});
 		
-		$( document ).on( "panelbeforeopen", function( event, ui ) {toggleMenueBlur();});
-		$( document ).on( "panelbeforeclose", function( event, ui ) {toggleMenueBlur();})
+		$( document ).on( "panelbeforeopen", function( event, ui ) {$( ".toblur" ).toggleClass('blur');});
+		$( document ).on( "panelbeforeclose", function( event, ui ) {$( ".toblur" ).removeClass('blur');})
 		$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
 
 		$( '#news' ).on( "pagebeforecreate", function() {	
@@ -111,15 +111,6 @@
 				$( "[data-role='header']" ).append('<a href="#menue" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>');
 			}
 		});		
-		
-		function toggleMenueBlur(){
-			var n = $( ".toblur" );
-			if(n.hasClass("blur")){
-				n.removeClass("blur");
-			} else {
-				n.addClass("blur"); 
-			}
-		}
 
 		function showLoader(){showLoading = true; $.mobile.loading('show');}
 

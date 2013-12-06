@@ -17,10 +17,12 @@
 			showLoader();
 			$.getJSON( SERVER_URL+'info/staff/').done( function(data,a,b) {
 				var pos = $('#profsList');
+				var pattern = "";
 				pos.empty();
 				$.each( data, function( key, item ) {
-					addProf(pos, item.name, item.degree, item.faculty, item.cuid);
+					pattern += addProf(item.name, item.degree, item.faculty, item.cuid);
 				});
+				pos.append(pattern);
 				$('.prof').bind("click",function (e){
 					changeToProf($(this).attr("data-id"));
 				});
@@ -57,11 +59,9 @@
 			});
 		}
 
-		function addProf(pos, name, degree, department, id){
-			var help = name.split(", ");
-			var pattern = 
-				'<li class="ui-screen-hidden"><a class="prof" data-id="'+id+'">'+help[1]+' '+help[0]+', '+degree+'<p>'+department+'</p></a></li>';
-			pos.append(pattern);
+		function addProf(name, degree, department, id){
+			var help = name.split(", "); 
+			return '<li class="ui-screen-hidden"><a class="prof" data-id="'+id+'">'+help[1]+' '+help[0]+', '+degree+'<p>'+department+'</p></a></li>';
 		}
 	</script>
 </div>
