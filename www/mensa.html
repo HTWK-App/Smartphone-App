@@ -1,20 +1,22 @@
 <div data-role="page" id="mensa" data-title="Mensa" data-theme="a" data-content-theme="a">
 	<div data-role="content" id="mensa_content" class="toblur">
-		<div data-role="tabs" id="tabs">
-			<div data-role="navbar">
-				<ul>
-					<li><a href="#mo" data-ajax="false">Montag</a></li>
-					<li><a href="#tu" data-ajax="false">Dienstag</a></li>
-					<li><a href="#Wed" data-ajax="false">Mittwoch</a></li>
-					<li><a href="#Thu" data-ajax="false">Donnerstag</a></li>
-					<li><a href="#Fr" data-ajax="false">Freitag</a></li>
-				</ul>
-			</div>
-			<div id="mo" class="tabs">
-			</div>
-			<div id="tu" class="tabs">
-			</div>
-		</div>
+		<div data-role="navbar">
+			<p>
+				<label id="Week" style="font-weight:bold"></label>
+			</p>
+		    <ul>
+		        <li><a href="#" data-href="Mon" id="l_Mon">Montag</a></li>
+		        <li><a href="#" data-href="Tue" id="l_Tue">Dienstag</a></li>
+		        <li><a href="#" data-href="Wed" id="l_Wed">Mittwoch</a></li>
+		        <li><a href="#" data-href="Thu" id="l_Thu">Donnerstag</a></li>
+		        <li><a href="#" data-href="Fri" id="l_Fri">Freitag</a></li>
+		    </ul>
+		</div><!-- /navbar -->
+		<div id="Mon" class="content_div"></div>
+		<div id="Tue" class="content_div"></div>
+		<div id="Wed" class="content_div"></div>
+		<div id="Thu" class="content_div"></div>
+		<div id="Fri" class="content_div"></div>
 	</div>
 	<div data-role="footer" id="footer_mensa" class="toblur" data-position="fixed">
 		<form>
@@ -26,20 +28,55 @@
 		</form>
 	</div>
 	<script>
-		$( document ).on( "pagecreate", '[data-title="Mensa"]', function() {
-			$(".tabs").empty(); $( "#select-native-1" ).empty();
-			fillMensaDay("mo","Nudeln","Nudeln sind geil",new Array("1,90","3,40","5"));
-			fillMensaDay("mo","Huhn","Hühner sind meist versalzen",new Array("5,90","3,40","1"));
+		$(document).on( "pagecreate", '[data-title="Mensa"]', function() {
+			//fillMensaDay("Mon","Nudeln","Nudeln sind geil",new Array("1,90","3,40","5"));
+			//fillMensaDay("Mon","Huhn","Hühner sind meist versalzen",new Array("5,90","3,40","1"));
+			//fillMensaDay("Tue","Huhn","Hühner sind meist versalzen",new Array("5,90","3,40","1"));
 			fillMensaList(new Array("Mensa Academica","Mensa am Park","Mensa Wächterstraße"));
+
+			var wDay = getWeekDay(new Date());
+			var cWeek = getWeek(new Date());
+			document.getElementById('Week').innerHTML = 'Aktuelle Woche von '+cWeek[0].replace(/(\d{4})(\d{2})(\d{2})/,'$3.$2.$1')+' bis '+cWeek[4].replace(/(\d{4})(\d{2})(\d{2})/,'$3.$2.$1');
+
+			fillMensa(cWeek, 118);
+
+			// open the tab for current day
+			$('[data-href="'+wDay+'"]').addClass('ui-btn-active');
+			document.getElementById('l_'+wDay).click();
 		});
+
+		$(document).delegate('[data-role="navbar"] a', 'click', function () {
+		    $('.content_div').hide();
+		    $('#' + $(this).attr('data-href')).show();
+		    return true;
+		});
+
+		function fillMensa(currentWeek, mensaNo) {
+			showLoader;
+			for (var i = 0; i < currentWeek.length; i++) {
+				var cDate = new Date(currentWeek[i].replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3'));
+				var cWeekDay = getWeekDay(cDate);
+				handleData(currentWeek[i],cWeekDay,mensaNo);
+			}
+		}
+
+		function handleData(day,weekDay,mensaNo) {
+			$.getJSON( SERVER_URL+'mensa/'+mensaNo+'/'+day).done( function(data,a,b) {
+					$.each( data.dayContent, function( key, item ) {
+						fillMensaDay(weekDay,item.title,item.ingredients,item.price);
+					});
+					$.mobile.loading('hide'); 
+					showLoading = false;
+				});
+		}
 		
-		function fillMensaDay( day, dishName, dishDescr, prices){
+		function fillMensaDay(day, dishName, dishDescr, prices){
 			var pattern = 
 				'<h3>'+dishName+'</h3><p>'+dishDescr+'</p>'+
 					'<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-disabled">'+
-					'<a data-role="button">Student: '+prices[0]+'€  </a>'+
-					'<a data-role="button">Mitarbeiter: '+prices[1]+'€  </a>'+
-					'<a data-role="button">Extern: '+prices[2]+'€  </a></div><hr>';
+					'<a data-role="button">S: '+prices[0]+'€  </a>'+
+					'<a data-role="button">M: '+prices[1]+'€  </a>'+
+					'<a data-role="button">E: '+prices[2]+'€  </a></div><hr>';
 			$( '#'+day+'' ).append(pattern).trigger("create");
 		}
 		
@@ -50,6 +87,52 @@
 				list.append('<option value="'+s+'" >'+places[i]+'</option>');
 			} 	
 			list.selectmenu( "refresh" );
+		}
+
+		function getFormattedDate(date){
+			var dd = date.getDate();
+			var mm = date.getMonth()+1; //January is 0!
+			
+			var yyyy = date.getFullYear();
+			if(dd<10){
+				dd='0'+dd
+			} 
+			if(mm<10){
+				mm='0'+mm
+			} 
+			var retVal = yyyy+''+mm+''+dd;
+			
+			return retVal;
+		}
+
+		function getWeek(today){
+			if (today.getDay() == 0 ) {
+				today.setDate(today.getDate() + 1);
+			} else if(today.getDay() == 6) {
+				today.setDate(today.getDate() + 2);
+			}
+
+			var d = new Date(today);
+			var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+			var monday = new Date(d.setDate(diff));
+			var week = new Array(5);
+			week[0] = getFormattedDate(monday);
+
+			for (var i = 1; i < 5; i++) {
+				week[i] = getFormattedDate(new Date(d.setDate(monday.getDate() + i)));
+			}
+
+			return week;
+		}
+
+		function getWeekDay(date){
+			var weekday = new Array('Son','Mon','Tue','Wed','Thu','Fri','Sat');
+			
+			if (date.getDay() == 0 || date.getDay() == 6) {
+				return weekday[1];
+			} else {
+				return weekday[date.getDay()];
+			}
 		}
 	</script>
 </div>
