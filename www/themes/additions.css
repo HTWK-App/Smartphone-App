@@ -12,3 +12,10 @@
 	-webkit-filter: blur(2px);
 	filter: blur(2px);
 }
+
+.content_div {
+    display: none;
+}
+.content_div:first-child {
+    display: block;
+}
