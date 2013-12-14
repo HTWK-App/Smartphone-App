@@ -65,9 +65,11 @@
 
 			//deactivate already past days
 			var date = new Date();
-			for (var i = 0; i < date.getDay(); i++) {
-				$('[data-href="'+weekday[i]+'"]').addClass('ui-disabled');
-			};
+			if (date.getDay() < 6) {
+				for (var i = 0; i < date.getDay(); i++) {
+					$('[data-href="'+weekday[i]+'"]').addClass('ui-disabled');
+				};
+			}
 
 			document.getElementById('l_'+wDay).click();
 		}
@@ -82,7 +84,7 @@
 		}
 
 		function handleData(day,weekDay,mensaNo) {
-			$.getJSON( SERVER_URL+'mensa/'+mensaNo+'/'+day).done( function(data,a,b) {
+			$.getJSON( SERVER_URL+'mensa/'+mensaNo+'/'+day).done( function(data) {
 					$.each( data.dayContent, function( key, item ) {
 						fillMensaDay(weekDay,item.title,item.ingredients,item.price);
 					});

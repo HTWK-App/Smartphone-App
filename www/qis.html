@@ -1,4 +1,4 @@
-<div data-role="page" data-title="QIS" data-theme="a" data-content-theme="a">
+<div data-role="page" id="qis" data-title="QIS" data-theme="a" data-content-theme="a" data-dom-cache="true">
 	</style>
 	<div data-role="content" id="qis_content" class="toblur">
 		<div data-role="collapsible-set" data-content-theme="a" id="qis-set">
@@ -6,9 +6,13 @@
 	</div>
 
 	<script>
-		$( document ).on( "pagecreate", '[data-title="QIS"]', function() {
+		$( document ).on( "pagecreate", '[id="qis"]', function() {
 			$( "#qis-set" ).empty();
 			fillQis();
+		});
+
+		$(document).on("pageshow",'[id="qis"]', function() {
+			$('#qispage').detach();
 		});
 
 		function fillQis() {
@@ -16,7 +20,7 @@
 			// TODO get credentials from settings
 			var CREDENTIALS = '';
 
-			$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS).done( function(data,a,b) {
+			$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS).done( function(data) {
 				$.each(data, function(key, item) {
 					var grades = new Array();
 					var descs = new Array();
