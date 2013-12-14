@@ -8,23 +8,52 @@
 	<script>
 		$( document ).on( "pagecreate", '[data-title="QIS"]', function() {
 			$( "#qis-set" ).empty();
-			for (var i = 1; i<6; i++) {
-				createSemester(i,
-					new Array("Mathe","Physik","AOP"), new Array("Weicker","Waldi","Petermann"),
-					new Array("1","3","1"));
-			}
+			fillQis();
 		});
+
+		function fillQis() {
+			showLoader();
+			// TODO get credentials from settings
+			var CREDENTIALS = '';
+
+			$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS).done( function(data,a,b) {
+				$.each(data, function(key, item) {
+					var grades = new Array();
+					var descs = new Array();
+					var ids = new Array();
+					var ects = new Array();
+					var i = 0;
+
+					$.each(item.modules, function(m_key, m_item) {
+						grades[i] = m_item.mark;
+						descs[i] = m_item.description;
+						ids[i] = m_item.id;
+						ects[i] =m_item.ects;
+						i++;
+					});
+					createSemester(item.id, item.description, ids, descs, ects, grades);
+				});
+				$.mobile.loading('hide'); 
+				showLoading = false;
+			});
+		}
 		
-		function createSemester(number,subjects,profs,grades){
+		function createSemester(id,semName,ids,descs,ects,grades){
 			var con = $( "#qis-set" );
 			var pattern =
 					'<div data-role="collapsible" data-theme="a" data-content-theme="a" '+
 					'data-collapsed-icon="carat-d" data-expanded-icon="carat-u" '+
-					'data-iconpos="right" data-mini="true" id="sem'+number+'"><h4>Semester '+number+'</h4>';
-			for (var i in subjects) {
+					'data-iconpos="right" data-mini="true" id="sem'+id+'"><h4>'+semName+'</h4>';
+			for (var i in ids) {
+				//pattern = pattern +
+				//	'<h3>'+subjects[i]+' ('+grades[i]+')</h3><p>Professor: '+profs[i]+'</p>'+
+				//	'</p><hr>';
+				// --------------------------
 				pattern = pattern +
-					'<h3>'+subjects[i]+' ('+grades[i]+')</h3><p>Professor: '+profs[i]+'</p>'+
-					'</p><hr>';
+					'<p><b>Prüfungsnummer:</b><br>'+ids[i]+'</p>'+
+					'<p><b>Beschreibung:</b><br>'+descs[i]+'</p>'+
+					'<p><b>ECTS-Punkte:</b><br>'+ects[i]+'</p>'+
+					'<p><b>Note:</b><br>'+grades[i]+'</p><hr>';
 			}
 			pattern = pattern + '</div>';
 			con.append(pattern).collapsibleset("refresh");
