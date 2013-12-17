@@ -1,6 +1,6 @@
-<div data-role="page" id="mail" data-title="Postfach" data-theme="a" data-content-theme="a">
+<div data-role="page" id="mail" data-title="Postfach" data-theme="a" data-content-theme="a"  data-dom-cache="true">
 	<div data-role="content" id="mail_content" class="toblur">
-		<ul data-role="listview" data-inset="true">
+		<ul id="mail_set" data-role="listview" data-inset="true">
 			<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
 			<li><a href="#">
 				<h2>Stephen Weber</h2>
@@ -25,7 +25,72 @@
 	</div>
 
 	<script>
-		$( document ).on( "pagecreate", '[data-title="Postfach"]', function() {
+		var currentDate = "";
+
+		$( document ).on( "pagecreate", '[id="mail"]', function() {
+			$("#mail_set").empty();
+			fillMailView();
 		});
+
+		function fillMailView() {
+			showLoader();
+			$.getJSON(SERVER_URL+'/mailbox/get?credentials='+CREDENTIALS+'&salt='+SALT).done(function(data) {
+				var elements = data.length;
+				var count = 1;
+				$.each(data, function(key, item) {
+					((count == elements) ? createNewMailHeader(item,1) : createNewMailHeader(item,0));
+					count++;
+				});
+				$.mobile.loading('hide'); 
+				showLoading = false;
+			});
+		}
+
+		function createNewMailHeader(item, last) {
+			var sendDate = getDateFromString(item.sendDate)
+			var sendDateFormatted = formatDate(sendDate);
+			var pattern = "";
+
+			if (currentDate == "") {
+				pattern = '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count ui-first-child">'+sendDateFormatted+'</li>';
+			} else if(sendDateFormatted != currentDate) {
+				pattern = '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count">'+sendDateFormatted+'</li>';
+			}
+			$( '#mail_set' ).append(pattern).trigger("create");
+			currentDate = sendDateFormatted;
+
+			var time = sendDate.getHours()+':'+sendDate.getMinutes();
+			var mailHeader = "";
+			if (last == 1) {
+				mailHeader = '<li class="ui-last-child">';
+			} else {
+				mailHeader = '<li>';
+			}
+			mailHeader = mailHeader + '<a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">'+
+				'<h2>'+item.from+'</h2>'+
+				'<p><strong>'+item.subject+'</strong></p>'+
+				'<p class="ui-li-aside">'+time+'<strong></strong></p>'+
+				'</a></li>';
+			$('#mail_set').append(mailHeader).trigger("create");
+		}
+
+		function getDateFromString(dateString) {
+			//	Thu Oct 09 14:54:21 CEST 2008
+			var dateParts = dateString.split(" ");
+			var cDate = new Date(''+dateParts[1]+' '+dateParts[2]+', '+dateParts[5]+' '+dateParts[3]);
+			return cDate;
+		}
+
+		function formatDate(cDate) {
+			var germanWeekDays = new Array('Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag');
+			var day = cDate.getDate();
+			var day = ((day < 10) ? '0' + day : day);
+			
+			var month = cDate.getMonth()+1;
+			var month = ((month < 10) ? '0' + month : month);
+
+			var retVal = germanWeekDays[cDate.getDay()]+', '+day+'.'+month+'.'+cDate.getFullYear();
+		return retVal;
+		}
 	</script>
 </div>
