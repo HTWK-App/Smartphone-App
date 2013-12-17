@@ -102,9 +102,9 @@
 			var pattern = 
 				'<h3>'+dishName+'</h3><p>'+dishDesc+'</p>'+
 					'<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-disabled" style="overflow:visible;">'+
-					'<a data-role="button">Student: '+prices[0]+'€  </a>'+
-					'<a data-role="button">Mitarbeiter: '+prices[1]+'€  </a>'+
-					'<a data-role="button">Extern: '+prices[2]+'€  </a></div><hr>';
+					'<a data-role="button">Student: '+prices[0].toFixed(2)+' €  </a>'+
+					'<a data-role="button">Mitarbeiter: '+prices[1].toFixed(2)+' €  </a>'+
+					'<a data-role="button">Extern: '+prices[2].toFixed(2)+' €  </a></div><hr>';
 			$( '#'+day+'' ).append(pattern).trigger("create");
 		}
 		

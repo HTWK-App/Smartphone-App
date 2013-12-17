@@ -66,12 +66,28 @@
 			} else {
 				mailHeader = '<li>';
 			}
-			mailHeader = mailHeader + '<a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">'+
+			mailHeader = mailHeader + '<a href="#mail_'+item.id+'" class="ui-btn ui-btn-icon-right ui-icon-carat-r" rel="external">'+
 				'<h2>'+item.from+'</h2>'+
 				'<p><strong>'+item.subject+'</strong></p>'+
 				'<p class="ui-li-aside">'+time+'<strong></strong></p>'+
 				'</a></li>';
 			$('#mail_set').append(mailHeader).trigger("create");
+
+			var toList = "";
+			for (var i = 0; i < item.toList.length; i++) {
+				toList += ', '+item.toList[i];
+			};
+
+			pattern = 
+					'<div data-role="page" class="newpage" id="mail_'+item.id+' data-title="back" data-theme="a" data-content-theme="a">'+
+						'<div data-role="content" id="mail_content">'+
+							'<p><strong>Von: </strong>'+item.from+'<br>'+
+							'<strong>An: </strong>'+toList+'<br>'
+							'<strong>Betreff: </strong>'+item.subject+'<br>'+
+							'</p><hr>'+item.message+
+						'</div>'+
+					'</div>';
+				$("body").append(pattern).trigger("create");
 		}
 
 		function getDateFromString(dateString) {

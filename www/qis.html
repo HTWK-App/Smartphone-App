@@ -17,17 +17,15 @@
 
 		function fillQis() {
 			showLoader();
-			// TODO get credentials from settings
-			var CREDENTIALS = '';
 
-			$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS).done( function(data) {
+			$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS+'&salt='+SALT).done( function(data, a, b) {
 				$.each(data, function(key, item) {
 					var grades = new Array();
 					var descs = new Array();
 					var ids = new Array();
 					var ects = new Array();
 					var i = 0;
-
+					
 					$.each(item.modules, function(m_key, m_item) {
 						grades[i] = m_item.mark;
 						descs[i] = m_item.description;
