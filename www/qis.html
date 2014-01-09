@@ -24,35 +24,34 @@
 					var descs = new Array();
 					var ids = new Array();
 					var ects = new Array();
+					var titles = new Array();
 					var i = 0;
 					
 					$.each(item.modules, function(m_key, m_item) {
 						grades[i] = m_item.mark;
 						descs[i] = m_item.description;
 						ids[i] = m_item.id;
-						ects[i] =m_item.ects;
+						ects[i] = m_item.ects;
+						titles[i] = m_item.title;
 						i++;
 					});
-					createSemester(item.id, item.description, ids, descs, ects, grades);
+					createSemester(item.id, item.description, ids, descs, ects, grades,titles);
 				});
 				$.mobile.loading('hide'); 
 				showLoading = false;
 			});
 		}
 		
-		function createSemester(id,semName,ids,descs,ects,grades){
+		function createSemester(id,semName,ids,descs,ects,grades,titles){
 			var con = $( "#qis-set" );
 			var pattern =
 					'<div data-role="collapsible" data-theme="a" data-content-theme="a" '+
 					'data-collapsed-icon="carat-d" data-expanded-icon="carat-u" '+
 					'data-iconpos="right" data-mini="true" id="sem'+id+'"><h4>'+semName+'</h4>';
 			for (var i in ids) {
-				//pattern = pattern +
-				//	'<h3>'+subjects[i]+' ('+grades[i]+')</h3><p>Professor: '+profs[i]+'</p>'+
-				//	'</p><hr>';
-				// --------------------------
 				pattern = pattern +
-					'<p><b>Prüfungsnummer:</b><br>'+ids[i]+'</p>'+
+					'<p><b>Prüfungskennung:</b><br>'+ids[i]+'</p>'+
+					'<p><b>Prüfungstitel:</b><br>'+titles[i]+'</p>'+
 					'<p><b>Beschreibung:</b><br>'+descs[i]+'</p>'+
 					'<p><b>ECTS-Punkte:</b><br>'+ects[i]+'</p>'+
 					'<p><b>Note:</b><br>'+grades[i]+'</p><hr>';
