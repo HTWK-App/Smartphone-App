@@ -1,7 +1,8 @@
-<div data-role="page" id="mail" data-title="Postfach" data-theme="a" data-content-theme="a"  data-dom-cache="true">
+<div data-role="page" id="mail" data-title="Postfach" data-theme="a" data-content-theme="a" data-dom-cache="true">
 	<div data-role="content" id="mail_content" class="toblur">
 		<ul id="mail_set" data-role="listview" data-inset="true">
-			<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
+		<! -- TODO remove, just demo -->	
+		<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
 			<li><a href="#">
 				<h2>Stephen Weber</h2>
 				<p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
@@ -25,16 +26,27 @@
 	</div>
 
 	<script>
-		var currentDate = "";
+		//var currentDate = "";
 
-		$( document ).on( "pagecreate", '[id="mail"]', function() {
+		$( document )
+			.on("pagecreate", "#mail", initMailView)
+			.on("pageshow", "#mail", function() {
+				//loadingIn();
+				//$("#qispage").detach();
+			 });
+		/*.on( "pagecreate", '[id="mail"]', function() {
 			$("#mail_set").empty();
 			fillMailView();
-		});
+		});*/
 
-		function fillMailView() {
-			showLoader();
-			$.getJSON(SERVER_URL+'/mailbox/get?credentials='+CREDENTIALS+'&salt='+SALT).done(function(data) {
+		function initMailView() {
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+'?credentials='+GLOBAL.DEMO.credentials+'&salt='+GLOBAL.DEMO.salt)
+			 .done(function(data) {
+				 	fillMailList(data);
+				 	loadingOut();
+			  });
+			/*$.getJSON(SERVER_URL+'/mailbox/get?credentials='+CREDENTIALS+'&salt='+SALT).done(function(data) {
 				var elements = data.length;
 				var count = 1;
 				$.each(data, function(key, item) {
@@ -43,10 +55,86 @@
 				});
 				$.mobile.loading('hide'); 
 				showLoading = false;
-			});
-		}
+			});*/
+		};
+		
+		function fillMailList(data) {
+			var mail, sdate = new Date(0);
+			var lis = "";
+			var divs = "";
+			
+			if(!isEmpty(data))
+			{
+				for(var k in data)
+				{
+					mail = data[k];
 
-		function createNewMailHeader(item, last) {
+					// Format: Thu Oct 09 14:54:21 <CEST,CET> 2008
+					// CEST is Summer UTC +2h -> for reference see http://www.timeanddate.com/library/abbreviations/timezones/eu/cest.html
+					// CET is Winter UTC +1h -> for reference see http://www.timeanddate.com/library/abbreviations/timezones/eu/cet.html
+					mail.sendDate = new Date(mail.sendDate.replace(/CEST/, "+0200").replace(/CET/, "+0100"));
+					
+					lis += createMailEntry(mail, sdate);
+					divs += createMailDetails(mail);
+					
+					sdate = mail.sendDate;
+				}
+				
+				$( "#mail_set" )
+					.empty()
+					.append(lis)
+					.find("li")
+					.first().addClass("ui-first-child").end()
+					.last().addClass("ui-last-child").end()
+					.end()
+					/*.listview('refresh')
+					.trigger('updatelayout');*/
+					.trigger("create");
+				
+				$( "body" )
+					.append(divs)
+					.trigger("create");
+			}
+		};
+
+		function createMailEntry(mail, sdate) {
+			var li = "";
+			var time = mail.sendDate.getHours()+':'+mail.sendDate.getMinutes();
+			
+			if(sdate.getTime()!=mail.sendDate.getTime()) {
+				li += '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count">'+createDateStamp(mail.sendDate)+'</li>';
+			}
+
+			li += 	'<li><a href="#mail_'+mail.id+'" class="ui-btn ui-btn-icon-right ui-icon-carat-r" rel="external">'+
+					'<h2>'+escape(mail.from)+'</h2>'+
+					'<p><strong>'+mail.subject+'</strong></p>'+
+					'<p class="ui-li-aside">'+time+'<strong></strong></p>'+
+					'</a></li>';
+			
+			return li;
+		};
+		
+		function createMailDetails(mail) {
+			var toList = "";
+			
+			for(var i = 0; i < mail.toList.length; i++) {
+				if(!isEmpty(mail.toList[i])) 
+					toList += mail.toList[i]+", ";
+			}
+
+			toList = toList.slice(0, toList.lastIndexOf(",")).replace(/[;:]/g, '');
+			
+			return 	'<div data-role="page" class="newpage" id="mail_'+mail.id+'" data-title="back" data-theme="a" data-content-theme="a">'+
+						'<div data-role="content" id="mail_content">'+
+							'<p><strong>Von: </strong>'+escape(mail.from)+'</br>'+
+							'<strong>An: </strong>'+escape(toList)+'</br>'+
+							'<strong>Betreff: </strong>'+escape(mail.subject)+'</br>'+
+							'</p><hr>'+escape(mail.message)+
+						'</div>'+
+					'</div>';
+		};
+		
+		/*function createNewMailHeader(item, last) {
 			var sendDate = getDateFromString(item.sendDate)
 			var sendDateFormatted = formatDate(sendDate);
 			var pattern = "";
@@ -88,25 +176,13 @@
 						'</div>'+
 					'</div>';
 				$("body").append(pattern).trigger("create");
-		}
+		}*/
 
-		function getDateFromString(dateString) {
+		/*function getDateFromString(dateString) {
 			//	Thu Oct 09 14:54:21 CEST 2008
 			var dateParts = dateString.split(" ");
 			var cDate = new Date(''+dateParts[1]+' '+dateParts[2]+', '+dateParts[5]+' '+dateParts[3]);
 			return cDate;
-		}
-
-		function formatDate(cDate) {
-			var germanWeekDays = new Array('Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag');
-			var day = cDate.getDate();
-			var day = ((day < 10) ? '0' + day : day);
-			
-			var month = cDate.getMonth()+1;
-			var month = ((month < 10) ? '0' + month : month);
-
-			var retVal = germanWeekDays[cDate.getDay()]+', '+day+'.'+month+'.'+cDate.getFullYear();
-		return retVal;
-		}
+		}*/
 	</script>
 </div>

@@ -1,24 +1,28 @@
 <div data-role="page" id="qis" data-title="QIS" data-theme="a" data-content-theme="a" data-dom-cache="true">
-	</style>
 	<div data-role="content" id="qis_content" class="toblur">
-		<div data-role="collapsible-set" data-content-theme="a" id="qis-set">
-		</div>
+		<div data-role="collapsible-set" data-content-theme="a" id="qis-set"></div>
 	</div>
 
 	<script>
-		$( document ).on( "pagecreate", '[id="qis"]', function() {
+		$( document )
+			.on("pagecreate", "#qis", initQISView)
+			.on("pageshow", "#qis", function() {
+				loadingIn();
+				$("#qispage").detach();
+			 });
+		/*function() {
 			$( "#qis-set" ).empty();
 			fillQis();
-		});
+		});*/
 
-		$(document).on("pageshow",'[id="qis"]', function() {
-			$('#qispage').detach();
-		});
-
-		function fillQis() {
-			showLoader();
-
-			$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS+'&salt='+SALT).done( function(data, a, b) {
+		function initQISView() {
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.qis+'?credentials='+GLOBAL.DEMO.credentials+'&salt='+GLOBAL.DEMO.salt)
+			 .done(function(data, status, jqXHR) {
+				 fillQIS(data);
+				 loadingOut();
+			  });
+			
+			/*$.getJSON(SERVER_URL+'qis/get?credentials='+CREDENTIALS+'&salt='+SALT).done( function(data, a, b) {
 				$.each(data, function(key, item) {
 					var grades = new Array();
 					var descs = new Array();
@@ -39,10 +43,51 @@
 				});
 				$.mobile.loading('hide'); 
 				showLoading = false;
-			});
-		}
+			});*/
+		};
 		
-		function createSemester(id,semName,ids,descs,ects,grades,titles){
+		function fillQIS(data) {
+			var sem, module;
+			var divs = '';
+			
+			if(!isEmpty(data))
+			{
+				for(var k in data)
+				{
+					sem = data[k];
+					
+					divs += '<div data-role="collapsible" data-theme="a" data-content-theme="a" '+
+								 'data-collapsed-icon="carat-d" data-expanded-icon="carat-u" '+
+								 'data-iconpos="right" data-mini="true" id="sem'+sem.id+'"><h4>'+sem.description+'</h4>';
+					
+					if(!isEmpty(sem.modules))
+					{
+    					for(var l in sem.modules)
+    					{
+    						module = sem.modules[l];
+    						
+    						divs += '<p><b>Prüfungskennung:</b><br>'+module.id+'</p>'+
+    								'<p><b>Prüfungstitel:</b><br>'+module.title+'</p>'+
+    								'<p><b>Beschreibung:</b><br>'+module.description+'</p>'+
+    								'<p><b>ECTS-Punkte:</b><br>'+module.ects+'</p>'+
+    								'<p><b>Note:</b><br>'+module.mark+'</p><hr>';
+    					}
+					}
+					else
+					{
+						divs += '<p>Keine Informationen verfügbar!</p>';
+					}
+					
+					divs += '</div>';
+				}
+				
+				$( "#qis-set" )
+					.append(divs)
+					.collapsibleset("refresh");
+			}
+		};
+		
+		/*function createSemester(id,semName,ids,descs,ects,grades,titles){
 			var con = $( "#qis-set" );
 			var pattern =
 					'<div data-role="collapsible" data-theme="a" data-content-theme="a" '+
@@ -58,6 +103,6 @@
 			}
 			pattern = pattern + '</div>';
 			con.append(pattern).collapsibleset("refresh");
-		}
+		}*/
 	</script>
 </div>

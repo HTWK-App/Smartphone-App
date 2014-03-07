@@ -1,4 +1,5 @@
 <div data-role="page" id="info" data-title="Info-Center" data-theme="a" data-content-theme="a">
+	<!-- TODO export to stylesheet -->
 	<style>
 		#info_content img{
 			width: 5em;
@@ -10,13 +11,21 @@
 		}
 	</style>
 	<div data-role="content" id="info_content" class="toblur">
-		<a href="profs.html" data-role="button"><img src="themes/images/icons-app/prof.png"><p>Professoren</p></a>
-		<a href="#" data-role="button"><img src="themes/images/icons-app/building.svg"><p>Gebäudeplan</p></a>
-		<a href="wlan.html" data-role="button"><img src="themes/images/icons-app/wlan.png"><p>WLan-Konfiguration</p></a>
+		<a href="profs.html" data-role="button">
+			<img src="themes/images/icons-app/prof.png">
+			<p>Professoren</p>
+		</a>
+		<a href="#" data-role="button">
+			<img src="themes/images/icons-app/building.svg">
+			<p>Gebäudeplan</p>
+		</a>
+		<a href="wlan.html" data-role="button">
+			<img src="themes/images/icons-app/wlan.png">
+			<p>WLAN-Konfiguration</p>
+		</a>
 	</div>
-
 	<script>
-		$( document ).on( "pagecreate", '[data-title="Info-Center"]', function() {
-		});
+		$( document )
+			.on( "pagecreate", '[data-title="Info-Center"]', function() {});
 	</script>
 </div>

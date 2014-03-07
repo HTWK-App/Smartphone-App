@@ -1,27 +1,125 @@
-<div data-role="page" id="building" data-title="Gebäude" data-theme="a" data-content-theme="a">
+<div data-role="page" id="building" data-title="Gebäude" data-theme="a" data-content-theme="a" data-dom-cache="true">
 	<div data-role="content" id="building_content" class="toblur">
+		<ul data-role="listview" id="buidling_content_list" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true"></ul>
+	</div>
+	<!-- <div data-role="content" id="building_content" class="toblur">
 		<form>
 			<div data-role="fieldcontain">
 			    <label for="select-building1">Gebäude:</label>
-			    <select name="select-building1" id="select-building">
-			    </select>
+			    <select name="select-building1" id="select-building"></select>
 			</div>
 		</form>
-	</div>
+	</div>-->
 
 	<script>
-		$( document ).on( "pagecreate", '[data-title="Gebäude"]', function() {
-			$( '#select-building' ).empty();
+		$( document )
+			.on("pagecreate", "#building", initBuildingsView)
+			.on("pageshow", "#building", function() {
+				$("#buildingpage").detach();
+			 });
+		/*$( document )
+			.on("pagecreate", "[data-title='Gebäude']", initBuildingsView); function() {
+			
 			fillBuildings(new Array("Lipsius-Bau","Zuse-Bau","Geutebrück-Bau"));
-		});
+		});*/
 
-		function fillBuildings(names){
-			var list = $('#select-building');
-			for(var i in names){
-				var s = parseInt(i)+1;
-				list.append('<option value="'+s+'">'+names[i]+'</option>');
+		function initBuildingsView() {
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
+			 .done(function(data, status, jqXHR) {
+				fillBuildingsList(data);
+				loadingOut();
+			});
+			// TODO fail
+			
+			
+			/*var data = new Array("Lipsius-Bau","Zuse-Bau","Geutebrück-Bau");
+			var opts = '';
+			
+			if(!isEmpty(data))
+			{
+				for(var k in data) {
+					//var s = parseInt(i)+1;
+					//list.append('<option value="'+s+'">'+names[i]+'</option>');
+					opts += '<option value="'+(k+1)+'">'+data[k]+'</option>';
+				}
+				
+				$( "#select-building" )
+					.empty()
+					.append(opts)
+					.selectmenu( "refresh" );
+			}*/
+		};
+		
+		function fillBuildingsList(data) {
+			var building, lis = '', desc = '';
+			
+			if(!isEmpty(data))
+			{				
+				for(var k in data)
+				{
+					building = data[k];
+					
+					// TODO better?
+					for(var d in building.description)
+					{
+						if(!isEmpty(building.description[d]))
+							desc += building.description[d];
+					}
+					
+					lis += 	'<li data-bid='+building.id+'><a href="#" class="sport">'+
+								'<h3>'+building.fullName+'</h3>'+
+								'<p>'+desc+'</p>'+
+								'<p>'+building.address+'</p>'+
+							'</a></li>';
+				}
+				
+				$( "#buidling_content_list" )
+					.empty()
+					.append(lis)
+					.on('click', '.sport', loadBuildingDetails)
+					.listview("refresh")
+					.trigger("updatelayout");
 			}
-			list.selectmenu( "refresh" );
-		}
+		};
+		
+		function loadBuildingDetails(e) {
+			var id = $(e.target).parents("li").first().data("bid");
+
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)
+			 .done(function(data, status, jqXHR) {
+				var desc = "";
+				
+				// TODO better?
+				for(var d in data.description)
+				{
+					if(!isEmpty(data.description[d]))
+						desc += data.description[d] + "</br>";
+				}
+				
+				 // TODO caching, pattern extern
+				var div =	'<div data-role="page" id="buildingpage" data-title="Gebäude" data-title="back" data-theme="a" data-content-theme="a">'+
+								'<div data-role="content" id="building_content">'+
+									'<h1><img src="'+data.pictureLink+'" '+
+									'id="building-img" style="float:right;"/>'+data.fullName+'</h1>'+
+									'<p><b>Abkürzung:</b> '+data.id+'</p>'+
+									'<p><b>Beschreibung:</b> '+desc+'<hr></p>'+
+									'<p><b>Adresse:</b> '+data.address+'</p>'+
+									'<p><iframe src="http://maps.google.de/maps?hl=de&q='+data.latLng.replace(/ /, '')+'&ie=UTF8&t=&z=16&iwloc=B&output=embed" width="90%" height="500" name="GoogleMaps"></iframe></p>'+
+									'<p><small><b>Letzte Änderung:</b> '+createDateTimeStamp(new Date(data.lastChange))+'</small></p>'+
+								'</div>'+
+							'</div>';
+				
+				$( "body" )
+					.append(div);
+				
+				$.mobile.initializePage();
+				$.mobile.changePage("#buildingpage");
+				
+				loadingOut();
+			  });
+			// TODO fail
+		};
 	</script>
 </div>

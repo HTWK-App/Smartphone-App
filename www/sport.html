@@ -1,54 +1,112 @@
 <div data-role="page" id="sport" data-title="Hochschulsport" data-theme="a" data-content-theme="a" data-dom-cache="true">
 	<div data-role="content" id="sport_content" class="toblur">
-		<ul data-role="listview" id="sport_content_list" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true"> 
-		</ul>
+		<ul data-role="listview" id="sport_content_list" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true"></ul>
 	</div>
 
 	<script>
-		$( document ).on( "pagecreate", '[data-title="Hochschulsport"]', function() {
-			fillSports();
-		});
+		$( document )
+			.on("pagecreate", "#sport", initSportsView)
+			.on("pageshow", "#sport", function() {
+				$("#sportpage").detach();
+			 });
 
-		$(document).on("pageshow",'[id="sport"]', function() {
-			$('#sportpage').detach();
-		});
-
-		function fillSports () {
-			showLoader();
-			$( '#sport_content_list' ).empty();
-			$.getJSON( SERVER_URL+'info/sport').done( function(data,a,b) {
-				var pos = $('#sport_content_list');
-				var pattern = "";
-				pos.empty();
-				$.each( data, function( key, item ) {
-					pattern += createSport(item.id, item.title, item.description);
-				});
-				pos.append(pattern);
-				$('.sport').bind("click",function (e){
-					changeToSport($(this).attr("data-id"));
-				});
-				pos.listview("refresh");
-				pos.trigger( "updatelayout");
-				$.mobile.loading('hide'); 
-				showLoading = false;
+		function initSportsView() {
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport)
+			 .done(function(data, status, jqXHR) {
+				fillSportsList(data);
+				loadingOut();
 			});
-		}
+			// TODO fail
+		};
+		
+		function fillSportsList(data) {
+			var sport, lis = '';
+			
+			if(!isEmpty(data))
+			{				
+				for(var k in data)
+				{
+					sport = data[k];
+					
+					lis += 	'<li data-sport='+sport.id+'><a href="#" class="sport">'+
+								'<h3>'+sport.title+'</h3>'+
+								'<p>'+sport.description+'</p>'+
+							'</a></li>'; 
+				}
+				
+				$( '#sport_content_list' )
+					.empty()
+					.append(lis)
+					.on('click', '.sport', loadSportDetails)
+					.listview("refresh")
+					.trigger("updatelayout");
+			}
+			
+			/*var pattern = 
+				'<li ><a href="#" data-id='+id+' class="sport">'+
+					'<h3>'+header+'</h3>'+
+					'<p>'+content+'</p>'+
+				'</a></li>';
+			return pattern;*/
+			
+			
+			/*pos.empty();
+			$.each( data, function( key, item ) {
+				pattern += createSport(item.id, item.title, item.description);
+			});
+			pos.append(pattern);
+			$('.sport').bind("click",function (e){
+				changeToSport($(this).attr("data-id"));
+			});
+			var pos = $('#sport_content_list');
+			pos.listview("refresh");
+			pos.trigger( "updatelayout");
+			$( '#sport_content_list' ).empty();$( '#sport_content_list' ).empty();*/
+		};
 
-		function changeToSport(id){
-			showLoader();
-			$.getJSON( SERVER_URL+'info/sport/'+id).done( function(data,a,b) {
-				var pattern = 
-				'<div data-role="page" id="sportpage" data-title="back" data-theme="a" data-content-theme="a">'+
-					'<div data-role="content" id="sport_content">'+
-						'<h1><img src="'+SERVER_URL+'info/sport/'+data.id+'/pic" '+
-						'id="sport-img" style="float:right;"/>'+data.title+'</h1>'+
-						'<p><b>Zeitspanne:</b> '+data.time+'<br> <b>Geschlecht:</b> '+data.gender+'</p>'+
-						'<p><b>Beschreibung:</b> '+data.description+'<hr></p>'+
-						'<p><b>Ort:</b> '+data.location+'</p>'+
-						'<p><b>Zeiten:</b> '+data.cycle+'</p>'+
-						'<p><b>Betreuer/in:</b> '+data.leader+'</a></p>'+
-						'<p><b>Hinweise:</b></p><ul>';
-				$.each( data.hints, function (key, item){
+		function loadSportDetails(e) {
+			var id = $(e.target).parents("li").first().data("sport");
+
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport+"/"+id)
+			 .done(function(data, status, jqXHR) {
+				// TODO caching, pattern extern
+				var div =	'<div data-role="page" id="sportpage" data-title="back" data-theme="a" data-content-theme="a">'+
+								'<div data-role="content" id="sport_content">'+
+									'<h1><img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" '+
+									'id="sport-img" style="float:right;"/>'+data.title+'</h1>'+
+									'<p><b>Zeitspanne:</b> '+data.time+'<br> <b>Geschlecht:</b> '+data.gender+'</p>'+
+									'<p><b>Beschreibung:</b> '+data.description+'<hr></p>'+
+									'<p><b>Ort:</b> '+data.location+'</p>'+
+									'<p><b>Zeiten:</b> '+data.cycle+'</p>'+
+									'<p><b>Betreuer/in:</b> '+data.leader+'</a></p>'+
+									'<p><b>Hinweise:</b></p>';
+				
+				if(!isEmpty(data.hints))
+				{
+					div += '<ul>';
+					
+					for(var k in data.hints)
+					{
+						div += '<li>'+data.hints[k]+'</li>';
+					}
+					
+					div += '</ul>';
+				}
+					
+				div +=				'<p><b>Auslastung des Kurses:<br></b>'+data.competitor+'</p>'+
+							'</div>'+
+						'</div>';
+				
+				$( "body" )
+					.append(div);
+				
+				$.mobile.initializePage();
+				$.mobile.changePage("#sportpage");
+				
+				loadingOut();
+				/*$.each( data.hints, function (key, item) {
 					pattern = pattern + '<li>'+item+'</li>';
 				});
 				pattern = pattern + '</ul><p><b>Auslastung des Kurses:<br></b>'+data.competitor+'</p>'+
@@ -58,17 +116,9 @@
 				$.mobile.initializePage();
 				$.mobile.loading('hide'); 
 				showLoading = false;
-				$.mobile.changePage('#sportpage');
-			});
-		}
-
-		function createSport(id, header, content){
-			var pattern = 
-				'<li ><a href="#" data-id='+id+' class="sport">'+
-					'<h3>'+header+'</h3>'+
-					'<p>'+content+'</p>'+
-				'</a></li>';
-			return pattern;
-		}
+				$.mobile.changePage('#sportpage');*/
+			  });
+			// TODO fail
+		};
 	</script>
 </div>
