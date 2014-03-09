@@ -1,14 +1,24 @@
-<div data-role="page" id="sport" data-title="Hochschulsport" data-theme="a" data-content-theme="a" data-dom-cache="true">
-	<div data-role="content" id="sport_content" class="toblur">
-		<ul data-role="listview" id="sport_content_list" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true"></ul>
+<div id="sport_page" data-role="page" data-dom-cache="true" data-title="Hochschulsport" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
+		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true"></ul>
 	</div>
 
 	<script>
-		$( document )
+		/*$( document )
 			.on("pagecreate", "#sport", initSportsView)
 			.on("pageshow", "#sport", function() {
 				$("#sportpage").detach();
-			 });
+			 });*/
+	
+    	$( "#sport_page" )
+    		.on("pagecreate", initSportsView)
+    		.on("pageshow", function() {
+    			if(!GLOBAL.INIT.sport) loadingIn();
+    			$("#btn_refresh")
+					.off()
+					.on("click", initSportsView);
+    			//$("#sportdetails").detach();
+    		 });
 
 		function initSportsView() {
 			loadingIn();
@@ -16,12 +26,13 @@
 			 .done(function(data, status, jqXHR) {
 				fillSportsList(data);
 				loadingOut();
+				GLOBAL.INIT.sport = true;
 			});
 			// TODO fail
 		};
 		
 		function fillSportsList(data) {
-			var sport, lis = '';
+			var sport, lis = "";
 			
 			if(!isEmpty(data))
 			{				
@@ -32,15 +43,22 @@
 					lis += 	'<li data-sport='+sport.id+'><a href="#" class="sport">'+
 								'<h3>'+sport.title+'</h3>'+
 								'<p>'+sport.description+'</p>'+
-							'</a></li>'; 
+							'</a></li>';
 				}
 				
-				$( '#sport_content_list' )
+				$( "#sport_content_list" )
+					.off()
 					.empty()
 					.append(lis)
-					.on('click', '.sport', loadSportDetails)
+					.on("click", "a.sport", loadSportDetails)
+					//.trigger("create")
 					.listview("refresh")
 					.trigger("updatelayout");
+				
+				$( "body" )
+					.find("div.sportdetails")
+					.remove();
+					//.trigger("create");
 			}
 			
 			/*var pattern = 
@@ -67,15 +85,21 @@
 
 		function loadSportDetails(e) {
 			var id = $(e.target).parents("li").first().data("sport");
+			
+			if($("#sport_"+id).length>0) {
+				$.mobile.initializePage();
+				$.mobile.changePage("#sport_"+id);
+				return;
+			}
 
 			loadingIn();
+			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport+"/"+id)
 			 .done(function(data, status, jqXHR) {
-				// TODO caching, pattern extern
-				var div =	'<div data-role="page" id="sportpage" data-title="back" data-theme="a" data-content-theme="a">'+
-								'<div data-role="content" id="sport_content">'+
+				var div =	'<div id="sport_'+id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="a" data-content-theme="a">'+
+								'<div data-role="content">'+
 									'<h1><img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" '+
-									'id="sport-img" style="float:right;"/>'+data.title+'</h1>'+
+									'style="float:right;"/>'+data.title+'</h1>'+
 									'<p><b>Zeitspanne:</b> '+data.time+'<br> <b>Geschlecht:</b> '+data.gender+'</p>'+
 									'<p><b>Beschreibung:</b> '+data.description+'<hr></p>'+
 									'<p><b>Ort:</b> '+data.location+'</p>'+
@@ -100,10 +124,11 @@
 						'</div>';
 				
 				$( "body" )
-					.append(div);
+					.append(div)
+					.trigger("create");
 				
 				$.mobile.initializePage();
-				$.mobile.changePage("#sportpage");
+				$.mobile.changePage("#sport_"+id);
 				
 				loadingOut();
 				/*$.each( data.hints, function (key, item) {

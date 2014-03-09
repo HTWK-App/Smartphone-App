@@ -1,21 +1,32 @@
-<div data-role="page" id="profs" data-title="Mitarbeiter" data-theme="a" data-content-theme="a" data-dom-cache="true">
-	<div data-role="content" id="profs_content" class="toblur">
-		<ul data-role="listview" id="profsList" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Mitarbeiter..." data-inset="true"></ul>
+<div id="staff_page" data-role="page" data-dom-cache="true" data-title="Mitarbeiter" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
+		<ul id="staff_content_list" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Mitarbeiter..." data-inset="true"></ul>
 	</div>
 
 	<script>
-		$( document )
+		/*$( document )
 			.on("pagecreate", "#profs", initProfView)
 			.on("pageshow", "#profs", function() {
 				$("#profpage").detach();
-			 });
+			 });*/
+	
+    	$( "#staff_page" )
+    		.on("pagecreate", initStaffView)
+    		.on("pageshow", function() {
+    			if(!GLOBAL.INIT.staff) loadingIn();
+    			$("#btn_refresh")
+					.off()
+					.on("click", initStaffView);
+    			//$("#staffdetails").detach();
+    		 });
 
-		function initProfView() {
+		function initStaffView() {
 			loadingIn();
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff)
 			 .done(function(data, status, jqXHR) {
-				 fillProfsList(data);
+				 fillStaffList(data);
 				 loadingOut();
+				 GLOBAL.INIT.staff = true;
 			  });
 			// TODO fail
 			
@@ -37,43 +48,55 @@
 			});*/
 		};
 		
-		function fillProfsList(data) {
-			var prof, name;
+		function fillStaffList(data) {
+			var emp, name;
 			var lis = "";
 			
 			if(!isEmpty(data))
 			{
 				for(var k in data)
 				{
-					prof = data[k];
-					name = prof.name.split(", ");
+					emp = data[k];
+					name = emp.name.split(", ");
 					
-					lis += 	'<li class="ui-screen-hidden" data-cuid="'+prof.cuid+'">'+
-								'<a class="prof">'+
-									name[1]+' '+name[0]+', '+prof.degree+
-									'<p>'+prof.faculty+'</p>'+
+					lis += 	'<li class="ui-screen-hidden" data-cuid="'+emp.cuid+'">'+
+								'<a href="#" class="staff">'+
+									name[1]+' '+name[0]+', '+emp.degree+
+									'<p>'+emp.faculty+'</p>'+
 							'</a></li>';
 				}
 				
-				$( "#profsList" )
+				$( "#staff_content_list" )
+					.off()
     				.empty()
     				.append(lis)
-    				.on("click", ".prof", loadProfDetail)
+    				.on("click", "a.staff", loadStaffDetails)
     				.listview("refresh")
     				.trigger("updatelayout");
+				
+				$( "body" )
+					.find("div.staffdetails")
+					.remove();
 			}
 		};
 
-		function loadProfDetail(e) {
+		function loadStaffDetails(e) {
 			var id = $(e.target).parents("li").first().data("cuid");
 			
+			if($("#staff_"+id).length>0) {
+				$.mobile.initializePage();
+				$.mobile.changePage("#staff_"+id);
+				return;
+			}
+			
 			loadingIn();
+			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)
 			 .done(function(data, status, jqXHR) {
 				var name = data.name.split(", ");
-				var div = 	'<div data-role="page" id="profpage" data-title="back" data-theme="a" data-content-theme="a">'+
-								'<div data-role="content" id="prof_content">'+
-									'<h1>'+name[1]+' '+name[0]+'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+id+'/pic" id="prof-img" style="float: right" /></h1>'+
+				var div = 	'<div id="staff_'+id+'" data-role="page" data-title="Mitarbeiter" data-subpage="true" class="staffdetails" data-theme="a" data-content-theme="a">'+
+								'<div data-role="content">'+
+									'<h1>'+name[1]+' '+name[0]+'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+id+'/pic" style="float: right" /></h1>'+
 									'<hr>'+
 									'<p><b>Grad:</b> '+data.degree+'</p>'+
 									'<p><b>Bereich:</b> '+data.faculty+'</br><b>Objekt:</b> '+data.location+'</p>'+
@@ -87,10 +110,11 @@
 							'</div>';
 				
 				$( "body" )
-					.append(div);
+					.append(div)
+					.trigger("create");
 				
 				$.mobile.initializePage();
-				$.mobile.changePage("#profpage");
+				$.mobile.changePage("#staff_"+id);
 				
 				loadingOut();
 			});

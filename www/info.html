@@ -1,4 +1,4 @@
-<div data-role="page" id="info" data-title="Info-Center" data-theme="a" data-content-theme="a">
+<div id="info_page" data-role="page" data-title="Info-Center" data-theme="a" data-content-theme="a">
 	<!-- TODO export to stylesheet -->
 	<style>
 		#info_content img{
@@ -10,12 +10,12 @@
 			margin-left: 25%;
 		}
 	</style>
-	<div data-role="content" id="info_content" class="toblur">
-		<a href="profs.html" data-role="button">
+	<div data-role="content" class="toblur">
+		<a href="staff.html" data-role="button">
 			<img src="themes/images/icons-app/prof.png">
-			<p>Professoren</p>
+			<p>Mitarbeiter</p>
 		</a>
-		<a href="#" data-role="button">
+		<a href="building.html" data-role="button">
 			<img src="themes/images/icons-app/building.svg">
 			<p>Gebäudeplan</p>
 		</a>
@@ -25,7 +25,7 @@
 		</a>
 	</div>
 	<script>
-		$( document )
-			.on( "pagecreate", '[data-title="Info-Center"]', function() {});
+		$( "#info_page" )
+			.on("pagecreate", function() {});
 	</script>
 </div>

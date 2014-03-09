@@ -1,59 +1,70 @@
-<div data-role="page" id="mensa" data-title="Mensa" data-theme="a" data-content-theme="a" data-dom-cache="true">
-	<div data-role="content" id="mensa_content" class="toblur">
+<div id="mensa_page" data-role="page" data-dom-cache="true" data-title="Mensa" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
 		<div data-role="navbar">
 			<p>
-				<label id="week" style="font-weight:bold"></label>
+				<h3 id="week_label"></h3>
 			</p>
-		    <ul>
-		        <li><a href="#" data-href="Mon" id="l_Mon">Montag</a></li>
-		        <li><a href="#" data-href="Tue" id="l_Tue">Dienstag</a></li>
-		        <li><a href="#" data-href="Wed" id="l_Wed">Mittwoch</a></li>
-		        <li><a href="#" data-href="Thu" id="l_Thu">Donnerstag</a></li>
-		        <li><a href="#" data-href="Fri" id="l_Fri">Freitag</a></li>
+		    <ul id="mensa_day_nav">
+		        <li><a id="link_Mon" href="#" data-href="Mon">Montag</a></li>
+		        <li><a id="link_Tue" href="#" data-href="Tue">Dienstag</a></li>
+		        <li><a id="link_Wed" href="#" data-href="Wed">Mittwoch</a></li>
+		        <li><a id="link_Thu" href="#" data-href="Thu">Donnerstag</a></li>
+		        <li><a id="link_Fri" href="#" data-href="Fri">Freitag</a></li>
 		    </ul>
 		</div>
-		<div id="Mon" class="mensa_content_div"></div>
-		<div id="Tue" class="mensa_content_div"></div>
-		<div id="Wed" class="mensa_content_div"></div>
-		<div id="Thu" class="mensa_content_div"></div>
-		<div id="Fri" class="mensa_content_div"></div>
+		<div id="meals_Mon" class="mensa_content"></div>
+		<div id="meals_Tue" class="mensa_content"></div>
+		<div id="meals_Wed" class="mensa_content"></div>
+		<div id="meals_Thu" class="mensa_content"></div>
+		<div id="meals_Fri" class="mensa_content"></div>
 	</div>
-	<div data-role="footer" id="footer_mensa" class="toblur" data-position="fixed">
+	<footer id="mensa_footer" data-role="footer" data-position="fixed" class="toblur">
 		<form>
 			<div data-role="fieldcontain">
-				<label for="select-mensa">Mensa:</label>
-				<select name="select-mensa" id="select-mensa"></select>
+				<label for="mensa_select">Mensa:</label>
+				<select id="mensa_select" name="mensa_select"></select>
 			</div>
 		</form>
-	</div>
+	</footer>
 
 	<script>
 		//var cWeek = getWeek(new Date());
 		//var defaultMensa = new Array("Mensa Academica","118");
 		//var weekday = new Array('Son','Mon','Tue','Wed','Thu','Fri','Sat');
-
-		GLOBAL.MENSA.currentWeek = getWeek(new Date());
 	
 		$( document )
-			.find('#mensa')
-			.on("pagecreate", initMensaView)
-			.on("pageshow", function() {
-				$('#mensapage').detach();
-			 }).end()
-			.delegate('[data-role="navbar"] a', 'click', function () {
-				$('.mensa_content_div').hide();
-				// TODO data()
-				$('#' + $(this).attr('data-href')).show();
+			.on("click", "div:jqmData(role='navbar') a", function () {
+				$("div.mensa_content").hide();
+				$("#" + $(this).jqmData("href")).show();
 				return true;
 			 });
+		
+		$( "#mensa_page" )
+			.on("pagebeforecreate", function() {
+				GLOBAL.MENSA.currentWeek = getWeek(new Date());
+			 })
+			.on("pagecreate", initMensaView)
+			.on("pageshow", function() {
+				if(!GLOBAL.INIT.mensa) loadingIn();
+				//$('#mensapage').detach();
+    			$("#btn_refresh")
+				.off()
+				.on("click", function() {
+					$("#mensa_select").change(); 
+				 });
+			 });
+			
 
 		// var sel = document.getElementById('select-mensa');
-		$( '#select-mensa' )
-			.on('change', function() {
-				$(".mensa_content_div").empty();
+		$( "#mensa_select" )
+			.on("change", function() {
+				$("div.mensa_content").empty();
 				fillCanteen($(this).val(), GLOBAL.MENSA.currentWeek);
 			 });
 
+		/**
+		 * Loading the available Canteens and fill the preselected Canteen.
+		 */
 		function initMensaView() {
 			var date = new Date();
 			var day = getWeekDay(date).id;
@@ -62,27 +73,29 @@
 			fillCanteenSelect();
 			
 			//document.getElementById('Week').innerHTML = 'Aktuelle Woche von '+cWeek[0].replace(/(\d{4})(\d{2})(\d{2})/,'$3.$2.$1')+' bis '+cWeek[4].replace(/(\d{4})(\d{2})(\d{2})/,'$3.$2.$1');
-			$('#week').html('Aktuelle Woche von '+
-								formatDate(GLOBAL.MENSA.currentWeek[0], GLOBAL.DATE.formats.de)
-							+' bis '+
-								formatDate(GLOBAL.MENSA.currentWeek[4], GLOBAL.DATE.formats.de));
+			$("#week_label").html(	"Aktuelle Woche von "+ formatDate(GLOBAL.MENSA.currentWeek[0], GLOBAL.DATE.formats.de)+
+									" bis "+formatDate(GLOBAL.MENSA.currentWeek[4], GLOBAL.DATE.formats.de));
 
 			fillCanteen(CONFIG.MENSA.defaultCanteen.id, GLOBAL.MENSA.currentWeek);
-
-			// open the tab for current day
-			$('[data-href="'+day+'"]').addClass('ui-btn-active');
 
 			// deactivate already past days
 			if (date.getDay() < 6)
 			{
 				for (var i = 0; i < date.getDay(); i++) {
-					// TODO better (id or class attr select maybe?)
-					$('[data-href="'+GLOBAL.DATE.weekdays[i].id+'"]').addClass('ui-disabled');
+					$("#link_"+GLOBAL.DATE.weekdays[i].id).addClass("ui-disabled");
 				};
 			}
+			
+			// open the tab for current day
+			$("#link_"+day)
+				.addClass("ui-btn-active")
+				.click();
 
-			$('#l_'+day).click();
+			//$("#link_"+day).click();
 			//document.getElementById('l_'+wDay).click();
+			
+			loadingOut();
+			GLOBAL.INIT.mensa = true;
 		};
 
 		//function fillCanteen(currentWeek, mensaNo) {
@@ -118,12 +131,12 @@
 		//function fillCanteenDay(day, dishName, dishDescr, prices) {
 		function fillCanteenDay(data, day) {
 			var title, desc, priceStud, priceEmp, priceExt;
-			var meal, meals = '';
+			var meal, meals = "";
 			
 			for(var k in data)
 			{
 				meal = data[k];
-				desc = '';
+				desc = "";
 				for(var i=0; i<meal.ingredients.length; i++)
 				{
 					// TODO better (tag wrap maybe?)
@@ -131,20 +144,20 @@
 				}
 				
 				title = meal.title;
-				// TODO Converting "." to German ","
-				priceStud = parseFloat(meal.price[0]).toFixed(2);
-				priceEmp = parseFloat(meal.price[1]).toFixed(2);
-				priceExt = parseFloat(meal.price[2]).toFixed(2);
+				// TODO better converting?
+				priceStud = parseFloat(meal.price[0]).toFixed(2).replace(/./, ",");
+				priceEmp = parseFloat(meal.price[1]).toFixed(2).replace(/./, ",");
+				priceExt = parseFloat(meal.price[2]).toFixed(2).replace(/./, ",");
 				
-				meals +='<h3>'+title+'</h3><p>'+desc+'</p>'+
-						'<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-disabled" style="overflow:visible;">'+
+				meals += '<h3>'+title+'</h3><p>'+desc+'</p>'+
+						 '<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-disabled" style="overflow:visible;">'+
 							'<a data-role="button">Student: '+priceStud+' &euro;  </a>'+
 							'<a data-role="button">Mitarbeiter: '+priceEmp+' &euro;  </a>'+
 							'<a data-role="button">Extern: '+priceExt+' &euro;  </a>'+
-						'</div><hr>';
+						 '</div><hr>';
 			}
 			
-			$( '#'+day+'' )
+			$( "#meals_"+day )
 				.empty()
 				.append(meals)
 				.trigger("create");
@@ -168,7 +181,7 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
 			 	.done(function(data, status, jqXHR) {
-			 		var opts = '';
+			 		var opts = "";
 			 		
 			 		for(var k in data.location)
 			 		{	
@@ -181,9 +194,9 @@
 			 			opts += '>'+k+'</option>';
 			 		}
 
-			 		$( "#select-mensa" )
+			 		$( "#mensa_select" )
 			 			.append(opts)
-			 			.selectmenu( "refresh" );
+			 			.selectmenu("refresh");
 			 		
 			 		/*$.each(data.location, function(key, item) {
 					if (key == defaultMensa[0]) {

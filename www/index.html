@@ -17,8 +17,8 @@
 		<script type="application/javascript" src="js/fn.js"></script>
 	</head>
 	<body>
-		<div data-role="panel" id="menue" data-theme="b" >
-			<div id="panellist" data-role="listview" data-inset="true" data-theme="b">
+		<nav id="menu" data-role="panel" data-theme="b" >
+			<div data-role="listview" data-inset="true" data-theme="b">
 				<li>
 					<a href="index.html">News</a>
 				</li>
@@ -35,11 +35,11 @@
 					<a href="sport.html">Hochschulsport</a>
 				</li>
 				<li>
-					<div data-role="collapsible" class="pcoll" data-inset="false" data-iconpos="right" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b">
+					<div data-role="collapsible" data-inset="false" data-iconpos="right" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" class="pcoll" data-theme="b">
 				    <h4>Info-Center</h4>
 				    <ul data-role="listview">
 						<li>
-							<a href="profs.html">Professoren</a>
+							<a href="staff.html">Mitarbeiter</a>
 						</li>
 						<li>
 							<a href="building.html">Gebäudeplan</a>
@@ -54,31 +54,32 @@
 					<a href="settings.html">Einstellungen</a>
 				</li>
 			</div>
-		</div>
+		</nav>
 		
-		<div data-role="header" id="header" class="toblur" data-theme="a" data-position="fixed">
+		<header id="header" data-role="header" data-position="fixed" class="toblur" data-theme="a">
 			<h1>News</h1>
-			<div class="ui-btn-left" data-type="horizontal">
-				<a href="#menue" data-role="button" data-icon="bars" data-mini="true">Menü</a>	
-				<a data-rel="back" data-role="button" data-icon="back" data-mini="true">Zurück</a>
+			<div data-type="horizontal" class="ui-btn-left">
+				<a id="btn_menu" href="#menu" data-role="button" data-icon="bars" data-mini="true">Menü</a>	
+				<a id="btn_back" data-rel="back" data-role="button" data-icon="back" data-mini="true">Zurück</a>
 			</div>
-			<div class="ui-btn-right" data-type="horizontal">
-				<a data-rel="refresh" id="btn_refresh" data-role="button" data-icon="refresh" data-mini="true">Aktualisieren</a>
+			<!-- TODO noText -->
+			<div data-role="controlgroup" data-type="horizontal" class="ui-btn-right">
+				<a id="btn_refresh" data-role="button" data-icon="refresh" data-rel="refresh">Aktualisieren</a>
 			</div>
-		</div>
+		</header>
 		
-		<div data-role="page" id="news" class="toblur" data-title="News" data-theme="a" data-content-theme="a" data-dom-cache="true">
-			<div data-role="content" id="news_content">
+		<div id="news_page" data-role="page" data-dom-cache="true" data-title="News" class="toblur" data-theme="a" data-content-theme="a">
+			<div data-role="content">
 				<div data-role="fieldcontain">
-					<label for="select-news">Kategorie:</label>
-					<select name="select-news" id="select-news" data-mini="true">
+					<label for="news_select">Kategorie:</label>
+					<select id="news_select" name="news_select" data-mini="true">
 						<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
 					</select>
 				</div>
-				<ul data-role="listview" id="news_content_list" data-inset="true"></ul>
-				<!-- <a data-role="button" id="news-more">Mehr</a>-->
+				<ul id="news_content_list" data-role="listview" data-inset="true"></ul>
+				<!-- TODO <a data-role="button" id="news-more">Mehr</a>-->
 			</div>
-			<div data-role="popup" id="news_popup">
+			<div id="news_popup" data-role="popup">
 				<p>Diese Nachricht besitzt keinen zusätzlichen Inhalt!</p>
 			</div>
 		</div>
@@ -90,7 +91,7 @@
 		$.ajaxSetup(CONFIG.AJAX);
 		
 		// TODO remove, only for Testing, Insert your Account-Data in GLOBAL.DEMO
-		$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+'?username='+GLOBAL.DEMO.username+'&password='+GLOBAL.DEMO.password)
+		$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+GLOBAL.DEMO.password)
 		 .done(function(data, status, jqXHR) {
 			 GLOBAL.DEMO.credentials = data.encryptedCredentials;
 			 GLOBAL.DEMO.salt = data.salt;
@@ -106,56 +107,67 @@
 				window.addEventListener("load", function() {
 					new FastClick(document.body);
 				}, false);
-				$( "[data-role='navbar']" ).navbar();
-				$( "[data-role='header'], [data-role='footer']" ).toolbar();
+				// there is no Element to fit the Selector
+				//$( "[data-role='navbar']" ).navbar();
+				$("header, footer").toolbar();
 			})
-			.on( "panelbeforeopen", function( event, ui ) {
-				$( ".toblur" ).toggleClass("blur");
+			.on("panelbeforeopen", function( event, ui ) {
+				$(".toblur").toggleClass("blur");
 			})
-			.on( "panelbeforeclose", function( event, ui ) {
-				$( ".toblur" ).removeClass("blur");
+			.on("panelbeforeclose", function( event, ui ) {
+				$(".toblur").removeClass("blur");
 			})
 			/* Update the contents of the toolbars*/
-			.on( "pageshow", "[data-role='page']", function() {
+			.on("pageshow", "div:jqmData(role='page')", function() {
     			/* on page: <div data-role="page" data-title="Info">*/
-    			var curr = $( this ).jqmData( "title" );
-    			var h = $("[data-role='header']");
-    			if( curr == "back") {
-    				h.find("a[data-rel='back']").css("display", "block").end()
-    				 .find("a[href='#menue']").css('display', 'none');
+				var o = $(this);
+    			var title = o.jqmData("title");
+    			var subpage = !isEmpty(o.jqmData("subpage"));
+    			var h = $("#header");
+    			
+    			h.find("h1").text(title);
+    			//if( curr == "back") {
+    			if(subpage) {
+    				h.find("#btn_back").css("display", "block").end()
+    				 .find("#btn_menu").css("display", "none");
     				//$( "[data-role='header'] a" ).remove();	
     				//$( "[data-role='header']" ).append('<a data-role="button" data-rel="back" data-icon="back" data-mini="true" class="ui-btn-left">Zurück</a>');
     			} else {
-    				h.find("h1").text( curr ).end()
-    				 .find("a[href='#menue']").css('display', 'block').end()
-    				 .find("a[data-rel='back']").css('display', 'none');
+    				//h.find("h1").text( curr ).end()
+    				h.find("#btn_menu").css("display", "block").end()
+    				 .find("#btn_back").css("display", "none");
     				//$( "[data-role='header'] h1" ).text( current );
     				//$( "[data-role='header'] a" ).remove();	
-    				//$( "[data-role='header']" ).append('<a href="#menue" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>');
+    				//$( "[data-role='header']" ).append('<a href="#menu" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>');
     			}
-    			// TODO better
-    			$("#btn_refresh").off().on("click", function() { $("#select-news").change(); });
 			});
 		// TODO showLoading
 		//$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
 
-		$( '#news' )
-			.on( "pagebeforecreate", function() {
+		$( "#news_page" )
+			/*.on("pagebeforecreate", function() {
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 				.done(fillNewsFeedSelect);
 				//fillNewsCategories();
 				//	fillNewsContent("");
-			})
-			.on('pageshow', function () {
+			})*/
+			.on("pagecreate", initNewsView)
+			.on("pageshow", function () {
+				if(!GLOBAL.INIT.news) loadingIn();
 				$("#news_content_list li a").removeClass("ui-btn-active");
+				$("#btn_refresh")
+				.off()
+				.on("click", function() { 
+					$("#news_select").change(); 
+				 });
 			});
 
-		$( '#select-news' )
+		$( "#news_select" )
 			.change(function() {
 				//$("#news_content_list").empty();
-				$( ".newpage" ).detach();
+				//$( "div.news_details" ).detach();
 				//fillNewsContent(feedList[$(this).val()]);
-				fillNewsContent($(this).val());
+				changeNewsFeed($(this).val());
 			});
 
 		// TODO
@@ -175,18 +187,66 @@
 				//});
 			//});
 		}*/
+		
+		//function fillNewsFeedSelect(data) {//key, item){
+		/**
+		 * Loading the available News-Feeds (Prefill Feed-Selectbox).
+		 */
+		function initNewsView() {
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
+			 .done(function(data, status, jqXHR) {
+					//var list = $("#news_select");
+					var tmp, name, id, opts;
 
-		function fillNewsContent(feed) {
+					opts = "";
+					
+					for(var k in data)
+					{
+						id = data[k].id;
+						tmp = id.split(".");
+						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
+						if(id == CONFIG.NEWS.defaultFeed)
+							tmp = 'selected="selected"';
+						else 
+							tmp = "";
+						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+						//feedList[k] = id;
+					}	
+					
+					$( "#news_select" )
+						.empty()
+						.append(opts)
+						.selectmenu("refresh")
+						.change();
+					
+					loadingOut();
+					GLOBAL.INIT.news = true;
+					
+					//var help = item.id.split(".");
+					//var name = help[1].substr(0,1).toUpperCase()+help[1].substring(1,help[1].length);
+					//var number = ""; var sel = "";
+					//if(help.length == 3){number = help[2];}else{number = "";}
+					//if(key == "rss.htwk.4") {sel = 'selected="selected"';}
+					//list.append('<option value="'+key+'" '+sel+'>'+name+' '+number+'</option>');
+					//feedList[key] = item.id;
+					//list.selectmenu( "refresh" );
+			 });
+		};
+
+		/**
+		 * Loading all News of the given Feed.
+		 */
+		function changeNewsFeed(feed) {
 			loadingIn();
 			//$.getJSON( SERVER_URL+'news/get?',{feed: feed}).done( function(data,a,b) {
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+'/get?', {feed: feed})
-				.done(function(data, status, jqXHR) {
-					//$('#news_content_list').empty();
-					fillNewsList(data.responseData.feed.entries);
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed})
+			 .done(function(data, status, jqXHR) {
+				 	createNewsEntries(data.responseData.feed.entries);
+				 	loadingOut();
+				 //$('#news_content_list').empty();
 					/*$.each( data.responseData.feed.entries, function( i, item ) {
 						newsCreateNewsElement("",item.title,item.contentSnippet,item.content,item.publishedDate);		
 					});*/
-					loadingOut();
 					//$.mobile.loading('hide'); 
 					//showLoading = false;
 				});
@@ -194,16 +254,21 @@
 		};
 
 		//function newsCreateNewsElement(picture,header,contentSnippet,content,date){
-		function fillNewsList(data) {
+		/**
+		 * Creating all News-Entries inclusive Details.
+		 */
+		function createNewsEntries(data) {
 			var link, pic, title, snipp, content, date;
-			var lis = '';
-			var divs = '';
+			var c = 0;
+			var lis = "";
+			var divs = "";
 			
-			GLOBAL.NEWS.counter = 0;
+			// not needed anymore
+			//GLOBAL.NEWS.counter = 0;
 			
 			for(var k in data)
 			{
-				pic = '';
+				pic = "";
 				title = data[k].title;
 				snipp = data[k].contentSnippet;
 				content = data[k].content;
@@ -211,7 +276,7 @@
 				
 				if(!isEmpty(pic)) pic = '<img src="data:image/png;base64,'+pic+'" />';
 				if(isEmpty(content)) link = 'popup" data-rel="popup"';
-				else link = ++GLOBAL.NEWS.counter + '"';
+				else link = ++c + '"'; //++GLOBAL.NEWS.counter + '"';
 				
 				lis += 	'<li><a href="#news_'+link+'>'+
 							'<h3>'+title+'</h3>'+
@@ -219,20 +284,22 @@
 							'<p><small>'+createDateTimeStamp(date)+'</small></p>'+
 						'</a></li>';
 				
-				divs += '<div data-role="page" class="newpage" id="news_'+link+' data-title="back" data-theme="a" data-content-theme="a">'+
-							'<div data-role="content" id="news_content">'+pic+
+				divs += '<div id="news_'+link+' data-role="page" data-title="News" data-subpage="true" class="newsdetails" data-theme="a" data-content-theme="a">'+
+							'<div data-role="content">'+pic+
 								'<h2>'+title+'</h2><h4><small>'+createDateTimeStamp(date)+'</small></h4><p>'+content+'</p>'+
 							'</div>'+
 						'</div>';
 			}
 			
-			$( '#news_content_list' )
+			$( "#news_content_list" )
 				.empty()
 				.append(lis)
-				.listview('refresh')
-				.trigger('updatelayout');
+				.listview("refresh")
+				.trigger("updatelayout");
 			
-			$( 'body' )
+			$( "body" )
+				.find("div.newsdetails")
+				.remove().end()
 				.append(divs)
 				.trigger("create");
 			
@@ -266,40 +333,6 @@
 				$( "body" ).append(pattern).trigger("create");
 				$.mobile.initializePage();
 			}*/
-		}
-
-		function fillNewsFeedSelect(data) {//key, item){
-			var list = $( "#select-news" );
-			var tmp, name, id, items;
-
-			items = "";
-			
-			for(var k in data)
-			{
-				id = data[k].id;
-				tmp = id.split(".");
-				name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
-				if(id == CONFIG.NEWS.defaultFeed)
-					tmp = 'selected="selected"';
-				else 
-					tmp = "";
-				items += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
-				//feedList[k] = id;
-			}	
-			
-			list
-				.empty()
-				.append(items)
-				.selectmenu( "refresh" );
-			
-			//var help = item.id.split(".");
-			//var name = help[1].substr(0,1).toUpperCase()+help[1].substring(1,help[1].length);
-			//var number = ""; var sel = "";
-			//if(help.length == 3){number = help[2];}else{number = "";}
-			//if(key == "rss.htwk.4") {sel = 'selected="selected"';}
-			//list.append('<option value="'+key+'" '+sel+'>'+name+' '+number+'</option>');
-			//feedList[key] = item.id;
-			//list.selectmenu( "refresh" );
 		};
 	</script>	
 	</body>

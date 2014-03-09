@@ -1,5 +1,5 @@
-<div data-role="page" id="building" data-title="Gebäude" data-theme="a" data-content-theme="a" data-dom-cache="true">
-	<div data-role="content" id="building_content" class="toblur">
+<div id="building_page" data-role="page" data-dom-cache="true" data-title="Gebäude" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
 		<ul data-role="listview" id="buidling_content_list" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true"></ul>
 	</div>
 	<!-- <div data-role="content" id="building_content" class="toblur">
@@ -12,16 +12,26 @@
 	</div>-->
 
 	<script>
-		$( document )
+		/*$( document )
 			.on("pagecreate", "#building", initBuildingsView)
 			.on("pageshow", "#building", function() {
 				$("#buildingpage").detach();
-			 });
+			 });*/
 		/*$( document )
 			.on("pagecreate", "[data-title='Gebäude']", initBuildingsView); function() {
 			
 			fillBuildings(new Array("Lipsius-Bau","Zuse-Bau","Geutebrück-Bau"));
 		});*/
+	
+    	$( "#building_page" )
+    		.on("pagecreate", initBuildingsView)
+    		.on("pageshow", function() {
+    			if(!GLOBAL.INIT.builds) loadingIn();
+    			$("#btn_refresh")
+					.off()
+					.on("click", initBuildingsView);
+    			//$("#buildingpage").detach();
+    		 });
 
 		function initBuildingsView() {
 			loadingIn();
@@ -29,6 +39,7 @@
 			 .done(function(data, status, jqXHR) {
 				fillBuildingsList(data);
 				loadingOut();
+				GLOBAL.INIT.builds = true;
 			});
 			// TODO fail
 			
@@ -52,7 +63,7 @@
 		};
 		
 		function fillBuildingsList(data) {
-			var building, lis = '', desc = '';
+			var building, lis = "", desc = "";
 			
 			if(!isEmpty(data))
 			{				
@@ -67,7 +78,7 @@
 							desc += building.description[d];
 					}
 					
-					lis += 	'<li data-bid='+building.id+'><a href="#" class="sport">'+
+					lis += 	'<li data-bid='+building.id+'><a href="#" class="building">'+
 								'<h3>'+building.fullName+'</h3>'+
 								'<p>'+desc+'</p>'+
 								'<p>'+building.address+'</p>'+
@@ -75,18 +86,30 @@
 				}
 				
 				$( "#buidling_content_list" )
+					.off()
 					.empty()
 					.append(lis)
-					.on('click', '.sport', loadBuildingDetails)
+					.on("click", "a.building", loadBuildingDetails)
 					.listview("refresh")
 					.trigger("updatelayout");
+				
+				$( "body" )
+					.find("div.buildingdetails")
+					.remove();
 			}
 		};
 		
 		function loadBuildingDetails(e) {
 			var id = $(e.target).parents("li").first().data("bid");
 
+			if($("#building_"+id).length>0) {
+				$.mobile.initializePage();
+				$.mobile.changePage("#building_"+id);
+				return;
+			}
+			
 			loadingIn();
+			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)
 			 .done(function(data, status, jqXHR) {
 				var desc = "";
@@ -98,24 +121,24 @@
 						desc += data.description[d] + "</br>";
 				}
 				
-				 // TODO caching, pattern extern
-				var div =	'<div data-role="page" id="buildingpage" data-title="Gebäude" data-title="back" data-theme="a" data-content-theme="a">'+
-								'<div data-role="content" id="building_content">'+
-									'<h1><img src="'+data.pictureLink+'" '+
-									'id="building-img" style="float:right;"/>'+data.fullName+'</h1>'+
+				var div =	'<div id="building_'+id+'" data-role="page" data-title="Gebäude" data-subpage="true" class="buildingdetails" data-theme="a" data-content-theme="a">'+
+								'<div data-role="content">'+
+									'<h1><img src="'+data.pictureLink+'" style="float:right;"/>'+data.fullName+'</h1>'+
 									'<p><b>Abkürzung:</b> '+data.id+'</p>'+
 									'<p><b>Beschreibung:</b> '+desc+'<hr></p>'+
 									'<p><b>Adresse:</b> '+data.address+'</p>'+
-									'<p><iframe src="http://maps.google.de/maps?hl=de&q='+data.latLng.replace(/ /, '')+'&ie=UTF8&t=&z=16&iwloc=B&output=embed" width="90%" height="500" name="GoogleMaps"></iframe></p>'+
+									//'<p><iframe src="http://maps.google.de/maps?hl=de&q='+data.latLng.replace(/ /, '')+'&ie=UTF8&t=&z=16&iwloc=B&output=embed" width="90%" height="500" name="GoogleMaps"></iframe></p>'+
+									'<p><iframe src="http://maps.google.de/maps?hl=de&q='+data.latLng.replace(/ /, '')+'&ie=UTF8&z=16&output=embed" width="90%" height="500" name="GoogleMaps"></iframe></p>'+
 									'<p><small><b>Letzte Änderung:</b> '+createDateTimeStamp(new Date(data.lastChange))+'</small></p>'+
 								'</div>'+
 							'</div>';
 				
 				$( "body" )
-					.append(div);
+					.append(div)
+					.trigger("create");
 				
 				$.mobile.initializePage();
-				$.mobile.changePage("#buildingpage");
+				$.mobile.changePage("#building_"+id);
 				
 				loadingOut();
 			  });

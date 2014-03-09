@@ -51,14 +51,25 @@ var CONFIG = {
 
 var GLOBAL = {
 	DEMO: {
-		username: "",
-		password: "",
+		username: "hwilluhn",
+		password: "ODei4Diy",
 		credentials: "",
 		salt: ""
 	},
-	NEWS: {
-		counter: 0
+	INIT: {
+		news: false,
+		mensa: false,
+		mail: false,
+		qis: false,
+		sport: false,
+		staff: false,
+		builds: false,
+		wlan: false,
+		settings: false
 	},
+	/*NEWS: {
+		counter: 0
+	},*/
 	MENSA: {
 		currentWeek: null
 	},
