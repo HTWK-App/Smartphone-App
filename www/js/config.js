@@ -51,8 +51,8 @@ var CONFIG = {
 
 var GLOBAL = {
 	DEMO: {
-		username: "hwilluhn",
-		password: "ODei4Diy",
+		username: "",
+		password: "",
 		credentials: "",
 		salt: ""
 	},
