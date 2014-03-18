@@ -5,13 +5,13 @@
 		<meta charset = "utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1"> 
 
-		<link rel="stylesheet" type="text/css" href="themes/jquery.mobile-1.4.0.min.css" />
+		<link rel="stylesheet" type="text/css" href="themes/jquery.mobile-1.4.2.min.css" />
 		<link rel="stylesheet" type="text/css" href="themes/HTWK.min.css" />
 		<link rel="stylesheet" type="text/css" href="themes/additions.css" />
 		
 		<script type="application/javascript" src="js/lib/fastclick.js"></script>
 		<script type="application/javascript" src="js/lib/jquery-2.0.3.min.js"></script>
-		<script type="application/javascript" src="js/lib/jquery.mobile-1.4.0.min.js"></script>
+		<script type="application/javascript" src="js/lib/jquery.mobile-1.4.2.min.js"></script>
 		
 		<script type="application/javascript" src="js/config.js"></script>
 		<script type="application/javascript" src="js/fn.js"></script>
@@ -104,8 +104,8 @@
 				$.mobile.buttonMarkup.hoverDelay = 0;
 				$.mobile.changePage.defaults.allowSamePageTransition = true;
 				// Add EventListener for Fastclick Framework//
-				window.addEventListener("load", function() {
-					new FastClick(document.body);
+				window.addEventListener('load', function() {
+					FastClick.attach(document.body);
 				}, false);
 				// there is no Element to fit the Selector
 				//$( "[data-role='navbar']" ).navbar();

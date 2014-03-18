@@ -1,9 +1,9 @@
 /*!
-* jQuery Mobile 1.4.0pre
-* Git HEAD hash: 430d6aed147c574ad9d68cdbde7b67a8dbb7ae35 <> Date: Tue Nov 26 2013 19:20:27 UTC
+* jQuery Mobile 1.4.2
+* Git HEAD hash: 9d9a42a27d0c693e8b5569c3a10d771916af5045 <> Date: Fri Feb 28 2014 17:32:01 UTC
 * http://jquerymobile.com
 *
-* Copyright 2010, 2013 jQuery Foundation, Inc. and other contributors
+* Copyright 2010, 2014 jQuery Foundation, Inc. and other contributors
 * Released under the MIT license.
 * http://jquery.org/license
 *
@@ -24,7 +24,7 @@ button,
 .ui-btn {
 	font-size: 1em;
 	line-height: 1.3;
-	  font-family: arial /*{global-font-family}*/;
+	 font-family: arial /*{global-font-family}*/;
 }
 legend,
 .ui-input-text input,
@@ -208,7 +208,7 @@ html .ui-alt-icon .ui-radio-off:after {
 }
 /* Loader */
 .ui-icon-loading {
-	background: url(images/ajax-loader.gif);
+	background: url("images/ajax-loader.gif");
 	background-size: 2.875em 2.875em;
 }
 /* Swatches */
@@ -220,8 +220,8 @@ html .ui-alt-icon .ui-radio-off:after {
 html .ui-bar-a .ui-bar-inherit,
 html .ui-body-a .ui-bar-inherit,
 html body .ui-group-theme-a .ui-bar-inherit {
-	background: #2346A0 /*{a-bar-background-color}*/;
-	border-color: #2346A0 /*{a-bar-border}*/;
+	background-color: #2346A0 /*{a-bar-background-color}*/;
+	border-color: #3162e0 /*{a-bar-border}*/;
 	color: #FFFFFF /*{a-bar-color}*/;
 	text-shadow: 0 /*{a-bar-shadow-x}*/ 0 /*{a-bar-shadow-y}*/ 0 /*{a-bar-shadow-radius}*/ #eeeeee /*{a-bar-shadow-color}*/;
 	font-weight: bold;
@@ -234,7 +234,7 @@ html body .ui-group-theme-a .ui-bar-inherit {
 .ui-overlay-a,
 .ui-page-theme-a,
 .ui-page-theme-a .ui-panel-wrapper {
-	background: #ECEEED /*{a-page-background-color}*/;
+	background-color: #ECEEED /*{a-page-background-color}*/;
 	border-color: #ECEEED /*{a-page-border}*/;
 	color: #000000 /*{a-page-color}*/;
 	text-shadow: 1px /*{a-page-shadow-x}*/ 1px /*{a-page-shadow-y}*/ 0 /*{a-page-shadow-radius}*/ #d1d1d1 /*{a-page-shadow-color}*/;
@@ -246,7 +246,7 @@ html .ui-bar-a .ui-body-inherit,
 html .ui-body-a .ui-body-inherit,
 html body .ui-group-theme-a .ui-body-inherit,
 html .ui-panel-page-container-a {
-	background: #ffffff /*{a-body-background-color}*/;
+	background-color: #ffffff /*{a-body-background-color}*/;
 	border-color: #bdbdbd /*{a-body-border}*/;
 	color: #000000 /*{a-body-color}*/;
 	text-shadow: 1px /*{a-body-shadow-x}*/ 1px /*{a-body-shadow-y}*/ 0 /*{a-body-shadow-radius}*/ #d1d1d1 /*{a-body-shadow-color}*/;
@@ -293,7 +293,7 @@ html .ui-bar-a .ui-btn:visited,
 html .ui-body-a .ui-btn:visited,
 html body .ui-group-theme-a .ui-btn:visited,
 html head + body .ui-btn.ui-btn-a:visited {
-	background: #DADEDB /*{a-bup-background-color}*/;
+	background-color: #DADEDB /*{a-bup-background-color}*/;
 	border-color: #bdbdbd /*{a-bup-border}*/;
 	color: #000000 /*{a-bup-color}*/;
 	text-shadow: 1px /*{a-bup-shadow-x}*/ 1px /*{a-bup-shadow-y}*/ 0 /*{a-bup-shadow-radius}*/ d1d1d1 /*{a-bup-shadow-color}*/;
@@ -304,7 +304,7 @@ html .ui-bar-a .ui-btn:hover,
 html .ui-body-a .ui-btn:hover,
 html body .ui-group-theme-a .ui-btn:hover,
 html head + body .ui-btn.ui-btn-a:hover {
-	background: #ECEEED /*{a-bhover-background-color}*/;
+	background-color: #ECEEED /*{a-bhover-background-color}*/;
 	border-color: #bdbdbd /*{a-bhover-border}*/;
 	color: #000000 /*{a-bhover-color}*/;
 	text-shadow: 1px /*{a-bhover-shadow-x}*/ 1px /*{a-bhover-shadow-y}*/ 0 /*{a-bhover-shadow-radius}*/ #d1d1d1 /*{a-bhover-shadow-color}*/;
@@ -315,7 +315,7 @@ html .ui-bar-a .ui-btn:active,
 html .ui-body-a .ui-btn:active,
 html body .ui-group-theme-a .ui-btn:active,
 html head + body .ui-btn.ui-btn-a:active {
-	background: #ECEEED /*{a-bdown-background-color}*/;
+	background-color: #ECEEED /*{a-bdown-background-color}*/;
 	border-color: #bdbdbd /*{a-bdown-border}*/;
 	color: #333333 /*{a-bdown-color}*/;
 	text-shadow: 1px /*{a-bdown-shadow-x}*/ 1px /*{a-bdown-shadow-y}*/ 0 /*{a-bdown-shadow-radius}*/ #d1d1d1 /*{a-bdown-shadow-color}*/;
@@ -382,7 +382,7 @@ html head + body .ui-body-a.ui-focus {
 html .ui-bar-b .ui-bar-inherit,
 html .ui-body-b .ui-bar-inherit,
 html body .ui-group-theme-b .ui-bar-inherit {
-	background: #424242 /*{b-bar-background-color}*/;
+	background-color: #424242 /*{b-bar-background-color}*/;
 	border-color: #212121 /*{b-bar-border}*/;
 	color: #FFFFFF /*{b-bar-color}*/;
 	text-shadow: 0 /*{b-bar-shadow-x}*/ 0 /*{b-bar-shadow-y}*/ 0 /*{b-bar-shadow-radius}*/ #eeeeee /*{b-bar-shadow-color}*/;
@@ -396,7 +396,7 @@ html body .ui-group-theme-b .ui-bar-inherit {
 .ui-overlay-b,
 .ui-page-theme-b,
 .ui-page-theme-b .ui-panel-wrapper {
-	background: #424242 /*{b-page-background-color}*/;
+	background-color: #424242 /*{b-page-background-color}*/;
 	border-color: #bbbbbb /*{b-page-border}*/;
 	color: #FFFFFF /*{b-page-color}*/;
 	text-shadow: 0 /*{b-page-shadow-x}*/ 1px /*{b-page-shadow-y}*/ 0 /*{b-page-shadow-radius}*/ #f3f3f3 /*{b-page-shadow-color}*/;
@@ -408,8 +408,8 @@ html .ui-bar-b .ui-body-inherit,
 html .ui-body-b .ui-body-inherit,
 html body .ui-group-theme-b .ui-body-inherit,
 html .ui-panel-page-container-b {
-	background: #212121 /*{b-body-background-color}*/;
-	border-color: #212121 /*{b-body-border}*/;
+	background-color: #212121 /*{b-body-background-color}*/;
+	border-color: #2e2e2e /*{b-body-border}*/;
 	color: #FFFFFF /*{b-body-color}*/;
 	text-shadow: 0 /*{b-body-shadow-x}*/ 0 /*{b-body-shadow-y}*/ 0 /*{b-body-shadow-radius}*/ #f3f3f3 /*{b-body-shadow-color}*/;
 }
@@ -455,7 +455,7 @@ html .ui-bar-b .ui-btn:visited,
 html .ui-body-b .ui-btn:visited,
 html body .ui-group-theme-b .ui-btn:visited,
 html head + body .ui-btn.ui-btn-b:visited {
-	background: #4f4f4f /*{b-bup-background-color}*/;
+	background-color: #4f4f4f /*{b-bup-background-color}*/;
 	border-color: #212121 /*{b-bup-border}*/;
 	color: #FFFFFF /*{b-bup-color}*/;
 	text-shadow: 0 /*{b-bup-shadow-x}*/ 0 /*{b-bup-shadow-y}*/ 0 /*{b-bup-shadow-radius}*/ #f3f3f3 /*{b-bup-shadow-color}*/;
@@ -466,7 +466,7 @@ html .ui-bar-b .ui-btn:hover,
 html .ui-body-b .ui-btn:hover,
 html body .ui-group-theme-b .ui-btn:hover,
 html head + body .ui-btn.ui-btn-b:hover {
-	background: #696969 /*{b-bhover-background-color}*/;
+	background-color: #696969 /*{b-bhover-background-color}*/;
 	border-color: #212121 /*{b-bhover-border}*/;
 	color: #ffffff /*{b-bhover-color}*/;
 	text-shadow: 0 /*{b-bhover-shadow-x}*/ 0 /*{b-bhover-shadow-y}*/ 0 /*{b-bhover-shadow-radius}*/ #f3f3f3 /*{b-bhover-shadow-color}*/;
@@ -477,7 +477,7 @@ html .ui-bar-b .ui-btn:active,
 html .ui-body-b .ui-btn:active,
 html body .ui-group-theme-b .ui-btn:active,
 html head + body .ui-btn.ui-btn-b:active {
-	background: #696969 /*{b-bdown-background-color}*/;
+	background-color: #696969 /*{b-bdown-background-color}*/;
 	border-color: #212121 /*{b-bdown-border}*/;
 	color: #ffffff /*{b-bdown-color}*/;
 	text-shadow: 0 /*{b-bdown-shadow-x}*/ 0 /*{b-bdown-shadow-y}*/ 0 /*{b-bdown-shadow-radius}*/ #f3f3f3 /*{b-bdown-shadow-color}*/;
