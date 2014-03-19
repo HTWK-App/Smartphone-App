@@ -13,10 +13,10 @@ var CONFIG = {
 		// LIVE
 		//base: "",
 		// DEMO
-		//base: "http://benjaminwestphal.de:9091/htwk/",
+		base: "http://benjaminwestphal.de:9091/htwk/",
 		//base: "http://gateway.westphal.im:5001/",
 		// LOCAL
-		base: "http://localhost:8080/app/",
+		// base: "http://localhost:8080/app/",
 		staff: "info/staff/",
 		builds: "info/building",
 		sport: "info/sport",
@@ -65,6 +65,8 @@ var GLOBAL = {
 		staff: false,
 		builds: false,
 		wlan: false,
+		info: false,
+		room: false,
 		settings: false
 	},
 	/*NEWS: {

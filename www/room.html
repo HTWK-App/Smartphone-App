@@ -1,0 +1,16 @@
+<div id="room_page" data-role="page" data-title="Finde Seminarraum" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
+
+	</div>
+	<script>
+		$( "#room_page" )
+			.on("pagecreate", function() {})
+			.on("pageshow", function () {
+				$("#btn_refresh").hide();
+				GLOBAL.INIT.room = true;
+			 })
+			.on("pagehide", function() {
+				$("#btn_refresh").show();
+			 });
+	</script>
+</div>
