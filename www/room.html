@@ -1,16 +1,47 @@
 <div id="room_page" data-role="page" data-title="Finde Seminarraum" data-theme="a" data-content-theme="a">
-	<div data-role="content" class="toblur">
-
+	<div id="roomContent" data-role="content" class="toblur">
 	</div>
 	<script>
 		$( "#room_page" )
-			.on("pagecreate", function() {})
+			.on("pagecreate", function(){})
 			.on("pageshow", function () {
 				$("#btn_refresh").hide();
 				GLOBAL.INIT.room = true;
+				$.mobile.loading( "show", {
+				  text: "Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!",
+				  textVisible: true,
+				  theme: "b"
+				});
 			 })
 			.on("pagehide", function() {
 				$("#btn_refresh").show();
 			 });
+
+		function getLocation() {
+			navigator.geolocation.getCurrentPosition(locationFound, locationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+		}
+
+		function locationFound(position){
+			if(position.coords.accuracy > 10) {
+				getLocation();
+			}else{
+				 alert('Latitude: '          + position.coords.latitude          + '\n' +
+				  'Longitude: '         + position.coords.longitude         + '\n' +
+				  'Altitude: '          + position.coords.altitude          + '\n' +
+				  'Accuracy: '          + position.coords.accuracy          + '\n' +
+				  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+				  'Heading: '           + position.coords.heading           + '\n' +
+				  'Speed: '             + position.coords.speed             + '\n' +
+				  'Timestamp: '         + position.timestamp                + '\n');
+				loadingOut();
+				$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude + position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="500" name="GoogleMaps"></iframe></p>');
+			}
+		}
+
+		function locationError(error){
+			alert('code: '    + error.code    + '\n' +
+          		'message: ' + error.message + '\n');
+			loadingOut();
+		}
 	</script>
 </div>

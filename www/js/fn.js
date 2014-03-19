@@ -79,7 +79,12 @@ function escape(str) {
 };
 
 function loadingIn() {
-	$.mobile.loading("show");
+	$.mobile.loading( "show", {
+	  text: "Daten werden abgerufen",
+	  textVisible: true,
+	  disabled: true,
+	  theme: "b"
+	});
 };
 
 function loadingOut() {
