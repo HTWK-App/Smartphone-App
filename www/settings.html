@@ -1,11 +1,18 @@
 <div id="settings_page" data-role="page" data-title="Einstellungen" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
+		<h3>Sprache</h3>
+		<hr>
+		<label for="default_language_select">Standardsprache:</label>
+		<select id="default_language_select" name="default_language_select" data-mini="true">
+			<option selected="selected">Deutsch</option>
+			<option>English</option>
+		</select>
 		<h3>Login-Daten</h3>
 		<hr>
 		<label for="text-basic">Nutzername:</label>
 		<input type="text" name="text-basic" id="text-basic" value="" placeholder="Nutzername">
 		<label for="password">Passwort:</label>
-		<input type="password" name="password" id="password" value="" autocomplete="off">
+		<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
 		<h3>News</h3>
 		<hr>
 		<label for="default_news_select">Standard Newsfeed:</label>
@@ -91,7 +98,8 @@
 
 		$( "#default_canteen_select" )
 			.on("change", function() {
-				CONFIG.Mensa.defaultCanteen = $(this).val();
+				CONFIG.Mensa.defaultCanteen.id = $(this).val();
+				CONFIG.Mensa.defaultCanteen.name = ""
 			});
 
 	</script>
