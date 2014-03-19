@@ -1,9 +1,98 @@
-<div data-role="page" id="settings" data-title="Einstellungen" data-theme="a" data-content-theme="a">
-	<div data-role="content" id="settings_content" class="toblur">
+<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
+		<h3>Login-Daten</h3>
+		<hr>
+		<label for="text-basic">Nutzername:</label>
+		<input type="text" name="text-basic" id="text-basic" value="" placeholder="Nutzername">
+		<label for="password">Passwort:</label>
+		<input type="password" name="password" id="password" value="" autocomplete="off">
+		<h3>News</h3>
+		<hr>
+		<label for="default_news_select">Standard Newsfeed:</label>
+		<select id="default_news_select" name="default_news_select" data-mini="true">
+			<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+		</select>
+		<h3>Mensa</h3>
+		<hr>
+		<label for="default_canteen_select">Standard Mensa:</label>
+		<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
+			<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+		</select>
 	</div>
 
 	<script>
-		$( document ).on( "pagecreate", '[data-title="Einstellungen"]', function() {
-		});
+		$( "#settings_page" )
+			.on("pagecreate", function () {getNewsFeeds(); getCanteens();})
+			.on("pageshow", function () {
+				if(!GLOBAL.INIT.settings) loadingIn();
+				$("#btn_refresh").hide();
+				GLOBAL.INIT.settings = true;
+			 })
+			.on("pagehide", function() {
+				$("#btn_refresh").show();
+			 });
+
+		function getNewsFeeds() {
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
+			 .done(function(data, status, jqXHR) {
+					var tmp, name, id, opts;
+
+					opts = "";
+					
+					for(var k in data)
+					{
+						id = data[k].id;
+						tmp = id.split(".");
+						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
+						if(id == CONFIG.NEWS.defaultFeed)
+							tmp = 'selected="selected"';
+						else 
+							tmp = "";
+						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+					}	
+					
+					$( "#default_news_select" )
+						.empty()
+						.append(opts)
+						.selectmenu("refresh");
+					
+					loadingOut();
+			 });
+		};
+
+		function getCanteens() {
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
+			 	.done(function(data, status, jqXHR) {
+			 		var opts = "";
+			 		
+			 		for(var k in data.location)
+			 		{	
+			 			opts += '<option value="'+data.location[k]+'" ';
+			 			
+			 			if(k == CONFIG.MENSA.defaultCanteen.name)
+			 				opts += 'selected="selected"';
+			 			
+			 			opts += '>'+k+'</option>';
+			 		}
+
+			 		$( "#default_canteen_select" )
+						.empty()
+			 			.append(opts)
+			 			.selectmenu("refresh");
+			   });
+		};
+
+		$( "#default_news_select" )
+			.change(function() {
+				CONFIG.NEWS.defaultFeed = $(this).val();
+			});
+
+		$( "#default_canteen_select" )
+			.on("change", function() {
+				CONFIG.Mensa.defaultCanteen = $(this).val();
+			});
+
 	</script>
 </div>
