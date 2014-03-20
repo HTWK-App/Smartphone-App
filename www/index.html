@@ -17,10 +17,13 @@
 		<script type="application/javascript" src="js/fn.js"></script>
 	</head>
 	<body>
-		<nav id="menu" data-role="panel" data-theme="b" >
+		<nav id="menu" data-role="panel" data-theme="b">
 			<div data-role="listview" data-inset="true" data-theme="b">
 				<li>
 					<a href="index.html">News</a>
+				</li>
+				<li>
+					<a href="timetable.html">Stundenplan</a>
 				</li>
 				<li>
 					<a href="mensa.html">Mensa</a>
@@ -110,7 +113,7 @@
 				$.mobile.buttonMarkup.hoverDelay = 0;
 				$.mobile.changePage.defaults.allowSamePageTransition = true;
 				// Add EventListener for Fastclick Framework//
-				window.addEventListener('load', function() {
+				window.addEventListener("load", function() {
 					FastClick.attach(document.body);
 				}, false);
 				// there is no Element to fit the Selector
@@ -118,7 +121,7 @@
 				$("header, footer").toolbar();
 			})
 			.on("panelbeforeopen", function( event, ui ) {
-				$(".toblur").toggleClass("blur");
+				$(".toblur").addClass("blur");
 			})
 			.on("panelbeforeclose", function( event, ui ) {
 				$(".toblur").removeClass("blur");
