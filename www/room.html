@@ -1,5 +1,16 @@
-<div id="room_page" data-role="page" data-title="Finde Seminarraum" data-theme="a" data-content-theme="a">
+<div id="room_page" data-role="page" data-title="Leerer Raum" data-theme="a" data-content-theme="a">
 	<div id="roomContent" data-role="content" class="toblur">
+		<p>
+			<h3>Leere Seminarräume, aufbauend auf ihrer Position, sind:<br></h3>
+			<ul id="#roomList" data-role="listview">
+			    <li><a href="#">Li015</a></li>
+			    <li><a href="#">Li203</a></li>
+			    <li><a href="#">Li404</a></li>
+			    <li><a href="#">Li405</a></li>
+			</ul>
+			<br>
+			<iframe src="https://maps.google.de/maps?hl=de&q=51.313209,12.373687&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe>
+		</p>
 	</div>
 	<script>
 		$( "#room_page" )
@@ -34,7 +45,7 @@
 				  'Speed: '             + position.coords.speed             + '\n' +
 				  'Timestamp: '         + position.timestamp                + '\n');
 				loadingOut();
-				$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude + position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="500" name="GoogleMaps"></iframe></p>');
+				$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+'.'+ position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
 			}
 		}
 

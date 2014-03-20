@@ -13,7 +13,22 @@
 		<input type="text" name="text-basic" id="text-basic" value="" placeholder="Nutzername">
 		<label for="password"><strong>Passwort:</strong></label>
 		<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
-		<br><a data-role="button" data-mini="true" >Speichern</a>
+		<br><a id="save"data-role="button" data-mini="true" >Speichern</a>
+		<h3>Fakultät</h3>
+		<hr>
+		<form>
+		    <input type="checkbox" name="prof_checkbox" id="prof_checkbox" data-mini="true" >
+		    <label for="prof_checkbox">Ich bin Professor</label>
+		</form>
+		<label for="default_fac_select"><strong>Ihre Fakultät</strong>:</label>
+		<select id="default_fac_select" name="default_fac_select" data-mini="true">
+			<option selected="selected">Liste der verfügbaren Fakultäten wird geladen...</option>
+			<option>abc</option>
+		</select>
+		<label for="default_mat_select"><strong>Ihr Matrikel</strong>:</label>
+		<select id="default_mat_select" name="default_mat_select" data-mini="true" disabled="true">
+			<option selected="selected">Matrikel</option>
+		</select>
 		<h3>News</h3>
 		<hr>
 		<label for="default_news_select"><strong>Standard Newsfeed</strong>:</label>
@@ -30,7 +45,12 @@
 
 	<script>
 		$( "#settings_page" )
-			.on("pagecreate", function () {getNewsFeeds(); getCanteens();})
+			.on("pagecreate", function () {
+				getNewsFeeds(); 
+				getCanteens();
+				window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+				window.requestFileSystem(window.PERSISTENT, 1024*1024, onInitFs, errorHandler);
+			})
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.settings) loadingIn();
 				$("#btn_refresh").hide();
@@ -95,13 +115,90 @@
 		$( "#default_news_select" )
 			.change(function() {
 				CONFIG.NEWS.defaultFeed = $(this).val();
+				// TODO Safe to file
 			});
 
 		$( "#default_canteen_select" )
 			.on("change", function() {
 				CONFIG.Mensa.defaultCanteen.id = $(this).val();
 				CONFIG.Mensa.defaultCanteen.name = ""
+				// TODO Safe to file
 			});
 
+		$("#default_fac_select")
+			.on("change", function () {
+				if(!$("#prof_checkbox").prop("checked")){
+					$("#default_mat_select").selectmenu( "option", "disabled", false );
+				}
+			});
+		
+		$("#save")
+			.on("click", function () {
+				writeConfigFile();
+				readConfigFile();
+			});
+		function onInitFs(fs) {
+			GLOBAL.FILESYSTEM.fs = fs;
+			GLOBAL.FILESYSTEM.fs.root.getFile('config.txt', {create: true}, function(fileEntry) {
+				GLOBAL.FILESYSTEM.configFile = fileEntry;
+			});
+		}
+		function writeConfigFile() {
+			GLOBAL.FILESYSTEM.configFile.createWriter(function(fileWriter) {
+
+				fileWriter.onwriteend = function(e) {
+					console.log('Write completed.');
+				};
+
+				fileWriter.onerror = function(e) {
+					console.log('Write failed: ' + e.toString());
+		 		};
+				var contentBlob = new Blob([
+					'username: '+GLOBAL.DEMO.username+
+					'\npassword: '+GLOBAL.DEMO.password+
+					'\ndefaultFeed: '+CONFIG.NEWS.defaultFeed+
+					'\ndefaultCanteen: '+CONFIG.MENSA.defaultCanteen.name+
+					'\ndefaultCanteenID: '+CONFIG.MENSA.defaultCanteen.id
+					], {type: 'text/plain'});
+				fileWriter.write(contentBlob);
+			}, errorHandler);
+		}
+		function readConfigFile() {
+			GLOBAL.FILESYSTEM.configFile.file(function(file) {
+		
+				var reader = new FileReader();
+				reader.onloadend = function(e) {
+					alert(this.result);
+				};
+				reader.readAsText(file);
+			}, errorHandler);
+		}
+
+		function errorHandler(e) {
+		  var msg = '';
+
+		  switch (e.code) {
+		    case FileError.QUOTA_EXCEEDED_ERR:
+		      msg = 'QUOTA_EXCEEDED_ERR';
+		      break;
+		    case FileError.NOT_FOUND_ERR:
+		      msg = 'NOT_FOUND_ERR';
+		      break;
+		    case FileError.SECURITY_ERR:
+		      msg = 'SECURITY_ERR';
+		      break;
+		    case FileError.INVALID_MODIFICATION_ERR:
+		      msg = 'INVALID_MODIFICATION_ERR';
+		      break;
+		    case FileError.INVALID_STATE_ERR:
+		      msg = 'INVALID_STATE_ERR';
+		      break;
+		    default:
+		      msg = 'Unknown Error';
+		      break;
+		  };
+
+		  console.log('Error: ' + msg);
+		}
 	</script>
 </div>
