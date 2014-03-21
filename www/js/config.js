@@ -13,8 +13,8 @@ var CONFIG = {
 		// LIVE
 		//base: "",
 		// DEMO
-		base: "http://benjaminwestphal.de:9091/htwk/",
-		//base: "http://gateway.westphal.im:5001/",
+		//base: "http://benjaminwestphal.de:9091/htwk/",
+		base: "http://gateway.westphal.im:5001/app/",
 		// LOCAL
 		// base: "http://localhost:8080/app/",
 		staff: "info/staff/",
