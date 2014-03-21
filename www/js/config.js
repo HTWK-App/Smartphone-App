@@ -14,9 +14,9 @@ var CONFIG = {
 		//base: "",
 		// DEMO
 		//base: "http://benjaminwestphal.de:9091/htwk/",
-		//base: "http://gateway.westphal.im:5001/",
+		base: "http://gateway.westphal.im:5001/app/",
 		// LOCAL
-		base: "http://localhost:8080/app/",
+		//base: "http://localhost:8080/app/",
 		staff: "info/staff/",
 		builds: "info/building",
 		sport: "info/sport",

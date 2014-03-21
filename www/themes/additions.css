@@ -8,8 +8,10 @@
 }
 
 .blur {
-	-moz-filter: blur(2px);
 	-webkit-filter: blur(2px);
+	-moz-filter: blur(2px);
+	-ms-filter: blur(2px);
+	-o-filter: blur(2px);
 	filter: blur(2px);
 }
 
@@ -18,4 +20,10 @@
 }
 .content_div:first-child {
     display: block;
+}
+
+.center
+{
+	margin: 0 auto;
+	text-align: center;
 }
