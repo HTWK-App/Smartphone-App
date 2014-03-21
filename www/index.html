@@ -99,13 +99,6 @@
 
 		$.ajaxSetup(CONFIG.AJAX);
 		
-		// TODO remove, only for Testing, Insert your Account-Data in GLOBAL.DEMO
-		$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+GLOBAL.DEMO.password)
-		 .done(function(data, status, jqXHR) {
-			 GLOBAL.DEMO.credentials = data.encryptedCredentials;
-			 GLOBAL.DEMO.salt = data.salt;
-		  });
-		
 		$( document )
 			.ready(function() {
 				$.mobile.defaultPageTransition   = "none";
@@ -119,6 +112,8 @@
 				// there is no Element to fit the Selector
 				//$( "[data-role='navbar']" ).navbar();
 				$("header, footer").toolbar();
+				GLOBAL.DEMO.credentials = localStorage.getItem("credentials");
+				GLOBAL.DEMO.salt = localStorage.getItem("salt");
 			})
 			.on("panelbeforeopen", function( event, ui ) {
 				$(".toblur").addClass("blur");

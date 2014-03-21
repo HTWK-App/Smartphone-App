@@ -1,7 +1,7 @@
 <div id="room_page" data-role="page" data-title="Leerer Raum" data-theme="a" data-content-theme="a">
 	<div id="roomContent" data-role="content" class="toblur">
 		<p>
-			<h3>Leere Seminarräume, aufbauend auf ihrer Position, sind:<br></h3>
+			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br></h3>
 			<ul id="#roomList" data-role="listview">
 			    <li><a href="#">Li015</a></li>
 			    <li><a href="#">Li203</a></li>
@@ -50,7 +50,7 @@
 		}
 
 		function locationError(error){
-			alert('code: '    + error.code    + '\n' +
+			 console.log('code: '    + error.code    + '\n' +
           		'message: ' + error.message + '\n');
 			loadingOut();
 		}

@@ -92,8 +92,4 @@ var GLOBAL = {
 			6: { id: "Sat" , name: "Samstag"}
 		}
 	},
-	FILESYSTEM: {
-		fs: "",
-		configFile: ""
-	}
 };

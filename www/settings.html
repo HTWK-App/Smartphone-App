@@ -9,8 +9,8 @@
 		</select>
 		<h3>Login-Daten</h3>
 		<hr>
-		<label for="text-basic"><strong>Nutzername:</strong></label>
-		<input type="text" name="text-basic" id="text-basic" value="" placeholder="Nutzername">
+		<label for="username"><strong>Nutzername:</strong></label>
+		<input type="text" name="username" id="username" value="" placeholder="Nutzername">
 		<label for="password"><strong>Passwort:</strong></label>
 		<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
 		<br><a id="save"data-role="button" data-mini="true" >Speichern</a>
@@ -48,8 +48,6 @@
 			.on("pagecreate", function () {
 				getNewsFeeds(); 
 				getCanteens();
-				window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-				window.requestFileSystem(window.PERSISTENT, 1024*1024, onInitFs, errorHandler);
 			})
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.settings) loadingIn();
@@ -97,12 +95,12 @@
 			 		
 			 		for(var k in data.location)
 			 		{	
-			 			opts += '<option value="'+data.location[k]+'" ';
+			 			opts += '<option value="'+k+'" ';
 			 			
-			 			if(k == CONFIG.MENSA.defaultCanteen.name)
+			 			if(k == CONFIG.MENSA.defaultCanteen.id)
 			 				opts += 'selected="selected"';
 			 			
-			 			opts += '>'+k+'</option>';
+			 			opts += '>'+data.location[k]+'</option>';
 			 		}
 
 			 		$( "#default_canteen_select" )
@@ -115,90 +113,40 @@
 		$( "#default_news_select" )
 			.change(function() {
 				CONFIG.NEWS.defaultFeed = $(this).val();
-				// TODO Safe to file
+				localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 			});
 
 		$( "#default_canteen_select" )
 			.on("change", function() {
-				CONFIG.Mensa.defaultCanteen.id = $(this).val();
-				CONFIG.Mensa.defaultCanteen.name = ""
-				// TODO Safe to file
+				CONFIG.MENSA.defaultCanteen.id = $(this).val();
+				CONFIG.MENSA.defaultCanteen.name = $(this).innerHTML; //TODO Correct it....resolves in "undefined"
+				localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen.name);
+				localStorage.setItem("defaultCanteenID", CONFIG.MENSA.defaultCanteen.id);
+				alert(""+localStorage.getItem("defaultCanteen")+"\n"+localStorage.getItem("defaultCanteenID"));
 			});
 
 		$("#default_fac_select")
 			.on("change", function () {
 				if(!$("#prof_checkbox").prop("checked")){
 					$("#default_mat_select").selectmenu( "option", "disabled", false );
+					/*CONFIG.FACULTY.name = $(this).innerHTML;
+					localStorage.setItem("facultyName", CONFIG.FACULTY.name);*/
 				}
 			});
 		
 		$("#save")
 			.on("click", function () {
-				writeConfigFile();
-				readConfigFile();
+				GLOBAL.DEMO.username = $("#username").val();
+				GLOBAL.DEMO.password = $("#password").val();
+				localStorage.setItem("username", GLOBAL.DEMO.username);
+				localStorage.setItem("password", GLOBAL.DEMO.password);
+				$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+GLOBAL.DEMO.password)
+				.done(function(data, status, jqXHR) {
+					GLOBAL.DEMO.credentials = data.encryptedCredentials;
+					GLOBAL.DEMO.salt = data.salt;
+					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
+					localStorage.setItem("salt", GLOBAL.DEMO.salt);
+				});
 			});
-		function onInitFs(fs) {
-			GLOBAL.FILESYSTEM.fs = fs;
-			GLOBAL.FILESYSTEM.fs.root.getFile('config.txt', {create: true}, function(fileEntry) {
-				GLOBAL.FILESYSTEM.configFile = fileEntry;
-			});
-		}
-		function writeConfigFile() {
-			GLOBAL.FILESYSTEM.configFile.createWriter(function(fileWriter) {
-
-				fileWriter.onwriteend = function(e) {
-					console.log('Write completed.');
-				};
-
-				fileWriter.onerror = function(e) {
-					console.log('Write failed: ' + e.toString());
-		 		};
-				var contentBlob = new Blob([
-					'username: '+GLOBAL.DEMO.username+
-					'\npassword: '+GLOBAL.DEMO.password+
-					'\ndefaultFeed: '+CONFIG.NEWS.defaultFeed+
-					'\ndefaultCanteen: '+CONFIG.MENSA.defaultCanteen.name+
-					'\ndefaultCanteenID: '+CONFIG.MENSA.defaultCanteen.id
-					], {type: 'text/plain'});
-				fileWriter.write(contentBlob);
-			}, errorHandler);
-		}
-		function readConfigFile() {
-			GLOBAL.FILESYSTEM.configFile.file(function(file) {
-		
-				var reader = new FileReader();
-				reader.onloadend = function(e) {
-					alert(this.result);
-				};
-				reader.readAsText(file);
-			}, errorHandler);
-		}
-
-		function errorHandler(e) {
-		  var msg = '';
-
-		  switch (e.code) {
-		    case FileError.QUOTA_EXCEEDED_ERR:
-		      msg = 'QUOTA_EXCEEDED_ERR';
-		      break;
-		    case FileError.NOT_FOUND_ERR:
-		      msg = 'NOT_FOUND_ERR';
-		      break;
-		    case FileError.SECURITY_ERR:
-		      msg = 'SECURITY_ERR';
-		      break;
-		    case FileError.INVALID_MODIFICATION_ERR:
-		      msg = 'INVALID_MODIFICATION_ERR';
-		      break;
-		    case FileError.INVALID_STATE_ERR:
-		      msg = 'INVALID_STATE_ERR';
-		      break;
-		    default:
-		      msg = 'Unknown Error';
-		      break;
-		  };
-
-		  console.log('Error: ' + msg);
-		}
 	</script>
 </div>
