@@ -1,0 +1,270 @@
+<div id="timetable_page" data-role="page" data-dom-cache="true" data-title="Stundenplan" data-theme="a" data-content-theme="a">
+	<div data-role="content" class="toblur">
+		<div data-role="navbar">
+			<p>
+				<select id="timetable_week_select"></select>
+			</p>
+		    <ul id="timetable_nav">
+		        <li><a href="#" data-day="Mon">Montag</a></li>
+		        <li><a href="#" data-day="Tue">Dienstag</a></li>
+		        <li><a href="#" data-day="Wed">Mittwoch</a></li>
+		        <li><a href="#" data-day="Thu">Donnerstag</a></li>
+		        <li><a href="#" data-day="Fri">Freitag</a></li>
+		    </ul>
+		</div>
+		<div id="timetable_days">
+			<table class="timetable_content">
+				<thead>
+					<tr>
+						<th>Beginn</th>
+						<th>Ende</th>
+						<th>KW</th>
+						<th>Ort</th>
+						<th>Typ</th>
+						<th>Name</th>
+						<th>Dozent</th>
+						<th>Hinweise</th>
+					</tr>
+				</thead>
+				<tbody data-day="Mon"></tbody>
+				<tbody data-day="Tue"></tbody>
+				<tbody data-day="Wed"></tbody>
+				<tbody data-day="Thu"></tbody>
+				<tbody data-day="Fri"></tbody>
+			<table>
+		</div>
+		
+		<!--<div data-day="Mon" class="timetable_content"></div>
+		<div data-day="Tue" class="timetable_content"></div>
+		<div data-day="Wed" class="timetable_content"></div>
+		<div data-day="Thu" class="timetable_content"></div>
+		<div data-day="Fri" class="timetable_content"></div>-->
+	</div>
+	<footer data-role="footer" data-position="fixed" class="toblur">
+		<div class="center">
+			<h4 id="timetable_week_label" data-week=""></h4>
+		</div>
+	</footer>
+
+	<script>
+		var TTSet = {
+			semester: null,
+			faculty : "fimn",
+			groups  : [
+			           {
+			        	   name : "13IN1-B",
+			        	   courses : {
+			        		   "ccf84be64a0e72a25b298ea645b2949f" : "Algorithmen und Datenstrukturen",
+			        		   "475aae75a1df900faf9a79f6f61bfe8f" : "Englisch",
+			        		   "98dff33f0fc0eb9e093950488badc976" : "Anwendungsorientierte Programmierung"
+			        	   }
+			           },
+			           {
+			        	   name : "13MI1-B",
+			        	   courses : {
+			        		   "43f39a31eaea91afd83069530b7a5681" : "Medientheorie",
+			        		   "2b078e012c9165d5c81f5c707c76b0f8" : "2030 Digitaltechnik MIB 2.FS (pf)",
+			        		   "f4513fc36fe008a4a9cb9f0a20ba8e0a" : "Physik",
+			        		   "f6ff37e22b74021f0064dba0fa49887d" : "Frei!"
+			        	   }
+			           }
+		   ]
+		};
+	
+		/*$( document )
+			.on("click", "div:jqmData(role='navbar') a", function () {
+				$("div.mensa_content").hide();
+				$("#" + $(this).jqmData("href")).show();
+				return true;
+			 });*/
+		
+		$( "#timetable_page" )
+			.on("pagecreate", initTimetableView)
+			.on("pageshow", function() {
+				if(!GLOBAL.INIT.timetable) loadingIn();
+    			$("#btn_refresh")
+				.off()
+				.on("click", function() {
+					$("#timetable_week_select").change(); 
+				 });
+			 })
+			.on("click", "#timetable_nav a", function(e) {
+				$("#timetable_days table")
+					.find("tbody")
+					.hide().end()
+					.find("tbody:jqmData(day='"+$(e.target).jqmData("day")+"')")
+					.show();
+			 });
+			
+		$( "#timetable_week_select" )
+			.on("change", function() {
+				//$("div.timetable_content").empty();
+				$("#timetable_days table tbody").empty();
+				fillTimetable($(this).val());
+			 });
+
+		/**
+		 * Loading the available Weeks and fill the preselected Timetable.
+		 */
+		function initTimetableView() {
+			var date = new Date();
+			var day = getWeekDay(date).id;
+			
+			fillTimetableSelect();
+			
+			$( "#timetable_week_label" )
+			 	.html("Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
+					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));
+
+			//fillTimetable();
+
+			// deactivate already past days
+			/*if (date.getDay() < 6)
+			{
+				for (var i = 0; i < date.getDay(); i++) {
+					$("#link_"+GLOBAL.DATE.weekdays[i].id).addClass("ui-disabled");
+				};
+			}*/
+			
+			// open the tab for current day
+			$( "#timetable_nav a:jqmData(day='"+day+"')" )
+				.addClass("ui-btn-active")
+				.click();
+			
+			loadingOut();
+			GLOBAL.INIT.timetable = true;
+		};
+
+		function fillTimetable() {
+			var week = $("#timetable_week_select").val();
+			
+			loadingIn();
+			for(var k in TTSet.groups) {
+				fillTimeTableWeek(week, k)
+			}
+			loadingOut();
+		};
+		
+		function fillTimeTableWeek(week, group) {
+			var o = $("#timetable_days table tbody") //$("#timetable_page div.timetable_content");
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+TTSet.semester+"/"+TTSet.faculty+"/week/"+week+"?semgroup="+TTSet.groups[group].name)
+			 .done(function (data, status, jqXHR) {
+				 if(!isEmpty(data))
+				 {
+					 for(var k in data)
+					 {	
+						 addTimeTableWeekday(o.eq(k), data[k].dayContent, group);
+					 }
+				 }
+			  });
+			//.fail(ajaxErrorHandler);
+		};
+		
+		
+		function addTimeTableWeekday(day, courses, group) {
+			var trs = "";
+			var n, c;
+			
+			if(!isEmpty(day) && !isEmpty(courses))
+			{
+				for(var i=0;i<courses.length;i++)
+				{	
+					c = courses[i];
+					n = TTSet.groups[group].courses[c.suid];
+					
+					if(!isEmpty(n))
+					{
+						trs += 	'<tr>'+
+									'<td>'+c.begin+'</td>'+
+									'<td>'+c.end+'</td>'+
+									'<td>'+c.kw+'</td>'+
+									'<td>'+c.location+'</td>'+
+									'<td>'+c.type+'</td>'+
+									'<td>'+n+'</td>'+
+									'<td>'+c.docent+'</td>'+
+									'<td>'+c.notes+'</td>'+
+								'</tr>';
+					}
+				}
+				
+				// TODO Sorting
+				
+				day.append(trs)
+				   .trigger("create");
+			}
+		};
+		
+		function fillTimetableSelect() {
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
+			 	.done(function(data, status, jqXHR) {
+			 		var opts = "";
+			 		
+			 		for(var k in data)
+			 		{	
+			 			if(k.search(/^\d+$/)==0)
+			 			{
+			 				opts += '<option value="'+k+'">'+data[k]+'</option>';
+			 			}
+			 		}
+			 		
+			 		// TODO right way?
+			 		TTSet.semester = data.semester;
+
+			 		$( "#timetable_week_select" )
+			 			.append(opts)
+			 			// TODO wait for Server-Update
+			 			//.find("option[value='"+data.current+"']")
+			 			//.prop("selected", true).end()
+			 			.selectmenu("refresh");
+			 		
+			 		fillTimetable();
+			   });
+			//.fail(ajaxErrorHandler);
+		};
+
+		// Creates formatted Date String
+		function formatDate(date, format) {
+			return createServerDateStamp(date).replace(GLOBAL.DATE.formats.regexp, format);
+		};
+
+		// Computes the Dates of the Week (per Day)
+		function getWeek(date) {
+			var week = new Array(5);
+			
+			// Today is a Sunday?
+			if (date.getDay() == 0 )
+			{
+				date.setDate(date.getDate() + 1);
+			}
+			// Today is a Saturday?
+			else if(date.getDay() == 6)
+			{
+				date.setDate(date.getDate() + 2);
+			}
+			
+			// Reset to Monday
+			date.setDate(date.getDate()-date.getDay()+1);
+			
+			week[0] = new Date(date);
+
+			for (var i = 1; i < 5; i++) {
+				week[i] = new Date(date.setDate(date.getDate()+1));
+			}
+
+			return week;
+		};
+
+		// Returns the Weekday defined by the given Date
+		function getWeekDay(date) {
+			if (date.getDay() == 0 || date.getDay() == 6)
+			{
+				return GLOBAL.DATE.weekdays[1];
+			}
+			else
+			{
+				return GLOBAL.DATE.weekdays[date.getDay()];
+			}
+		};
+	</script>
+</div>
