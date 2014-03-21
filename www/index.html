@@ -114,6 +114,7 @@
 				$("header, footer").toolbar();
 				GLOBAL.DEMO.credentials = localStorage.getItem("credentials");
 				GLOBAL.DEMO.salt = localStorage.getItem("salt");
+				CONFIG.NEWS.defaultFeed = localStorage.getItem("defaultFeed");
 			})
 			.on("panelbeforeopen", function( event, ui ) {
 				$(".toblur").addClass("blur");

@@ -4,8 +4,8 @@
 		<hr>
 		<label for="default_language_select"><strong>Standardsprache:</strong></label>
 		<select id="default_language_select" name="default_language_select" data-mini="true">
-			<option selected="selected">Deutsch</option>
-			<option>English</option>
+			<option selected="selected" value="de_DE">Deutsch</option>
+			<option value="en_EN">English</option>
 		</select>
 		<h3>Login-Daten</h3>
 		<hr>
@@ -44,6 +44,7 @@
 	</div>
 
 	<script>
+		//TODO autofill languages
 		$( "#settings_page" )
 			.on("pagecreate", function () {
 				getNewsFeeds(); 
@@ -110,6 +111,12 @@
 			   });
 		};
 
+		$( "#default_language_select")
+			.change(function() {
+				CONFIG.LANGUAGE.set = $(this).val();
+				localStorage.setItem("language", CONFIG.LANGUAGE.set);
+			});
+
 		$( "#default_news_select" )
 			.change(function() {
 				CONFIG.NEWS.defaultFeed = $(this).val();
@@ -125,17 +132,35 @@
 				alert(""+localStorage.getItem("defaultCanteen")+"\n"+localStorage.getItem("defaultCanteenID"));
 			});
 
+		$( "#prof_checkbox")
+			.on("change", function() {
+				CONFIG.FACULTY.prof = !CONFIG.FACULTY.prof;
+				localStorage.setItem("prof", CONFIG.FACULTY.prof);
+				if(CONFIG.FACULTY.prof == true){
+					$("#default_mat_select").selectmenu( "disable" ).selectmenu("refresh");
+					localStorage.removeItem("matrikel");
+				}else{
+					$("#default_mat_select").selectmenu( "enable" ).selectmenu("refresh");
+					//TODO reset matrikel
+				}
+		});
+
 		$("#default_fac_select")
 			.on("change", function () {
 				if(!$("#prof_checkbox").prop("checked")){
-					$("#default_mat_select").selectmenu( "option", "disabled", false );
-					/*CONFIG.FACULTY.name = $(this).innerHTML;
-					localStorage.setItem("facultyName", CONFIG.FACULTY.name);*/
+					$("#default_mat_select").selectmenu( "enable" ).selectmenu("refresh");
+					CONFIG.FACULTY.name = $(this).innerHTML;
+					localStorage.setItem("facultyName", CONFIG.FACULTY.name);
 				}
 			});
 		
 		$("#save")
 			.on("click", function () {
+				$.mobile.loading( "show", {
+				  text: "Ihre Einstellungen werden gespeichert",
+				  textVisible: true,
+				  theme: "b"
+				});
 				GLOBAL.DEMO.username = $("#username").val();
 				GLOBAL.DEMO.password = $("#password").val();
 				localStorage.setItem("username", GLOBAL.DEMO.username);
@@ -146,6 +171,7 @@
 					GLOBAL.DEMO.salt = data.salt;
 					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
 					localStorage.setItem("salt", GLOBAL.DEMO.salt);
+					loadingOut();
 				});
 			});
 	</script>
