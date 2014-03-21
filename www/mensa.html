@@ -33,9 +33,6 @@
 
 	<script>
 		$( "#canteen_page" )
-			.on("pagebeforecreate", function() {
-				GLOBAL.MENSA.currentWeek = getWeek(new Date());
-			 })
 			.on("pagecreate", initCanteenView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.mensa) loadingIn();
@@ -75,7 +72,7 @@
 		$( "#canteen_select" )
 			.on("change", function() {
 				$("#canteen_page div.canteen_content").empty();
-				fillCanteen($(this).val(), GLOBAL.MENSA.currentWeek);
+				fillCanteen($(this).val(), GLOBAL.DATE.currentWeek);
 			 });
 		
 		$( "#canteen_veggie_mode" )
@@ -99,10 +96,10 @@
 			
 			fillCanteenSelect();
 
-			$("#week_label").html(	"Aktuelle Woche von "+ formatDate(GLOBAL.MENSA.currentWeek[0], GLOBAL.DATE.formats.de)+
-									" bis "+formatDate(GLOBAL.MENSA.currentWeek[4], GLOBAL.DATE.formats.de));
+			$("#week_label").html(	"Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
+									" bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));
 
-			fillCanteen(CONFIG.MENSA.defaultCanteen.id, GLOBAL.MENSA.currentWeek);
+			fillCanteen(CONFIG.MENSA.defaultCanteen, GLOBAL.DATE.currentWeek);
 
 			// deactivate already past days
 			if (date.getDay() < 6)
@@ -213,7 +210,7 @@
 			 		{	
 			 			opts += '<option value="'+k+'" ';
 			 			
-			 			if(k == CONFIG.MENSA.defaultCanteen.id)
+			 			if(k == CONFIG.MENSA.defaultCanteen)
 			 				opts += 'selected="selected"';
 			 			
 			 			opts += '>'+data.location[k]+'</option>';
@@ -231,35 +228,6 @@
 		 */
 		function formatDate(date, format) {
 			return createServerDateStamp(date).replace(GLOBAL.DATE.formats.regexp, format);
-		};
-
-		/**
-		 * Computes the Dates of the Week (per Day).
-		 */
-		function getWeek(date) {
-			var week = new Array(5);
-			
-			// Today is a Sunday?
-			if (date.getDay() == 0 )
-			{
-				date.setDate(date.getDate() + 1);
-			}
-			// Today is a Saturday?
-			else if(date.getDay() == 6)
-			{
-				date.setDate(date.getDate() + 2);
-			}
-			
-			// Reset to Monday
-			date.setDate(date.getDate()-date.getDay()+1);
-			
-			week[0] = new Date(date);
-
-			for (var i = 1; i < 5; i++) {
-				week[i] = new Date(date.setDate(date.getDate()+1));
-			}
-
-			return week;
 		};
 
 		/**

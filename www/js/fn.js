@@ -2,17 +2,28 @@
  * General Function Libary for small, "Every Day"-Work.
  * 
  * @author Hubertus Willuhn
- * @version 1.0
  * 
  * UTF-8
  */
 
-// Capitalize first Letter in String
+/**
+ * Capitalize first Letter in String.
+ * 
+ * @param String str
+ * 
+ * @return String
+ */
 function capitalize(str) {
 	return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-// Test if val is empty (for all Types)
+/**
+ * Test if val is empty (for all Types).
+ * 
+ * @param mixed val
+ * 
+ * @return Boolean
+ */
 function isEmpty(val) {
 	return (val === "" || 
 			val === {} || 
@@ -21,7 +32,13 @@ function isEmpty(val) {
 			(val instanceof Array && val.length === 0));
 };
 
-// Creates a DateStamp for Server Requests, Format: YYYYMMDD
+/**
+ * Creates a DateStamp for Server Requests, Format: YYYYMMDD.
+ * 
+ * @param Date date
+ * 
+ * @return String
+ */
 function createServerDateStamp(date) {
 	if(isEmpty(date)) date = new Date();
 	
@@ -35,7 +52,13 @@ function createServerDateStamp(date) {
 	return yyyy+""+mm+""+dd;
 };
 
-//Creates a DateStamp for general Purposes, Format: WeedDay, dd.mm.yyyy
+/**
+ * Creates a DateStamp for general Purposes, Format: WeedDay, dd.mm.yyyy.
+ * 
+ * @param Date date
+ * 
+ * @return String
+ */
 function createDateStamp(date) {
 	if(isEmpty(date)) date = new Date();
 	
@@ -49,7 +72,13 @@ function createDateStamp(date) {
 	return GLOBAL.DATE.weekdays[date.getDay()].name+', '+dd+'.'+mm+'.'+yyyy;
 };
 
-// Creates a DateTimeStamp, Format: dd.mm.yyyy hh:mm:ss
+/**
+ * Creates a DateTimeStamp, Format: dd.mm.yyyy hh:mm:ss.
+ * 
+ * @param Date date
+ * 
+ * @return String
+ */
 function createDateTimeStamp(date) {
 	if(isEmpty(date)) date = new Date();
 	
@@ -69,7 +98,46 @@ function createDateTimeStamp(date) {
 	return (dd+"."+mm+"."+yyyy+" "+hh+":"+mi+":"+ss);	
 };
 
-// Escaping HTML Special Chars like & or <>
+/**
+ * Computes the Dates of the Week (per Day).
+ * 
+ * @param Date date
+ * 
+ * @return Array[Date]
+ */
+function getWeek(date) {
+	var week = new Array(5);
+	
+	// Today is a Sunday?
+	if (date.getDay() == 0 )
+	{
+		date.setDate(date.getDate() + 1);
+	}
+	// Today is a Saturday?
+	else if(date.getDay() == 6)
+	{
+		date.setDate(date.getDate() + 2);
+	}
+	
+	// Reset to Monday
+	date.setDate(date.getDate()-date.getDay()+1);
+	
+	week[0] = new Date(date);
+
+	for (var i = 1; i < 5; i++) {
+		week[i] = new Date(date.setDate(date.getDate()+1));
+	}
+
+	return week;
+};
+
+/**
+ * Escaping HTML Special Chars like & or <>.
+ * 
+ * @param String str
+ * 
+ * @return escaped String
+ */
 function escape(str) {
 	return str.replace(/&/g, "&amp;")
 			  .replace(/</g, "&lt;")
@@ -78,6 +146,9 @@ function escape(str) {
 			  .replace(/'/g, "&#039;");
 };
 
+/**
+ * Show Loading-Spinner.
+ */
 function loadingIn() {
 	$.mobile.loading( "show", {
 	  text: "Daten werden abgerufen",
@@ -87,6 +158,9 @@ function loadingIn() {
 	});
 };
 
+/**
+ * Hide Loading-Spinner.
+ */
 function loadingOut() {
 	$.mobile.loading("hide");
 };

@@ -149,6 +149,9 @@
 		//$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
 
 		$( "#news_page" )
+			.on("pagebeforecreate", function() {
+				GLOBAL.DATE.currentWeek = getWeek(new Date());
+			 })
 			/*.on("pagebeforecreate", function() {
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 				.done(fillNewsFeedSelect);
