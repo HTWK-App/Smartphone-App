@@ -13,10 +13,10 @@ var CONFIG = {
 		// LIVE
 		//base: "",
 		// DEMO
-		base: "http://benjaminwestphal.de:9091/htwk/",
+		//base: "http://benjaminwestphal.de:9091/htwk/",
 		//base: "http://gateway.westphal.im:5001/",
 		// LOCAL
-		// base: "http://localhost:8080/app/",
+		base: "http://localhost:8080/app/",
 		staff: "info/staff/",
 		builds: "info/building",
 		sport: "info/sport",
@@ -34,10 +34,7 @@ var CONFIG = {
 		defaultFeed: "rss.htwk.4"
 	},
 	MENSA: {
-		defaultCanteen: {
-			name: "Mensa Academica",
-			id: 118
-		}
+		defaultCanteen: 118
 	},
 	AJAX: {
 		scriptCharset: "utf-8", 
@@ -58,6 +55,7 @@ var GLOBAL = {
 	},
 	INIT: {
 		news: false,
+		timetable: false,
 		mensa: false,
 		mail: false,
 		qis: false,
@@ -68,12 +66,6 @@ var GLOBAL = {
 		info: false,
 		room: false,
 		settings: false
-	},
-	/*NEWS: {
-		counter: 0
-	},*/
-	MENSA: {
-		currentWeek: null
 	},
 	DATE: {
 		formats: {
@@ -90,7 +82,8 @@ var GLOBAL = {
 			4: { id: "Thu" , name: "Donnerstag"},
 			5: { id: "Fri" , name: "Freitag"},
 			6: { id: "Sat" , name: "Samstag"}
-		}
+		},
+		currentWeek: null
 	},
 	FILESYSTEM: {
 		fs: "",
