@@ -53,7 +53,7 @@ function createServerDateStamp(date) {
 };
 
 /**
- * Creates a DateStamp for general Purposes, Format: WeedDay, dd.mm.yyyy.
+ * Creates a DateStamp for general Purposes, Format: Weekday, dd.mm.yyyy.
  * 
  * @param Date date
  * 
@@ -70,6 +70,20 @@ function createDateStamp(date) {
 	if(mm<10) mm="0"+mm;
 	
 	return GLOBAL.DATE.weekdays[date.getDay()].name+', '+dd+'.'+mm+'.'+yyyy;
+};
+
+/**
+ * Creates a DateStamp.
+ * 
+ * @param Date date
+ * @param String format
+ * 
+ * @see GLOBAL.DATE.formats
+ * 
+ * @return String, formatted DateStamp
+ */
+function formatDate(date, format) {
+	return createServerDateStamp(date).replace(GLOBAL.DATE.formats.regexp, format);
 };
 
 /**
@@ -129,6 +143,27 @@ function getWeek(date) {
 	}
 
 	return week;
+};
+
+/**
+ * Returns the Weekday defined by the given Date,
+ * this Function is used by Services that needs Monday to Friday only!
+ * 
+ * @param Date date
+ * 
+ * @see GLOBAL.DATE.weekdays
+ * 
+ * @return Weekday Object
+ */
+function getWeekDay(date) {
+	if (date.getDay() == 0 || date.getDay() == 6)
+	{
+		return GLOBAL.DATE.weekdays[1];
+	}
+	else
+	{
+		return GLOBAL.DATE.weekdays[date.getDay()];
+	}
 };
 
 /**

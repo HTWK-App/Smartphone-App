@@ -222,26 +222,5 @@
 			   });
 			   //.fail(ajaxErrorHandler);
 		};
-
-		/**
-		 * Creates formatted Date String.
-		 */
-		function formatDate(date, format) {
-			return createServerDateStamp(date).replace(GLOBAL.DATE.formats.regexp, format);
-		};
-
-		/**
-		 * Returns the Weekday defined by the given Date.
-		 */
-		function getWeekDay(date) {
-			if (date.getDay() == 0 || date.getDay() == 6)
-			{
-				return GLOBAL.DATE.weekdays[1];
-			}
-			else
-			{
-				return GLOBAL.DATE.weekdays[date.getDay()];
-			}
-		};
 	</script>
 </div>
