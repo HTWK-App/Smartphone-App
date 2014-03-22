@@ -33,6 +33,34 @@ var CONFIG = {
 		available: ["de_DE","en_EN"],
 		set: "de_DE"
 	},
+	TIMETABLE: {
+		semester: null,
+		showDocentFullName: false,
+		faculty : [
+		           {
+		        	   id : "fimn",
+		        	   groups : [
+		        	             {
+		        	            	 id : "13IN1-B",
+		        	            	 courses : {
+		        	            		 "ccf84be64a0e72a25b298ea645b2949f" : "Algorithmen und Datenstrukturen",
+		        	            		 "475aae75a1df900faf9a79f6f61bfe8f" : "Englisch",
+		        	            		 "98dff33f0fc0eb9e093950488badc976" : "Anwendungsorientierte Programmierung"
+		        	            	 }
+		        	             },
+		        	             {
+		        	            	 id : "13MI1-B",
+		        	            	 courses : {
+		        	            		 "43f39a31eaea91afd83069530b7a5681" : "Medientheorie",
+		        	            		 "2b078e012c9165d5c81f5c707c76b0f8" : "2030 Digitaltechnik MIB 2.FS (pf)",
+		        	            		 "f4513fc36fe008a4a9cb9f0a20ba8e0a" : "Physik",
+		        	            		 "f6ff37e22b74021f0064dba0fa49887d" : "Frei!"
+		        	            	 }
+		        	             }
+		        	            ]
+		           }
+		          ]
+	},
 	FACULTY: {
 		prof: false,
 		name: "",
