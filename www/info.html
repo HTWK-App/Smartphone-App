@@ -11,9 +11,89 @@
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
 				<h4>Spezielle Orte</h4>
+				<p><table data-role="table" id="examTable" data-mode="reflow" class="ui-responsive">
+				<thead>
+					<tr>
+						<th>HTWK-Card</th>
+					</tr>
+				   <tr>
+				      <td>Aktualisierung</td>
+				      <td>Terminal im Foyer des Lipsius Baus</td>
+				    </tr>
+				    <tr>
+				      <td>Probleme</td>
+				      <td><a href="http://www.htwk-leipzig.de/de/studierende/beratungs-servicestellen/htwk-card/">Zur Website HTWK-Card</a></td>
+				    </tr>
+				    <tr>
+				      <th>Prüfungsämter</th>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="431">Angewandte Sozialwissenschaften</a></td>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="100">Bauwesen</a></td>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="197">Elektro- und Informationstechnik</a></td>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="288">Informatik, Mathematik, Naturwissenschaften</a></td>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="293">Maschinenbau und Energietechnik 1</a>, <a href="#" class="exam" data-cuid="320">ME 2</a></td>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="395">Medien 1</a>, <a href="#" class="exam" data-cuid="407">Medien 2</a></td>
+				    </tr>
+				    <tr>
+				      <td><a href="#" class="exam" data-cuid="460">Wirtschaftswissenschaften</a></td>
+				    </tr>
+				</thead>
+				</table></p>
+			</div>
+			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
+				<h4>Einrichtung ihres Mail-Clients</h4>
+				<p>Um einen Mail-Client mit ihrem HTWK Mail-Konto zu verknüpfen, benutzten Sie bitte folgende Einstellungen:<br>
+				<table data-role="table" data-mode="reflow" class="ui-responsive">
+				<thead>
+					<tr>
+						<th>Posteingangsserver</th>
+						<td>mail.htwk-leipzig.de</td>
+					</tr>
+				   <tr>
+				      <th>IMAP Port</th>
+				      <td>143</td>
+				    </tr>
+				    <tr>
+				      <th>POP Port</th>
+				      <td>110</td>
+				    </tr>
+				    <tr>
+				      <th>Postausgangsserver</th>
+				      <td>send.htwk-leipzig.de</td>
+				    </tr>
+				    <tr>
+				      <th>Port</th>
+				      <td>587</td>
+				    </tr>
+				    <tr>
+				      <th>Verbindungssicherheit</th>
+				      <td>STARTTLS oder TLS</td>
+				    </tr>
+				    <tr>
+				      <th>Authentifizierungsmethode</th>
+				      <td>Passwort/normal</td>
+				    </tr>
+				    <tr>
+				      <th>Login</th>
+				      <td>Ihr HRZ Login</td>
+				    </tr>
+				</thead>
+				</table></p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
 				<h4>E-Mail Listen</h4>
+				<p>Leider bietet die HTWK Leipzig keine öffentlichen Verteilerlisten an. Sofern Sie etwas an Studenten senden möchten, wenden Sie sich an den Studentenrat. Sofern Sie etwas an Mitarbeiter senden möchten, wenden Sie sich bitte an das Büro der Rektorin.</p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
 				<h4>VPN-Zugang</h4>
@@ -28,9 +108,55 @@
 			.on("pageshow", function () {
 				$("#btn_refresh").hide();
 				GLOBAL.INIT.info = true;
+				$( "body" )
+					.find("div.staffdetails")
+					.remove();
 			 })
 			.on("pagehide", function() {
 				$("#btn_refresh").show();
 			 });
+
+		$( "#examTable" )
+    			.on("click", "a.exam", loadExamDetails);
+
+		function loadExamDetails(e) {
+			var id = $(e.target).data("cuid");
+			
+			if($("#staff_"+id).length>0) {
+				$.mobile.initializePage();
+				$.mobile.changePage("#staff_"+id);
+				return;
+			}
+			
+			loadingIn();
+			
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)
+			 .done(function(data, status, jqXHR) {
+				var name = data.name.split(", ");
+				var div = 	'<div id="exam_'+id+'" data-role="page" data-title="Mitarbeiter" data-subpage="true" class="examdetails" data-theme="a" data-content-theme="a">'+
+								'<div data-role="content">'+
+									'<h1>'+name[1]+' '+name[0]+'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+id+'/pic" style="float: right" /></h1>'+
+									'<hr>'+
+									'<p><b>Grad:</b> '+data.degree+'</p>'+
+									'<p><b>Bereich:</b> '+data.faculty+'</br><b>Objekt:</b> '+data.location+'</p>'+
+									'<p><b>Beschreibung:</b> '+data.description+'</p>'+
+									'<p><b>E-Mail:</b> <a href="mailto:'+data.email+'">'+data.email+'</a></p>'+
+									'<p><b>Telefon:</b> <a href="tel:'+data.telephone+'">'+data.telephone+'</a></p>'+
+									'<p><b>Fax:</b> '+data.telefax+'</p>'+
+									'<p><b>Links:</b></br><a href="'+data.detailLink+'">Details zur Person</a></br>'+
+									'<a href="'+data.vcardLink+'">V-Card</a></p>'+
+								'</div>'+
+							'</div>';
+				
+				$( "body" )
+					.append(div)
+					.trigger("create");
+				
+				$.mobile.initializePage();
+				$.mobile.changePage("#exam_"+id);
+				
+				loadingOut();
+			});
+		};
 	</script>
 </div>
