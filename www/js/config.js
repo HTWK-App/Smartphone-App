@@ -30,7 +30,8 @@ var CONFIG = {
 		mails: "mailbox/send",
 	},
 	LANGUAGE: {
-		available: ["de_DE","en_EN"],
+		availableShort: ["de_DE","en_EN"],
+		availableLong: ["Deutsch","English"],
 		set: "de_DE"
 	},
 	TIMETABLE: {

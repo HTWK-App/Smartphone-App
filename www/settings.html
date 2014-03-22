@@ -4,8 +4,6 @@
 		<hr>
 		<label for="default_language_select"><strong>Standardsprache:</strong></label>
 		<select id="default_language_select" name="default_language_select" data-mini="true">
-			<option selected="selected" value="de_DE">Deutsch</option>
-			<option value="en_EN">English</option>
 		</select>
 		<h3>Login-Daten</h3>
 		<hr>
@@ -14,21 +12,6 @@
 		<label for="password"><strong>Passwort:</strong></label>
 		<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
 		<br><a id="save"data-role="button" data-mini="true" >Speichern</a>
-		<h3>Fakultät</h3>
-		<hr>
-		<form>
-		    <input type="checkbox" name="prof_checkbox" id="prof_checkbox" data-mini="true" >
-		    <label for="prof_checkbox">Ich bin Professor</label>
-		</form>
-		<label for="default_fac_select"><strong>Ihre Fakultät</strong>:</label>
-		<select id="default_fac_select" name="default_fac_select" data-mini="true">
-			<option selected="selected">Liste der verfügbaren Fakultäten wird geladen...</option>
-			<option>abc</option>
-		</select>
-		<label for="default_mat_select"><strong>Ihr Matrikel</strong>:</label>
-		<select id="default_mat_select" name="default_mat_select" data-mini="true" disabled="true">
-			<option selected="selected">Matrikel</option>
-		</select>
 		<h3>News</h3>
 		<hr>
 		<label for="default_news_select"><strong>Standard Newsfeed</strong>:</label>
@@ -41,6 +24,9 @@
 		<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
 			<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
 		</select>
+		<div data-role="popup" id="popupFail">
+      			<p>Tragen Sie bitte ihren Username und ihr Passwort ein!</p>
+		</div>
 	</div>
 
 	<script>
@@ -111,10 +97,23 @@
 			 			.selectmenu("refresh");
 			   });
 		};
+
 		function fillFields(){
 			if(GLOBAL.DEMO.username != undefined || GLOBAL.DEMO.username != ""){
-				$("#username").attr("placeholder", GLOBAL.DEMO.username);
+				$("#username").attr("placeholder", GLOBAL.DEMO.username).val(GLOBAL.DEMO.username);
 			}
+			var opts = "";
+			for(var k in CONFIG.LANGUAGE.availableShort){
+	 			opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
+	 			if(CONFIG.LANGUAGE.availableShort[k] == CONFIG.LANGUAGE.set)
+	 				opts += 'selected="selected"';
+	 			opts += '>'+CONFIG.LANGUAGE.availableLong[k]+'</option>';
+	 		}
+
+	 		$( "#default_language_select" )
+				.empty()
+	 			.append(opts)
+	 			.selectmenu("refresh");
 		};
 
 		$( "#default_language_select")
@@ -131,38 +130,19 @@
 
 		$( "#default_canteen_select" )
 			.on("change", function() {
-				CONFIG.MENSA.defaultCanteen.id = $(this).val();
-				CONFIG.MENSA.defaultCanteen.name = $(this).innerHTML; //TODO Correct it....resolves in "undefined"
-				localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen.name);
-				localStorage.setItem("defaultCanteenID", CONFIG.MENSA.defaultCanteen.id);
-				alert(""+localStorage.getItem("defaultCanteen")+"\n"+localStorage.getItem("defaultCanteenID"));
-			});
-
-		$( "#prof_checkbox")
-			.on("change", function() {
-				CONFIG.FACULTY.prof = !CONFIG.FACULTY.prof;
-				localStorage.setItem("prof", CONFIG.FACULTY.prof);
-				if(CONFIG.FACULTY.prof == true){
-					$("#default_mat_select").selectmenu( "disable" ).selectmenu("refresh");
-					localStorage.removeItem("matrikel");
-				}else{
-					$("#default_mat_select").selectmenu( "enable" ).selectmenu("refresh");
-					//TODO reset matrikel
-				}
-		});
-
-		$("#default_fac_select")
-			.on("change", function () {
-				if(!$("#prof_checkbox").prop("checked")){
-					$("#default_mat_select").selectmenu( "enable" ).selectmenu("refresh");
-					CONFIG.FACULTY.name = $(this).innerHTML;
-					localStorage.setItem("facultyName", CONFIG.FACULTY.name);
-				}
+				CONFIG.MENSA.defaultCanteen = $(this).val();
+				localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
 			});
 
 		$("#save")
 		.on("click", function () {
-			saveUsernamePassword($("#username").val(),$("#password").val());
+			var pass = $("#password").val();
+			var user = $("#username").val();
+			if(pass == "" || user == ""){
+				$( "#popupFail" ).popup("open");
+			}else{
+				saveUsernamePassword(user,pass);
+			}
 		});
 	</script>
 </div>

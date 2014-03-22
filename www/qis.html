@@ -31,12 +31,12 @@
 		});*/
 	
     	$( "#qis_page" )
-    		.on("pagecreate", function () {if(GLOBAL.DEMO.username != undefined && GLOBAL.DEMO.username != "") initQISView();})
+    		.on("pagecreate", function () {if(GLOBAL.DEMO.username != "") initQISView();})
     		.on("pageshow", function() {
 			$("#btn_refresh")
     				.off()
     				.on("click", initQISView);
-			if(GLOBAL.DEMO.username == undefined || GLOBAL.DEMO.username == "") {
+			if(GLOBAL.DEMO.username == "") {
 				$( "#signInDialog" ).popup( "open", { positionTo: "window", transition: "pop" } );
 			}else{
 				if(!GLOBAL.INIT.qis) loadingIn();	
@@ -48,7 +48,7 @@
 			saveUsernamePassword($("#popupUsername").val(),$("#popupPassword").val());
 			$( "#signInDialog" ).popup( "close");
 			function wait() {
-				if(GLOBAL.DEMO.salt == "" || GLOBAL.DEMO.salt == undefined){
+				if(GLOBAL.DEMO.salt == ""){
 					setTimeout(wait, 50);//wait 50 millisecnds then recheck
 					return;
 				}
