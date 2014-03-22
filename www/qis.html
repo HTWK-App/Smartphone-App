@@ -1,9 +1,24 @@
 <div id="qis_page" data-role="page" data-dom-cache="true" data-title="QIS" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
 		<div id="qis_list" data-role="collapsible-set" data-content-theme="a"></div>
+		<div data-role="popup" id="signInDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+		    <div data-role="header" data-theme="a">
+		   	 <h1>Einloggen</h1>
+		    </div>
+		    <div role="main" class="ui-content">
+			<h3 class="ui-title">Sie sind noch nicht eingeloggt,  bitte loggen Sie sich jetzt ein!</h3>
+			<label for="username"><strong>Nutzername:</strong></label>
+			<input type="text" name="username" id="popupUsername" value="" placeholder="Nutzername">
+			<label for="password"><strong>Passwort:</strong></label>
+			<input type="password" name="password" id="popupPassword" value="" autocomplete="off" placeholder="******">
+			<a id="popupAbort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
+			<a id="popupSave" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Speichern</a>
+		    </div>
+		</div>
 	</div>
 
 	<script>
+
 		/*$( document )
 			.on("pagecreate", "#qis", initQISView)
 			.on("pageshow", "#qis", function() {
@@ -16,13 +31,36 @@
 		});*/
 	
     	$( "#qis_page" )
-    		.on("pagecreate", initQISView)
+    		.on("pagecreate", function () {if(GLOBAL.DEMO.username != undefined && GLOBAL.DEMO.username != "") initQISView();})
     		.on("pageshow", function() {
-    			if(!GLOBAL.INIT.qis) loadingIn();
-    			$("#btn_refresh")
+			$("#btn_refresh")
     				.off()
     				.on("click", initQISView);
+			if(GLOBAL.DEMO.username == undefined || GLOBAL.DEMO.username == "") {
+				$( "#signInDialog" ).popup( "open", { positionTo: "window", transition: "pop" } );
+			}else{
+				if(!GLOBAL.INIT.qis) loadingIn();	
+			}
     		 });
+
+		$("#popupSave")
+		.on("click", function () {
+			saveUsernamePassword($("#popupUsername").val(),$("#popupPassword").val());
+			$( "#signInDialog" ).popup( "close");
+			function wait() {
+				if(GLOBAL.DEMO.salt == "" || GLOBAL.DEMO.salt == undefined){
+					setTimeout(wait, 50);//wait 50 millisecnds then recheck
+					return;
+				}
+				initQISView();
+			}
+			wait();
+		});
+
+		$("#popupAbort")
+		.on("click", function () {
+			$( "#signInDialog" ).popup( "close");
+		});
 
 		function initQISView() {
 			loadingIn();

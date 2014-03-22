@@ -199,3 +199,25 @@ function loadingIn() {
 function loadingOut() {
 	$.mobile.loading("hide");
 };
+
+/**
+ * Save Username and Password
+ */
+function saveUsernamePassword(username, password){
+	$.mobile.loading( "show", {
+	  text: "Ihre Einstellungen werden gespeichert",
+	  textVisible: true,
+	  theme: "b"
+	});
+	GLOBAL.DEMO.username = username;
+	localStorage.setItem("username", GLOBAL.DEMO.username);
+	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+password)
+	.done(function(data, status, jqXHR) {
+		GLOBAL.DEMO.credentials = data.encryptedCredentials;
+		GLOBAL.DEMO.salt = data.salt;
+		localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
+		localStorage.setItem("salt", GLOBAL.DEMO.salt);
+		loadingOut();
+	});
+};
+

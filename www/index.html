@@ -112,6 +112,7 @@
 				// there is no Element to fit the Selector
 				//$( "[data-role='navbar']" ).navbar();
 				$("header, footer").toolbar();
+				GLOBAL.DEMO.username = localStorage.getItem("username");
 				GLOBAL.DEMO.credentials = localStorage.getItem("credentials");
 				GLOBAL.DEMO.salt = localStorage.getItem("salt");
 				CONFIG.NEWS.defaultFeed = localStorage.getItem("defaultFeed");

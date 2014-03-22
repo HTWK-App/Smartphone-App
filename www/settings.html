@@ -49,6 +49,7 @@
 			.on("pagecreate", function () {
 				getNewsFeeds(); 
 				getCanteens();
+				fillFields();
 			})
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.settings) loadingIn();
@@ -110,6 +111,11 @@
 			 			.selectmenu("refresh");
 			   });
 		};
+		function fillFields(){
+			if(GLOBAL.DEMO.username != undefined || GLOBAL.DEMO.username != ""){
+				$("#username").attr("placeholder", GLOBAL.DEMO.username);
+			}
+		};
 
 		$( "#default_language_select")
 			.change(function() {
@@ -153,26 +159,10 @@
 					localStorage.setItem("facultyName", CONFIG.FACULTY.name);
 				}
 			});
-		
+
 		$("#save")
-			.on("click", function () {
-				$.mobile.loading( "show", {
-				  text: "Ihre Einstellungen werden gespeichert",
-				  textVisible: true,
-				  theme: "b"
-				});
-				GLOBAL.DEMO.username = $("#username").val();
-				GLOBAL.DEMO.password = $("#password").val();
-				localStorage.setItem("username", GLOBAL.DEMO.username);
-				localStorage.setItem("password", GLOBAL.DEMO.password);
-				$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+GLOBAL.DEMO.password)
-				.done(function(data, status, jqXHR) {
-					GLOBAL.DEMO.credentials = data.encryptedCredentials;
-					GLOBAL.DEMO.salt = data.salt;
-					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
-					localStorage.setItem("salt", GLOBAL.DEMO.salt);
-					loadingOut();
-				});
-			});
+		.on("click", function () {
+			saveUsernamePassword($("#username").val(),$("#password").val());
+		});
 	</script>
 </div>
