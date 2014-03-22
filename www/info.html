@@ -2,101 +2,52 @@
 	<div data-role="content" class="toblur">
 		<div data-role="collapsible-set" data-content-theme="a">
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h4>Semester-Plan</h4>
+				<h3>Semester-Plan</h3>
 				<p></p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h4>Opal</h4>
+				<h3>Opal</h3>
 				<p><a href="https://shib1.rz.htwk-leipzig.de/idp/Authn/UserPassword">Klicke hier, um zu Opal zu gelangen</a></p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h4>Spezielle Orte</h4>
-				<p><table data-role="table" id="examTable" data-mode="reflow" class="ui-responsive">
-				<thead>
-					<tr>
-						<th>HTWK-Card</th>
-					</tr>
-				   <tr>
-				      <td>Aktualisierung</td>
-				      <td>Terminal im Foyer des Lipsius Baus</td>
-				    </tr>
-				    <tr>
-				      <td>Probleme</td>
-				      <td><a href="http://www.htwk-leipzig.de/de/studierende/beratungs-servicestellen/htwk-card/">Zur Website HTWK-Card</a></td>
-				    </tr>
-				    <tr>
-				      <th>Prüfungsämter</th>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="431">Angewandte Sozialwissenschaften</a></td>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="100">Bauwesen</a></td>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="197">Elektro- und Informationstechnik</a></td>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="288">Informatik, Mathematik, Naturwissenschaften</a></td>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="293">Maschinenbau und Energietechnik 1</a>, <a href="#" class="exam" data-cuid="320">ME 2</a></td>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="395">Medien 1</a>, <a href="#" class="exam" data-cuid="407">Medien 2</a></td>
-				    </tr>
-				    <tr>
-				      <td><a href="#" class="exam" data-cuid="460">Wirtschaftswissenschaften</a></td>
-				    </tr>
-				</thead>
-				</table></p>
+				<h3>Spezielle Orte</h3>
+				<hr>
+				<h4>HTWK-Card</h4>
+				<p><strong>Aktualisierung:</strong><br>Terminal im Foyer des Lipsius Baus</p>
+				<p><strong>Probleme:</strong><br><a href="http://www.htwk-leipzig.de/de/studierende/beratungs-servicestellen/htwk-card/">Zur Website bzgl. der HTWK-Card</a></p>
+				<hr>
+				<h4>Prüfungsämter</h4>
+				<ul id="examTable" data-role="listview" data-inset="true">
+					<li><a href="#" class="exam" data-cuid="431">Angewandte Sozialwissenschaften</a></li>
+					<li><a href="#" class="exam" data-cuid="100">Bauwesen</a></li>
+					<li><a href="#" class="exam" data-cuid="197">Elektro- und Informationstechnik</a></li>
+					<li><a href="#" class="exam" data-cuid="288">Informatik, Mathematik, Naturwissenschaften</a></li>
+					<li><a href="#" class="exam" data-cuid="293">Maschinenbau und Energietechnik 1</a></li>
+					<li><a href="#" class="exam" data-cuid="320">Maschinenbau und Energietechnik 2</a></li>
+					<li><a href="#" class="exam" data-cuid="395">Medien 1</a></li>
+					<li><a href="#" class="exam" data-cuid="407">Medien 2</a></li>
+					<li><a href="#" class="exam" data-cuid="460">Wirtschaftswissenschaften</a></li>
+				</ul>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h4>Einrichtung ihres Mail-Clients</h4>
+				<h3>Mail-Client einrichten</h3>
 				<p>Um einen Mail-Client mit ihrem HTWK Mail-Konto zu verknüpfen, benutzten Sie bitte folgende Einstellungen:<br>
-				<table data-role="table" data-mode="reflow" class="ui-responsive">
-				<thead>
-					<tr>
-						<th>Posteingangsserver</th>
-						<td>mail.htwk-leipzig.de</td>
-					</tr>
-				   <tr>
-				      <th>IMAP Port</th>
-				      <td>143</td>
-				    </tr>
-				    <tr>
-				      <th>POP Port</th>
-				      <td>110</td>
-				    </tr>
-				    <tr>
-				      <th>Postausgangsserver</th>
-				      <td>send.htwk-leipzig.de</td>
-				    </tr>
-				    <tr>
-				      <th>Port</th>
-				      <td>587</td>
-				    </tr>
-				    <tr>
-				      <th>Verbindungssicherheit</th>
-				      <td>STARTTLS oder TLS</td>
-				    </tr>
-				    <tr>
-				      <th>Authentifizierungsmethode</th>
-				      <td>Passwort/normal</td>
-				    </tr>
-				    <tr>
-				      <th>Login</th>
-				      <td>Ihr HRZ Login</td>
-				    </tr>
-				</thead>
-				</table></p>
+				<p><strong>Posteingangsserver:</strong><br>mail.htwk-leipzig.de</p>
+				<p><strong>IMAP Port:</strong><br>143</p>
+				<p><strong>POP Port:</strong><br>110</p>
+				<p><strong>Postausgangsserver:</strong><br>send.htwk-leipzig.de</p>
+				<p><strong>Port:</strong><br>587</p>
+				<p><strong>Verbindungssicherheit:</strong><br>STARTTLS oder TLS</p>
+				<p><strong>Authentifizierungsmethode:</strong><br>Passwort/normal</p>
+				<p><strong>Login:</strong><br>Ihr HRZ Login</p>
+				</p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h4>E-Mail Listen</h4>
+				<h3>E-Mail Listen</h3>
 				<p>Leider bietet die HTWK Leipzig keine öffentlichen Verteilerlisten an. Sofern Sie etwas an Studenten senden möchten, wenden Sie sich an den Studentenrat. Sofern Sie etwas an Mitarbeiter senden möchten, wenden Sie sich bitte an das Büro der Rektorin.</p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h4>VPN-Zugang</h4>
+				<h3>VPN-Zugang</h3>
 				<p><a href="http://www.htwk-leipzig.de/de/rzpages/services/vpn/">Klicke hier, um zur Informationsseite der HTWK für den VPN-Zugang zu gelangen</a></p>
 			</div>
 
@@ -117,10 +68,10 @@
 			 });
 
 		$( "#examTable" )
-    			.on("click", "a.exam", loadExamDetails);
+			.on("click", "a.exam", loadExamDetails);
 
 		function loadExamDetails(e) {
-			var id = $(e.target).data("cuid");
+			var id = $(e.target).first().data("cuid");
 			
 			if($("#staff_"+id).length>0) {
 				$.mobile.initializePage();
