@@ -86,7 +86,7 @@
 					</select>
 				</div>
 				<ul id="news_content_list" data-role="listview" data-inset="true"></ul>
-				<!-- TODO <a data-role="button" id="news-more">Mehr</a>-->
+				<a data-role="button" id="news-more">Mehr</a>
 			</div>
 			<div id="news_popup" data-role="popup">
 				<p>Diese Nachricht besitzt keinen zusätzlichen Inhalt!</p>
@@ -184,7 +184,11 @@
 				//$("#news_content_list").empty();
 				//$( "div.news_details" ).detach();
 				//fillNewsContent(feedList[$(this).val()]);
-				changeNewsFeed($(this).val());
+				changeNewsFeed($(this).val(),false);
+			});
+		$("#news-more").
+			on("click", function () {
+				changeNewsFeed($(this).val(),true);
 			});
 
 		// TODO
@@ -253,12 +257,15 @@
 		/**
 		 * Loading all News of the given Feed.
 		 */
-		function changeNewsFeed(feed) {
+		function changeNewsFeed(feed, more) {
 			loadingIn();
+			var offset = 0;
+			var remove = true;
+			if(more == true){ remove = false; offset = $('#news_content_list li').length;}
 			//$.getJSON( SERVER_URL+'news/get?',{feed: feed}).done( function(data,a,b) {
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed})
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
 			 .done(function(data, status, jqXHR) {
-				 	createNewsEntries(data.responseData.feed.entries);
+				 	createNewsEntries(data.responseData.feed.entries, remove);
 				 	loadingOut();
 				 //$('#news_content_list').empty();
 					/*$.each( data.responseData.feed.entries, function( i, item ) {
@@ -274,7 +281,7 @@
 		/**
 		 * Creating all News-Entries inclusive Details.
 		 */
-		function createNewsEntries(data) {
+		function createNewsEntries(data, remove) {
 			var link, pic, title, snipp, content, date;
 			var c = 0;
 			var lis = "";
@@ -307,19 +314,29 @@
 							'</div>'+
 						'</div>';
 			}
+			if(remove == true){
+				$( "#news_content_list" )
+					.empty()
+					.append(lis)
+					.listview("refresh")
+					.trigger("updatelayout");
 			
-			$( "#news_content_list" )
-				.empty()
-				.append(lis)
-				.listview("refresh")
-				.trigger("updatelayout");
+				$( "body" )
+					.find("div.newsdetails")
+					.remove().end()
+					.append(divs)
+					.trigger("create");
+			}else{
+				$( "#news_content_list" )
+					.append(lis)
+					.listview("refresh")
+					.trigger("updatelayout");
 			
-			$( "body" )
-				.find("div.newsdetails")
-				.remove().end()
-				.append(divs)
-				.trigger("create");
-			
+				$( "body" )
+					.find("div.newsdetails")
+					.append(divs)
+					.trigger("create");
+			}
 			$.mobile.initializePage();
 			
 			/*
