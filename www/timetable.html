@@ -31,14 +31,8 @@
 				<tbody data-day="Wed"></tbody>
 				<tbody data-day="Thu"></tbody>
 				<tbody data-day="Fri"></tbody>
-			<table>
+			</table>
 		</div>
-		
-		<!--<div data-day="Mon" class="timetable_content"></div>
-		<div data-day="Tue" class="timetable_content"></div>
-		<div data-day="Wed" class="timetable_content"></div>
-		<div data-day="Thu" class="timetable_content"></div>
-		<div data-day="Fri" class="timetable_content"></div>-->
 	</div>
 	<footer data-role="footer" data-position="fixed" class="toblur">
 		<div class="center">
@@ -46,38 +40,7 @@
 		</div>
 	</footer>
 
-	<script>
-		var TTSet = {
-			semester: null,
-			faculty : "fimn",
-			groups  : [
-			           {
-			        	   name : "13IN1-B",
-			        	   courses : {
-			        		   "ccf84be64a0e72a25b298ea645b2949f" : "Algorithmen und Datenstrukturen",
-			        		   "475aae75a1df900faf9a79f6f61bfe8f" : "Englisch",
-			        		   "98dff33f0fc0eb9e093950488badc976" : "Anwendungsorientierte Programmierung"
-			        	   }
-			           },
-			           {
-			        	   name : "13MI1-B",
-			        	   courses : {
-			        		   "43f39a31eaea91afd83069530b7a5681" : "Medientheorie",
-			        		   "2b078e012c9165d5c81f5c707c76b0f8" : "2030 Digitaltechnik MIB 2.FS (pf)",
-			        		   "f4513fc36fe008a4a9cb9f0a20ba8e0a" : "Physik",
-			        		   "f6ff37e22b74021f0064dba0fa49887d" : "Frei!"
-			        	   }
-			           }
-		   ]
-		};
-	
-		/*$( document )
-			.on("click", "div:jqmData(role='navbar') a", function () {
-				$("div.mensa_content").hide();
-				$("#" + $(this).jqmData("href")).show();
-				return true;
-			 });*/
-		
+	<script>		
 		$( "#timetable_page" )
 			.on("pagecreate", initTimetableView)
 			.on("pageshow", function() {
@@ -94,13 +57,28 @@
 					.hide().end()
 					.find("tbody:jqmData(day='"+$(e.target).jqmData("day")+"')")
 					.show();
+			 })
+			.on("swipeleft", "#timetable_days tbody", function() {
+					var o = $(this);	
+					
+					if(o.index()<5)
+					{	
+						$("#timetable_nav a").eq(o.index()).not(".ui-disabled").click();
+					}
+			 })
+			.on("swiperight", "#timetable_days tbody", function() {
+					var o = $(this);	
+					
+					if(o.index()>1)
+					{
+						$("#timetable_nav a").eq(o.index()-2).not(".ui-disabled").click();
+					}
 			 });
 			
 		$( "#timetable_week_select" )
 			.on("change", function() {
-				//$("div.timetable_content").empty();
 				$("#timetable_days table tbody").empty();
-				fillTimetable($(this).val());
+				fillTimetable();
 			 });
 
 		/**
@@ -115,16 +93,6 @@
 			$( "#timetable_week_label" )
 			 	.html("Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
 					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));
-
-			//fillTimetable();
-
-			// deactivate already past days
-			/*if (date.getDay() < 6)
-			{
-				for (var i = 0; i < date.getDay(); i++) {
-					$("#link_"+GLOBAL.DATE.weekdays[i].id).addClass("ui-disabled");
-				};
-			}*/
 			
 			// open the tab for current day
 			$( "#timetable_nav a:jqmData(day='"+day+"')" )
@@ -135,46 +103,108 @@
 			GLOBAL.INIT.timetable = true;
 		};
 
+		/**
+		 * Loading the selected Week into the Timetable.
+		 */
 		function fillTimetable() {
+			var tbs = $("#timetable_days table tbody");
 			var week = $("#timetable_week_select").val();
+			var deferreds = [];
+			var fac;
 			
 			loadingIn();
-			for(var k in TTSet.groups) {
-				fillTimeTableWeek(week, k)
+			for(var f in CONFIG.TIMETABLE.faculty) 
+			{
+				fac = CONFIG.TIMETABLE.faculty[f];
+				for(var g in fac.groups)
+				{
+					deferreds[deferreds.length] = fillTimetableWeek(tbs, week, fac.id, fac.groups[g]);
+				}
 			}
-			loadingOut();
-		};
-		
-		function fillTimeTableWeek(week, group) {
-			var o = $("#timetable_days table tbody") //$("#timetable_page div.timetable_content");
-
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+TTSet.semester+"/"+TTSet.faculty+"/week/"+week+"?semgroup="+TTSet.groups[group].name)
-			 .done(function (data, status, jqXHR) {
-				 if(!isEmpty(data))
-				 {
-					 for(var k in data)
-					 {	
-						 addTimeTableWeekday(o.eq(k), data[k].dayContent, group);
-					 }
-				 }
-			  });
-			//.fail(ajaxErrorHandler);
-		};
-		
-		
-		function addTimeTableWeekday(day, courses, group) {
-			var trs = "";
-			var n, c;
 			
-			if(!isEmpty(day) && !isEmpty(courses))
+			$.when.apply($, deferreds)
+			 .then(function() {
+				 for(var i=0;i<tbs.length;i++)
+				 {
+					var trs = tbs.eq(i).find("tr").detach();
+					
+					if(trs.length>0)
+					{
+						trs = trs.sort(function(a,b) {
+							var o1 = $(a).find("td").first().text();
+							var o2 = $(b).find("td").first().text();
+							
+							if(o1.length==4) o1 = "0"+o1;
+							if(o2.length==4) o2 = "0"+o2;
+							
+							console.log(o1+" "+o2);
+							
+							if(o1==o2) return 0;
+							else if(o1>o2) return 1;
+							else return -1;
+						});
+						 
+						 tbs.eq(i).append(trs);
+					}
+					else
+					{
+						tbs.eq(i)
+						  .append('<tr><td colspan="8">Keine Veranstaltungen.</td></tr>')
+						  .trigger("create");
+					}
+				 }
+				 
+				 loadingOut();
+			 });
+		};
+		
+		/**
+		 * Fill the Timetable Day by Day for the given Faculty and Group in the given Week.
+		 * 
+		 * @param jQuery-Object tbs ... TBody's of Timetable
+		 * @param String week ... Week Number
+		 * @param String faculty ... Faculty ID (e.g. "FIMN")
+		 * @param Array[Object] group ... Courses and Group ID from Settings
+		 * 
+		 * @see CONFIG.TIMETABLE
+		 */
+		function fillTimetableWeek(tbs, week, faculty, group) {
+			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+faculty+"/week/"+week+"?semgroup="+group.id)
+			 		.done(function (data, status, jqXHR) {
+			 				if(!isEmpty(data))
+			 				{
+			 					for(var k in data)
+			 					{	
+			 						addTimetableWeekday(tbs.eq(k), data[k].dayContent, group);
+			 					}
+			 				}
+			 		 });
+				   //.fail(ajaxErrorHandler);
+		};
+		
+		/**
+		 * Adding Courses from the Request to the Weekday.
+		 * 
+		 * @param jQuery-Object tb ... TBody-Element (TBody representing the Day)
+		 * @param Array courses ... all Courses for the Day
+		 * @param Array[Object] group ... Courses and Group ID from Settings
+		 * 
+		 * @see CONFIG.TIMETABLE
+		 */
+		function addTimetableWeekday(tb, courses, group) {
+			var trs = "";
+			var n, c, d;
+
+			if(!isEmpty(tb) && !isEmpty(courses))
 			{
 				for(var i=0;i<courses.length;i++)
 				{	
 					c = courses[i];
-					n = TTSet.groups[group].courses[c.suid];
+					n = group.courses[c.suid];
+					d = (CONFIG.TIMETABLE.showDocentFullName && !isEmpty(c.docentDetailed))?c.docentDetailed:c.docent;
 					
 					if(!isEmpty(n))
-					{
+					{	
 						trs += 	'<tr>'+
 									'<td>'+c.begin+'</td>'+
 									'<td>'+c.end+'</td>'+
@@ -182,16 +212,14 @@
 									'<td>'+c.location+'</td>'+
 									'<td>'+c.type+'</td>'+
 									'<td>'+n+'</td>'+
-									'<td>'+c.docent+'</td>'+
+									'<td>'+d+'</td>'+
 									'<td>'+c.notes+'</td>'+
 								'</tr>';
 					}
 				}
 				
-				// TODO Sorting
-				
-				day.append(trs)
-				   .trigger("create");
+				tb.append(trs)
+				  .trigger("create");
 			}
 		};
 		
@@ -208,8 +236,8 @@
 			 			}
 			 		}
 			 		
-			 		// TODO right way?
-			 		TTSet.semester = data.semester;
+			 		// TODO move to Settings
+			 		CONFIG.TIMETABLE.semester = data.semester;
 
 			 		$( "#timetable_week_select" )
 			 			.append(opts)
@@ -221,50 +249,6 @@
 			 		fillTimetable();
 			   });
 			//.fail(ajaxErrorHandler);
-		};
-
-		// Creates formatted Date String
-		function formatDate(date, format) {
-			return createServerDateStamp(date).replace(GLOBAL.DATE.formats.regexp, format);
-		};
-
-		// Computes the Dates of the Week (per Day)
-		function getWeek(date) {
-			var week = new Array(5);
-			
-			// Today is a Sunday?
-			if (date.getDay() == 0 )
-			{
-				date.setDate(date.getDate() + 1);
-			}
-			// Today is a Saturday?
-			else if(date.getDay() == 6)
-			{
-				date.setDate(date.getDate() + 2);
-			}
-			
-			// Reset to Monday
-			date.setDate(date.getDate()-date.getDay()+1);
-			
-			week[0] = new Date(date);
-
-			for (var i = 1; i < 5; i++) {
-				week[i] = new Date(date.setDate(date.getDate()+1));
-			}
-
-			return week;
-		};
-
-		// Returns the Weekday defined by the given Date
-		function getWeekDay(date) {
-			if (date.getDay() == 0 || date.getDay() == 6)
-			{
-				return GLOBAL.DATE.weekdays[1];
-			}
-			else
-			{
-				return GLOBAL.DATE.weekdays[date.getDay()];
-			}
 		};
 	</script>
 </div>

@@ -39,6 +39,19 @@ var CONFIG = {
 		showDocentFullName: false,
 		faculty : [
 		           {
+		        	   id : "fb",
+		        	   groups : [
+		        	             {
+                	            	 id : "13BI1-B",
+                	            	 courses : {
+                	            		 "a852385b44c1bc6f78287a455c5832fa" : "Hydromechanik",
+                	            		 "d8f0a7990b00594587c3dbe9fe798804" : "2501 Baustofflehre II",
+                	            		 "584f5fb2f1e9024511b02e4e5b0bdb1a" : "AK Baukonstruktion"
+                	            	 }
+                	             }
+                	            ]
+				   },
+		           {
 		        	   id : "fimn",
 		        	   groups : [
 		        	             {
