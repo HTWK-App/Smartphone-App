@@ -221,3 +221,10 @@ function saveUsernamePassword(username, password){
 	});
 };
 
+/**
+ * Open Links in System Browser
+ */
+function openInExternalBrowser(elem) {
+        window.open(elem.href, "_system", "location=yes");
+        return false; // Prevent execution of the default onClick handler 
+    }
