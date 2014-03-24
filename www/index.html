@@ -154,7 +154,8 @@
     				//$( "[data-role='header'] a" ).remove();	
     				//$( "[data-role='header']" ).append('<a href="#menu" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>');
     			}
-			});
+			})
+			.on("click", "a.external", openInExternalBrowser);
 		// TODO showLoading
 		//$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
 

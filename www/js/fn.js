@@ -183,16 +183,22 @@ function escape(str) {
 
 /**
  * Show Loading-Spinner.
+ * 
+ * @param String msg
+ * @param Boolean textonly ... indicates wether Spinner is shown or not
  */
-function loadingIn(message, onlytext) {
-	if(onlytext == undefined){onlytext == false}
-	if(message == "" || message == undefined){ 
-		message = "Daten werden abgerufen";
+function loadingIn(msg, textonly) {
+	if(isEmpty(textonly)) {
+		textonly = false;
 	}
-	$.mobile.loading( "show", {
-	  text: message,
+	if(isEmpty(msg)) { 
+		msg = "Daten werden abgerufen";
+	}
+	
+	$.mobile.loading("show", {
+	  text: msg,
 	  textVisible: true,
-	  textonly: onlytext,
+	  textonly: textonly,
 	  disabled: true,
 	  theme: "b"
 	});
@@ -206,46 +212,55 @@ function loadingOut() {
 };
 
 /**
- * Save Username and Password
+ * Save Username and Password.
+ * 
+ * @param String username
+ * @param String password
  */
 function saveUsernamePassword(username, password){
-	loadingIn("Ihre Einstellungen werden gespeichert");
+	loadingIn("Ihre Einstellungen werden gespeichert...");
+	
 	GLOBAL.DEMO.username = username;
 	GLOBAL.DEMO.checking = true;
-	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+password)
-	.done(function(data, status, jqXHR) {
+	
+	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+username+"&password="+password)
+	 .done(function(data, status, jqXHR) {
 		GLOBAL.DEMO.credentials = data.encryptedCredentials;
 		GLOBAL.DEMO.salt = data.salt;
+		
 		loadingOut();
 		loadingIn("Es wird geprüft, ob ihre Daten korrekt sind...");
+		
 		$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt+"&offset=1")
-			.done(function(data, status, jqXHR) {
-				loadingOut();
-				if(data.message == "[AUTHENTICATIONFAILED] Authentication failed.") {
+		 .done(function(data, status, jqXHR) {
+			 	loadingOut();
+				if(!isEmpty(data.exception)) {
 					GLOBAL.DEMO.username = "";
 					GLOBAL.DEMO.credentials = "";
 					GLOBAL.DEMO.salt = "";
 					GLOBAL.DEMO.correct = false;
 					GLOBAL.DEMO.checking = false;
-					loadingIn("Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!", true );
-					setTimeout(loadingOut, 3000);
-				}else{
+					loadingIn("Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!", true);
+				}
+				else {
 					GLOBAL.DEMO.correct = true;
 					GLOBAL.DEMO.checking = false;
 					localStorage.setItem("username", GLOBAL.DEMO.username);
 					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
 					localStorage.setItem("salt", GLOBAL.DEMO.salt);
-					loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true );
-					setTimeout(loadingOut, 3000);
+					loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true);
 				}
-			});
-	});
+				setTimeout(loadingOut, 3000);
+		  });
+	  });
 };
 
 /**
- * Open Links in System Browser
+ * Open Links in Devices native Browser.
+ * 
+ * @param Event e ... Click-Event of Link
  */
-function openInExternalBrowser(elem) {
-        window.open(elem.href, "_system", "location=yes");
-        return false; // Prevent execution of the default onClick handler 
-    }
+function openInExternalBrowser(e) {
+	window.open($(e.target).attr("href"), "_system", "location=yes");
+	e.preventDefault(); 
+};

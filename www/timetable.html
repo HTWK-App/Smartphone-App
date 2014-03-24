@@ -36,7 +36,7 @@
 	</div>
 	<footer data-role="footer" data-position="fixed" class="toblur">
 		<div class="center">
-			<h4 id="timetable_week_label" data-week=""></h4>
+			<h4 id="timetable_week_label"></h4>
 		</div>
 	</footer>
 
@@ -149,8 +149,8 @@
 					else
 					{
 						tbs.eq(i)
-						  .append('<tr><td colspan="8">Keine Veranstaltungen.</td></tr>')
-						  .trigger("create");
+						   .append('<tr><td colspan="8">Keine Veranstaltungen.</td></tr>')
+						   .trigger("create");
 					}
 				 }
 				 
@@ -165,6 +165,8 @@
 		 * @param String week ... Week Number
 		 * @param String faculty ... Faculty ID (e.g. "FIMN")
 		 * @param Array[Object] group ... Courses and Group ID from Settings
+		 * 
+		 * @return jQuery-Deferred
 		 * 
 		 * @see CONFIG.TIMETABLE
 		 */
@@ -223,9 +225,12 @@
 			}
 		};
 		
+		/**
+		 * Loading all Weeks for the Timetable.
+		 */
 		function fillTimetableSelect() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
-			 	.done(function(data, status, jqXHR) {
+			 .done(function(data, status, jqXHR) {
 			 		var opts = "";
 			 		
 			 		for(var k in data)
@@ -241,9 +246,8 @@
 
 			 		$( "#timetable_week_select" )
 			 			.append(opts)
-			 			// TODO wait for Server-Update
-			 			//.find("option[value='"+data.current+"']")
-			 			//.prop("selected", true).end()
+			 			.find("option[value='"+data.current+"']")
+			 			.prop("selected", true).end()
 			 			.selectmenu("refresh");
 			 		
 			 		fillTimetable();

@@ -27,3 +27,13 @@
 	margin: 0 auto;
 	text-align: center;
 }
+
+#sport_content_list img
+{
+	margin: 15px 0 0 15px;	
+}
+
+.sportdetails img
+{
+	float:right;
+}
