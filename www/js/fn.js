@@ -184,10 +184,15 @@ function escape(str) {
 /**
  * Show Loading-Spinner.
  */
-function loadingIn() {
+function loadingIn(message, onlytext) {
+	if(onlytext == undefined){onlytext == false}
+	if(message == "" || message == undefined){ 
+		message = "Daten werden abgerufen";
+	}
 	$.mobile.loading( "show", {
-	  text: "Daten werden abgerufen",
+	  text: message,
 	  textVisible: true,
+	  textonly: onlytext,
 	  disabled: true,
 	  theme: "b"
 	});
@@ -204,20 +209,31 @@ function loadingOut() {
  * Save Username and Password
  */
 function saveUsernamePassword(username, password){
-	$.mobile.loading( "show", {
-	  text: "Ihre Einstellungen werden gespeichert",
-	  textVisible: true,
-	  theme: "b"
-	});
+	loadingIn("Ihre Einstellungen werden gespeichert");
 	GLOBAL.DEMO.username = username;
-	localStorage.setItem("username", GLOBAL.DEMO.username);
 	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+password)
 	.done(function(data, status, jqXHR) {
 		GLOBAL.DEMO.credentials = data.encryptedCredentials;
 		GLOBAL.DEMO.salt = data.salt;
-		localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
-		localStorage.setItem("salt", GLOBAL.DEMO.salt);
 		loadingOut();
+		loadingIn("Es wird geprüft, ob ihre Daten korrekt sind...");
+		$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt+"&offset=1")
+			.done(function(data, status, jqXHR) {
+				loadingOut();
+				if(data.message == "[AUTHENTICATIONFAILED] Authentication failed.") {
+					GLOBAL.DEMO.username = "";
+					GLOBAL.DEMO.credentials = "";
+					GLOBAL.DEMO.salt = "";
+					loadingIn("Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!", true );
+					setTimeout(loadingOut, 3000);
+				}else{
+					localStorage.setItem("username", GLOBAL.DEMO.username);
+					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
+					localStorage.setItem("salt", GLOBAL.DEMO.salt);
+					loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true );
+					setTimeout(loadingOut, 3000);
+				}
+			});
 	});
 };
 
