@@ -25,6 +25,7 @@ var CONFIG = {
 		timetable: "timetable/",
 		auth: "auth",
 		qis: "qis/get",
+		room: "room/"
 		mailg: "mailbox/get",
 		mailn: "mailbox/new",
 		mails: "mailbox/send",
