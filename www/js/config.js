@@ -102,7 +102,9 @@ var GLOBAL = {
 		username: "",
 		password: "",
 		credentials: "",
-		salt: ""
+		salt: "",
+		checking: false,
+		correct: false
 	},
 	INIT: {
 		news: false,

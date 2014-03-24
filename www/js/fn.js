@@ -211,6 +211,7 @@ function loadingOut() {
 function saveUsernamePassword(username, password){
 	loadingIn("Ihre Einstellungen werden gespeichert");
 	GLOBAL.DEMO.username = username;
+	GLOBAL.DEMO.checking = true;
 	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+GLOBAL.DEMO.username+"&password="+password)
 	.done(function(data, status, jqXHR) {
 		GLOBAL.DEMO.credentials = data.encryptedCredentials;
@@ -224,9 +225,13 @@ function saveUsernamePassword(username, password){
 					GLOBAL.DEMO.username = "";
 					GLOBAL.DEMO.credentials = "";
 					GLOBAL.DEMO.salt = "";
+					GLOBAL.DEMO.correct = false;
+					GLOBAL.DEMO.checking = false;
 					loadingIn("Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!", true );
 					setTimeout(loadingOut, 3000);
 				}else{
+					GLOBAL.DEMO.correct = true;
+					GLOBAL.DEMO.checking = false;
 					localStorage.setItem("username", GLOBAL.DEMO.username);
 					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
 					localStorage.setItem("salt", GLOBAL.DEMO.salt);

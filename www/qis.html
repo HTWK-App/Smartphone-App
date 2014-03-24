@@ -48,8 +48,12 @@
 			saveUsernamePassword($("#popupUsername").val(),$("#popupPassword").val());
 			$( "#signInDialog" ).popup( "close");
 			function wait() {
-				if(GLOBAL.DEMO.salt == ""){
+				if(GLOBAL.DEMO.checking == true){
 					setTimeout(wait, 50);//wait 50 millisecnds then recheck
+					return;
+				}
+				if(GLOBAL.DEMO.correct == false){
+					$( "#signInDialog" ).popup( "open", { positionTo: "window", transition: "pop" } );
 					return;
 				}
 				initQISView();
