@@ -185,7 +185,7 @@ function escape(str) {
  * Show Loading-Spinner.
  * 
  * @param String msg
- * @param Boolean textonly ... indicates wether Spinner is shown or not
+ * @param Boolean textonly ... indicates whether Spinner will be shown or not
  */
 function loadingIn(msg, textonly) {
 	if(isEmpty(textonly)) {

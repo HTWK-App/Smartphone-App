@@ -15,9 +15,11 @@
 		
 		<script type="application/javascript" src="js/config.js"></script>
 		<script type="application/javascript" src="js/fn.js"></script>
+		
+		<script type="application/javascript" src="cordova.js"></script>
 	</head>
 	<body>
-		<nav id="menu" data-role="panel" data-theme="b">
+		<div id="menu" data-role="panel" data-display="push" data-position="left" data-theme="b">
 			<div data-role="listview" data-inset="true" data-theme="b">
 				<li>
 					<a href="index.html">News</a>
@@ -63,7 +65,7 @@
 					<a href="settings.html">Einstellungen</a>
 				</li>
 			</div>
-		</nav>
+		</div>
 		
 		<header id="header" data-role="header" data-position="fixed" class="toblur" data-theme="a">
 			<h1>News</h1>
@@ -93,11 +95,9 @@
 			</div>
 		</div>
 
-	<script type="text/javascript" src="cordova.js"></script>
+	
 	<script>
-		//var showLoading = false;
-		//var feedList = new Array();
-
+		// AJAX Setup
 		$.ajaxSetup(CONFIG.AJAX);
 		
 		$( document )
@@ -110,9 +110,9 @@
 				window.addEventListener("load", function() {
 					FastClick.attach(document.body);
 				}, false);
-				// there is no Element to fit the Selector
-				//$( "[data-role='navbar']" ).navbar();
 				$("header, footer").toolbar();
+				
+				// TODO better, move to Function, map keys to fields
 				var help = localStorage.getItem("username");
 				if(help != undefined) GLOBAL.DEMO.username = help;
 				help = localStorage.getItem("credentials");
@@ -132,49 +132,32 @@
 			.on("panelbeforeclose", function( event, ui ) {
 				$(".toblur").removeClass("blur");
 			})
-			/* Update the contents of the toolbars*/
+			// Header Update on Page Switch
 			.on("pageshow", "div:jqmData(role='page')", function() {
-    			/* on page: <div data-role="page" data-title="Info">*/
 				var o = $(this);
     			var title = o.jqmData("title");
     			var subpage = !isEmpty(o.jqmData("subpage"));
     			var h = $("#header");
     			
     			h.find("h1").text(title);
-    			//if( curr == "back") {
     			if(subpage) {
     				h.find("#btn_back").css("display", "block").end()
     				 .find("#btn_menu").css("display", "none");
-    				//$( "[data-role='header'] a" ).remove();	
-    				//$( "[data-role='header']" ).append('<a data-role="button" data-rel="back" data-icon="back" data-mini="true" class="ui-btn-left">Zurück</a>');
     			} else {
-    				//h.find("h1").text( curr ).end()
     				h.find("#btn_menu").css("display", "block").end()
     				 .find("#btn_back").css("display", "none");
-    				//$( "[data-role='header'] h1" ).text( current );
-    				//$( "[data-role='header'] a" ).remove();	
-    				//$( "[data-role='header']" ).append('<a href="#menu" data-role="button" data-icon="bars" data-mini="true" class="ui-btn-left">Menü</a>');
     			}
 			})
+			// External Link Handling
 			.on("click", "a.external", openInExternalBrowser);
-
-		// TODO showLoading
-		//$( document ).on( "pageshow", function() {if(showLoading == true){showLoader();}});
 
 		$( "#news_page" )
 			.on("pagebeforecreate", function() {
 				GLOBAL.DATE.currentWeek = getWeek(new Date());
 			 })
-			/*.on("pagebeforecreate", function() {
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-				.done(fillNewsFeedSelect);
-				//fillNewsCategories();
-				//	fillNewsContent("");
-			})*/
 			.on("pagecreate", initNewsView)
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.news) loadingIn();
-				$("#news_content_list li a").removeClass("ui-btn-active");
 				$("#btn_refresh")
 				.off()
 				.on("click", function() { 
@@ -184,140 +167,110 @@
 
 		$( "#news_select" )
 			.change(function() {
-				//$("#news_content_list").empty();
-				//$( "div.news_details" ).detach();
-				//fillNewsContent(feedList[$(this).val()]);
 				changeNewsFeed($(this).val(),false);
 			});
-		$("#news-more").
-			on("click", function () {
+		
+		$("#news-more")
+			.click(function () {
 				changeNewsFeed($(this).val(),true);
 			});
 
-		// TODO
-		/*function showLoader() {
-			showLoading = true;
-			$.mobile.loading('show');
-		}*/
-
-		/*function fillNewsCategories() {
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-			 .done(fillNewsFeedSelect); 
-			//function(data) {
-				//$.each( data, createNewsCategory);
-				
-				//$('#news-more').click(function () {
-				//	fillNewsContent(feedList[0]);
-				//});
-			//});
-		}*/
-		
-		//function fillNewsFeedSelect(data) {//key, item){
 		/**
 		 * Loading the available News-Feeds (Prefill Feed-Selectbox).
 		 */
 		function initNewsView() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 			 .done(function(data, status, jqXHR) {
-					//var list = $("#news_select");
-					var tmp, name, id, opts;
-
-					opts = "";
+					var tmp, name, id, opts = "";
 					
 					for(var k in data)
 					{
 						id = data[k].id;
 						tmp = id.split(".");
 						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
-						if(id == CONFIG.NEWS.defaultFeed)
-							tmp = 'selected="selected"';
-						else 
-							tmp = "";
-						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
-						//feedList[k] = id;
+						
+						opts += '<option value="'+id+'">'+name+'</option>';
 					}	
 					
 					$( "#news_select" )
 						.empty()
 						.append(opts)
+						.find("option[value='"+CONFIG.NEWS.defaultFeed+"']")
+						.prop("selected", true).end()
 						.selectmenu("refresh")
 						.change();
 					
 					loadingOut();
 					GLOBAL.INIT.news = true;
-					
-					//var help = item.id.split(".");
-					//var name = help[1].substr(0,1).toUpperCase()+help[1].substring(1,help[1].length);
-					//var number = ""; var sel = "";
-					//if(help.length == 3){number = help[2];}else{number = "";}
-					//if(key == "rss.htwk.4") {sel = 'selected="selected"';}
-					//list.append('<option value="'+key+'" '+sel+'>'+name+' '+number+'</option>');
-					//feedList[key] = item.id;
-					//list.selectmenu( "refresh" );
 			 });
+			//.fail(ajaxErrorHandler);
 		};
 
 		/**
 		 * Loading all News of the given Feed.
+		 * 
+		 * @param String feed ... News Feed ID
+		 * @param Boolean more ... indicates whether additional News should be loaded
 		 */
 		function changeNewsFeed(feed, more) {
-			loadingIn();
 			var offset = 0;
 			var remove = true;
-			if(more == true){ remove = false; offset = $('#news_content_list li').length;}
-			//$.getJSON( SERVER_URL+'news/get?',{feed: feed}).done( function(data,a,b) {
+			
+			loadingIn();
+			
+			if(more == true) { 
+				remove = false; 
+				offset = $('#news_content_list li').length;
+			}
+			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
 			 .done(function(data, status, jqXHR) {
 				 	createNewsEntries(data.responseData.feed.entries, remove);
-				 	loadingOut();
-				 //$('#news_content_list').empty();
-					/*$.each( data.responseData.feed.entries, function( i, item ) {
-						newsCreateNewsElement("",item.title,item.contentSnippet,item.content,item.publishedDate);		
-					});*/
-					//$.mobile.loading('hide'); 
-					//showLoading = false;
-				});
-			// TODO fail
+			  });
+			//.fail(ajaxErrorHandler);
 		};
 
-		//function newsCreateNewsElement(picture,header,contentSnippet,content,date){
 		/**
 		 * Creating all News-Entries inclusive Details.
+		 * 
+		 * @param JSON-Object data
+		 * @param Boolean remove ... indicates whether old News should be removed or not, due to "More"-Button
 		 */
 		function createNewsEntries(data, remove) {
-			var link, pic, title, snipp, content, date;
+			var news, link,  date;
 			var c = 0;
 			var lis = "";
 			var divs = "";
 			
-			// not needed anymore
-			//GLOBAL.NEWS.counter = 0;
-			
 			for(var k in data)
 			{
-				pic = "";
-				title = data[k].title;
-				snipp = data[k].contentSnippet;
-				content = data[k].content;
-				date = new Date(data[k].publishedDate);
+				news = data[k];
+				date = createDateTimeStamp(new Date(news.publishedDate));
 				
-				if(!isEmpty(pic)) pic = '<img src="data:image/png;base64,'+pic+'" />';
-				if(isEmpty(content)) link = 'popup" data-rel="popup"';
-				else link = ++c + '"'; //++GLOBAL.NEWS.counter + '"';
+				if(isEmpty(news.content)) link = 'popup" data-rel="popup"';
+				else link = ++c + '"';
 				
 				lis += 	'<li><a href="#news_'+link+'>'+
-							'<h3>'+title+'</h3>'+
-							'<p>'+snipp+'</p>'+
-							'<p><small>'+createDateTimeStamp(date)+'</small></p>'+
+							'<h3>'+news.title+'</h3>'+
+							'<p>'+news.contentSnippet+'</p>'+
+							'<p><small>'+date+'</small></p>'+
 						'</a></li>';
 				
 				divs += '<div id="news_'+link+' data-role="page" data-title="News" data-subpage="true" class="newsdetails" data-theme="a" data-content-theme="a">'+
-							'<div data-role="content">'+pic+
-								'<h2>'+title+'</h2><h4><small>'+createDateTimeStamp(date)+'</small></h4><p>'+content+'</p>'+
+							'<div data-role="content">'+
+								'<h2>'+news.title+'</h2>'+
+								'<h4>'+date+'</h4>'+
+								'<p>'+news.content+'</p>'+
+								'<p>Quelle: <a href="'+news.link+'">Link zur Nachricht</a></p>'+
 							'</div>'+
 						'</div>';
 			}
-			if(remove == true){
+			
+			divs = $(divs);
+			
+			divs.find("a").addClass("external");
+			
+			if(remove == true) {
 				$( "#news_content_list" )
 					.empty()
 					.append(lis)
@@ -329,7 +282,8 @@
 					.remove().end()
 					.append(divs)
 					.trigger("create");
-			}else{
+			}
+			else {
 				$( "#news_content_list" )
 					.append(lis)
 					.listview("refresh")
@@ -342,34 +296,7 @@
 			}
 			$.mobile.initializePage();
 			
-			/*
-			if (content == ""){ link = 'popup" data-rel="popup"';
-			}else { link =  ++GLOBAL.NEWS.counter + '"';}
-			var pattern = 
-				'<li><a href="#news_'+link+'>'+
-					'<h3>'+header+'</h3>'+
-					'<p>'+contentSnippet+'</p>'+
-					'<p><small>'+date+'</small></p>'+
-				'</a></li>';
-			clist = $('#news_content_list');
-			clist.append(pattern);
-			clist.listview('refresh');
-			clist.trigger('updatelayout');
-			if(content != ""){
-				var help = "";
-				if(picture != "") {
-					help = '<img src="data:image/png;base64,'+picture+'" />';
-				}
-				pattern = 
-					'<div data-role="page" class="newpage" id="news_'+link+' data-title="back" data-theme="a" data-content-theme="a">'+
-						'<div data-role="content" id="news_content">'+
-							help+
-							'<h2>'+header+'</h2><h4><small>'+date+'</small></h4><p>'+content+'</p>'+
-						'</div>'+
-					'</div>';
-				$( "body" ).append(pattern).trigger("create");
-				$.mobile.initializePage();
-			}*/
+			loadingOut();
 		};
 	</script>	
 	</body>

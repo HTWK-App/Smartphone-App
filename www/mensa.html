@@ -105,7 +105,7 @@
 			// deactivate already past Days
 			if (date.getDay()>1 && date.getDay()<6)
 			{
-				for(var i = 0; i < date.getDay(); i++)
+				for(var i=0; i<date.getDay()-1; i++)
 				{
 					nav.eq(i).addClass("ui-disabled");
 				}
