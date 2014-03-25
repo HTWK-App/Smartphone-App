@@ -83,8 +83,8 @@
 									'<p><b>E-Mail:</b> <a href="mailto:'+data.email+'">'+data.email+'</a></p>'+
 									'<p><b>Telefon:</b> <a href="tel:'+data.telephone+'">'+data.telephone+'</a></p>'+
 									'<p><b>Fax:</b> '+data.telefax+'</p>'+
-									'<p><b>Links:</b></br><a href="'+data.detailLink+'" onClick="javascript:return openInExternalBrowser(this)">Details zur Person</a></br>'+
-									'<a href="'+data.vcardLink+'" onClick="javascript:return openInExternalBrowser(this)">V-Card</a></p>'+
+									'<p><b>Links:</b></br><a href="'+data.detailLink+'" class="externel">Details zur Person</a></br>'+
+									'<a href="'+data.vcardLink+'">V-Card</a></p>'+
 								'</div>'+
 							'</div>';
 				
@@ -98,37 +98,5 @@
 				loadingOut();
 			});
 		};
-		
-		/*function loadProfDetail(id){
-			$(this).attr("data-id")
-			showLoader();
-			$.getJSON( SERVER_URL+'info/staff/'+id).done( function(data,a,b) {
-				var help = data.name.split(", ");
-				var pattern = 
-				'<div data-role="page" id="profpage" data-title="back" data-theme="a" data-content-theme="a">'+
-					'<div data-role="content" id="prof_content">'+
-						'<h1>'+help[1]+' '+help[0]+'<img src="'+SERVER_URL+'info/staff/'+data.cuid+'/pic" id="prof-img" style="float: right"/></h1><hl>'+
-						'<p><b>Grad:</b> '+data.degree+'</p>'+
-						'<p><b>Bereich:</b> '+data.faculty+'<br><b>Objekt:</b> '+data.location+'</p>'+
-						'<p><b>Beschreibung:</b> '+data.description+'</p>'+
-						'<p><b>E-Mail:</b> <a href="mailto:'+data.email+'">'+data.email+'</a></p>'+
-						'<p><b>Telefon:</b> <a href="tel:'+data.telephone+'">'+data.telephone+'</a></p>'+
-						'<p><b>Fax:</b> '+data.telefax+'</p>'+
-						'<p><b>Links:</b><br><a href="'+data.detailLink+'" class="external">Details zur Person</a><br>'+
-						'<a href="'+data.vcardLink+'">V-Card</a></p>'+
-					'</div>'+
-				'</div>';
-				$( "body" ).append(pattern);
-				$.mobile.initializePage();
-				$.mobile.loading('hide'); 
-				showLoading = false;
-				$.mobile.changePage('#profpage');
-			});
-		};*/
-
-		/*function addProf(name, degree, department, id){
-			var help = name.split(", "); 
-			return '<li class="ui-screen-hidden"><a class="prof" data-id="'+id+'">'+help[1]+' '+help[0]+', '+degree+'<p>'+department+'</p></a></li>';
-		}*/
 	</script>
 </div>
