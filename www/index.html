@@ -113,18 +113,7 @@
 				// there is no Element to fit the Selector
 				//$( "[data-role='navbar']" ).navbar();
 				$("header, footer").toolbar();
-				var help = localStorage.getItem("username");
-				if(help != undefined) GLOBAL.DEMO.username = help;
-				help = localStorage.getItem("credentials");
-				if(help != undefined) GLOBAL.DEMO.credentials = help;
-				help = localStorage.getItem("salt");
-				if(help != undefined) GLOBAL.DEMO.salt = help;
-				help = localStorage.getItem("language");
-				if(help != undefined) CONFIG.LANGUAGE.set = help;
-				help = localStorage.getItem("defaultFeed");
-				if(help != undefined) CONFIG.NEWS.defaultFeed = help;
-				help = localStorage.getItem("defaultCanteen");
-				if(help != undefined) CONFIG.MENSA.defaultCanteen = help;
+				loadParameters();
 			})
 			.on("panelbeforeopen", function( event, ui ) {
 				$(".toblur").addClass("blur");
