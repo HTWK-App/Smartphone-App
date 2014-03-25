@@ -25,10 +25,10 @@ var CONFIG = {
 		timetable: "timetable/",
 		auth: "auth",
 		qis: "qis/get",
-		room: "room/"
+		room: "room/",
 		mailg: "mailbox/get",
 		mailn: "mailbox/new",
-		mails: "mailbox/send",
+		mails: "mailbox/send"
 	},
 	LANGUAGE: {
 		availableShort: ["de_DE","en_EN"],
@@ -138,5 +138,5 @@ var GLOBAL = {
 			6: { id: "Sat" , name: "Samstag"}
 		},
 		currentWeek: null
-	},
+	}
 };
