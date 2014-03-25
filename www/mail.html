@@ -1,43 +1,10 @@
 <div id="mail_page" data-role="page" data-dom-cache="true" data-title="Postfach" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
 		<ul id="mail_list" data-role="listview" data-inset="true">
-		<! -- TODO remove, just demo -->	
-		<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
-			<li><a href="#">
-				<h2>Stephen Weber</h2>
-				<p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
-				<p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
-				<p class="ui-li-aside"><strong>6:24</strong>PM</p>
-			</a></li>
-			<li><a href="#">
-				<h2>jQuery Team</h2>
-				<p><strong>Boston Conference Planning</strong></p>
-				<p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-				<p class="ui-li-aside"><strong>9:18</strong>AM</p>
-			</a></li>
-			<li data-role="list-divider">Thursday, October 7, 2010 <span class="ui-li-count">1</span></li>
-			<li><a href="#">
-				<h2>Avery Walker</h2>
-				<p><strong>Re: Dinner Tonight</strong></p>
-				<p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait! </p>
-				<p class="ui-li-aside"><strong>4:48</strong>PM</p>
-			</a></li>
 		</ul>
 	</div>
 
 	<script>
-		//var currentDate = "";
-	
-		/*$( document )
-			.on("pagecreate", "#mail", initMailView)
-			.on("pageshow", "#mail", function() {
-				//loadingIn();
-				//$("#qispage").detach();
-			 });*/
-		/*.on( "pagecreate", '[id="mail"]', function() {
-			$("#mail_set").empty();
-			fillMailView();
-		});*/
 	
 		$( "#mail_page" )
 			.on("pagecreate", initMailView)
@@ -52,32 +19,30 @@
 			loadingIn();
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt)
 			 .done(function(data, status, jqXHR) {
-				 	fillMailList(data);
-				 	loadingOut();
+					if(data.message != "message number < 1"){
+					 	fillMailList(data);
+						loadingOut();
+					}else{
+						loadingIn("Es konnten keine Mails abgerufen werden!", true);
+						setTimeout(fetchMailsFail, 3000);
+					}
 				 	GLOBAL.INIT.mail = true;
 			  });
 			// TODO fail
-			/*$.getJSON(SERVER_URL+'/mailbox/get?credentials='+CREDENTIALS+'&salt='+SALT).done(function(data) {
-				var elements = data.length;
-				var count = 1;
-				$.each(data, function(key, item) {
-					((count == elements) ? createNewMailHeader(item,1) : createNewMailHeader(item,0));
-					count++;
-				});
-				$.mobile.loading('hide'); 
-				showLoading = false;
-			});*/
 		};
+
+		function fetchMailsFail(){
+			loadingOut();
+			$( "#menu" ).panel( "open");
+		}
 		
 		function fillMailList(data) {
 			var mail, sdate = new Date(0);
 			var lis = "";
 			var divs = "";
 			
-			if(!isEmpty(data))
-			{
-				for(var k in data)
-				{
+			if(!isEmpty(data)){
+				for(var k in data){
 					mail = data[k];
 
 					// Format: Thu Oct 09 14:54:21 <CEST,CET> 2008
@@ -98,8 +63,6 @@
 					.first().addClass("ui-first-child").end()
 					.last().addClass("ui-last-child").end()
 					.end()
-					/*.listview('refresh')
-					.trigger('updatelayout');*/
 					.trigger("create");
 				
 				$( "body" )

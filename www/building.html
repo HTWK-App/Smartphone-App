@@ -2,26 +2,8 @@
 	<div data-role="content" class="toblur">
 		<ul data-role="listview" id="buidling_content_list" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true"></ul>
 	</div>
-	<!-- <div data-role="content" id="building_content" class="toblur">
-		<form>
-			<div data-role="fieldcontain">
-			    <label for="select-building1">Gebäude:</label>
-			    <select name="select-building1" id="select-building"></select>
-			</div>
-		</form>
-	</div>-->
 
 	<script>
-		/*$( document )
-			.on("pagecreate", "#building", initBuildingsView)
-			.on("pageshow", "#building", function() {
-				$("#buildingpage").detach();
-			 });*/
-		/*$( document )
-			.on("pagecreate", "[data-title='Gebäude']", initBuildingsView); function() {
-			
-			fillBuildings(new Array("Lipsius-Bau","Zuse-Bau","Geutebrück-Bau"));
-		});*/
 	
     	$( "#building_page" )
     		.on("pagecreate", initBuildingsView)
@@ -30,7 +12,6 @@
     			$("#btn_refresh")
 					.off()
 					.on("click", initBuildingsView);
-    			//$("#buildingpage").detach();
     		 });
 
 		function initBuildingsView() {
@@ -42,24 +23,6 @@
 				GLOBAL.INIT.builds = true;
 			});
 			// TODO fail
-			
-			
-			/*var data = new Array("Lipsius-Bau","Zuse-Bau","Geutebrück-Bau");
-			var opts = '';
-			
-			if(!isEmpty(data))
-			{
-				for(var k in data) {
-					//var s = parseInt(i)+1;
-					//list.append('<option value="'+s+'">'+names[i]+'</option>');
-					opts += '<option value="'+(k+1)+'">'+data[k]+'</option>';
-				}
-				
-				$( "#select-building" )
-					.empty()
-					.append(opts)
-					.selectmenu( "refresh" );
-			}*/
 		};
 		
 		function fillBuildingsList(data) {
@@ -132,6 +95,9 @@
 									'<p><small><b>Letzte Änderung:</b> '+createDateTimeStamp(new Date(data.lastChange))+'</small></p>'+
 								'</div>'+
 							'</div>';
+
+				div = $(div);
+				div.find("a").addClass("external");
 				
 				$( "body" )
 					.append(div)

@@ -101,6 +101,9 @@
     				div += 			'<p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
 						 	    '</div>'+
 						 	  '</div>';
+
+				div = $(div);
+				div.find("a").addClass("external");
 				
     				$( "body" )
 						.append(div)

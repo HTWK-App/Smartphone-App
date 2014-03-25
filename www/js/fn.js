@@ -287,4 +287,4 @@ function saveParameters(){
 	localStorage.setItem("language", CONFIG.LANGUAGE.set);
 	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
-}
+};
