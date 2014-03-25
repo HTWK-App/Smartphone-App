@@ -51,7 +51,12 @@
 			});
 
 		$("#btn_mail_send").on("click", function(){
-			$("#mail_popupDialog").popup( "open", { positionTo: "window", transition: "pop" });
+			if($("#email_to").val() != "" && $("#email_subject").val() != "")
+				$("#mail_popupDialog").popup( "open", { positionTo: "window", transition: "pop" });
+			else{
+				loadingIn("Sie haben keine Adresse oder keinen Betreff eingegeben!", true);
+				setTimeout(loadingOut, 3000);
+			}
 			});
 
 		$("#btn_mail_really").on("click", function(){
@@ -70,9 +75,11 @@
 			});
 
 		function answer(){
-			alert("here");
-//			var help = $("#btn_mail_answer").parent();
-//			alert(parent.attr("data-from"));
+			var help = $(this).parent();
+			$("#email_to").val(help.attr("data-from"));
+			$("#email_subject").val("Re: "+help.attr("data-subject"));
+			showWrite();
+			$("#btn_back").click();
 		}
 
 		function showInbox(){
@@ -81,14 +88,14 @@
 			$("#email_content").val("");
 			$("#reply").hide();
 			$("#inbox").show();
-			$("#btn_mail_write").html("E-Mail schreiben ...").attr( "data-icon", "forward" ).attr("back", "false");
+			$("#btn_mail_write").html("E-Mail schreiben ...").attr( "data-icon", "forward" ).attr("back", "false").addClass("ui-icon-forward").removeClass("ui-icon-back ui-btn-active");
 			$("#btn_mail_send").hide();
 		}
 
 		function showWrite(){
 			$("#inbox").hide();
 			$("#reply").show();
-			$("#btn_mail_write").html("Abbrechen").attr( "data-icon", "back" ).attr("back", "true").button("refresh");
+			$("#btn_mail_write").html("Abbrechen").attr( "data-icon", "back" ).attr("back", "true").addClass("ui-icon-back").removeClass("ui-icon-forward ui-btn-active");
 			$("#btn_mail_send").show();
 		}
 
@@ -148,7 +155,7 @@
 					.append(divs)
 					.trigger("create");
 
-				$("#btn_mail_answer").on("click", answer);
+				$("a.btn_mail_answer").on("click", answer);
 			}
 		};
 
@@ -187,7 +194,7 @@
 						'<strong>An: </strong>'+escape(toList)+'</br>'+
 						'<strong>Betreff: </strong>'+escape(mail.subject)+'</br>'+
 						'</p><hr>'+escape(mail.message)+
-						'<a id="btn_mail_answer" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-icon="forward">Antworten</a>'+
+						'<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b btn_mail_answer" data-icon="forward">Antworten</a>'+
 					'</div>'+
 				'</div>';
 
