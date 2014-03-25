@@ -1,19 +1,96 @@
 <div id="mail_page" data-role="page" data-dom-cache="true" data-title="Postfach" data-theme="a" data-content-theme="a">
-	<div data-role="content" class="toblur">
+	<div id="inbox" data-role="content" class="toblur">
 		<ul id="mail_list" data-role="listview" data-inset="true">
 		</ul>
 	</div>
-
+	<div id="reply" data-role="content" class="toblur">
+		<form>
+			<input type="email" data-clear-btn="false" name="email_to" id="email_to" value="" placeholder="Empfänger">
+			<input type="text" name="email_subject" id="email_subject" value="" placeholder="Betreff">
+			<textarea name="email_content" id="email_content" placeholder="Inhalt"></textarea>
+		</form>
+	</div>
+	<div data-role="popup" id="mail_popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+	    <div data-role="header" data-theme="a">
+		    <h1>Wirklich senden?</h1>
+	    </div>
+	    <div role="main" class="ui-content">
+		<h3 class="ui-title">Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
+		<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
+		<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Senden</a>
+	    </div>
+	</div>
+	<footer id="mail_footer" data-role="footer" data-position="fixed" class="toblur">
+		<div data-role="navbar">
+            		<ul>
+			<li><a id="btn_mail_write" href="#" data-role="button" data-icon="forward" data-mini="true" back="false">E-Mail schreiben ...</a></li>
+			<li><a id="btn_mail_send" href="#" data-role="button" data-icon="mail" data-mini="true">Senden</a></li>
+			</ul>
+		</div>
+	</footer>
 	<script>
 	
 		$( "#mail_page" )
-			.on("pagecreate", initMailView)
+			.on("pagecreate", function(){
+				initMailView();
+				$("#reply").hide();
+				$("#btn_mail_send").hide();
+			})
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.mail) loadingIn();
 				$("#btn_refresh")
 					.off()
 					.on("click", initMailView);
 			 });
+
+		$("#btn_mail_write").on("click", function(){
+				if($(this).attr("back") == "false")
+					showWrite();
+				else
+					showInbox();
+			});
+
+		$("#btn_mail_send").on("click", function(){
+			$("#mail_popupDialog").popup( "open", { positionTo: "window", transition: "pop" });
+			});
+
+		$("#btn_mail_really").on("click", function(){
+			$("#mail_popupDialog").popup( "close");
+			var mail = $("#email_to").val();
+			var subject = $("#email_subject").val();
+			var content = $("#email_content").val();
+			loadingIn("Ihre Mail wird versendet...");
+			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt+"&to="+mail+"&subject="+subject+"&message="+content)
+				.done(function(data, status, jqXHR) {
+					loadingOut();
+					loadingIn("Ihre Mail wurde versendet", true);
+					setTimeout(loadingOut, 3000);
+					showInbox();
+				});
+			});
+
+		function answer(){
+			alert("here");
+//			var help = $("#btn_mail_answer").parent();
+//			alert(parent.attr("data-from"));
+		}
+
+		function showInbox(){
+			$("#email_to").val("");
+			$("#email_subject").val("");
+			$("#email_content").val("");
+			$("#reply").hide();
+			$("#inbox").show();
+			$("#btn_mail_write").html("E-Mail schreiben ...").attr( "data-icon", "forward" ).attr("back", "false");
+			$("#btn_mail_send").hide();
+		}
+
+		function showWrite(){
+			$("#inbox").hide();
+			$("#reply").show();
+			$("#btn_mail_write").html("Abbrechen").attr( "data-icon", "back" ).attr("back", "true").button("refresh");
+			$("#btn_mail_send").show();
+		}
 
 		function initMailView() {
 			loadingIn();
@@ -70,6 +147,8 @@
 					.remove().end()
 					.append(divs)
 					.trigger("create");
+
+				$("#btn_mail_answer").on("click", answer);
 			}
 		};
 
@@ -92,6 +171,7 @@
 		
 		function createMailDetails(mail) {
 			var toList = "";
+			var div = "";
 			
 			// TODO better?
 			for(var i = 0; i < mail.toList.length; i++) {
@@ -101,14 +181,20 @@
 
 			toList = toList.slice(0, toList.lastIndexOf(",")).replace(/[;:]/g, "");
 			
-			return 	'<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="a" data-content-theme="a">'+
-						'<div data-role="content">'+
-							'<p><strong>Von: </strong>'+escape(mail.from)+'</br>'+
-							'<strong>An: </strong>'+escape(toList)+'</br>'+
-							'<strong>Betreff: </strong>'+escape(mail.subject)+'</br>'+
-							'</p><hr>'+escape(mail.message)+
-						'</div>'+
-					'</div>';
+			div += '<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="a" data-content-theme="a">'+
+					'<div data-role="content" data-from="'+escape(mail.from)+'" data-subject="'+escape(mail.subject)+'">'+
+						'<p><strong>Von: </strong>'+escape(mail.from)+'</br>'+
+						'<strong>An: </strong>'+escape(toList)+'</br>'+
+						'<strong>Betreff: </strong>'+escape(mail.subject)+'</br>'+
+						'</p><hr>'+escape(mail.message)+
+						'<a id="btn_mail_answer" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-icon="forward">Antworten</a>'+
+					'</div>'+
+				'</div>';
+
+			//div = $(div);
+			//div.find("a").addClass("external");
+
+			return div;
 		};
 		
 		/*function createNewMailHeader(item, last) {

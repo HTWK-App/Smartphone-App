@@ -32,14 +32,6 @@
 
 		function locationFound(position){
 			loadingOut();
-			alert('Latitude: '          + position.coords.latitude          + '\n' +
-				  'Longitude: '         + position.coords.longitude         + '\n' +
-				  'Altitude: '          + position.coords.altitude          + '\n' +
-				  'Accuracy: '          + position.coords.accuracy          + '\n' +
-				  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-				  'Heading: '           + position.coords.heading           + '\n' +
-				  'Speed: '             + position.coords.speed             + '\n' +
-				  'Timestamp: '         + position.timestamp                + '\n');
 			//if(position.coords.accuracy > 15) {
 				//getLocation();
 			//}else{
@@ -84,20 +76,23 @@
 			$( "#room_select" )
 			.empty()
 			.append(opts)
-			.selectmenu("refresh")
-			/*
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'data[0].id') // Todo
+			.selectmenu("refresh");
+			var first;
+			for(first in data) break;
+			var fid = data[first].id;
+
+			/*$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'http://localhost:8080/app/room/ss/13/1')
 				 .done(function(data, status, jqXHR) {
-					fillRoomList(data);
-				  });
-			*/
+					fillRoomList(data, fid);
+				  });*/
+			loadingOut();
 		}
 
-		function fillRoomList(data){
+		function fillRoomList(data, id){
 			var room = "";
 			var lis = "";
-			for(var k in data){
-				room = data[k];
+			for(var k in data[id]){
+				room = data[id][k];
 				lis += 	'<li><h4>'+room.name+'</h4><p>Typ: '+room.type+', Größe: '+room.size+' Plätze</p></li>';
 			}
 			
