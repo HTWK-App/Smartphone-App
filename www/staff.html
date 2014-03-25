@@ -4,11 +4,6 @@
 	</div>
 
 	<script>
-		/*$( document )
-			.on("pagecreate", "#profs", initProfView)
-			.on("pageshow", "#profs", function() {
-				$("#profpage").detach();
-			 });*/
 	
     	$( "#staff_page" )
     		.on("pagecreate", initStaffView)
@@ -29,23 +24,6 @@
 				 GLOBAL.INIT.staff = true;
 			  });
 			// TODO fail
-			
-			/*$.getJSON( SERVER_URL+'info/staff/').done( function(data,a,b) {
-				var pos = $('#profsList');
-				var pattern = "";
-				pos.empty();
-				$.each( data, function( key, item ) {
-					pattern += addProf(item.name, item.degree, item.faculty, item.cuid);
-				});
-				pos.append(pattern);
-				$('.prof').bind("click",function (e){
-					changeToProf($(this).attr("data-id"));
-				});
-				pos.listview("refresh");
-				pos.trigger( "updatelayout");
-				$.mobile.loading('hide');
-				showLoading = false;
-			});*/
 		};
 		
 		function fillStaffList(data) {
