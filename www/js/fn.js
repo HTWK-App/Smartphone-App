@@ -211,46 +211,69 @@ function loadingOut() {
 	$.mobile.loading("hide");
 };
 
+function openSignInDialog(success) {	
+	$( "#signInDialog_Btn_Save" )
+		.off()
+		.on("click", {callback:success}, function (e) {
+			saveUsernamePassword($("#signInDialogUsername").val(),
+								 $("#signInDialogPassword").val(),
+								 function() {
+									if($.isFunction(e.data.callback))
+										e.data.callback.call(this);
+									$( "#signInDialog" ).popup("close");	
+								 });
+		 });
+
+	$( "#signInDialog" )
+		.css("display", "block")
+		.popup("open", { positionTo: "window", transition: "pop" });
+};
+
 /**
  * Save Username and Password.
  * 
  * @param String username
  * @param String password
+ * @param Function done ... Success Callback
+ * @param Function fail ... Failure Callback
  */
-function saveUsernamePassword(username, password){
+function saveUsernamePassword(username, password, done, fail) {
 	loadingIn("Ihre Einstellungen werden gespeichert...");
 	
-	GLOBAL.DEMO.username = username;
-	GLOBAL.DEMO.checking = true;
+	CONFIG.AUTH.username = username;
+	CONFIG.AUTH.checking = true;
 	
 	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+username+"&password="+password)
 	 .done(function(data, status, jqXHR) {
-		GLOBAL.DEMO.credentials = data.encryptedCredentials;
-		GLOBAL.DEMO.salt = data.salt;
+		CONFIG.AUTH.credentials = data.encryptedCredentials;
+		CONFIG.AUTH.salt = data.salt;
 		
 		loadingOut();
 		loadingIn("Es wird geprüft, ob ihre Daten korrekt sind...");
 		
-		$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt+"&offset=1")
+		$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+"&offset=1")
 		 .done(function(data, status, jqXHR) {
 			 	loadingOut();
 				if(!isEmpty(data.exception)) {
-					GLOBAL.DEMO.username = "";
-					GLOBAL.DEMO.credentials = "";
-					GLOBAL.DEMO.salt = "";
-					GLOBAL.DEMO.correct = false;
-					GLOBAL.DEMO.checking = false;
+					CONFIG.AUTH.username = "";
+					CONFIG.AUTH.credentials = "";
+					CONFIG.AUTH.salt = "";
+					CONFIG.AUTH.correct = false;
+					CONFIG.AUTH.checking = false;
 					loadingIn("Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!", true);
 				}
 				else {
-					GLOBAL.DEMO.correct = true;
-					GLOBAL.DEMO.checking = false;
-					localStorage.setItem("username", GLOBAL.DEMO.username);
-					localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
-					localStorage.setItem("salt", GLOBAL.DEMO.salt);
+					CONFIG.AUTH.correct = true;
+					CONFIG.AUTH.checking = false;
+					localStorage.setItem("username", CONFIG.AUTH.username);
+					localStorage.setItem("credentials", CONFIG.AUTH.credentials);
+					localStorage.setItem("salt", CONFIG.AUTH.salt);
 					loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true);
 				}
 				setTimeout(loadingOut, 3000);
+				
+				if($.isFunction(done) && CONFIG.AUTH.correct) done.call(this);
+				if($.isFunction(fail) && !CONFIG.AUTH.correct) fail.call(this);
 		  });
 	  });
 };
@@ -267,11 +290,11 @@ function openInExternalBrowser(e) {
 
 function loadParameters(){
 	var help = localStorage.getItem("username");
-	if(help != undefined) GLOBAL.DEMO.username = help;
+	if(help != undefined) CONFIG.AUTH.username = help;
 	help = localStorage.getItem("credentials");
-	if(help != undefined) GLOBAL.DEMO.credentials = help;
+	if(help != undefined) CONFIG.AUTH.credentials = help;
 	help = localStorage.getItem("salt");
-	if(help != undefined) GLOBAL.DEMO.salt = help;
+	if(help != undefined) CONFIG.AUTH.salt = help;
 	help = localStorage.getItem("language");
 	if(help != undefined) CONFIG.LANGUAGE.set = help;
 	help = localStorage.getItem("defaultFeed");
@@ -281,9 +304,9 @@ function loadParameters(){
 };
 
 function saveParameters(){
-	localStorage.setItem("username", GLOBAL.DEMO.username);
-	localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
-	localStorage.setItem("salt", GLOBAL.DEMO.salt);
+	localStorage.setItem("username", CONFIG.AUTH.username);
+	localStorage.setItem("credentials", CONFIG.AUTH.credentials);
+	localStorage.setItem("salt", CONFIG.AUTH.salt);
 	localStorage.setItem("language", CONFIG.LANGUAGE.set);
 	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);

@@ -37,3 +37,9 @@
 {
 	float:right;
 }
+
+#signInDialog
+{
+	display: none;
+	max-width: 400px;
+}

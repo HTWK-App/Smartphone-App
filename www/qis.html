@@ -1,68 +1,35 @@
 <div id="qis_page" data-role="page" data-dom-cache="true" data-title="QIS" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
 		<div id="qis_list" data-role="collapsible-set" data-content-theme="a"></div>
-		<div data-role="popup" id="signInDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
-		    <div data-role="header" data-theme="a">
-		   	 <h1>Einloggen</h1>
-		    </div>
-		    <div role="main" class="ui-content">
-			<h3 class="ui-title">Sie sind noch nicht eingeloggt,  bitte loggen Sie sich jetzt ein!</h3>
-			<label for="username"><strong>Nutzername:</strong></label>
-			<input type="text" name="username" id="popupUsername" value="" placeholder="Nutzername">
-			<label for="password"><strong>Passwort:</strong></label>
-			<input type="password" name="password" id="popupPassword" value="" autocomplete="off" placeholder="******">
-			<a id="popupAbort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
-			<a id="popupSave" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Speichern</a>
-		    </div>
-		</div>
 	</div>
 
 	<script>
-	
     	$( "#qis_page" )
-    		.on("pagecreate", function () {if(GLOBAL.DEMO.username != "") initQISView();})
+    		.on("pagecreate", initQISView)
     		.on("pageshow", function() {
-			$("#btn_refresh")
+    			$("#btn_refresh")
     				.off()
     				.on("click", initQISView);
-			if(GLOBAL.DEMO.username == "") {
-				$( "#signInDialog" ).popup( "open", { positionTo: "window", transition: "pop" } );
-			}else{
-				if(!GLOBAL.INIT.qis) loadingIn();	
-			}
+    			
+    			if(isEmpty(CONFIG.AUTH.credentials)) {
+    				openSignInDialog(initQISView);
+    			} 
+    			else {
+    				if(!GLOBAL.INIT.qis) loadingIn();	
+    			}
     		 });
 
-		$("#popupSave")
-		.on("click", function () {
-			saveUsernamePassword($("#popupUsername").val(),$("#popupPassword").val());
-			$( "#signInDialog" ).popup( "close");
-			function wait() {
-				if(GLOBAL.DEMO.checking == true){
-					setTimeout(wait, 50);//wait 50 millisecnds then recheck
-					return;
-				}
-				if(GLOBAL.DEMO.correct == false){
-					$( "#signInDialog" ).popup( "open", { positionTo: "window", transition: "pop" } );
-					return;
-				}
-				initQISView();
-			}
-			wait();
-		});
-
-		$("#popupAbort")
-		.on("click", function () {
-			$( "#signInDialog" ).popup( "close");
-		});
-
 		function initQISView() {
-			loadingIn();
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.qis+'?credentials='+GLOBAL.DEMO.credentials+'&salt='+GLOBAL.DEMO.salt)
-			 .done(function(data, status, jqXHR) {
-				 fillQIS(data);
-				 loadingOut();
-				 GLOBAL.INIT.qis = true;
-			  });
+			if(!isEmpty(CONFIG.AUTH.credentials))
+			{
+				loadingIn();
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.qis+'?credentials='+CONFIG.AUTH.credentials+'&salt='+CONFIG.AUTH.salt)
+				 .done(function(data, status, jqXHR) {
+					 fillQIS(data);
+					 loadingOut();
+					 GLOBAL.INIT.qis = true;
+				  });
+			}
 		};
 		
 		function fillQIS(data) {

@@ -65,7 +65,7 @@
 			var subject = $("#email_subject").val();
 			var content = $("#email_content").val();
 			loadingIn("Ihre Mail wird versendet...");
-			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt+"&to="+mail+"&subject="+subject+"&message="+content)
+			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+"&to="+mail+"&subject="+subject+"&message="+content)
 				.done(function(data, status, jqXHR) {
 					loadingOut();
 					loadingIn("Ihre Mail wurde versendet", true);
@@ -101,7 +101,7 @@
 
 		function initMailView() {
 			loadingIn();
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+GLOBAL.DEMO.credentials+"&salt="+GLOBAL.DEMO.salt)
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt)
 			 .done(function(data, status, jqXHR) {
 					if(data.message != "message number < 1"){
 					 	fillMailList(data);

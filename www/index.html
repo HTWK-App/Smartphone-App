@@ -19,6 +19,7 @@
 		<script type="application/javascript" src="cordova.js"></script>
 	</head>
 	<body>
+		<!-- ## MENU ## -->
 		<div id="menu" data-role="panel" data-display="push" data-position="left" data-theme="b">
 			<div data-role="listview" data-inset="true" data-theme="b">
 				<li>
@@ -33,7 +34,7 @@
 				<li>
 					<a href="mail.html">Postfach</a>
 				</li>
-				<li>
+				<li id="menuItem_QIS">
 					<a href="qis.html">QIS</a>
 				</li>
 				<li>
@@ -66,18 +67,20 @@
 				</li>
 			</div>
 		</div>
+		<!-- ## MENU ## -->
 		
+		<!-- ## HEADER ## -->
 		<header id="header" data-role="header" data-position="fixed" class="toblur" data-theme="a">
 			<h1>News</h1>
 			<div data-type="horizontal" class="ui-btn-left">
 				<a id="btn_menu" href="#menu" data-role="button" data-icon="bars" data-mini="true">Menü</a>	
 				<a id="btn_back" data-rel="back" data-role="button" data-icon="back" data-mini="true">Zurück</a>
 			</div>
-			<!-- TODO noText -->
 			<div data-role="controlgroup" data-type="horizontal" class="ui-btn-right">
 				<a id="btn_refresh" data-role="button" data-icon="refresh" data-rel="refresh">Refresh</a>
 			</div>
 		</header>
+		<!-- ## HEADER ## -->
 		
 		<div id="news_page" data-role="page" data-dom-cache="true" data-title="News" class="toblur" data-theme="a" data-content-theme="a">
 			<div data-role="content">
@@ -94,12 +97,32 @@
 				<p>Diese Nachricht besitzt keinen zusätzlichen Inhalt!</p>
 			</div>
 		</div>
+		
+		<!-- ## SIGNIN DIALOG ## -->
+		<div id="signInDialog" data-role="popup" data-dismissible="false" data-overlay-theme="b" data-theme="b">
+	    	<div data-role="header" data-theme="a">
+	   	 		<h1>Authentifizierung</h1>
+	   	 	</div>
+	   	 	<div role="main" class="ui-content">
+	   	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
+	   	 		
+	   	 		<label for="username"><strong>Nutzername:</strong></label>
+	   	 		<input type="text" name="username" id="signInDialogUsername" value="" placeholder="Nutzername">
+	   	 		
+	   	 		<label for="password"><strong>Passwort:</strong></label>
+	   	 		<input type="password" name="password" id="signInDialogPassword" value="" autocomplete="off" placeholder="******">
+	   	 		
+	   	 		<a id="signInDialog_Btn_Abort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
+	   	 		<a id="signInDialog_Btn_Save" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Speichern</a>
+	   	 	</div>
+	    </div>
+	    <!-- ## SIGNIN DIALOG ## -->
 
-	
 	<script>
 		// AJAX Setup
 		$.ajaxSetup(CONFIG.AJAX);
 		
+		// GENERAL Setup
 		$( document )
 			.ready(function() {
 				$.mobile.defaultPageTransition   = "none";
@@ -113,6 +136,11 @@
 				$("header, footer").toolbar();
 				
 				loadParameters();
+				
+				if(!CONFIG.GENERAL.student)
+				{
+					$("#menuItem_QIS").hide();
+				}
 			})
 			.on("panelbeforeopen", function( event, ui ) {
 				$(".toblur").addClass("blur");
@@ -139,6 +167,13 @@
 			// External Link Handling
 			.on("click", "a.external", openInExternalBrowser);
 
+		// SignIn Dialog
+		$( "#signInDialog_Btn_Abort" )
+			.on("click", function () {
+				$( "#signInDialog" ).popup("close");
+			 });
+		
+		// NEWS Page
 		$( "#news_page" )
 			.on("pagebeforecreate", function() {
 				GLOBAL.DATE.currentWeek = getWeek(new Date());
@@ -160,7 +195,7 @@
 		
 		$("#news-more")
 			.click(function () {
-				changeNewsFeed($(this).val(),true);
+				changeNewsFeed($("#news_select").val(),true);
 			});
 
 		/**
@@ -225,8 +260,9 @@
 		 * @param Boolean remove ... indicates whether old News should be removed or not, due to "More"-Button
 		 */
 		function createNewsEntries(data, remove) {
+			var list = $("#news_content_list");
 			var news, link,  date;
-			var c = 0;
+			var c = list.find("li").length;
 			var lis = "";
 			var divs = "";
 			
@@ -259,29 +295,17 @@
 			divs.find("a").addClass("external");
 			
 			if(remove == true) {
-				$( "#news_content_list" )
-					.empty()
-					.append(lis)
-					.listview("refresh")
-					.trigger("updatelayout");
-			
-				$( "body" )
-					.find("div.newsdetails")
-					.remove().end()
-					.append(divs)
-					.trigger("create");
+				list.empty();
+				$( "div.newsdetails" ).remove();
 			}
-			else {
-				$( "#news_content_list" )
-					.append(lis)
-					.listview("refresh")
-					.trigger("updatelayout");
 			
-				$( "body" )
-					.find("div.newsdetails")
-					.append(divs)
-					.trigger("create");
-			}
+			list.append(lis)
+				.listview("refresh")
+				.trigger("updatelayout");
+			
+			$("body").append(divs)
+					 .trigger("create");
+			
 			$.mobile.initializePage();
 			
 			loadingOut();
