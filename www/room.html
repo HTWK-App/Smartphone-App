@@ -19,30 +19,29 @@
 			.on("pageshow", function () {
 				$("#btn_refresh").hide();
 				GLOBAL.INIT.room = true;
+				loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
 				getLocation();
 			 })
 			.on("pagehide", function() {
 				$("#btn_refresh").show();
 			 });
 
+		var roomCount = 0;
+
 		function getLocation() {
-			loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
-			navigator.geolocation.getCurrentPosition(locationFound, locationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+			roomCount = roomCount + 1;
+			if(roomCount <= 10)
+				navigator.geolocation.getCurrentPosition(locationFound, locationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+			else
+				locationError();
 		}
 
 		function locationFound(position){
-			loadingOut();
-			//if(position.coords.accuracy > 15) {
-				//getLocation();
-			//}else{
-				 alert('Latitude: '          + position.coords.latitude          + '\n' +
-				  'Longitude: '         + position.coords.longitude         + '\n' +
-				  'Altitude: '          + position.coords.altitude          + '\n' +
-				  'Accuracy: '          + position.coords.accuracy          + '\n' +
-				  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-				  'Heading: '           + position.coords.heading           + '\n' +
-				  'Speed: '             + position.coords.speed             + '\n' +
-				  'Timestamp: '         + position.timestamp                + '\n');
+			if(position.coords.accuracy > 13) {
+				getLocation();
+			}else{
+				roomCount = 0;
+				loadingOut();
 				loadingIn();
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
 				 .done(function(data, status, jqXHR) {
@@ -50,13 +49,14 @@
 					fillBuildingsList(data);
 					$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
 				  });
-			//}
+			}
 		}
 
-		function locationError(error){
-			 alert('code: '    + error.code    + '\n' +
-          		'message: ' + error.message + '\n');
+		function locationError(){
 			loadingOut();
+			loadingIn("Ihre Position konnte nicht bestimmt werden!",true);
+			setTimeout(loadingOut, 3000);
+			$( "#menu" ).panel( "open");
 		}
 
 		function fillBuildingsList(data) {
@@ -77,15 +77,16 @@
 			.empty()
 			.append(opts)
 			.selectmenu("refresh");
-			var first;
-			for(first in data) break;
-			var fid = data[first].id;
 
-			/*$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'http://localhost:8080/app/room/ss/13/1')
-				 .done(function(data, status, jqXHR) {
-					fillRoomList(data, fid);
-				  });*/
-			loadingOut();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'http://localhost:8080/app/room/ss/13/1')
+				.done(function(data, status, jqXHR) {
+					fillRoomList(data, $( "#room_select" ).first.val());
+				})
+				.fail(function(){
+					loadingOut();
+					loadingIn("Die Raumliste konnte nicht abgerufen werden!",true);
+					setTimeout(lodingOut, 3000);
+				});
 		}
 
 		function fillRoomList(data, id){
