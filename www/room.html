@@ -1,12 +1,14 @@
 <div id="room_page" data-role="page" data-title="Leerer Raum" data-theme="a" data-content-theme="a">
 	<div id="roomContent" data-role="content" class="toblur">
 		<p>
+			<div data-role="fieldcontain">
+				<label for="room_select">Gebäude:</label>
+				<select id="room_select" name="room_select" data-mini="true">
+					<option selected="selected">Liste der nächsten Gebäude wird geladen...</option>
+				</select>
+			</div>
 			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br></h3>
 			<ul id="#roomList" data-role="listview">
-			    <li><a href="#">Li015</a></li>
-			    <li><a href="#">Li203</a></li>
-			    <li><a href="#">Li404</a></li>
-			    <li><a href="#">Li405</a></li>
 			</ul>
 			<br>
 		</p>
@@ -38,9 +40,9 @@
 				  'Heading: '           + position.coords.heading           + '\n' +
 				  'Speed: '             + position.coords.speed             + '\n' +
 				  'Timestamp: '         + position.timestamp                + '\n');
-			if(position.coords.accuracy > 15) {
+			//if(position.coords.accuracy > 15) {
 				//getLocation();
-			}else{
+			//}else{
 				 alert('Latitude: '          + position.coords.latitude          + '\n' +
 				  'Longitude: '         + position.coords.longitude         + '\n' +
 				  'Altitude: '          + position.coords.altitude          + '\n' +
@@ -49,13 +51,62 @@
 				  'Heading: '           + position.coords.heading           + '\n' +
 				  'Speed: '             + position.coords.speed             + '\n' +
 				  'Timestamp: '         + position.timestamp                + '\n');
-				$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+ position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
-			}
+				loadingIn();
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
+				 .done(function(data, status, jqXHR) {
+					console.log(data);
+					fillBuildingsList(data);
+					$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
+				  });
+			//}
 		}
 
 		function locationError(error){
 			 alert('code: '    + error.code    + '\n' +
           		'message: ' + error.message + '\n');
+			loadingOut();
+		}
+
+		function fillBuildingsList(data) {
+			var tmp, name, id, opts;
+
+			opts = "";
+			
+			for(var k in data){
+				id = data[k].id;
+				tmp = "";
+				name = data[k].fullName;
+				if(k == 0)
+					tmp = 'selected="selected"';
+				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+			}	
+			
+			$( "#room_select" )
+			.empty()
+			.append(opts)
+			.selectmenu("refresh")
+			/*
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'data[0].id') // Todo
+				 .done(function(data, status, jqXHR) {
+					fillRoomList(data);
+				  });
+			*/
+		}
+
+		function fillRoomList(data){
+			var room = "";
+			var lis = "";
+			for(var k in data){
+				room = data[k];
+				lis += 	'<li><h4>'+room.name+'</h4><p>Typ: '+room.type+', Größe: '+room.size+' Plätze</p></li>';
+			}
+			
+			$( "#roomList" )
+			.off()
+			.empty()
+			.append(lis)
+			.listview("refresh")
+			.trigger("updatelayout");
 			loadingOut();
 		}
 	</script>

@@ -264,3 +264,27 @@ function openInExternalBrowser(e) {
 	window.open($(e.target).attr("href"), "_system", "location=yes");
 	e.preventDefault(); 
 };
+
+function loadParameters(){
+	var help = localStorage.getItem("username");
+	if(help != undefined) GLOBAL.DEMO.username = help;
+	help = localStorage.getItem("credentials");
+	if(help != undefined) GLOBAL.DEMO.credentials = help;
+	help = localStorage.getItem("salt");
+	if(help != undefined) GLOBAL.DEMO.salt = help;
+	help = localStorage.getItem("language");
+	if(help != undefined) CONFIG.LANGUAGE.set = help;
+	help = localStorage.getItem("defaultFeed");
+	if(help != undefined) CONFIG.NEWS.defaultFeed = help;
+	help = localStorage.getItem("defaultCanteen");
+	if(help != undefined) CONFIG.MENSA.defaultCanteen = help;
+};
+
+function saveParameters(){
+	localStorage.setItem("username", GLOBAL.DEMO.username);
+	localStorage.setItem("credentials", GLOBAL.DEMO.credentials);
+	localStorage.setItem("salt", GLOBAL.DEMO.salt);
+	localStorage.setItem("language", CONFIG.LANGUAGE.set);
+	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
+	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
+}
