@@ -1,9 +1,9 @@
 <div id="info_page" data-role="page" data-title="Allgemeine Informationen" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
-		<div data-role="collapsible-set" data-content-theme="a">
+		<div id="infoCollapsible" data-role="collapsible-set" data-content-theme="a">
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
-				<h3>Semester-Plan</h3>
-				<p></p>
+				<h3 id="academicalCaption">Semester-Plan</h3>
+				<p id="academical"></p>
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
 				<h3>Opal</h3>
@@ -11,12 +11,11 @@
 			</div>
 			<div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a">
 				<h3>Spezielle Orte</h3>
-				<hr>
-				<h4>HTWK-Card</h4>
+				<h3>HTWK-Card</h3>
 				<p><strong>Aktualisierung:</strong><br>Terminal im Foyer des Lipsius Baus</p>
 				<p><strong>Probleme:</strong><br><a href="http://www.htwk-leipzig.de/de/studierende/beratungs-servicestellen/htwk-card/" class="external">Zur Website bzgl. der HTWK-Card</a></p>
 				<hr>
-				<h4>Prüfungsämter</h4>
+				<h3>Prüfungsämter</h3>
 				<ul id="examTable" data-role="listview" data-inset="true">
 					<li><a href="#" class="exam" data-cuid="431">Angewandte Sozialwissenschaften</a></li>
 					<li><a href="#" class="exam" data-cuid="100">Bauwesen</a></li>
@@ -55,12 +54,13 @@
 	</div>
 	<script>
 		$( "#info_page" )
-			.on("pagecreate", function() {})
+			.on("pagecreate", fillAcademical)
 			.on("pageshow", function () {
 				$("#btn_refresh").hide();
-				GLOBAL.INIT.info = true;
+				if(!GLOBAL.INIT.info)
+					loadingIn();
 				$( "body" )
-					.find("div.staffdetails")
+					.find("div.examdetails")
 					.remove();
 			 })
 			.on("pagehide", function() {
@@ -69,6 +69,45 @@
 
 		$( "#examTable" )
 			.on("click", "a.exam", loadExamDetails);
+
+		function fillAcademical(){
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
+			.done(function (data, status, jqXHR) {
+				fillSemesterData(data.semester);				
+			});
+		}
+
+		function fillSemesterData(semester){
+			
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.academical+semester)
+			.done(function (data, status, jqXHR) {
+				var div = "";
+				var runs = 0;
+				var length = 0;
+				for(var k in data){
+					length = length+1;
+				}
+				for(var k in data){
+					var textarray = data[k];
+					div = div + "<h4>"+k+"</h4>";
+					for( var s in textarray){
+						var line = textarray[s];
+						line = line.split(":");
+						div += "<strong>"+line[0]+":</strong>"+line[1]+"<br>";
+					}
+					runs = runs + 1;
+					if(runs != length)
+						div = div + "<hr>";
+				}
+
+				$("#academical")
+					.empty()
+					.append(div);
+
+				loadingOut();
+				GLOBAL.INIT.info = true;
+			});
+		}
 
 		function loadExamDetails(e) {
 			var id = $(e.target).first().data("cuid");
@@ -95,7 +134,7 @@
 									'<p><b>Telefon:</b> <a href="tel:'+data.telephone+'">'+data.telephone+'</a></p>'+
 									'<p><b>Fax:</b> '+data.telefax+'</p>'+
 									'<p><b>Links:</b></br><a href="'+data.detailLink+'" class="external">Details zur Person</a></br>'+
-									'<a href="'+data.vcardLink+'">V-Card</a></p>'+
+									'<a href="'+data.vcardLink+'" class="external">V-Card</a></p>'+
 								'</div>'+
 							'</div>';
 				

@@ -20,6 +20,7 @@ var CONFIG = {
 		staff: "info/staff/",
 		builds: "info/building",
 		sport: "info/sport",
+		academical: "info/academical/",
 		news: "news",
 		mensa: "mensa",
 		timetable: "timetable/",
