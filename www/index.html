@@ -165,7 +165,11 @@
     			}
 			})
 			// External Link Handling
-			.on("click", "a.external", openInExternalBrowser);
+			.on("click", "a.external", openInExternalBrowser)
+			.on("swiperight", function(event){
+				if(event.swipestart.coords[0] <= 20)
+					$( "#menu" ).panel( "open");
+				});
 
 		// SignIn Dialog
 		$( "#signInDialog_Btn_Abort" )

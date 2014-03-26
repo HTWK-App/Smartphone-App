@@ -103,29 +103,32 @@
 				$("#timetableDialog").popup("close");
 				$("#timetableDialog").find("input").data("lastval", "");//TODO geht noch ni -.-
 				if($( "#chooseCourse" ).data("func") == "course"){
-				loadingIn();
-				var id = $(e.target).parents("li").first().data("id");
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
-			 		.done(function (data, status, jqXHR) {
-						var div = "";
-						for(var k in data){
-							for(var s in data[k].courses){
-								var course = data[k].courses[s];
-								if(course.id == id){
-									for(var p in course.semGroups){
-										div += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
+					loadingIn();
+					var element = $(e.target).parents("li").first();
+					var id = element.data("id");
+					var faculty = element.data("faculty");
+					//TODO add a new faculty to list in Config
+					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
+				 		.done(function (data, status, jqXHR) {
+							var div = "";
+							for(var k in data){
+								for(var s in data[k].courses){
+									var course = data[k].courses[s];
+									if(course.id == id){
+										for(var p in course.semGroups){
+											div += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
+										}
 									}
 								}
 							}
-						}
-						$("#timetableDialog_description").val("Bitte wählen Sie ihren Kurs aus!");
-						$("#chooseCourse")
-							.empty()
-							.append(div)
-							.listview("refresh");
-						loadingOut();
-						$("#timetableDialog").popup("open");
-					});
+							$("#timetableDialog_description").val("Bitte wählen Sie ihren Kurs aus!");
+							$("#chooseCourse")
+								.empty()
+								.append(div)
+								.listview("refresh");
+							loadingOut();
+							$("#timetableDialog").popup("open");
+						});
 				}
 			 });
 
@@ -140,7 +143,7 @@
 						for(var k in data){
 							for(var s in data[k].courses){
 								var course = data[k].courses[s];
-								div += '<li class="ui-screen-hidden" data-id="'+course.id+'"><a href="#">'+course.name+'</a></li>';
+								div += '<li class="ui-screen-hidden" data-id="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
 							}
 						}
 						$("#chooseCourse")
@@ -171,7 +174,7 @@
 				.addClass("ui-btn-active")
 				.click();
 			
-			loadingOut();
+			loadingOut();//TODO Falsch
 			GLOBAL.INIT.timetable = true;
 		};
 
