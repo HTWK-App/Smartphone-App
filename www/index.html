@@ -1,124 +1,132 @@
 ﻿<!DOCTYPE html>
 <html>
 	<head>
-		<title>HTWK App</title>
-		<meta charset = "utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1"> 
-
-		<link rel="stylesheet" type="text/css" href="themes/jquery.mobile-1.4.2.min.css" />
-		<link rel="stylesheet" type="text/css" href="themes/HTWK.min.css" />
-		<link rel="stylesheet" type="text/css" href="themes/additions.css" />
-		
-		<script type="application/javascript" src="js/lib/fastclick.js"></script>
-		<script type="application/javascript" src="js/lib/jquery-2.0.3.min.js"></script>
-		<script type="application/javascript" src="js/lib/jquery.mobile-1.4.2.min.js"></script>
-		
+        <title>HTWK App</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+        <link rel="stylesheet" href="css/font-awesome.min.css" />
+        <link rel="stylesheet" href="css/jquerymobile-1.4.2.css" />
+        <link rel="stylesheet" href="css/design-1.4.2.css" />
+        <link rel="stylesheet" href="css/design.htwk-1.4.2.css"  id='jQMnDTheme' />
+        <link rel="stylesheet" href="css/design.color.htwk.css" id='jQMnDColor' />
+		<script type="application/javascript" src="js/fastclick.js"></script>
+		<script type="application/javascript" src="js/jquery-2.1.0.js"></script>
+        <script type="application/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>
+		<script type="application/javascript" src="js/design.js"></script>
 		<script type="application/javascript" src="js/config.js"></script>
 		<script type="application/javascript" src="js/fn.js"></script>
-		
-		<script type="application/javascript" src="cordova.js"></script>
+		<!-- <script type="application/javascript" src="cordova.js"></script> -->
 	</head>
 	<body>
-		<!-- ## MENU ## -->
-		<div id="menu" data-role="panel" data-display="push" data-position="left" data-theme="b">
-			<div data-role="listview" data-inset="true" data-theme="b">
-				<li>
-					<a href="index.html">News</a>
-				</li>
-				<li>
-					<a href="timetable.html">Stundenplan</a>
-				</li>
-				<li>
-					<a href="mensa.html">Mensa</a>
-				</li>
-				<li>
-					<a href="mail.html">Postfach</a>
-				</li>
-				<li id="menuItem_QIS">
-					<a href="qis.html">QIS</a>
-				</li>
-				<li>
-					<a href="sport.html">Hochschulsport</a>
-				</li>
-				<li>
-					<div data-role="collapsible" data-inset="false" data-iconpos="right" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" class="pcoll" data-theme="b">
-				    <h4>Info-Center</h4>
-				    <ul data-role="listview">
-						<li>
-							<a href="info.html">Allgemein</a>
-						</li>
-						<li>
-							<a href="staff.html">Mitarbeiter</a>
-						</li>
-						<li>
-							<a href="building.html">Gebäudeplan</a>
-						</li>
-						<li>
-							<a href="wlan.html">WLAN-Konfiguration</a>
-						</li>
-				    </ul>
-				    </div>
-				</li>
-				<li>
-					<a href="room.html">Finde leeren Raum</a>
-				</li>
-				<li>
-					<a href="settings.html">Einstellungen</a>
-				</li>
+		<div data-role="page" data-theme='b'>
+			<div data-role="panel" id="menue_index" data-theme="a" data-display="push">
+				<ul data-role="listview">
+					<li data-role="list-divider" role="heading">Hauptmenü</li>
+					<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+					<li data-icon="fire"><a href="news.html" >News</a></li>
+					<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+					<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+					<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+					<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+					<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+					
+				</ul>
+				<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+				<ul data-role="listview">
+					<li data-role="list-divider" role="heading">Info-Center</li>
+					<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+					<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+					<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+					<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+				</ul>
+				<!--</div> -->
+				<ul data-role="listview">
+					<li data-role="list-divider" role="heading">Tools</li>
+					<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+					<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+				</ul>
+				<ul data-role="listview">
+					<li data-role="list-divider" role="heading">Einstellungen</li>
+					<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+				</ul>
 			</div>
-		</div>
-		<!-- ## MENU ## -->
-		
-		<!-- ## HEADER ## -->
-		<header id="header" data-role="header" data-position="fixed" class="toblur" data-theme="a">
-			<h1>News</h1>
-			<div data-type="horizontal" class="ui-btn-left">
-				<a id="btn_menu" href="#menu" data-role="button" data-icon="bars" data-mini="true">Menü</a>	
-				<a id="btn_back" data-rel="back" data-role="button" data-icon="back" data-mini="true">Zurück</a>
+			<div data-role="header" data-position="fixed" data-theme='b'>
+				<a href="#menue_index" data-role="button" data-iconpos='left' ><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+				<h1>&nbsp;HTWK App</h1>
 			</div>
-			<div data-role="controlgroup" data-type="horizontal" class="ui-btn-right">
-				<a id="btn_refresh" data-role="button" data-icon="refresh" data-rel="refresh">Refresh</a>
-			</div>
-		</header>
-		<!-- ## HEADER ## -->
-		
-		<div id="news_page" data-role="page" data-dom-cache="true" data-title="News" class="toblur" data-theme="a" data-content-theme="a">
-			<div data-role="content">
-				<div data-role="fieldcontain">
-					<label for="news_select">Kategorie:</label>
-					<select id="news_select" name="news_select" data-mini="true">
-						<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-					</select>
+			<div data-role="content">   
+				<div class='inset cardAnimated'>
+					<h1>Willkommen ...</h1>
+					<ul data-nativedroid-plugin='cards'>
+						<li data-cards-type='weather'>
+							<h1>Leipzig</h1>
+							<h2>Deutschland</h2>
+							<ul class='detail'>
+								<li><i class='icon-circle sunny'></i>
+									<span>Sonnig</span>
+									<span><i class='icon-fire'></i> 12km/h</span>
+								</li>
+								<li>28&deg;</li>
+							</ul>
+							<ul class='week'>
+								<li>
+									<span>Mo</span>
+									<i class='icon-cloud'></i>
+									<strong>24&deg;</strong>
+									<span>11&deg;</span>
+								</li>
+								<li>
+									<span>Die</span>
+									<i class='icon-cloud'></i>
+									<strong>20&deg;</strong>
+									<span>10&deg;</span>
+								</li>
+								<li>
+									<span>Mi</span>
+									<i class='icon-cloud'></i>
+									<strong>11&deg;</strong>
+									<span>3&deg;</span>
+								</li>
+								<li>
+									<span>Do</span>
+									<i class='icon-cloud'></i>
+									<strong>4&deg;</strong>
+									<span>0&deg;</span>
+								</li>
+							</ul>
+						</li>
+						<li data-cards-type='text'>
+							<h1>Neuste HTWK-Nachricht</h1>
+							<h2>19.03.14, Herzlich Willkommen!</h2>
+							<p>Gemeinsam haben die Mitarbeiter des Akademischen Auslandsamtes und des Hochschulsprachenzentrums am Dienstag die neuen Teilstudenten von unseren internationalen Partnerhochschulen (Incomings) begrüßt. Im Sommersemester 2014 beginnen 20 Studierende aus Frankreich, Italien, Jordanien, Russland, der Türkei und Ungarn ihr Teilstudium an der HTWK Leipzig.</p>
+							<p><a href="news.html">Weiterlesen </a></p>
+						</li>
+						<li data-cards-type='text'>
+							<h1>Kommende Veranstaltungen</h1>
+							<br/>
+							<h2>AUSSTELLUNG "AUFGERISSEN"</h2>
+							<h3>18.02.2014 - 11.04.2014</h3>
+							<p> Auch in diesem Jahr lädt die Fakultät Medien zu der Ausstellung „AUFGERISSEN VI“ ins Foyer der Hochschulbibliothek ein, um Entwürfe von Studier...</p>
+							<p><a href="#" >mehr </a></p>
+							<br/> 
+							<h2>TREFFEN LEAN HOCHSCHULGRUPPE (2/14)</h2>
+							<h3>28.03.2014</h3>
+							<p> Wir laden euch ganz herzlich zu unserem zweiten Treffen in diesem Jahr am 28.03.2014 um 12.00 Uhr ein! Willkommen sind natürlich wieder alle interess...</p>
+							<p><a href="#" >mehr </a></p>
+						</li>
+						<li data-cards-type='text'>
+							<h1>Leipzig News LVZ</h1>
+							<h2>19.03.14, Blab bla bla</h2>
+							<p>Eisenbahnstraße,... bla,... tod.. schmerz... bla</p>
+							<p><a href="#" >Weiterlesen </a></p>
+						</li>
+					</ul>
 				</div>
-				<ul id="news_content_list" data-role="listview" data-inset="true"></ul>
-				<a data-role="button" id="news-more" data-icon="arrow-d">Mehr</a>
-			</div>
-			<div id="news_popup" data-role="popup">
-				<p>Diese Nachricht besitzt keinen zusätzlichen Inhalt!</p>
 			</div>
 		</div>
 		
-		<!-- ## SIGNIN DIALOG ## -->
-		<div id="signInDialog" data-role="popup" data-dismissible="false" data-overlay-theme="b" data-theme="b">
-	    	<div data-role="header" data-theme="a">
-	   	 		<h1>Authentifizierung</h1>
-	   	 	</div>
-	   	 	<div role="main" class="ui-content">
-	   	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
-	   	 		
-	   	 		<label for="username"><strong>Nutzername:</strong></label>
-	   	 		<input type="text" name="username" id="signInDialogUsername" value="" placeholder="Nutzername">
-	   	 		
-	   	 		<label for="password"><strong>Passwort:</strong></label>
-	   	 		<input type="password" name="password" id="signInDialogPassword" value="" autocomplete="off" placeholder="******">
-	   	 		
-	   	 		<a id="signInDialog_Btn_Abort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
-	   	 		<a id="signInDialog_Btn_Save" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Speichern</a>
-	   	 	</div>
-	    </div>
-	    <!-- ## SIGNIN DIALOG ## -->
-
-	<script>
+		<!---------------------------------------------------------------------------------------------------->
+		<script>
 		// AJAX Setup
 		$.ajaxSetup(CONFIG.AJAX);
 		
@@ -133,27 +141,33 @@
 				window.addEventListener("load", function() {
 					FastClick.attach(document.body);
 				}, false);
-				$("header, footer").toolbar();
+				//$("header, footer").toolbar();
 				
 				loadParameters();
 				
+				
+				///// FIXME ISSUE FOR EVERY MENUE
 				if(!CONFIG.GENERAL.student)
 				{
 					$("#menuItem_QIS").hide();
 				}
 			})
-			.on("panelbeforeopen", function( event, ui ) {
+			
+			/*.on("panelbeforeopen", function( event, ui ) {
 				$(".toblur").addClass("blur");
 			})
 			.on("panelbeforeclose", function( event, ui ) {
 				$(".toblur").removeClass("blur");
 			})
+			*/
+			
 			// Header Update on Page Switch
 			.on("pageshow", "div:jqmData(role='page')", function() {
 				var o = $(this);
     			var title = o.jqmData("title");
     			var subpage = !isEmpty(o.jqmData("subpage"));
-    			var h = $("#header");
+    			//var h = $("#header");
+    			var h = $(".ui-page-active div[data-role='header']");
     			
     			h.find("h1").text(title);
     			if(subpage) {
@@ -165,155 +179,13 @@
     			}
 			})
 			// External Link Handling
-			.on("click", "a.external", openInExternalBrowser)
-			.on("swiperight", function(event){
-				if(event.swipestart.coords[0] <= 20)
-					$( "#menu" ).panel( "open");
-				});
+			.on("click", "a.external", openInExternalBrowser);
 
 		// SignIn Dialog
 		$( "#signInDialog_Btn_Abort" )
 			.on("click", function () {
 				$( "#signInDialog" ).popup("close");
-			 });
-		
-		// NEWS Page
-		$( "#news_page" )
-			.on("pagebeforecreate", function() {
-				GLOBAL.DATE.currentWeek = getWeek(new Date());
-			 })
-			.on("pagecreate", initNewsView)
-			.on("pageshow", function () {
-				if(!GLOBAL.INIT.news) loadingIn();
-				$("#btn_refresh")
-				.off()
-				.on("click", function() { 
-					$("#news_select").change(); 
-				 });
 			});
-
-		$( "#news_select" )
-			.change(function() {
-				changeNewsFeed($(this).val(),false);
-			});
-		
-		$("#news-more")
-			.click(function () {
-				changeNewsFeed($("#news_select").val(),true);
-			});
-
-		/**
-		 * Loading the available News-Feeds (Prefill Feed-Selectbox).
-		 */
-		function initNewsView() {
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-			 .done(function(data, status, jqXHR) {
-					var tmp, name, id, opts = "";
-					
-					for(var k in data)
-					{
-						id = data[k].id;
-						tmp = id.split(".");
-						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
-						
-						opts += '<option value="'+id+'">'+name+'</option>';
-					}	
-					
-					$( "#news_select" )
-						.empty()
-						.append(opts)
-						.find("option[value='"+CONFIG.NEWS.defaultFeed+"']")
-						.prop("selected", true).end()
-						.selectmenu("refresh")
-						.change();
-					
-					loadingOut();
-					GLOBAL.INIT.news = true;
-			 });
-			//.fail(ajaxErrorHandler);
-		};
-
-		/**
-		 * Loading all News of the given Feed.
-		 * 
-		 * @param String feed ... News Feed ID
-		 * @param Boolean more ... indicates whether additional News should be loaded
-		 */
-		function changeNewsFeed(feed, more) {
-			var offset = 0;
-			var remove = true;
-			
-			loadingIn();
-			
-			if(more == true) { 
-				remove = false; 
-				offset = $('#news_content_list li').length;
-			}
-			
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
-			 .done(function(data, status, jqXHR) {
-				 	createNewsEntries(data.responseData.feed.entries, remove);
-			  });
-			//.fail(ajaxErrorHandler);
-		};
-
-		/**
-		 * Creating all News-Entries inclusive Details.
-		 * 
-		 * @param JSON-Object data
-		 * @param Boolean remove ... indicates whether old News should be removed or not, due to "More"-Button
-		 */
-		function createNewsEntries(data, remove) {
-			var list = $("#news_content_list");
-			var news, link,  date;
-			var c = list.find("li").length;
-			var lis = "";
-			var divs = "";
-			
-			for(var k in data)
-			{
-				news = data[k];
-				date = createDateTimeStamp(new Date(news.publishedDate));
-				
-				if(isEmpty(news.content)) link = 'popup" data-rel="popup"';
-				else link = ++c + '"';
-				
-				lis += 	'<li><a href="#news_'+link+'>'+
-							'<h3>'+news.title+'</h3>'+
-							'<p>'+news.contentSnippet+'</p>'+
-							'<p><small>'+date+'</small></p>'+
-						'</a></li>';
-				
-				divs += '<div id="news_'+link+' data-role="page" data-title="News" data-subpage="true" class="newsdetails" data-theme="a" data-content-theme="a">'+
-							'<div data-role="content">'+
-								'<h2>'+news.title+'</h2>'+
-								'<h4>'+date+'</h4>'+
-								'<p>'+news.content+'</p>'+
-								'<p>Quelle: <a href="'+news.link+'">Link zur Nachricht</a></p>'+
-							'</div>'+
-						'</div>';
-			}
-			
-			divs = $(divs);
-			
-			divs.find("a").addClass("external");
-			
-			if(remove == true) {
-				list.empty();
-				$( "div.newsdetails" ).remove();
-			}
-			
-			list.append(lis)
-				.listview("refresh")
-				.trigger("updatelayout");
-			
-			$("body").append(divs)
-					 .trigger("create");
-			
-			$.mobile.initializePage();
-			
-			loadingOut();
-		};
-	</script>	
+	</script>
 	</body>
 </html>

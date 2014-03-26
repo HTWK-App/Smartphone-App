@@ -1,8 +1,50 @@
-<div id="qis_page" data-role="page" data-dom-cache="true" data-title="QIS" data-theme="a" data-content-theme="a">
-	<div data-role="content" class="toblur">
-		<div id="qis_list" data-role="collapsible-set" data-content-theme="a"></div>
+<div id="qis_page" data-role="page" data-theme='b'>
+	<div data-role="panel" id="menue_qis" data-theme="a" data-display="push">
+		<ul data-role="listview">
+			<li data-role="list-divider">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
 	</div>
-
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue_qis" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-role="content">
+		<div id="qis_list" data-role="collapsible-set" data-content-theme="b"></div>
+	<!-- 	<div data-role="collapsible" data-content-theme="b">
+				<h4>Semester 2</h4>
+				<div class='inset'>
+					<div><span>Datenbanken</span><span style="float:right">2.0</span></div>
+					<div><span>Analysis 2</span><span style="float:right">3.0</span></div>
+					<div><span>Elektrotechnik</span><span style="float:right">2.0</span></div>
+				</div>
+			</div> -->
+	</div>
 	<script>
     	$( "#qis_page" )
     		.on("pagecreate", initQISView)
@@ -43,7 +85,7 @@
 					sem = data[k];
 					
 					divs += '<div id="sem'+sem.id+'" data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" '+
-							'data-iconpos="right" data-mini="true" data-theme="a" data-content-theme="a"><h4>'+sem.description+'</h4>';
+							'data-iconpos="right" data-theme="b" data-content-theme="b"><h4>'+sem.description+'</h4>';
 					
 					if(!isEmpty(sem.modules))
 					{
@@ -51,11 +93,11 @@
     					{
     						module = sem.modules[l];
     						
-    						divs += '<p><b>Prüfungskennung:</b><br>'+module.id+'</p>'+
+    						divs += '<div class="inset"><p><b>Prüfungskennung:</b><br>'+module.id+'</p>'+
     								'<p><b>Prüfungstitel:</b><br>'+module.title+'</p>'+
     								'<p><b>Beschreibung:</b><br>'+module.description+'</p>'+
     								'<p><b>ECTS-Punkte:</b><br>'+module.ects+'</p>'+
-    								'<p><b>Note:</b><br>'+module.mark+'</p><hr>';
+    								'<p><b>Note:</b><br>'+module.mark+'</p></div><hr>';
     					}
 					}
 					else

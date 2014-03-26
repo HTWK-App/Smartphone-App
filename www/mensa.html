@@ -1,244 +1,166 @@
-<div id="canteen_page" data-role="page" data-dom-cache="true" data-title="Mensa" data-theme="a" data-content-theme="a">
-	<div data-role="content" class="toblur">
-		<div data-role="navbar">
-			<p>
-				<h3 id="week_label"></h3>
-			</p>
-		    <ul id="canteen_nav">
-		        <li><a href="#" data-day="Mon">Montag</a></li>
-		        <li><a href="#" data-day="Tue">Dienstag</a></li>
-		        <li><a href="#" data-day="Wed">Mittwoch</a></li>
-		        <li><a href="#" data-day="Thu">Donnerstag</a></li>
-		        <li><a href="#" data-day="Fri">Freitag</a></li>
-		    </ul>
-		</div>
-		<div data-day="Mon" class="canteen_content"></div>
-		<div data-day="Tue" class="canteen_content"></div>
-		<div data-day="Wed" class="canteen_content"></div>
-		<div data-day="Thu" class="canteen_content"></div>
-		<div data-day="Fri" class="canteen_content"></div>
+﻿<div data-role="page" data-theme='b'>
+	<div data-role="panel" id="menue" data-theme="a">
+		<ul data-role="listview">
+			<li data-role="list-divider">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
 	</div>
-	<footer id="canteen_footer" data-role="footer" data-position="fixed" class="toblur">
-		<form>
-			<div data-role="fieldcontain">
-				<label for="canteen_select">Mensa:</label>
-				<select id="canteen_select" name="canteen_select"></select>
-			</div>
-			<div data-role="fieldcontain">
-				<input type="checkbox" id="canteen_veggie_mode" name="canteen_veggie_mode" />
-				<label for="canteen_veggie_mode">Vegetarische Gerichte</label>
-			</div>
-		</form>
-	</footer>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-position="fixed" data-role="footer" data-theme='b'> <!--data-tap-toggle="true" setzen falls gewünscht--> 
+			<select name="select-choice-1" id="mensa_mensaSelect" data-native-menu="true">
+				<option selected="selected" value="">Mensa ...</option>
+				<option value="css">Mensa am Park</option>
+				<option value="html">Mensa Academica</option>
+				<option value="csharp">Peterssteinweg</option>
+			</select>
+		</div>
+	<div data-role="content" >
+					<form>
+						<fieldset data-mini="true" data-type="horizontal" data-role="controlgroup">
+                            <input type="radio" checked="checked" value="choice-a" id="radio-choice-ab" name="radio-choice-a">
+                            <label for="radio-choice-ab">Select</label>
+                            <input type="radio" value="choice-b" id="radio-choice-bb" name="radio-choice-a">
+                            <label for="radio-choice-bb">one</label>
+                            <input type="radio" value="choice-c" id="radio-choice-cb" name="radio-choice-a">
+                            <label for="radio-choice-cb">thing</label>
+                            <input type="radio" value="choice-d" id="radio-choice-db" name="radio-choice-a">
+                            <label for="radio-choice-db">here!</label>
+                        </fieldset>
+					</form>
 
-	<script>
-		$( "#canteen_page" )
-			.on("pagecreate", initCanteenView)
-			.on("pageshow", function() {
-				if(!GLOBAL.INIT.mensa) loadingIn();
-    			$("#btn_refresh")
-				.off()
-				.on("click", function() {
-					$("#canteen_select").change();
-					$("#canteen_veggie_mode")
-						.prop("checked", false)
-						.checkboxradio("refresh");
-				 });
-			 })
-			.on("click", "#canteen_nav a", function(e) {
-				$("#canteen_page")
-					.find("div.canteen_content")
-					.hide().end()
-					.find("div:jqmData(day='"+$(e.target).jqmData("day")+"')")
-					.show();
-			 })
-			.on("swipeleft", "div.canteen_content", function() {
-				var o = $(this);	
-				
-				if(o.index()<5)
-				{	
-					$("#canteen_nav a").eq(o.index()).not(".ui-disabled").click();
-				}
-			 })
-			.on("swiperight", "div.canteen_content", function() {
-				var o = $(this);	
-				
-				if(o.index()>1)
-				{
-					$("#canteen_nav a").eq(o.index()-2).not(".ui-disabled").click();
-				}
-			 });
+	<!--
+			<form data-theme='b' class="mensa_daySelect">
+				<li data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+						<input type="radio" name="mensa_day" id="mensa_day1" value="mo" checked="checked">
+						<label for="mensa_day1">Mo</label>
+						<input type="radio" name="mensa_day" id="mensa_day2" value="di">
+						<label for="mensa_day2">Di</label>
+						<input type="radio" name="mensa_day" id="mensa_day3" value="mi">
+						<label for="mensa_day3">Mi</label>
+						<input type="radio" name="mensa_day" id="mensa_day4" value="do">
+						<label for="mensa_day4">Do</label>
+						<input type="radio" name="mensa_day" id="mensa_day5" value="fr">
+						<label for="mensa_day5">Fr</label>
+						<input type="radio" name="mensa_day" id="mensa_day6" value="sa">
+						<label for="mensa_day6">Sa</label>
+						<input type="radio" name="mensa_day" id="mensa_day7" value="so">
+						<label for="mensa_day7">So</label>
+					</fieldset>
+				</li>
+			</form>
+-->
+		<div id="menue_mealContent">
+			<ul data-nativedroid-plugin='cards'>
+				<li data-cards-type='text'>
+					<h1>Schneller Teller</h1>
+					<p> Schweinerückensteak, 
+						Champignons à la crème ,
+						Pommes frites
+					</p>
+					<p>
+						Studenten 2.45 € <br/>
+						Mitarbeiter 4.20 € <br/>
+						Gäste  5.90 €
 
-		$( "#canteen_select" )
-			.on("change", function() {
-				$("#canteen_page div.canteen_content").empty();
-				fillCanteen($(this).val(), GLOBAL.DATE.currentWeek);
-			 });
-		
-		$( "#canteen_veggie_mode" )
-			.on("click", function() {
-				if($(this).is(":checked"))
-				{
-					$("#canteen_page div.canteen_content div.non_veggie").hide();
-				}
-				else
-				{
-					$("#canteen_page div.canteen_content div.non_veggie").show();
-				}
-			});
+					</p>
+					<h5> Zusatzstoffe: Alkohol, Zusatzstoff1, Zusatzstoff2 </h5>
+				</li>
+				<li data-cards-type='text'>
+					<h1>Gut & Günstig</h1>
+					<p> Asiatische Gemüsepfanne mit Curryreis 
+					</p>
+					<p>
+						Studenten 2.45 € <br/>
+						Mitarbeiter 4.20 € <br/>
+						Gäste  5.90 €
 
-		/**
-		 * Loading the available Canteens and fill the pre-selected Canteen.
-		 */
-		function initCanteenView() {
-			var date = new Date();
-			var day = getWeekDay(date).id;
-			var nav = $("#canteen_nav a");
-			
-			fillCanteenSelect();
+					</p>
+					<h5> Zusatzstoffe: Alkohol, Zusatzstoff1, Zusatzstoff2 </h5>
+				</li>
+				<li data-cards-type='text'>
+					<h1>Veganes Gericht</h1>
+					<p> Austernpilze und Champignons gebrate
+						Gitterkartoffeln
+					</p>
+					<p>
+						Studenten 2.45 € <br/>
+						Mitarbeiter 4.20 € <br/>
+						Gäste  5.90 €
 
-			$("#week_label").html(	"Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
-									" bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));
+					</p>
+					<h5> Zusatzstoffe: Alkohol, Zusatzstoff1, Zusatzstoff2 </h5>
+				</li>
+				<li data-cards-type='text'>
+					<h1>Hauptkomponenten</h1>
+					<p> Knusprige Putenoberkeule
+						Seelachsfilet Müllerinart
+					</p>
+					<p>
+						Studenten 2.45 € <br/>
+						Mitarbeiter 4.20 € <br/>
+						Gäste  5.90 €
 
-			fillCanteen(CONFIG.MENSA.defaultCanteen, GLOBAL.DATE.currentWeek);
+					</p>
+					<h5> Zusatzstoffe: Alkohol, Zusatzstoff1, Zusatzstoff2 </h5>
+				</li>
+				<li data-cards-type='text'>
+					<h1>Gemüsebeilagen</h1>
+					<p> Apfelrotkohl mit Speck 
+						Kaisergemüse
+						Blattspinat ohne Speck
+					</p>
+					<p>
+						Studenten 2.45 € <br/>
+						Mitarbeiter 4.20 € <br/>
+						Gäste  5.90 €
 
-			// deactivate already past Days
-			if (date.getDay()>1 && date.getDay()<6)
-			{
-				for(var i=0; i<date.getDay()-1; i++)
-				{
-					nav.eq(i).addClass("ui-disabled");
-				}
-			}
-			
-			// open the Tab for current Day
-			nav.filter(":jqmData(day='"+day+"')")
-			   .addClass("ui-btn-active")
-			   .click();
-			
-			loadingOut();
-			GLOBAL.INIT.mensa = true;
-		};
+					</p>
+					<h5> Zusatzstoffe: Alkohol, Zusatzstoff1, Zusatzstoff2 </h5>
+				</li>
+				<li data-cards-type='text'>
+					<h1>Sättigungsbeilagen</h1>
+					<p> Salzkartoffeln 
+						Reis
+						Klöße Thüringer Art
+					</p>
+					<p>
+						Studenten 2.45 € <br/>
+						Mitarbeiter 4.20 € <br/>
+						Gäste  5.90 €
 
-		/**
-		 * Loading all Meals for the given Week of the given Canteen.
-		 * 
-		 * @param Integer id ... Canteen ID
-		 * @param Array[Date] ... Week as Array of Days
-		 */
-		function fillCanteen(id, week) {
-			var today = new Date().getDay();
-			var o = $( "#canteen_page div.canteen_content");
-			var deferreds = [];
-			
-			loadingIn();
-			
-			// Saturday or Sunday ?
-			if(today==6 || today==0) today = 0;
-			else today--;
-			
-			for(var i = today; i < week.length; i++) {
-				deferreds[deferreds.length] = fillCanteenDay(o, id, week[i]);
-			}
-			
-			$.when.apply($, deferreds)
-			 .then(loadingOut);
-		};
-		
-		/**
-		 * Loading all Meals for the given Day of the given Canteen.
-		 * 
-		 * @param jQuery-Object o ... Day DIVs
-		 * @param Integer id ... Canteen ID
-		 * @param Date date ... Weekday
-		 * 
-		 * @return jQuery-Deferred
-		 */
-		function fillCanteenDay(o, id, date) {
-			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+id+"/"+createServerDateStamp(date))
-			 .done(function (data, status, jqXHR) {
-				 		var title, desc, addits;
-				 		var priceStud, priceEmp, priceExt;
-				 		var meal, meals = "";
-				 		var veggie = false;
-
-				 		if(isEmpty(data.dayContent))
-				 		{
-				 			meals = '<div class="no_meals_today">Keine Angebote verfügbar.</div>';
-				 		}
-				 		else {
-    				 		for(var k in data.dayContent)
-    						{
-    							meal = data.dayContent[k];
-    							
-    							desc = !isEmpty(meal.ingredients)?meal.ingredients.join(", "):"Keine Beschreibung verfügbar!";
-    							
-    							addits = "";
-    							if(!isEmpty(meal.addititves))
-    							{
-    								for(var j in meal.addititves)
-        							{
-    									// exclude Descrition for "Veggie"-Mode
-    									if(j!=58 && j!=50)
-    										addits += meal.addititves[j] + "</br>";
-        							}
-    							}
-    							
-    							if(isEmpty(addits)) addits = "Keine weiteren Inhaltsstoffe.";
-    							
-    							// make veggie flag
-    							veggie = !isEmpty(meal.addititves[58]) || !isEmpty(meal.addititves[50]);
-    							
-    							title = meal.title;
-    							// TODO make Update like Issue #39
-    							priceStud = parseFloat(meal.price[0]).toFixed(2).replace(/\./, ",");
-    							priceEmp = parseFloat(meal.price[1]).toFixed(2).replace(/\./, ",");
-    							priceExt = parseFloat(meal.price[2]).toFixed(2).replace(/\./, ",");
-    							
-    							meals += '<div '+(veggie?'':'class="non_veggie"')+'>'+
-    									 '<h3>'+title+'</h3>'+
-    									 '<p>'+desc+'</p>'+
-    									 '<p><small>Zusätzliche Inhaltsstoffe:</br>'+addits+'</small></p>'+
-    									 '<div class="canteen_price_bar">'+
-    										'<span>Student: '+priceStud+' &euro;</span>'+
-    										'<span>Mitarbeiter: '+priceEmp+' &euro;</span>'+
-    										'<span>Extern: '+priceExt+' &euro;</span>'+
-    									 '</div></div>';
-    						}
-				 		}
-						
-						o.filter(":jqmData(day='"+getWeekDay(date).id+"')")
-						 .empty()
-						 .append(meals)
-						 .trigger("create");
-
-			  });
-			 //.fail(ajaxErrorHandler);
-		};
-		
-		/**
-		 * Loading all available Canteens. 
-		 */
-		function fillCanteenSelect() {
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
-			 	.done(function(data, status, jqXHR) {
-			 		var opts = "";
-			 		
-			 		for(var k in data.location)
-			 		{	
-			 			opts += '<option value="'+k+'" ';
-			 			
-			 			if(k == CONFIG.MENSA.defaultCanteen)
-			 				opts += 'selected="selected"';
-			 			
-			 			opts += '>'+data.location[k]+'</option>';
-			 		}
-
-			 		$( "#canteen_select" )
-			 			.append(opts)
-			 			.selectmenu("refresh");
-			   });
-			   //.fail(ajaxErrorHandler);
-		};
-	</script>
+					</p>
+					<h5> Zusatzstoffe: Alkohol, Zusatzstoff1, Zusatzstoff2 </h5>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>

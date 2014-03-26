@@ -1,8 +1,44 @@
-<div id="sport_page" data-role="page" data-dom-cache="true" data-title="Hochschulsport" data-theme="a" data-content-theme="a">
-	<div data-role="content" class="toblur">
-		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true"></ul>
+<div id="sport_page" data-dom-cache="true" data-role="page" data-theme='b'>
+	<div data-role="panel" id="menue_sport" data-theme="a" data-display="push">
+		<ul data-role="listview">
+			<li data-role="list-divider">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
 	</div>
-
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue_sport" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-role="content">
+		<br/>
+		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportart..." data-filter="true" data-inset="true">
+			
+	</div>
 	<script>	
     	$( "#sport_page" )
     		.on("pagecreate", initSportsView)
@@ -72,8 +108,12 @@
 				 	// simple Fix for empty Response, TODO better?
 				 	if(isEmpty(data.id)) return;
 				
-    				var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="a" data-content-theme="a">'+
-    							'<div data-role="content">'+
+    				var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="b" data-content-theme="b">'+
+								'<div data-role="header" data-position="fixed" data-theme="b">'+
+									'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
+									'<h1>&nbsp;HTWK App</h1>'+
+								'</div>'+
+    							'<div data-role="content"><div class="inset"><br/>'+
     							    '<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" />'+
     								'<h1>'+data.title+'</h1>'+
     								'<p><b>Kursnummer:</b> '+data.courseNumber.match(/\d+/)[0]+'</p>'+
@@ -99,11 +139,12 @@
     				}
 					
     				div += 			'<p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
-						 	    '</div>'+
-						 	  '</div>';
+						 	       '</div>'+
+								 '</div>'+
+								'</div>';
 
 				div = $(div);
-				div.find("a").addClass("external");
+				div.find("div[data-role='content'] a").addClass("external");
 				
     				$( "body" )
 						.append(div)

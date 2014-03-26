@@ -1,0 +1,188 @@
+﻿<div id="building_page" data-role="page" data-theme='b' data-display="push">
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+	<div data-role="panel" id="menue_info_gebaeudeplan" data-theme="a" data-display="push">
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
+	</div>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue_info_gebaeudeplan" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-role="content">
+		<br/>
+		<ul id="buidling_content_list" data-role="listview" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true">
+		</ul>
+	</div>
+	<script>
+	
+    	$( "#building_page" )
+    		.on("pagecreate", initBuildingsView)
+    		.on("pageshow", function() {
+    			if(!GLOBAL.INIT.builds) loadingIn();
+    			$("#btn_refresh")
+					.off()
+					.on("click", initBuildingsView);
+    		 });
+
+		function initBuildingsView() {
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
+			 .done(function(data, status, jqXHR) {
+				fillBuildingsList(data);
+				loadingOut();
+				GLOBAL.INIT.builds = true;
+			});
+			// TODO fail
+		};
+		
+		function fillBuildingsList(data) {
+			var building, lis = "", desc = "";
+			
+			if(!isEmpty(data))
+			{				
+				for(var k in data)
+				{
+					building = data[k];
+					
+					// TODO better?
+					for(var d in building.description)
+					{
+						if(!isEmpty(building.description[d]))
+							desc += building.description[d];
+					}
+					
+					lis += 	'<li data-bid='+building.id+'><a href="#building_'+building.id+'" class="building">'+
+								'<h3>'+building.fullName+'</h3>'+
+								'<p>'+desc+'</p>'+
+								'<p>'+building.address+'</p>'+
+							'</a></li>';
+				}
+				
+				$( "#buidling_content_list" )
+					.off()
+					.empty()
+					.append(lis)
+					.on("click", "a.building", loadBuildingDetails)
+					.listview("refresh")
+					.trigger("updatelayout");
+				
+				$( "body" )
+					.find("div.buildingdetails")
+					.remove();
+			}
+		};
+		
+		function loadBuildingDetails(e) {
+			var id = $(e.target).parents("li").first().data("bid");
+
+			if($("#building_"+id).length>0) {
+				$.mobile.initializePage();
+				$.mobile.changePage("#building_"+id);
+				return;
+			}
+			
+			loadingIn();
+			
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)
+			 .done(function(data, status, jqXHR) {
+				var desc = "";
+				
+				// TODO better?
+				for(var d in data.description)
+				{
+					if(!isEmpty(data.description[d]))
+						desc += data.description[d] + "</br>";
+				}
+				
+				var div =	
+								'<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebaeude">'+
+								'	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b">'+
+										'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
+										'<h1>&nbsp;HTWK App</h1>'+
+									'</div>'+
+									'<div data-role="content">'+
+										'<div class="inset">'+
+											'<h1>'+data.fullName+'('+data.id+')</h1>'+
+											'<ul data-nativedroid-plugin="cards">'+
+												'<li data-cards-type="text">'+
+													'<h1>Info</h2>'+
+													'<p>'+
+														'<strong>Abkürzung: </strong> '+data.id+' <br/>'+
+														'<br/>'+
+														'<strong>Adresse: </strong> '+data.address+' <br/>'+
+														'<br/>'+
+														'<p>'+
+															desc+
+														'</p>'+
+													'</p>'+
+												'</li>'+
+												'<li data-cards-type="text">'+
+													'<p><img src="'+data.pictureLink+'"/></p>'+
+												'</li>'+
+												"<li data-cards-type='traffic' data-cards-traffic-route='{\"from\":\"51.344224,12.379765\",\"to\":\""+data.latLng.replace(/ /, '')+"\",\"type\" : \"coords\"}'>"+
+													'<h1>'+
+														'<strong>'+
+															'XX Minuten'+
+														'</strong>'+
+														'nach '+data.address+
+													'</h1>'+
+													'<br/>'+
+													'<div class="map"></div>'+
+													'<a class="" href="maps:q='+data.address+'"><i class="icon-screenshot"></i>Navigation </a>'+
+												'</li>'+
+											'</ul>'+
+											'<br/>'+
+											'<p>'+
+												'<h5>'+
+													'<strong>'+
+														'Letzte Änderung:'+
+													'</strong> '+
+													createDateTimeStamp(new Date(data.lastChange))+
+												'</h5>'+
+											'</p>'+
+										'</div>'+
+									'</div>';
+
+				div = $(div);
+				div.find("div[data-role='content'] a").addClass("external");
+				
+				$( "body" )
+					.append(div)
+					.trigger("create");
+				
+				$.mobile.initializePage();
+				$.mobile.changePage("#building_"+id);
+				
+				loadingOut();
+			  });
+			// TODO fail
+		};
+	</script>
+</div>

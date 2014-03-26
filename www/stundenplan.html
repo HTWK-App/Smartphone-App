@@ -1,0 +1,435 @@
+﻿<div data-role="page" data-theme='b'>
+	<div data-role="panel" id="menue_stundenplan" data-theme="a" data-display="push">
+		<ul data-role="listview">
+			<li data-role="list-divider">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
+	</div>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue_stundenplan" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-role="content">   
+		<div class="inset">
+			<h1>Stundenplan für KW (slide to next week)</h1>
+			<br/>
+		</div>
+		<style type="text/css">
+			.tg  {
+				border-collapse:collapse;
+				border-spacing:0;
+				width:100%
+			}
+			table.tg td{
+				padding:0px;
+			}
+			table.tg tr td.full-hour:first-child{
+				width:50px;
+			}
+			table.tg tr th:first-child{
+				width:50px;
+			}
+			table.tg th.weekdays{
+				width:13%;
+			}
+			table.tg tr {
+				height:30px;
+			}
+			table.tg tr.full-hour td {
+				border-top:1px solid black;
+				border-left:1px solid black;
+			}
+
+			table.tg tr.half-hour td{
+				border-top:1px dotted #333333;
+				border-left:1px solid black;
+			}
+			table.tg tr.full-hour td:first-child{
+				border-left:0px;
+				border-right:1px solid black;
+				text-align:center;
+			}
+			table.tg tr.head th{
+				border-collapse:separate;
+				border-spacing:0px;
+				border-top:1px solid black;
+				border-left:1px solid black;
+			}
+			table.tg tr.head th.top-left-no-borders {
+				border:0px;
+			}
+			table.tg tr th:last-child, table.tg tr td:last-child{
+				border-right:1px solid black;
+			}
+			table.tg tr:last-child{
+				border-bottom:1px solid black;
+			}
+			table.tg td span {
+				font-size:0.8em;
+				padding:0px;
+				margin-right:3px;
+				background-color:black;
+				color:white;
+				width:85%;
+				height:100%;
+				line-height:29px;
+				float:right;
+				display:block;
+				overflow:auto
+			}
+			table.tg td span.start{
+				-moz-border-radius: 5px 5px 0px 0px;
+				border-radius: 5px 5px 0px 0px;
+			}
+			table.tg td span.middle{
+
+			}
+			table.tg td span.end{
+				-moz-border-radius: 0px 0px 5px 5px;
+				border-radius: 0px 0px 5px 5px;
+			}
+		</style>
+		<div id="stundenplan_kalendar">
+			<table class="tg">
+			  <tr class="head">
+				<th class="top-left-no-borders">Zeit</th>
+				<th class="weekdays">Mo</th>
+				<th class="weekdays">Die</th>
+				<th class="weekdays">Mi</th>
+				<th class="weekdays">Do</th>
+				<th class="weekdays">Fr</th>
+				<th class="weekdays">Sa</th>
+				<th class="weekdays">So</th>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">07.00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ><span class="start"><span>Termin start</span></span></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">08.00<br></td>
+				<td ></td>
+				<td ><span class="end"><span>Termin end</span></span></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">09.00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">10.00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ><span class="start"><span>Termin startet</span></span></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ><span class="middle"><span>Termin dauert</span></span></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">11.00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ><span class="middle"><span>dauert</span></span></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ><span class="end"><span>Termin endet</span></span></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td  rowspan="2">12.00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td  rowspan="2">13.00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td  rowspan="2">14:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">15:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">16:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">17:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">18:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">19:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">20:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">21:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">22:00</td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+				<td ></td>
+			  </tr>
+			</table>
+	</div>
+</div>

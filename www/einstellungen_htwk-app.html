@@ -1,0 +1,216 @@
+﻿<div id="settings_page" data-role="page" data-theme='b'>
+	<div data-role="panel" id="menue_einstellungen_htwk-app" data-theme="a" data-display="push">
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
+	</div>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue_einstellungen_htwk-app" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-role="content">   
+		<div class='inset'>
+			<h1>Einstellungen</h1>
+			
+			<br /><br/>
+			<h2>Login-Daten</h2>
+			<hr/>
+			<label for="username">
+				<strong>
+					Nutzername:
+				</strong>
+			</label>
+			<input type="text" name="username" id="username" value="" placeholder="Nutzername">
+			<label for="password">
+				<strong>
+					Passwort:
+				</strong>
+			</label>
+			<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
+			
+			<br /><br/>
+			<h2>Sprache</h2>
+			<hr/>
+			<label for="default_language_select">
+					<strong>
+						Standardsprache:
+					</strong>
+				</label>
+			<select id="default_language_select" name="default_language_select" data-mini="true">
+			</select>
+			
+			<br /><br/>
+			<h2>News</h2>
+			<hr/>
+			<label for="default_news_select">
+				<strong>
+					Standard Newsfeed:
+				</strong>
+			</label>
+			<select id="default_news_select" name="default_news_select" data-mini="true">
+				<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+			</select>
+			
+			<br /><br/>
+			<h2>Mensa</h2>
+			<hr/>
+			
+			<label for="default_canteen_select">
+				<strong>
+					Standard Mensa:
+				</strong>
+			</label>
+			<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
+				<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+			</select>
+			<div data-role="popup" id="popupFail">
+					<p>
+						Tragen Sie bitte ihren Username und ihr Passwort ein!
+					</p>
+			</div>
+		</div>
+		<a id="save"data-role="button" data-mini="true" >Speichern</a>
+	</div>
+	<script>
+	//TODO autofill languages
+		$( "#settings_page" )
+			.on("pagecreate", function () {
+				getNewsFeeds(); 
+				getCanteens();
+				fillFields();
+			})
+			.on("pageshow", function () {
+				if(!GLOBAL.INIT.settings) loadingIn();
+				$("#btn_refresh").hide();
+				GLOBAL.INIT.settings = true;
+			 })
+			.on("pagehide", function() {
+				$("#btn_refresh").show();
+			 });
+
+		function getNewsFeeds() {
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
+			 .done(function(data, status, jqXHR) {
+					var tmp, name, id, opts;
+
+					opts = "";
+					
+					for(var k in data)
+					{
+						id = data[k].id;
+						tmp = id.split(".");
+						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
+						if(id == CONFIG.NEWS.defaultFeed)
+							tmp = 'selected="selected"';
+						else 
+							tmp = "";
+						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+					}	
+					
+					$( "#default_news_select" )
+						.empty()
+						.append(opts)
+						.selectmenu("refresh");
+					
+					loadingOut();
+			 });
+		};
+
+		function getCanteens() {
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
+			 	.done(function(data, status, jqXHR) {
+			 		var opts = "";
+			 		
+			 		for(var k in data.location)
+			 		{	
+			 			opts += '<option value="'+k+'" ';
+			 			
+			 			if(k == CONFIG.MENSA.defaultCanteen.id)
+			 				opts += 'selected="selected"';
+			 			
+			 			opts += '>'+data.location[k]+'</option>';
+			 		}
+
+			 		$( "#default_canteen_select" )
+						.empty()
+			 			.append(opts)
+			 			.selectmenu("refresh");
+			   });
+		};
+
+		function fillFields(){
+			if(CONFIG.AUTH.username != undefined || CONFIG.AUTH.username != ""){
+				$("#username").attr("placeholder", CONFIG.AUTH.username).val(CONFIG.AUTH.username);
+			}
+			var opts = "";
+			for(var k in CONFIG.LANGUAGE.availableShort){
+	 			opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
+	 			if(CONFIG.LANGUAGE.availableShort[k] == CONFIG.LANGUAGE.set)
+	 				opts += 'selected="selected"';
+	 			opts += '>'+CONFIG.LANGUAGE.availableLong[k]+'</option>';
+	 		}
+
+	 		$( "#default_language_select" )
+				.empty()
+	 			.append(opts)
+	 			.selectmenu("refresh");
+		};
+
+		$( "#default_language_select")
+			.change(function() {
+				CONFIG.LANGUAGE.set = $(this).val();
+				localStorage.setItem("language", CONFIG.LANGUAGE.set);
+			});
+
+		$( "#default_news_select" )
+			.change(function() {
+				CONFIG.NEWS.defaultFeed = $(this).val();
+				localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
+			});
+
+		$( "#default_canteen_select" )
+			.on("change", function() {
+				CONFIG.MENSA.defaultCanteen = $(this).val();
+				localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
+			});
+
+		$("#save")
+		.on("click", function () {
+			var pass = $("#password").val();
+			var user = $("#username").val();
+			if(pass == "" || user == ""){
+				$( "#popupFail" ).popup("open");
+			}else{
+				saveUsernamePassword(user,pass);
+			}
+		});
+	</script>
+</div>
