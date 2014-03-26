@@ -99,8 +99,8 @@
 		};
 
 		function fillFields(){
-			if(GLOBAL.DEMO.username != undefined || GLOBAL.DEMO.username != ""){
-				$("#username").attr("placeholder", GLOBAL.DEMO.username).val(GLOBAL.DEMO.username);
+			if(CONFIG.AUTH.username != undefined || CONFIG.AUTH.username != ""){
+				$("#username").attr("placeholder", CONFIG.AUTH.username).val(CONFIG.AUTH.username);
 			}
 			var opts = "";
 			for(var k in CONFIG.LANGUAGE.availableShort){

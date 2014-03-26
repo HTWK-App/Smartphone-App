@@ -31,16 +31,21 @@
 	<script>
 	
 		$( "#mail_page" )
-			.on("pagecreate", function(){
-				initMailView();
-				$("#reply").hide();
-				$("#btn_mail_send").hide();
-			})
+			.on("pagecreate", initMailView)
 			.on("pageshow", function() {
-				if(!GLOBAL.INIT.mail) loadingIn();
+				$("#reply")
+					.hide();
+				$("#btn_mail_send")
+					.hide();
 				$("#btn_refresh")
 					.off()
 					.on("click", initMailView);
+				if(isEmpty(CONFIG.AUTH.credentials)) {
+	    				openSignInDialog(initMailView);
+	    			}
+				else {
+	    				if(!GLOBAL.INIT.mai) loadingIn();	
+	    			}
 			 });
 
 		$("#btn_mail_write").on("click", function(){
@@ -100,18 +105,21 @@
 		}
 
 		function initMailView() {
-			loadingIn();
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt)
-			 .done(function(data, status, jqXHR) {
-					if(data.message != "message number < 1"){
-					 	fillMailList(data);
-						loadingOut();
-					}else{
-						loadingIn("Es konnten keine Mails abgerufen werden!", true);
-						setTimeout(fetchMailsFail, 3000);
-					}
-				 	GLOBAL.INIT.mail = true;
-			  });
+			if(!isEmpty(CONFIG.AUTH.credentials))
+			{
+				loadingIn();
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt)
+				 .done(function(data, status, jqXHR) {
+						if(data.message != "message number < 1"){
+						 	fillMailList(data);
+							loadingOut();
+						}else{
+							loadingIn("Es konnten keine Mails abgerufen werden!", true);
+							setTimeout(fetchMailsFail, 3000);
+						}
+					 	GLOBAL.INIT.mail = true;
+				  });
+			}
 			// TODO fail
 		};
 
