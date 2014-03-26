@@ -6,8 +6,9 @@
 	<div id="reply" data-role="content" class="toblur">
 		<form>
 			<input type="email" data-clear-btn="false" name="email_to" id="email_to" value="" placeholder="Empfänger">
+			<input type="text" name="email_cc" id="email_cc" value="" placeholder="Kopie an">
 			<input type="text" name="email_subject" id="email_subject" value="" placeholder="Betreff">
-			<textarea name="email_content" id="email_content" placeholder="Inhalt"></textarea>
+			<textarea name="email_content" id="email_content" placeholder="Ihr Text ..."></textarea>
 		</form>
 	</div>
 	<div data-role="popup" id="mail_popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
@@ -31,12 +32,14 @@
 	<script>
 	
 		$( "#mail_page" )
-			.on("pagecreate", initMailView)
-			.on("pageshow", function() {
+			.on("pagecreate", function(){
 				$("#reply")
 					.hide();
 				$("#btn_mail_send")
 					.hide();
+				initMailView();
+			})
+			.on("pageshow", function() {
 				$("#btn_refresh")
 					.off()
 					.on("click", initMailView);
@@ -44,7 +47,7 @@
 	    				openSignInDialog(initMailView);
 	    			}
 				else {
-	    				if(!GLOBAL.INIT.mai) loadingIn();	
+	    				if(!GLOBAL.INIT.mail) loadingIn();	
 	    			}
 			 });
 
@@ -66,12 +69,15 @@
 
 		$("#btn_mail_really").on("click", function(){
 			$("#mail_popupDialog").popup( "close");
-			var mail = $("#email_to").val();
+			var mail = $("#email_to").val().replace(" ","").split(",");
+			console.log(mail);
+			var cc = $("#email_cc").val().replace(" ","").split(",");
 			var subject = $("#email_subject").val();
 			var content = $("#email_content").val();
 			loadingIn("Ihre Mail wird versendet...");
-			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+"&to="+mail+"&subject="+subject+"&message="+content)
+			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+"&to="+mail+"&cc="+cc+"&subject="+subject+"&message="+content)
 				.done(function(data, status, jqXHR) {
+					console.log(data);
 					loadingOut();
 					loadingIn("Ihre Mail wurde versendet", true);
 					setTimeout(loadingOut, 3000);
@@ -81,14 +87,19 @@
 
 		function answer(){
 			var help = $(this).parent();
-			$("#email_to").val(help.attr("data-from"));
+			var mail = help.attr("data-from");
+			//Regex to filter the text for an valid mail adress
+			mail = mail.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g);
+			$("#email_to").val(mail);
 			$("#email_subject").val("Re: "+help.attr("data-subject"));
 			showWrite();
 			$("#btn_back").click();
 		}
 
 		function showInbox(){
+			$("#btn_refresh").show();
 			$("#email_to").val("");
+			$("#email_cc").val("");
 			$("#email_subject").val("");
 			$("#email_content").val("");
 			$("#reply").hide();
@@ -98,6 +109,7 @@
 		}
 
 		function showWrite(){
+			$("#btn_refresh").hide();
 			$("#inbox").hide();
 			$("#reply").show();
 			$("#btn_mail_write").html("Abbrechen").attr( "data-icon", "back" ).attr("back", "true").addClass("ui-icon-back").removeClass("ui-icon-forward ui-btn-active");
@@ -113,11 +125,11 @@
 						if(data.message != "message number < 1"){
 						 	fillMailList(data);
 							loadingOut();
+							GLOBAL.INIT.mail = true;
 						}else{
 							loadingIn("Es konnten keine Mails abgerufen werden!", true);
 							setTimeout(fetchMailsFail, 3000);
 						}
-					 	GLOBAL.INIT.mail = true;
 				  });
 			}
 			// TODO fail
@@ -193,6 +205,9 @@
 				if(!isEmpty(mail.toList[i])) 
 					toList += mail.toList[i]+", ";
 			}
+			var tmp = document.createElement("DIV");
+			tmp.innerHTML = mail.message;
+			var message = tmp.textContent || tmp.innerText || "";
 
 			toList = toList.slice(0, toList.lastIndexOf(",")).replace(/[;:]/g, "");
 			
@@ -201,8 +216,8 @@
 						'<p><strong>Von: </strong>'+escape(mail.from)+'</br>'+
 						'<strong>An: </strong>'+escape(toList)+'</br>'+
 						'<strong>Betreff: </strong>'+escape(mail.subject)+'</br>'+
-						'</p><hr>'+escape(mail.message)+
-						'<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b btn_mail_answer" data-icon="forward">Antworten</a>'+
+						'</p><hr>'+message+
+						'<hr><a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b btn_mail_answer" data-icon="forward">Antworten</a>'+
 					'</div>'+
 				'</div>';
 
