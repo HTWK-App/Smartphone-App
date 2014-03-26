@@ -39,17 +39,30 @@
 			<h4 id="timetable_week_label"></h4>
 		</div>
 	</footer>
+	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-overlay-theme="b" data-theme="b">
+	    	<div data-role="header" data-theme="a">
+	   	 		<h1>Einrichtung</h1>
+	   	 	</div>
+	   	 	<div role="main" class="ui-content">
+	   	 		<h4 id="timetableDialog_description">Bitte wählen Sie ihren Studiengang aus!</h4>
+	   	 		<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">
+					<li><a href="#">Acura</a></li>
+				</ul>
+	   	 		<a id="timetableDialog_Btn_Abort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
+	   	 	</div>
+	    </div>
 
 	<script>		
 		$( "#timetable_page" )
 			.on("pagecreate", initTimetableView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.timetable) loadingIn();
-    			$("#btn_refresh")
-				.off()
-				.on("click", function() {
-					$("#timetable_week_select").change(); 
-				 });
+    				$("#btn_refresh")
+					.off()
+					.on("click", function() {
+						$("#timetable_week_select").change(); 
+					 });
+				showConfigDialog();
 			 })
 			.on("click", "#timetable_nav a", function(e) {
 				$("#timetable_days table")
@@ -80,6 +93,65 @@
 				$("#timetable_days table tbody").empty();
 				fillTimetable();
 			 });
+
+		$( "#timetableDialog_Btn_Abort" )
+			.on("click", function () {
+				$( "#timetableDialog" ).popup("close");
+			 });
+		$( "#chooseCourse" )
+			.on("click", "a", function (e) {
+				$("#timetableDialog").popup("close");
+				$("#timetableDialog").find("input").data("lastval", "");//TODO geht noch ni -.-
+				if($( "#chooseCourse" ).data("func") == "course"){
+				loadingIn();
+				var id = $(e.target).parents("li").first().data("id");
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
+			 		.done(function (data, status, jqXHR) {
+						var div = "";
+						for(var k in data){
+							for(var s in data[k].courses){
+								var course = data[k].courses[s];
+								if(course.id == id){
+									for(var p in course.semGroups){
+										div += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
+									}
+								}
+							}
+						}
+						$("#timetableDialog_description").val("Bitte wählen Sie ihren Kurs aus!");
+						$("#chooseCourse")
+							.empty()
+							.append(div)
+							.listview("refresh");
+						loadingOut();
+						$("#timetableDialog").popup("open");
+					});
+				}
+			 });
+
+		function showConfigDialog(){
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
+			.done(function (data, status, jqXHR) {
+					CONFIG.TIMETABLE.semester = data.semester;
+					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
+			 		.done(function (data, status, jqXHR) {
+						
+						var div = "";
+						for(var k in data){
+							for(var s in data[k].courses){
+								var course = data[k].courses[s];
+								div += '<li class="ui-screen-hidden" data-id="'+course.id+'"><a href="#">'+course.name+'</a></li>';
+							}
+						}
+						$("#chooseCourse")
+							.empty()
+							.append(div)
+							.listview("refresh");
+						loadingOut();
+						$("#timetableDialog").popup("open");
+					});
+			});
+		}
 
 		/**
 		 * Loading the available Weeks and fill the preselected Timetable.

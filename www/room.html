@@ -20,6 +20,7 @@
 				$("#btn_refresh").hide();
 				GLOBAL.INIT.room = true;
 				loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
+				roomCount = 0;
 				getLocation();
 			 })
 			.on("pagehide", function() {
@@ -29,8 +30,10 @@
 		var roomCount = 0;
 
 		function getLocation() {
+			setTimeout(temporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
+			return;
 			roomCount = roomCount + 1;
-			if(roomCount <= 10)
+			if(roomCount <= 30)
 				navigator.geolocation.getCurrentPosition(locationFound, locationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
 			else
 				locationError();
@@ -38,9 +41,8 @@
 
 		function locationFound(position){
 			if(position.coords.accuracy > 13) {
-				getLocation();
+				getLocation();	
 			}else{
-				roomCount = 0;
 				loadingOut();
 				loadingIn();
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
@@ -51,11 +53,16 @@
 				  });
 			}
 		}
+		function temporary(){
+			loadingIn("Aktuell besteht kein Zugriff auf den Server, da er nicht im Hochschulnetzwerk eingeloggt ist. Diese Funktion ist derzeit nicht verfügbar!",true);
+			setTimeout(loadingOut, 4000);
+			$( "#menu" ).panel( "open");
+		}
 
 		function locationError(){
 			loadingOut();
-			loadingIn("Ihre Position konnte nicht bestimmt werden!",true);
-			setTimeout(loadingOut, 3000);
+			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut",true);
+			setTimeout(loadingOut, 4000);
 			$( "#menu" ).panel( "open");
 		}
 

@@ -40,7 +40,6 @@
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.settings) loadingIn();
 				$("#btn_refresh").hide();
-				GLOBAL.INIT.settings = true;
 			 })
 			.on("pagehide", function() {
 				$("#btn_refresh").show();
@@ -72,6 +71,7 @@
 						.selectmenu("refresh");
 					
 					loadingOut();
+					GLOBAL.INIT.settings = true;
 			 });
 		};
 
@@ -85,7 +85,7 @@
 			 		{	
 			 			opts += '<option value="'+k+'" ';
 			 			
-			 			if(k == CONFIG.MENSA.defaultCanteen.id)
+			 			if(k == CONFIG.MENSA.defaultCanteen)
 			 				opts += 'selected="selected"';
 			 			
 			 			opts += '>'+data.location[k]+'</option>';
