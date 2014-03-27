@@ -39,18 +39,6 @@
 			<h4 id="timetable_week_label"></h4>
 		</div>
 	</footer>
-	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-overlay-theme="b" data-theme="b">
-	    	<div data-role="header" data-theme="a">
-	   	 		<h1>Einrichtung</h1>
-	   	 	</div>
-	   	 	<div role="main" class="ui-content">
-	   	 		<h4 id="timetableDialog_description">Bitte wählen Sie ihren Studiengang aus!</h4>
-	   	 		<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">
-					<li><a href="#">Acura</a></li>
-				</ul>
-	   	 		<a id="timetableDialog_Btn_Abort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
-	   	 	</div>
-	    </div>
 
 	<script>		
 		$( "#timetable_page" )
@@ -94,66 +82,82 @@
 				fillTimetable();
 			 });
 
-		$( "#timetableDialog_Btn_Abort" )
-			.on("click", function () {
-				$( "#timetableDialog" ).popup("close");
-			 });
-		$( "#chooseCourse" )
-			.on("click", "a", function (e) {
-				$("#timetableDialog").popup("close");
-				$("#timetableDialog").find("input").data("lastval", "");//TODO geht noch ni -.-
-				if($( "#chooseCourse" ).data("func") == "course"){
-					loadingIn();
-					var element = $(e.target).parents("li").first();
-					var id = element.data("id");
-					var faculty = element.data("faculty");
-					//TODO add a new faculty to list in Config
-					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
-				 		.done(function (data, status, jqXHR) {
-							var div = "";
-							for(var k in data){
-								for(var s in data[k].courses){
-									var course = data[k].courses[s];
-									if(course.id == id){
-										for(var p in course.semGroups){
-											div += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
-										}
-									}
-								}
-							}
-							$("#timetableDialog_description").val("Bitte wählen Sie ihren Kurs aus!");
-							$("#chooseCourse")
-								.empty()
-								.append(div)
-								.listview("refresh");
-							loadingOut();
-							$("#timetableDialog").popup("open");
-						});
-				}
-			 });
+		function getPopup(heading, description){
+			var $popUp = $("<div/>").popup({
+				dismissible : false,
+				theme : "b",
+				overlyaTheme : "b",
+				transition : "pop"
+			}).bind("popupafterclose", function() {
+				$(this).remove();
+			});
+			$('<div data-role="header" data-theme="a"><h1>'+heading+'</h1></div>').appendTo($popUp);
+			$("<h4/>", {text : description}).appendTo($popUp);
+			return $popUp;
+		}
+
+		function closePopup(e){
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+		}
 
 		function showConfigDialog(){
+			var $popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
 			.done(function (data, status, jqXHR) {
 					CONFIG.TIMETABLE.semester = data.semester;
 					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
 			 		.done(function (data, status, jqXHR) {
 						
-						var div = "";
+						var div = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
 						for(var k in data){
 							for(var s in data[k].courses){
 								var course = data[k].courses[s];
 								div += '<li class="ui-screen-hidden" data-id="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
 							}
 						}
-						$("#chooseCourse")
-							.empty()
-							.append(div)
-							.listview("refresh");
+						div += '</ul>';
+						$(div).on("click", "a", facultyChosen).appendTo($popUp);
+						$("<a>",{text : "Abbrechen"}).buttonMarkup({inline : true, icon : "back"}).on("click", closePopup).appendTo($popUp);
 						loadingOut();
-						$("#timetableDialog").popup("open");
+						$popUp.popup("open").trigger("create");
 					});
 			});
+		}
+
+		function facultyChosen(e){
+			var $popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
+			var element = $(e.target).parents("li").first();
+			var id = element.data("id");
+			var faculty = element.data("faculty");
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+			loadingIn();
+			CONFIG.TIMETABLE.faculty.push({"id": id, "groups": []});
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
+		 		.done(function (data, status, jqXHR) {
+					var div = '<label for="select">Kurs:</label><select id="select" name="select"><option>Wählen...</option>';
+					for(var k in data){
+						for(var s in data[k].courses){
+							var course = data[k].courses[s];
+							if(course.id == id){
+								for(var p in course.semGroups){
+									div += '<option>'+course.semGroups[p]+'</option>';
+								}
+							}
+						}
+					}
+					div += '</select>';
+					$(div).on("change", courseChosen).appendTo($popUp);
+					$("<a>",{text : "Abbrechen"}).buttonMarkup({inline : true, icon : "back"}).on("click", closePopup).appendTo($popUp);
+					loadingOut();
+					$popUp.popup("open").trigger("create");
+				});
+			}
+
+		function courseChosen(e){
+			var element = $(e.target);
+			var course = element.val();
+			console.log(course);
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
 		}
 
 		/**
