@@ -36,7 +36,7 @@
 	</div>
 	<footer data-role="footer" data-position="fixed" class="toblur">
 		<div class="center">
-			<h4 id="timetable_week_label"></h4>
+			<a data-role="button" href="#" id="extendTimetable">Kalender erweitern...</a>
 		</div>
 	</footer>
 
@@ -50,7 +50,7 @@
 					.on("click", function() {
 						$("#timetable_week_select").change(); 
 					 });
-				showConfigDialog();
+				if(CONFIG.TIMETABLE.faculty.length == 0) showConfigDialog();
 			 })
 			.on("click", "#timetable_nav a", function(e) {
 				$("#timetable_days table")
@@ -81,16 +81,28 @@
 				$("#timetable_days table tbody").empty();
 				fillTimetable();
 			 });
+		$("#extendTimetable")
+			.on("click", showConfigDialog);
 
-		function getPopup(heading, description, btn_ok_show, func){
+		/**
+		 * Get a Popup with a Heading and a Description
+		 * 
+		 * @param String heading ... Heading of the Popup
+		 * @param String description ... Text to display in the Popup
+		 * @param Optional String btn_text ... If set, another button with btn_text as text will be displayd
+		 * @param Optional Function func ... Callbackfunction for optional button
+		 * 
+		 * @return jQueryMobile Popup
+		 */
+		function getPopup(heading, description, btn_text, func){
 			var p;
 			var div = $('<div data-role="popup" id="timetablePopup'+Math.random()+'"></div>');
 			var btn = $('<a class="popup-abort">Abbrechen</a>')
 						.buttonMarkup({inline : true, icon : "back"})
 						.on("click", abortSetup);
 			var btn_save = ""
-			if(btn_ok_show){
-				btn_save = $('<a>Ok</a>')
+			if(!isEmpty(btn_text)){
+				btn_save = $('<a>'+btn_text+'</a>')
 						.buttonMarkup({inline : true, icon : "check"})
 						.on("click", func);
 			}
@@ -106,20 +118,31 @@
 					transition : "pop"
 			 	})
 			 	.on("popupafterclose", function() {
-					  $(this).remove();
+					popupOpen = false;
+					$(this).remove();
 			 	 });
 
 			return p;
 		};
 
-
+		/**
+		 * Aborts the displayed Dialog and resets configurations (if not completed)
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function abortSetup(e) {
 			CONFIG.TIMETABLE.temporary= [];
+			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_week_select").change();
 			$(e.target).parent().popup("close");
 		};
 
 		var popupOpen = false;
 
+		/**
+		 * Opens the given Popup whenever another Popup is closed
+		 * 
+		 * @param JQueryMobile Popub popUp ... Popup to open
+		 */
 		function open(popUp){
 			if(popupOpen == true){
 				setTimeout(function(){open(popUp);}, 50);
@@ -129,14 +152,24 @@
 			popUp.popup("open").popup({afteropen: function() {popupOpen = true;}});
 		}
 
-		function showConfigDialog() {	
+		/**
+		 * Starts Configuration Dialog for Timetable.
+		 * 
+		 * @param Optional Event e ... Click-Event of Link
+		 */
+		function showConfigDialog(e) {	
+			if(!isEmpty(e)){
+				var popUp = $(e.target).parents("div", {"data-role": "popup"}).eq(0);
+				console.log(popUp);
+				if(popUp.data("role") == "popup") popUp.popup("close");
+			}
 			loadingIn();
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
 			 .done(function (data, status, jqXHR) {
 					CONFIG.TIMETABLE.semester = data.semester;
 					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
 			 		 .done(function (data, status, jqXHR) {
-			 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!", false);
+			 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
 						var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
 						
 						for(var k in data) {
@@ -159,6 +192,11 @@
 			});
 		};
 
+		/**
+		 * Called by Configuration Dialog. At this point, a faculty was chosen.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function facultyChosen(e) {
 			var li = $(e.target).parent("li");
 			var id = li.jqmData("course");
@@ -167,11 +205,11 @@
 			loadingIn();
 			CONFIG.TIMETABLE.temporary.push({"id": id, "groups": []});
 			
-			li.closest("div:jqmData(role='popup')").popup("close").popup({afterclose: function (){popupOpen = false;}});
+			li.closest("div:jqmData(role='popup')").popup("close");
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
 		 		.done(function (data, status, jqXHR) {
-		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!", false);
+		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
 		 			
 		 			// watch out
 					var lis = '<ul data-role="listview">';
@@ -198,17 +236,22 @@
 				});
 		};
 
+		/**
+		 * Called by Configuration Dialog. At this point, a course was chosen.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function courseChosen(e){
 			var element = $(e.target);
 			var course = element.text();
 
 			loadingIn();
 			CONFIG.TIMETABLE.temporary[0].groups.push({"id": course, "courses": {}});
-			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close").popup({afterclose: function (){popupOpen = false;}});
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.faculty[0].id+"/courses?semgroup="+course)
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.temporary[0].id+"/courses?semgroup="+course)
 		 		.done(function (data, status, jqXHR) {
-		 			var popUp = getPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!",true, setCourses);
+		 			var popUp = getPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
 		 			
 					var check = '<form><fieldset data-role="controlgroup">';
 					
@@ -227,6 +270,11 @@
 				});
 		}
 
+		/**
+		 * Called by Configuration Dialog. At this point, all needed subjects were marked.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function setCourses(e){
 			var element = $(e.target);
 			var boxes = element.siblings("form").find("input");
@@ -236,8 +284,8 @@
 					CONFIG.TIMETABLE.temporary[0].groups[0].courses[box.attr("data-hash")] = box.attr("name")
 				}
 			}
-			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close").popup({afterclose: function (){popupOpen = false;}});
-			var popUp = getPopup("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt",true, renameCourses);
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+			var popUp = getPopup("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt","Ok", renameCourses);
 			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
 			var ins = '<form>';
 			for(var k in courses){
@@ -250,6 +298,11 @@
 			setTimeout(function(){open(popUp);}, 50);
 		}
 
+		/**
+		 * Called by Configuration Dialog. At this point, subjects were renamed. In this step, made configurations are saved permenantly.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function renameCourses(e){
 			var element = $(e.target);
 			var boxes = element.siblings("form");
@@ -258,8 +311,13 @@
 				var box = boxes.find('#text-'+k);
 				courses[k] = box.val();
 			}
-			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close").popup({afterclose: function (){popupOpen = false;}});
-			//TODO Save courses
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+			CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);
+			CONFIG.TIMETABLE.temporary = [];
+			saveParameters();
+			var popUp = getPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
+			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+			setTimeout(function(){open(popUp);}, 50);
 		}
 
 		/**
@@ -271,16 +329,15 @@
 			
 			fillTimetableSelect();
 			
-			$( "#timetable_week_label" )
+			/*$( "#timetable_week_label" )
 			 	.html("Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
-					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));
+					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));*/// --> TODO iwie sinnlos...den Platz kann ich besser fürn Button gebrauchen
 			
 			// open the tab for current day
 			$( "#timetable_nav a:jqmData(day='"+day+"')" )
 				.addClass("ui-btn-active")
 				.click();
 			
-			loadingOut();//TODO Falsch
 			GLOBAL.INIT.timetable = true;
 		};
 
@@ -361,6 +418,7 @@
 			 						addTimetableWeekday(tbs.eq(k), data[k].dayContent, group);
 			 					}
 			 				}
+							loadingOut();
 			 		 });
 				   //.fail(ajaxErrorHandler);
 		};
@@ -431,7 +489,7 @@
 			 			.prop("selected", true).end()
 			 			.selectmenu("refresh");
 			 		
-			 		fillTimetable();
+			 		if(CONFIG.TIMETABLE.faculty.length != 0) fillTimetable();
 			   });
 			//.fail(ajaxErrorHandler);
 		};

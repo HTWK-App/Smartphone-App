@@ -52,7 +52,7 @@ var CONFIG = {
 		semester: null,
 		showDocentFullName: false,
 		faculty : [
-		           {
+		           /*{
 		        	   id : "fb",
 		        	   groups : [
 		        	             {
@@ -86,7 +86,7 @@ var CONFIG = {
 		        	            	 }
 		        	             }
 		        	            ]
-		           }
+		           }*/
 		          ],
 		temporary: []
 	},

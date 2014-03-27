@@ -301,6 +301,9 @@ function loadParameters(){
 	if(help != undefined) CONFIG.NEWS.defaultFeed = help;
 	help = localStorage.getItem("defaultCanteen");
 	if(help != undefined) CONFIG.MENSA.defaultCanteen = help;
+	help = localStorage.getItem("timetable");
+	if(help != undefined){ CONFIG.TIMETABLE = JSON.parse(help);
+	console.log(JSON.parse(help));}
 };
 
 function saveParameters(){
@@ -310,4 +313,5 @@ function saveParameters(){
 	localStorage.setItem("language", CONFIG.LANGUAGE.set);
 	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
+	localStorage.setItem("timetable", JSON.stringify(CONFIG.TIMETABLE));
 };
