@@ -87,7 +87,8 @@ var CONFIG = {
 		        	             }
 		        	            ]
 		           }
-		          ]
+		          ],
+		temporary: []
 	},
 	NEWS: {
 		defaultFeed: "rss.htwk.4"
