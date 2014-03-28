@@ -1,101 +1,112 @@
 <div id="settings_page" data-role="page" data-title="Einstellungen" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
 		<h3>Sprache</h3>
-		<hr>
-		<label for="default_language_select"><strong>Standardsprache:</strong></label>
-		<select id="default_language_select" name="default_language_select" data-mini="true">
-		</select>
+			<hr>
+			<label for="default_language_select"><strong>Standardsprache:</strong></label>
+			<select id="default_language_select" name="default_language_select" data-mini="true">
+			</select>
 		<h3>Login-Daten</h3>
-		<hr>
-		<label for="username"><strong>Nutzername:</strong></label>
-		<input type="text" name="username" id="username" value="" placeholder="Nutzername">
-		<label for="password"><strong>Passwort:</strong></label>
-		<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
-		<br><a id="save" data-role="button" data-mini="true" >Speichern</a>
+			<hr>
+			<label for="input_username"><strong>Nutzername:</strong></label>
+			<input id="input_username" type="text" name="input_username" value="" placeholder="Nutzername">
+			<label for="input_password"><strong>Passwort:</strong></label>
+			<input id="input_password" type="password" name="input_password" value="" autocomplete="off" placeholder="******">
+			<br><a id="settings_login_save" data-role="button" data-mini="true" >Speichern</a>
 		<h3>News</h3>
-		<hr>
-		<label for="default_news_select"><strong>Standard Newsfeed</strong>:</label>
-		<select id="default_news_select" name="default_news_select" data-mini="true">
-			<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-		</select>
+			<hr>
+			<label for="default_news_select"><strong>Standard Newsfeed</strong>:</label>
+			<select id="default_news_select" name="default_news_select" data-mini="true">
+				<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+			</select>
 		<h3>Stundenplan</h3>
-		<a href="#popupTimetableDelete" data-role="button" data-rel="popup" data-mini="true" data-position-to="window" data-transition="pop">Löschen...</a>
+			<hr>
+			<a href="#popup_timetable_delete" data-role="button" data-rel="popup" data-mini="true" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
 		<h3>Mensa</h3>
-		<hr>
-		<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
-		<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
-			<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
-		</select>
-		<div data-role="popup" id="popupFail">
-      			<p>Tragen Sie bitte ihren Username und ihr Passwort ein!</p>
+			<hr>
+			<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
+			<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
+				<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+			</select>
+	</div>
+	<div id="popup_timetable_delete" data-role="popup" data-theme="b" data-content-theme="b">
+		<div data-role="header" data-theme="b">
+			<h3>Wirklich Löschen?</h3>
 		</div>
-		<div data-role="popup" id="popupTimetableDelete">
-			<div data-role="header" data-theme="a">
-				<h1>Wirklich Löschen?</h1>
-			</div>
-			<div role="main" class="ui-content">
-				<h3 class="ui-title">Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h3>
-			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
-			<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
-			<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="#timetableDelete" data-rel="back" data-transition="flow">Löschen</a>
-			</div>
+		<div role="main" class="ui-content">
+			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
+			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p><br>
+			<a href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>
+			<a id="settings_timetable_delete" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" data-transition="flow" class="ui-corner-all ui-shadow">Löschen</a>
 		</div>
 	</div>
 
 	<script>
-		//TODO autofill languages
+		/*TODO
+		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
+		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
+		 * Heading of the Popup is displayed as "Wirklich Lösch..." on mobile phones --> should be fixed
+		 */
 		$( "#settings_page" )
 			.on("pagecreate", function () {
-				getNewsFeeds(); 
-				getCanteens();
-				fillFields();
+				settingsGetNewsFeeds(); 
+				settingsGetCanteens();
+				settingsFillFields();
 			})
 			.on("pageshow", function () {
-				if(!GLOBAL.INIT.settings) loadingIn();
+				loadingIn();
 				$("#btn_refresh").hide();
 			 })
 			.on("pagehide", function() {
 				$("#btn_refresh").show();
 			 });
 
-		function getNewsFeeds() {
+		/**
+		 * Get all Newsfeeds from the Server and fill them into the select widget. Default Feed will be selected.
+		 *
+		 */
+		function settingsGetNewsFeeds() {
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-			 .done(function(data, status, jqXHR) {
-					var tmp, name, id, opts;
+				 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 
+					var tmp, name, id, opts;
 					opts = "";
-					
-					for(var k in data)
-					{
+				
+					for(var k in data){
 						id = data[k].id;
 						tmp = id.split(".");
 						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
+
 						if(id == CONFIG.NEWS.defaultFeed)
 							tmp = 'selected="selected"';
-						else 
+						else
 							tmp = "";
 						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
-					}	
-					
+					}
+				
 					$( "#default_news_select" )
 						.empty()
 						.append(opts)
 						.selectmenu("refresh");
-					
 					loadingOut();
-					GLOBAL.INIT.settings = true;
-			 });
+				 })
+				.fail(ajaxErrorHandler);
 		};
 
-		function getCanteens() {
+		/**
+		 * Get all Canteens from the Server and fill them into the select widget. Default Canteen will be selected.
+		 *
+		 */
+		function settingsGetCanteens() {
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
-			 	.done(function(data, status, jqXHR) {
+				 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
 			 		var opts = "";
 			 		
-			 		for(var k in data.location)
-			 		{	
+			 		for(var k in data.location){	
 			 			opts += '<option value="'+k+'" ';
 			 			
 			 			if(k == CONFIG.MENSA.defaultCanteen)
@@ -108,18 +119,30 @@
 						.empty()
 			 			.append(opts)
 			 			.selectmenu("refresh");
-			   });
+				})
+				.fail(ajaxErrorHandler);
 		};
 
-		function fillFields(){
-			if(CONFIG.AUTH.username != undefined || CONFIG.AUTH.username != ""){
-				$("#username").attr("placeholder", CONFIG.AUTH.username).val(CONFIG.AUTH.username);
-			}
+		/**
+		 * Fill existing widgets with data, if present. To be filled: Username textbox, Language select
+		 *
+		 */
+		function settingsFillFields(){
+
 			var opts = "";
+
+			if(CONFIG.AUTH.username != undefined && CONFIG.AUTH.username != ""){
+				$("#input_username")
+					.attr("placeholder", CONFIG.AUTH.username)
+					.val(CONFIG.AUTH.username);
+			}
+
 			for(var k in CONFIG.LANGUAGE.availableShort){
 	 			opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
+
 	 			if(CONFIG.LANGUAGE.availableShort[k] == CONFIG.LANGUAGE.set)
 	 				opts += 'selected="selected"';
+
 	 			opts += '>'+CONFIG.LANGUAGE.availableLong[k]+'</option>';
 	 		}
 
@@ -132,36 +155,39 @@
 		$( "#default_language_select")
 			.change(function() {
 				CONFIG.LANGUAGE.set = $(this).val();
-				localStorage.setItem("language", CONFIG.LANGUAGE.set);
+				saveParameters();
+			});
+
+		$("#settings_login_save")
+			.on("click", function () {
+				var pass = $("#input_password").val();
+				var user = $("#input_username").val();
+
+				if(pass == "" || user == ""){
+					loadingIn("Tragen Sie bitte Ihren Nutzernamen und ihr Passwort ein!", true);
+					setTimeout(loadingOut, 2500);
+				}else{
+					saveUsernamePassword(user,pass);
+				}
 			});
 
 		$( "#default_news_select" )
 			.change(function() {
 				CONFIG.NEWS.defaultFeed = $(this).val();
-				localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
+				saveParameters();
 			});
 
-		$( "#timetableDelete" )
+		$( "#settings_timetable_delete" )
 			.on("click", function() {
-				CONFIG.TIMETABLE.faculty = []
-				localStorage.removeItem("timetable");
+				CONFIG.TIMETABLE.faculty = [];
+				saveParameters();
+				
 			});
 
 		$( "#default_canteen_select" )
 			.on("change", function() {
 				CONFIG.MENSA.defaultCanteen = $(this).val();
-				localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
+				saveParameters();
 			});
-
-		$("#save")
-		.on("click", function () {
-			var pass = $("#password").val();
-			var user = $("#username").val();
-			if(pass == "" || user == ""){
-				$( "#popupFail" ).popup("open");
-			}else{
-				saveUsernamePassword(user,pass);
-			}
-		});
 	</script>
 </div>
