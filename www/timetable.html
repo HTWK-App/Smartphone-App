@@ -36,7 +36,7 @@
 	</div>
 	<footer data-role="footer" data-position="fixed" class="toblur">
 		<div class="center">
-			<h4 id="timetable_week_label"></h4>
+			<a data-role="button" href="#" id="extendTimetable">Kalender erweitern...</a>
 		</div>
 	</footer>
 
@@ -50,7 +50,7 @@
 					.on("click", function() {
 						$("#timetable_week_select").change(); 
 					 });
-				showConfigDialog();
+				if(CONFIG.TIMETABLE.faculty.length == 0) showConfigDialog();
 			 })
 			.on("click", "#timetable_nav a", function(e) {
 				$("#timetable_days table")
@@ -81,16 +81,39 @@
 				$("#timetable_days table tbody").empty();
 				fillTimetable();
 			 });
+		$("#extendTimetable")
+			.on("click", showConfigDialog);
 
-		function getPopup(heading, description){
+		/*********************************************************************************************************************
+		  * This Area is used for Timetable Configuration Dialogs
+		*/
+
+		/**
+		 * Get a Popup with a Heading and a Description
+		 * 
+		 * @param String heading ... Heading of the Popup
+		 * @param String description ... Text to display in the Popup
+		 * @param Optional String btn_text ... If set, another button with btn_text as text will be displayd
+		 * @param Optional Function func ... Callbackfunction for optional button
+		 * 
+		 * @return jQueryMobile Popup
+		 */
+		function getPopup(heading, description, btn_text, func){
 			var p;
-			var div = $("<div data-role='popup'></div>");
+			var div = $('<div data-role="popup" id="timetablePopup'+Math.random()+'"></div>');
 			var btn = $('<a class="popup-abort">Abbrechen</a>')
 						.buttonMarkup({inline : true, icon : "back"})
-						.on("click", closePopup);
+						.on("click", abortSetup);
+			var btn_save = ""
+			if(!isEmpty(btn_text)){
+				btn_save = $('<a>'+btn_text+'</a>')
+						.buttonMarkup({inline : true, icon : "check"})
+						.on("click", func);
+			}
 				
 			div.append('<div data-role="header" data-theme="a"><h1>'+heading+'</h1></div><h4>'+description+'</h4>')
-			   .append(btn);
+			   .append(btn)
+			   .append(btn_save);
 			
 			p = div.popup({
 					dismissible : false,
@@ -99,62 +122,113 @@
 					transition : "pop"
 			 	})
 			 	.on("popupafterclose", function() {
-					  $(this).remove();
+					popupOpen = false;
+					$(this).remove();
 			 	 });
 
 			return p;
 		};
 
-		function closePopup(e) {
-			$(e.target).parent().popup("close");
+		/**
+		 * Aborts the displayed Dialog and resets configurations (if not completed)
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function abortSetup(e) {
+			if(!isEmpty(e)){
+				var popUp = $(e.target).parents("div", {"data-role": "popup"}).eq(0);
+				if(popUp.data("role") == "popup") popUp.popup("close");
+			}
+			CONFIG.TIMETABLE.temporary= [];
+			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_week_select").change();
 		};
 
-		function showConfigDialog() {	
+		var popupOpen = false;
+
+		/**
+		 * Opens the given Popup whenever another Popup is closed
+		 * 
+		 * @param JQueryMobile Popub popUp ... Popup to open
+		 */
+		function open(popUp){
+			if(popupOpen == true){
+				setTimeout(function(){open(popUp);}, 50);
+				return;
+			}
+			loadingOut();
+			popUp.popup("open").popup({afteropen: function() {popupOpen = true;}});
+		}
+
+		function noContent(text){
+			loadingOut();
+			loadingIn(text,true);
+			setTimeout(loadingOut, 3000);
+			CONFIG.TIMETABLE.temporary= [];
+		}
+
+		/**
+		 * Starts Configuration Dialog for Timetable.
+		 * 
+		 * @param Optional Event e ... Click-Event of Link
+		 */
+		function showConfigDialog(e) {	
+			if(!isEmpty(e))
+				abortSetup(e); //Not the right name, but the right functionality!
 			loadingIn();
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
 			 .done(function (data, status, jqXHR) {
-					CONFIG.TIMETABLE.semester = data.semester;
-					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
-			 		 .done(function (data, status, jqXHR) {
-			 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
-						var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
-						
-						for(var k in data) {
-							for(var s in data[k].courses) {
-								var course = data[k].courses[s];
-								ul += '<li class="ui-screen-hidden" data-course="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
-							}
+				if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+				CONFIG.TIMETABLE.semester = data.semester;
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
+		 		 .done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
+					var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
+					
+					for(var k in data) {
+						for(var s in data[k].courses) {
+							var course = data[k].courses[s];
+							ul += '<li class="ui-screen-hidden" data-course="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
 						}
+					}
 
-						ul += '</ul>';
-						
-						ul = $(ul).on("click", "a", facultyChosen);
-						
-						popUp.find("a.popup-abort").before(ul);
-						popUp.trigger("create");
-						popUp.popup("open");
-						
-						loadingOut();
-					});
-			});
+					ul += '</ul>';
+					
+					ul = $(ul).on("click", "a", facultyChosen);
+					
+					popUp.find("a.popup-abort").before(ul);
+					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+					setTimeout(function(){open(popUp);}, 50);
+					
+					loadingOut();
+				})
+				.fail(ajaxErrorHandler);
+			})
+			.fail(ajaxErrorHandler);
 		};
 
+		/**
+		 * Called by Configuration Dialog. At this point, a faculty was chosen.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function facultyChosen(e) {
 			var li = $(e.target).parent("li");
 			var id = li.jqmData("course");
 			var fac = li.jqmData("faculty");
 			
 			loadingIn();
-			CONFIG.TIMETABLE.faculty.push({"id": id, "groups": []});
+			CONFIG.TIMETABLE.temporary.push({"id": id, "groups": []});
 			
 			li.closest("div:jqmData(role='popup')").popup("close");
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
 		 		.done(function (data, status, jqXHR) {
-		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
-		 			
-		 			// watch out
-					var sel = '<label for="selectBittenichtTagNamenalsID">Kurs:</label><select id="selectBittenichtTagNamenalsID"><option>Wählen...</option>';
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+
+					var empty = true;
+		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");		 			
+					var lis = '<ul data-role="listview">';
 					
 					for(var k in data) {
 						for(var s in data[k].courses) {
@@ -162,30 +236,146 @@
 							
 							if(course.id === id) {
 								for(var p in course.semGroups) {
-									sel += '<option>'+course.semGroups[p]+'</option>';
+									lis += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
+									empty = false;
 								}
 							}
 						}
 					}
 					
-					sel += '</select>';
+					lis += '</ul>';
 					
-					sel = $(sel).on("change", courseChosen); 
+					lis = $(lis).on("click", "a", courseChosen); 
 					
-					popUp.find("a.popup-abort").before(sel);
-					popUp.trigger("create");
-					popUp.popup("open");
+					if(empty == true) {noContent("Es existieren keine Matrikel bzgl. Ihres Studiengangs!"); return;}
 					
-					loadingOut();
-				});
+					popUp.find("a.popup-abort").before(lis);
+					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+					setTimeout(function(){open(popUp);}, 50);
+				})
+				.fail(ajaxErrorHandler);
 		};
 
+		/**
+		 * Called by Configuration Dialog. At this point, a course was chosen.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
 		function courseChosen(e){
 			var element = $(e.target);
-			var course = element.val();
-			console.log(course);
+			var course = element.text();
+
+			loadingIn();
+			CONFIG.TIMETABLE.temporary[0].groups.push({"id": course, "courses": {}});
 			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.temporary[0].id+"/courses?semgroup="+course)
+		 		.done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+
+					var empty = true;
+		 			var popUp = getPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
+					var check = '<form><fieldset data-role="controlgroup">';
+					
+					for(var k in data) {
+						var course = data[k];
+							
+						check += '<input type="checkbox" name="'+course+'" id="'+course+'" data-hash="'+k+'"><label for="'+course+'">'+course+'</label>';
+						empty = false;
+					}
+					
+					check += '</fieldset></form>';
+
+					if(empty == true) {noContent("Es existieren keine Fächer bzgl. Ihres Matrikels!"); return;}
+					
+					check = $(check); 
+					popUp.find("a.popup-abort").before(check);
+					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+					setTimeout(function(){open(popUp);}, 50);
+				})
+				.fail(ajaxErrorHandler);
 		}
+
+		/**
+		 * Called by Configuration Dialog. At this point, all needed subjects were marked.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function setCourses(e){
+			var element = $(e.target);
+			var boxes = element.siblings("form").find("input");
+			for(var k = 0; k < boxes.length; k++){
+				var box = boxes.eq(k);
+				if(box.prop("checked")){
+					CONFIG.TIMETABLE.temporary[0].groups[0].courses[box.attr("data-hash")] = box.attr("name")
+				}
+			}
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+			var popUp = getPopup("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt","Ok", renameCourses);
+			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
+			var ins = '<form>';
+			for(var k in courses){
+				ins += '<input type="text" name="text-'+k+'" id="text-'+k+'" value="'+courses[k]+'">';
+			}
+			ins += '</form>';
+			ins = $(ins);
+			popUp.find("a.popup-abort").before(ins);
+			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+			setTimeout(function(){open(popUp);}, 50);
+		}
+
+		/**
+		 * Called by Configuration Dialog. At this point, subjects were renamed. In this step, made configurations are saved permenantly.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function renameCourses(e){
+			var element = $(e.target);
+			var boxes = element.siblings("form");
+			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
+
+			for(var k in courses){
+				var box = boxes.find('#text-'+k);
+				courses[k] = box.val();
+			}
+
+			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+
+			//save courses
+			var pushedc = false; var pushedg = false;
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				if(faculty.id == CONFIG.TIMETABLE.temporary[0].id){
+					for(var s in CONFIG.TIMETABLE.faculty[k].groups){
+						var group = CONFIG.TIMETABLE.faculty[k].groups[s];
+						if(group.id == CONFIG.TIMETABLE.temporary[0].groups[0].id){
+							for(var l in courses){
+								CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //Add/Rename Courses
+							}
+							pushedc = true;
+						}
+					}
+					if(pushedc == false) { //Nothing was pushed
+						CONFIG.TIMETABLE.faculty[k].groups.push(CONFIG.TIMETABLE.temporary[0].groups[0]);//Add group
+						pushedg = true;
+					}
+				}
+			}
+			if(pushedc == false && pushedg == false){//Nothing was pushed
+				CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);//Add faculty
+			}
+			saveParameters();
+			console.log(CONFIG.TIMETABLE.faculty);
+			CONFIG.TIMETABLE.temporary = [];
+
+			var popUp = getPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
+			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+			setTimeout(function(){open(popUp);}, 50);
+		}
+
+		/*********************************************************************************************************************
+		  * END of "This Area is used for Timetable Configuration Dialogs"
+		*/
 
 		/**
 		 * Loading the available Weeks and fill the preselected Timetable.
@@ -196,16 +386,15 @@
 			
 			fillTimetableSelect();
 			
-			$( "#timetable_week_label" )
+			/*$( "#timetable_week_label" )
 			 	.html("Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
-					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));
+					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));*/// --> TODO iwie sinnlos...den Platz kann ich besser fürn Button gebrauchen
 			
 			// open the tab for current day
 			$( "#timetable_nav a:jqmData(day='"+day+"')" )
 				.addClass("ui-btn-active")
 				.click();
 			
-			loadingOut();//TODO Falsch
 			GLOBAL.INIT.timetable = true;
 		};
 
@@ -279,6 +468,7 @@
 		function fillTimetableWeek(tbs, week, faculty, group) {
 			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+faculty+"/week/"+week+"?semgroup="+group.id)
 			 		.done(function (data, status, jqXHR) {
+							if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 			 				if(!isEmpty(data))
 			 				{
 			 					for(var k in data)
@@ -286,8 +476,9 @@
 			 						addTimetableWeekday(tbs.eq(k), data[k].dayContent, group);
 			 					}
 			 				}
-			 		 });
-				   //.fail(ajaxErrorHandler);
+							loadingOut();
+					})
+					.fail(ajaxErrorHandler);
 		};
 		
 		/**
@@ -337,6 +528,7 @@
 		function fillTimetableSelect() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
 			 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 			 		var opts = "";
 			 		
 			 		for(var k in data)
@@ -356,9 +548,9 @@
 			 			.prop("selected", true).end()
 			 			.selectmenu("refresh");
 			 		
-			 		fillTimetable();
-			   });
-			//.fail(ajaxErrorHandler);
+			 		if(CONFIG.TIMETABLE.faculty.length != 0) fillTimetable();
+			})
+			.fail(ajaxErrorHandler);
 		};
 	</script>
 </div>

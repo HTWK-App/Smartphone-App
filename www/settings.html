@@ -11,13 +11,15 @@
 		<input type="text" name="username" id="username" value="" placeholder="Nutzername">
 		<label for="password"><strong>Passwort:</strong></label>
 		<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
-		<br><a id="save"data-role="button" data-mini="true" >Speichern</a>
+		<br><a id="save" data-role="button" data-mini="true" >Speichern</a>
 		<h3>News</h3>
 		<hr>
 		<label for="default_news_select"><strong>Standard Newsfeed</strong>:</label>
 		<select id="default_news_select" name="default_news_select" data-mini="true">
 			<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
 		</select>
+		<h3>Stundenplan</h3>
+		<a href="#popupTimetableDelete" data-role="button" data-rel="popup" data-mini="true" data-position-to="window" data-transition="pop">Löschen...</a>
 		<h3>Mensa</h3>
 		<hr>
 		<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
@@ -26,6 +28,17 @@
 		</select>
 		<div data-role="popup" id="popupFail">
       			<p>Tragen Sie bitte ihren Username und ihr Passwort ein!</p>
+		</div>
+		<div data-role="popup" id="popupTimetableDelete">
+			<div data-role="header" data-theme="a">
+				<h1>Wirklich Löschen?</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<h3 class="ui-title">Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h3>
+			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
+			<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
+			<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" id="#timetableDelete" data-rel="back" data-transition="flow">Löschen</a>
+			</div>
 		</div>
 	</div>
 
@@ -126,6 +139,12 @@
 			.change(function() {
 				CONFIG.NEWS.defaultFeed = $(this).val();
 				localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
+			});
+
+		$( "#timetableDelete" )
+			.on("click", function() {
+				CONFIG.TIMETABLE.faculty = []
+				localStorage.removeItem("timetable");
 			});
 
 		$( "#default_canteen_select" )
