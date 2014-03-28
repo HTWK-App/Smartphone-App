@@ -30,14 +30,14 @@
 			var directionsService;
 
 			function onGeoGetSuccess (p){
-				alert("geosuccess");
+				//alert("geosuccess");
 				fromLat = parseFloat(p.coords.latitude);
 				fromLng = parseFloat(p.coords.longitude);
 				calcRoute();
 				
 			}
 			function onGeoGetFail(e){
-				alert("fail");
+				//alert("fail");
 			}
 			function calcRoute() {
 				alert("calcRoute");
@@ -56,8 +56,8 @@
 			}
 			function initGmap(){
 				alert("initGmap");
-				navigator.geolocation.getCurrentPosition(onGeoGetSuccess, onGeoGetFail);
-				alert("end init");
+				navigator.geolocation.getCurrentPosition(onGeoGetSuccess, onGeoGetFail,{timeout:30000});
+				//alert("end init");
 				directionsService = new google.maps.DirectionsService();
 
 				var leipzig = new google.maps.LatLng(51.344267, 12.380071);

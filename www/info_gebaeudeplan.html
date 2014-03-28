@@ -1,5 +1,4 @@
 ﻿<div id="building_page" data-role="page" data-theme='b' data-display="push">
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
 	<div data-role="panel" id="menue_info_gebaeudeplan" data-theme="a" data-display="push">
 		<ul data-role="listview">
 			<li data-role="list-divider" role="heading">Hauptmenü</li>
@@ -187,8 +186,8 @@
 					toLng = c[1];
 					mapcontainer = t;
 					
-					t.on("pageshow", initGmap()); 
-					alert("pageload");
+					t.on("pageshow", initGmap); 
+					//alert("pageload");
 				});
 				
 				$.mobile.initializePage();
