@@ -17,6 +17,7 @@
 		<script type="application/javascript" src="js/fn.js"></script>
 		<script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true"> </script>
 		<!-- <script type="application/javascript" src="cordova.js"></script> -->
+		<style>.map-canvas{height:250px;}</style>
 		<script type="text/javascript">
 		
 			var fromLat;
@@ -30,7 +31,7 @@
 			var directionsService;
 
 			function onGeoGetSuccess (p){
-				alert("geosuccess");
+				//alert("geosuccess");
 				fromLat = parseFloat(p.coords.latitude);
 				fromLng = parseFloat(p.coords.longitude);
 				calcRoute();
@@ -40,12 +41,12 @@
 				alert("geofail");
 			}
 			function calcRoute() {
-				alert("calcRoute");
+				//alert("calcRoute");
 				start = new google.maps.LatLng(fromLat, fromLng);
 				end = new google.maps.LatLng(toLat, toLng);
 				var request = {
-					origin: "Leipzig Hauptbahnhof",
-					destination:"Karl-Liebknecht-Str 70",
+					origin: start,
+					destination:end,
 					travelMode: google.maps.TravelMode.WALKING
 				};
 				directionsService.route(request, function(response, status) {
@@ -55,32 +56,30 @@
 				});
 			}
 			function initGmap(){
-				alert("initGmap");
-				navigator.geolocation.getCurrentPosition(onGeoGetSuccess, onGeoGetFail,{timeout:30000});
+				//alert("initGmap");
+				navigator.geolocation.getCurrentPosition(onGeoGetSuccess, onGeoGetFail,{timeout:30000,enableHighAccuracy: true, maximumAge: 0});
 				//alert("end init");
 				directionsService = new google.maps.DirectionsService();
 
-				var leipzig = new google.maps.LatLng(51.344267, 12.380071);
 				var mapOptions = {
 					zoom: 7,
-					//disableDefaultUI : true,
-					//draggable : false,
-					//keyboardShortcuts : false,
-					//scrollwheel : false,
-					center: leipzig
-					//mapTypeId: google.maps.MapTypeId.WALKING
+					disableDefaultUI : true,
+					draggable : false,
+					keyboardShortcuts : false,
+					scrollwheel : false,
+					mapTypeId: google.maps.MapTypeId.WALKING
 				}
 				
-				mapcontainer.find(".map-canvas").first().append("<span>test</span>");
-				
-				map = new google.maps.Map(mapcontainer.find(".map-canvas").first(), mapOptions);
+				//mapcontainer.find(".mapcontainer").first().append("<span>test</span>");
+				//mapcontainer.find(".map-canvas").get(0).css("height","250px;");
+				map = new google.maps.Map(mapcontainer.find(".map-canvas")[0], mapOptions);
 				var rendererOptions = {
 					map: map
-				}
-				directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
-				
+				}				
+				directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+				//directionsDisplay.setPanel(mapcontainer.find(".mapcontainer")[0]);
 				//directionsDisplay.setMap(map);
-				//directionsDisplay.setPanel(t.find(".mapcontainer").get(0));
+				
 				
 			}
 		</script>
