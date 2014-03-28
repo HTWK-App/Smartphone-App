@@ -1,72 +1,114 @@
-<div id="room_page" data-role="page" data-title="Leerer Raum" data-theme="a" data-content-theme="a">
-	<div id="roomContent" data-role="content" class="toblur">
+<div id="room_page" data-role="page" data-title="Leere Räume" data-dom-cache="true" data-theme="a" data-content-theme="a">
+	<div id="room_content" data-role="content" class="toblur">
 		<p>
 			<div data-role="fieldcontain">
-				<label for="room_select">Gebäude:</label>
-				<select id="room_select" name="room_select" data-mini="true">
+				<label for="room_building_select">Gebäude:</label>
+				<select id="room_building_select" name="room_building_select" data-mini="true">
 					<option selected="selected">Liste der nächsten Gebäude wird geladen...</option>
 				</select>
 			</div>
 			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br></h3>
-			<ul id="#roomList" data-role="listview">
-			</ul>
+			<ul id="room_room_list" data-role="listview"></ul>
 			<br>
 		</p>
 	</div>
+
 	<script>
+		/*TODO
+		 * Not finished yet! see todos
+		 * Needs testing
+		 */
 		$( "#room_page" )
-			.on("pagecreate", function(){})
+			.on("pagecreate", roomStartRoomFind)
 			.on("pageshow", function () {
-				$("#btn_refresh").hide();
+				$("#btn_refresh")
+					.off()
+					.on("click", roomStartRoomFind);
+
+				setTimeout(roomTemporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
+
 				GLOBAL.INIT.room = true;
-				loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
-				roomCount = 0;
-				getLocation();
-			 })
-			.on("pagehide", function() {
-				$("#btn_refresh").show();
 			 });
 
-		var roomCount = 0;
+		var roomRoomCount = 0;
 
-		function getLocation() {
-			setTimeout(temporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
+		/**
+		 * Starts looking for empty rooms. Gets geolocation and runs on success locationFound, on fail locationError
+		 *
+		 */
+		function roomStartRoomFind() {
+
+			setTimeout(roomTemporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
 			return;
-			roomCount = roomCount + 1;
-			if(roomCount <= 30)
-				navigator.geolocation.getCurrentPosition(locationFound, locationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+
+			loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
+			roomRoomCount = roomRoomCount + 1;
+
+			if(roomRoomCount <= 30)
+				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
 			else
 				locationError();
 		}
 
-		function locationFound(position){
-			if(position.coords.accuracy > 13) {
-				getLocation();	
+		/**
+		 * Called when a geolocation was found. Recalls startRoomFind if accuracy was to poor.
+		 *
+		 * @param HTML5_position_object position ... Contains position data. See http://www.w3schools.com/html/html5_geolocation.asp
+		 *
+		 */
+		function roomLocationFound(position){
+
+			if(position.coords.accuracy > 13) { // in m
+				roomStartRoomFind();
 			}else{
-				loadingOut();
-				loadingIn();
+				loadingOut(); loadingIn(); roomRoomCount = 0;
+
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
-				 .done(function(data, status, jqXHR) {
-					console.log(data);
-					fillBuildingsList(data);
-					$("#roomContent").append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
-				  });
+					 .done(function(data, status, jqXHR) {
+						if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+						console.log(data); // used for developement and testing purposes TODO Delete someday
+
+						roomFillBuildingsList(data);
+
+						$("#room_content")
+							.append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
+					 })
+					 .fail(ajaxErrorHandler);
 			}
 		}
-		function temporary(){
+
+		/**
+		 * Called when it failed to locate the device.
+		 *
+		 */
+		function roomLocationError(){
+
+			loadingOut();
+			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut", true);
+			setTimeout(loadingOut, 4000);
+			roomRoomCount = 0;
+			$( "#menu" ).panel( "open");
+		}
+
+		/**
+		 * Temporary function to display that this feature is currenty disabled. TODO Delete someday
+		 *
+		 */
+		function roomTemporary(){
 			loadingIn("Aktuell besteht kein Zugriff auf den Server, da er nicht im Hochschulnetzwerk eingeloggt ist. Diese Funktion ist derzeit nicht verfügbar!",true);
 			setTimeout(loadingOut, 4000);
 			$( "#menu" ).panel( "open");
 		}
 
-		function locationError(){
-			loadingOut();
-			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut",true);
-			setTimeout(loadingOut, 4000);
-			$( "#menu" ).panel( "open");
-		}
+		/**
+		 * Fills the List of Buildings, that are nearby. Fetches data for empty rooms of the selected building.
+		 *
+		 * @ param JSON-Object data
+		 *
+		 */
+		function roomFillBuildingsList(data) {
 
-		function fillBuildingsList(data) {
 			var tmp, name, id, opts;
 
 			opts = "";
@@ -75,41 +117,52 @@
 				id = data[k].id;
 				tmp = "";
 				name = data[k].fullName;
+
 				if(k == 0)
 					tmp = 'selected="selected"';
+
 				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
 			}	
 			
-			$( "#room_select" )
-			.empty()
-			.append(opts)
-			.selectmenu("refresh");
+			$( "#room_building_select" )
+				.empty()
+				.append(opts)
+				.selectmenu("refresh");
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'http://localhost:8080/app/room/ss/13/1')
+			//TODO not the right url yet
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'ss/13/1')
 				.done(function(data, status, jqXHR) {
-					fillRoomList(data, $( "#room_select" ).first.val());
-				})
-				.fail(function(){
-					loadingOut();
-					loadingIn("Die Raumliste konnte nicht abgerufen werden!",true);
-					setTimeout(lodingOut, 3000);
-				});
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+					roomFillRoomList(data, $( "#room_building_select" ).first.val()); //TODO bad request!
+				 })
+				 .fail(ajaxErrorHandler);
 		}
 
-		function fillRoomList(data, id){
+		/**
+		 * Fills the List of empty rooms for the selected building. TODO not yet right implemented
+		 *
+		 * @ param JSON-Object data
+		 * @ param ... id ... ....
+		 *
+		 */
+		function roomFillRoomList(data, id){
+
 			var room = "";
 			var lis = "";
+
 			for(var k in data[id]){
 				room = data[id][k];
+
 				lis += 	'<li><h4>'+room.name+'</h4><p>Typ: '+room.type+', Größe: '+room.size+' Plätze</p></li>';
 			}
 			
-			$( "#roomList" )
-			.off()
-			.empty()
-			.append(lis)
-			.listview("refresh")
-			.trigger("updatelayout");
+			$( "#room_room_list" )
+				.empty()
+				.append(lis)
+				.listview("refresh")
+				.trigger("updatelayout");
+
 			loadingOut();
 		}
 	</script>

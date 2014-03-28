@@ -1,4 +1,4 @@
-<div id="wlan_page" data-role="page" data-title="WLAN-Konfiguration" data-theme="a" data-content-theme="a">
+<div id="wlan_page" data-role="page" data-title="WLan-Konfiguration" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
 		<p><strong>Netzwerkname(SSID):</strong> eduroam</p>
 		<p><strong>Sicherheit:</strong> WPA2-Enterprise</p>
@@ -13,7 +13,6 @@
 			.on("pagecreate", function() {})
 			.on("pageshow", function () {
 				$("#btn_refresh").hide();
-				GLOBAL.INIT.wlan = true;
 			 })
 			.on("pagehide", function() {
 				$("#btn_refresh").show();
