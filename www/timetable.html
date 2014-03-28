@@ -216,7 +216,6 @@
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
 		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
 		 			
-		 			// watch out
 					var lis = '<ul data-role="listview">';
 					
 					for(var k in data) {
@@ -315,14 +314,41 @@
 			var element = $(e.target);
 			var boxes = element.siblings("form");
 			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
+
 			for(var k in courses){
 				var box = boxes.find('#text-'+k);
 				courses[k] = box.val();
 			}
+
 			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
-			CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);
-			CONFIG.TIMETABLE.temporary = [];
+
+			//save courses
+			var pushedc = false; var pushedg = false;
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				if(faculty.id == CONFIG.TIMETABLE.temporary[0].id){
+					for(var s in CONFIG.TIMETABLE.faculty[k].groups){
+						var group = CONFIG.TIMETABLE.faculty[k].groups[s];
+						if(group.id == CONFIG.TIMETABLE.temporary[0].groups[0].id){
+							for(var l in courses){
+								CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //Add/Rename Courses
+							}
+							pushedc = true;
+						}
+					}
+					if(pushedc == false) { //Nothing was pushed
+						CONFIG.TIMETABLE.faculty[k].groups.push(CONFIG.TIMETABLE.temporary[0].groups[0]);//Add group
+						pushedg = true;
+					}
+				}
+			}
+			if(pushedc == false && pushedg == false){//Nothing was pushed
+				CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);//Add faculty
+			}
 			saveParameters();
+			console.log(CONFIG.TIMETABLE.faculty);
+			CONFIG.TIMETABLE.temporary = [];
+
 			var popUp = getPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
 			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
 			setTimeout(function(){open(popUp);}, 50);
