@@ -131,9 +131,12 @@
 		 * @param Event e ... Click-Event of Link
 		 */
 		function abortSetup(e) {
+			if(!isEmpty(e)){
+				var popUp = $(e.target).parents("div", {"data-role": "popup"}).eq(0);
+				if(popUp.data("role") == "popup") popUp.popup("close");
+			}
 			CONFIG.TIMETABLE.temporary= [];
 			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_week_select").change();
-			$(e.target).parent().popup("close");
 		};
 
 		var popupOpen = false;
@@ -158,38 +161,39 @@
 		 * @param Optional Event e ... Click-Event of Link
 		 */
 		function showConfigDialog(e) {	
-			if(!isEmpty(e)){
-				var popUp = $(e.target).parents("div", {"data-role": "popup"}).eq(0);
-				console.log(popUp);
-				if(popUp.data("role") == "popup") popUp.popup("close");
-			}
+			if(!isEmpty(e))
+				abortSetup(e); //Not the right name, but the right functionality!
 			loadingIn();
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
 			 .done(function (data, status, jqXHR) {
-					CONFIG.TIMETABLE.semester = data.semester;
-					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
-			 		 .done(function (data, status, jqXHR) {
-			 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
-						var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
-						
-						for(var k in data) {
-							for(var s in data[k].courses) {
-								var course = data[k].courses[s];
-								ul += '<li class="ui-screen-hidden" data-course="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
-							}
+				if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+				CONFIG.TIMETABLE.semester = data.semester;
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
+		 		 .done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
+					var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
+					
+					for(var k in data) {
+						for(var s in data[k].courses) {
+							var course = data[k].courses[s];
+							ul += '<li class="ui-screen-hidden" data-course="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
 						}
+					}
 
-						ul += '</ul>';
-						
-						ul = $(ul).on("click", "a", facultyChosen);
-						
-						popUp.find("a.popup-abort").before(ul);
-						popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
-						setTimeout(function(){open(popUp);}, 50);
-						
-						loadingOut();
-					});
-			});
+					ul += '</ul>';
+					
+					ul = $(ul).on("click", "a", facultyChosen);
+					
+					popUp.find("a.popup-abort").before(ul);
+					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
+					setTimeout(function(){open(popUp);}, 50);
+					
+					loadingOut();
+				})
+				.fail(ajaxErrorHandler);
+			})
+			.fail(ajaxErrorHandler);
 		};
 
 		/**
@@ -209,6 +213,7 @@
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
 		 		.done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
 		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
 		 			
 		 			// watch out
@@ -233,7 +238,8 @@
 					popUp.find("a.popup-abort").before(lis);
 					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
 					setTimeout(function(){open(popUp);}, 50);
-				});
+				})
+				.fail(ajaxErrorHandler);
 		};
 
 		/**
@@ -251,6 +257,7 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.temporary[0].id+"/courses?semgroup="+course)
 		 		.done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
 		 			var popUp = getPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
 		 			
 					var check = '<form><fieldset data-role="controlgroup">';
@@ -267,7 +274,8 @@
 					popUp.find("a.popup-abort").before(check);
 					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
 					setTimeout(function(){open(popUp);}, 50);
-				});
+				})
+				.fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -411,6 +419,7 @@
 		function fillTimetableWeek(tbs, week, faculty, group) {
 			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+faculty+"/week/"+week+"?semgroup="+group.id)
 			 		.done(function (data, status, jqXHR) {
+							if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 			 				if(!isEmpty(data))
 			 				{
 			 					for(var k in data)
@@ -419,8 +428,8 @@
 			 					}
 			 				}
 							loadingOut();
-			 		 });
-				   //.fail(ajaxErrorHandler);
+					})
+					.fail(ajaxErrorHandler);
 		};
 		
 		/**
@@ -470,6 +479,7 @@
 		function fillTimetableSelect() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
 			 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 			 		var opts = "";
 			 		
 			 		for(var k in data)
@@ -490,8 +500,8 @@
 			 			.selectmenu("refresh");
 			 		
 			 		if(CONFIG.TIMETABLE.faculty.length != 0) fillTimetable();
-			   });
-			//.fail(ajaxErrorHandler);
+			})
+			.fail(ajaxErrorHandler);
 		};
 	</script>
 </div>
