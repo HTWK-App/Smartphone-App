@@ -84,6 +84,10 @@
 		$("#extendTimetable")
 			.on("click", showConfigDialog);
 
+		/*********************************************************************************************************************
+		  * This Area is used for Timetable Configuration Dialogs
+		*/
+
 		/**
 		 * Get a Popup with a Heading and a Description
 		 * 
@@ -155,6 +159,13 @@
 			popUp.popup("open").popup({afteropen: function() {popupOpen = true;}});
 		}
 
+		function noContent(text){
+			loadingOut();
+			loadingIn(text,true);
+			setTimeout(loadingOut, 3000);
+			CONFIG.TIMETABLE.temporary= [];
+		}
+
 		/**
 		 * Starts Configuration Dialog for Timetable.
 		 * 
@@ -214,8 +225,9 @@
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
 		 		.done(function (data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
-		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
-		 			
+
+					var empty = true;
+		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");		 			
 					var lis = '<ul data-role="listview">';
 					
 					for(var k in data) {
@@ -225,6 +237,7 @@
 							if(course.id === id) {
 								for(var p in course.semGroups) {
 									lis += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
+									empty = false;
 								}
 							}
 						}
@@ -233,6 +246,8 @@
 					lis += '</ul>';
 					
 					lis = $(lis).on("click", "a", courseChosen); 
+					
+					if(empty == true) {noContent("Es existieren keine Matrikel bzgl. Ihres Studiengangs!"); return;}
 					
 					popUp.find("a.popup-abort").before(lis);
 					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
@@ -257,17 +272,21 @@
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.temporary[0].id+"/courses?semgroup="+course)
 		 		.done(function (data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+
+					var empty = true;
 		 			var popUp = getPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
-		 			
 					var check = '<form><fieldset data-role="controlgroup">';
 					
 					for(var k in data) {
 						var course = data[k];
 							
 						check += '<input type="checkbox" name="'+course+'" id="'+course+'" data-hash="'+k+'"><label for="'+course+'">'+course+'</label>';
+						empty = false;
 					}
 					
 					check += '</fieldset></form>';
+
+					if(empty == true) {noContent("Es existieren keine Fächer bzgl. Ihres Matrikels!"); return;}
 					
 					check = $(check); 
 					popUp.find("a.popup-abort").before(check);
@@ -353,6 +372,10 @@
 			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
 			setTimeout(function(){open(popUp);}, 50);
 		}
+
+		/*********************************************************************************************************************
+		  * END of "This Area is used for Timetable Configuration Dialogs"
+		*/
 
 		/**
 		 * Loading the available Weeks and fill the preselected Timetable.
