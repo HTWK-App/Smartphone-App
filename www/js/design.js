@@ -132,7 +132,7 @@ $(document).on("pageinit",function() {
 				},
 				create : {
 					text : function(obj) {
-						console.log("text");
+						//console.log("text");
 					},
 					traffic : function(obj) {
 						route = obj.data("cards-traffic-route");
@@ -141,13 +141,13 @@ $(document).on("pageinit",function() {
 						nativeDroid.api.helper.googlemaps.directions.getRoute(route);
 					},
 					weather : function(obj) {
-						console.log("weather");
+						//console.log("weather");
 					},
 					publictransport : function(obj) {
-						console.log("publictransport");
+						//console.log("publictransport");
 					},
 					sports : function(obj) {
-						console.log("sports");
+						//console.log("sports");
 					}		
 				}
 			},
@@ -1143,7 +1143,25 @@ $(document).on("pageinit",function() {
 								toLng = parseFloat(to[1]);
 								nativeDroid.api.helper.googlemaps.directions.to = new google.maps.LatLng(toLat,toLng);
 																
-							} else {
+							}
+							else if(nativeDroid.api.helper.googlemaps.directions.type == "geolocation") {
+								navigator.geolocation.getCurrentPosition(function(successData){
+									fromLat = parseFloat(successData.coords.latitude)
+									fromLng = parseFloat(successData.coords.longitude);
+									nativeDroid.api.helper.googlemaps.directions.from = new google.maps.LatLng(fromLat,fromLng);
+									
+									to = data.to.split(',');
+									toLat = parseFloat(to[0])
+									toLng = parseFloat(to[1]);
+									nativeDroid.api.helper.googlemaps.directions.to = new google.maps.LatLng(toLat,toLng);
+									
+									
+								}
+								, function(errorData){
+										console.log("Error while getting geolocation");
+								});
+							}
+							else {
 								nativeDroid.api.helper.googlemaps.directions.from = data.from;
 								nativeDroid.api.helper.googlemaps.directions.to = data.to;
 								nativeDroid.api.helper.googlemaps.directions.container = data.container;

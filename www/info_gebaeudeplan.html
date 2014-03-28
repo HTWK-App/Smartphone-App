@@ -40,8 +40,16 @@
 		<ul id="buidling_content_list" data-role="listview" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true">
 		</ul>
 	</div>
+	<style>
+		.map-canvas{
+			float:left;width:70%; height:100%;
+		}
+		.mapcontainer{
+			float:right;width:30%;height 100%;
+		}
+	</style>
 	<script>
-	
+		
     	$( "#building_page" )
     		.on("pagecreate", initBuildingsView)
     		.on("pageshow", function() {
@@ -122,16 +130,16 @@
 				}
 				
 				var div =	
-								'<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebaeude">'+
+								'<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebaeude" class="building_page" data-destination="'+data.latLng.replace(/ /, '')+'">'+
 								'	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b">'+
 										'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
 										'<h1>&nbsp;HTWK App</h1>'+
 									'</div>'+
 									'<div data-role="content">'+
 										'<div class="inset">'+
-											'<h1>'+data.fullName+'('+data.id+')</h1>'+
-											'<ul data-nativedroid-plugin="cards">'+
-												'<li data-cards-type="text">'+
+											'<h1>'+data.fullName+'</h1>'+
+											'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+												'<li data-cards-type="text" >'+
 													'<h1>Info</h2>'+
 													'<p>'+
 														'<strong>Abkürzung: </strong> '+data.id+' <br/>'+
@@ -143,18 +151,12 @@
 														'</p>'+
 													'</p>'+
 												'</li>'+
-												'<li data-cards-type="text">'+
+												'<li data-cards-type="text" >'+
 													'<p><img src="'+data.pictureLink+'"/></p>'+
 												'</li>'+
-												"<li data-cards-type='traffic' data-cards-traffic-route='{\"from\":\"51.344224,12.379765\",\"to\":\""+data.latLng.replace(/ /, '')+"\",\"type\" : \"coords\"}'>"+
-													'<h1>'+
-														'<strong>'+
-															'XX Minuten'+
-														'</strong>'+
-														'nach '+data.address+
-													'</h1>'+
-													'<br/>'+
-													'<div class="map"></div>'+
+												'<li id="building_'+id+'_map" data-cards-type="traffic">'+
+												//"<li data-cards-type='traffic' data-cards-traffic-route='{\"from\":\"0.00000,0.000000\",\"to\":\""+data.latLng.replace(/ /, '')+"\",\"type\" : \"geolocation\"}'>"+
+													'<div class="map-canvas"></div><div class="mapcontainer"></div>'+
 													'<a class="" href="maps:q='+data.address+'"><i class="icon-screenshot"></i>Navigation </a>'+
 												'</li>'+
 											'</ul>'+
@@ -169,6 +171,7 @@
 											'</p>'+
 										'</div>'+
 									'</div>';
+									
 
 				div = $(div);
 				div.find("div[data-role='content'] a").addClass("external");
@@ -176,6 +179,17 @@
 				$( "body" )
 					.append(div)
 					.trigger("create");
+				
+				$(".building_page").on("pageshow",function(){
+					t = $(this)
+					c = t.attr('data-destination').split(',');
+					toLat = c[0];
+					toLng = c[1];
+					mapcontainer = t;
+					
+					t.on("pageshow", initGmap()); 
+					alert("pageload");
+				});
 				
 				$.mobile.initializePage();
 				$.mobile.changePage("#building_"+id);
