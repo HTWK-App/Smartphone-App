@@ -303,7 +303,6 @@ function loadParameters(){
 	if(help != undefined) CONFIG.MENSA.defaultCanteen = help;
 	help = localStorage.getItem("timetable");
 	if(help != undefined){ CONFIG.TIMETABLE = JSON.parse(help);
-	console.log(JSON.parse(help));}
 };
 
 function saveParameters(){
@@ -314,4 +313,18 @@ function saveParameters(){
 	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
 	localStorage.setItem("timetable", JSON.stringify(CONFIG.TIMETABLE));
+};
+
+function ajaxErrorHandler(data, status, jqXHR, callback){
+	loadingOut();
+	var text = "Leider ist ein Fehler aufgetreten. Versuchen Sie es später erneut!";
+	if(!isEmpty(data) && !isEmpty(data.message)){
+		text = "Leider ist ein Fehler aufgetreten. Eine Fehlermeldung wurde zu Debug Zwecken in die Konsole geschrieben.";
+		console.log("Error-Message: "+data.message+"\n Exception: "+data.exception+"\n URL: "+data.url);
+	}
+	loadingIn(text,true);
+	$( "#menu" ).panel( "open");
+	setTimeout(loadingOut, 4000);
+	if(!isEmpty(callback))
+		callback.call(this);
 };
