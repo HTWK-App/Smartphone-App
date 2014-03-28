@@ -4,65 +4,86 @@
 	</div>
 
 	<script>
-	
-    	$( "#staff_page" )
-    		.on("pagecreate", initStaffView)
-    		.on("pageshow", function() {
-    			if(!GLOBAL.INIT.staff) loadingIn();
-    			$("#btn_refresh")
-					.off()
-					.on("click", initStaffView);
-    			//$("#staffdetails").detach();
-    		 });
 
-		function initStaffView() {
+		/*TODO
+		 *
+		 */
+    		$( "#staff_page" )
+	    		.on("pagecreate", staffInitStaffView)
+	    		.on("pageshow", function() {
+	    			if(!GLOBAL.INIT.staff) loadingIn();
+	    			$("#btn_refresh")
+						.off()
+						.on("click", staffInitStaffView);
+	    		 });
+
+		/**
+		 * Fetches staff from the Server. Will call staffFillStaffList
+		 *
+		 */
+		function staffInitStaffView() {
+
 			loadingIn();
+
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff)
-			 .done(function(data, status, jqXHR) {
-				 fillStaffList(data);
-				 loadingOut();
-				 GLOBAL.INIT.staff = true;
-			  });
-			// TODO fail
-		};
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+					staffFillStaffList(data);
+
+					loadingOut();
+					GLOBAL.INIT.staff = true;
+				})
+				.fail(ajaxErrorHandler);
+		}
 		
-		function fillStaffList(data) {
+		/**
+		 * Fills the staff list widget.
+		 *
+		 * @ param JSON-Object data
+		 *
+		 */
+		function staffFillStaffList(data) {
+
 			var emp, name;
 			var lis = "";
 			
-			if(!isEmpty(data))
-			{
-				for(var k in data)
-				{
-					emp = data[k];
-					name = emp.name.split(", ");
-					
-					lis += 	'<li class="ui-screen-hidden" data-cuid="'+emp.cuid+'">'+
-								'<a href="#" class="staff">'+
-								'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+emp.cuid+'/thumb" style="margin:8px 0 0 8px;">'+
-									name[1]+' '+name[0]+', '+emp.degree+
-									'<p>'+emp.faculty+'</p>'+
-							'</a></li>';
-				}
-				
-				$( "#staff_content_list" )
-					.off()
-    				.empty()
-    				.append(lis)
-    				.on("click", "a.staff", loadStaffDetails)
-    				.listview("refresh")
-    				.trigger("updatelayout");
-				
-				$( "body" )
-					.find("div.staffdetails")
-					.remove();
+			for(var k in data){
+				emp = data[k];
+				name = emp.name.split(", ");
+			
+				lis += '<li class="ui-screen-hidden" data-cuid="'+emp.cuid+'">'+
+						'<a href="#" class="staff">'+
+						'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+emp.cuid+'/thumb" style="margin:8px 0 0 8px;">'+
+							name[1]+' '+name[0]+', '+emp.degree+
+							'<p>'+emp.faculty+'</p>'+
+						'</a></li>';
 			}
-		};
+		
+			$( "#staff_content_list" )
+				.off()
+				.empty()
+				.append(lis)
+				.on("click", "a.staff", staffLoadStaffDetails)
+				.listview("refresh")
+				.trigger("updatelayout");
+		
+			$( "body" )
+				.find("div.staffdetails")
+				.remove();
+		}
 
-		function loadStaffDetails(e) {
+		/**
+		 * Fetches staff detail data from the Server and initalizes a new page in document to change to.
+		 *
+		 * @ param Event e
+		 *
+		 */
+		function staffLoadStaffDetails(e) {
+
 			var id = $(e.target).parents("li").first().data("cuid");
 			
-			if($("#staff_"+id).length>0) {
+			if($("#staff_"+id).length > 0) {
 				$.mobile.initializePage();
 				$.mobile.changePage("#staff_"+id);
 				return;
@@ -71,9 +92,11 @@
 			loadingIn();
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)
-			 .done(function(data, status, jqXHR) {
-				var name = data.name.split(", ");
-				var div = 	'<div id="staff_'+id+'" data-role="page" data-title="Mitarbeiter" data-subpage="true" class="staffdetails" data-theme="a" data-content-theme="a">'+
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+					var name = data.name.split(", ");
+					var div = '<div id="staff_'+id+'" data-role="page" data-title="Mitarbeiter" data-subpage="true" class="staffdetails" data-theme="a" data-content-theme="a">'+
 								'<div data-role="content">'+
 									'<h1>'+name[1]+' '+name[0]+'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+id+'/pic" style="float: right" /></h1>'+
 									'<hr>'+
@@ -88,15 +111,16 @@
 								'</div>'+
 							'</div>';
 				
-				$( "body" )
-					.append(div)
-					.trigger("create");
+					$( "body" )
+						.append(div)
+						.trigger("create");
 				
-				$.mobile.initializePage();
-				$.mobile.changePage("#staff_"+id);
+					$.mobile.initializePage();
+					$.mobile.changePage("#staff_"+id);
 				
-				loadingOut();
-			});
-		};
+					loadingOut();
+				})
+				.fail(ajaxErrorHandler);
+		}
 	</script>
 </div>
