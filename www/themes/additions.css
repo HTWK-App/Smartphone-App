@@ -43,3 +43,8 @@
 	display: none;
 	max-width: 400px;
 }
+
+#mail_popupDialog
+{
+	max-width: 400px;	
+}

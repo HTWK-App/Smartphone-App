@@ -26,7 +26,6 @@
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.qis+'?credentials='+CONFIG.AUTH.credentials+'&salt='+CONFIG.AUTH.salt)
 				 .done(function(data, status, jqXHR) {
 					 fillQIS(data);
-					 loadingOut();
 					 GLOBAL.INIT.qis = true;
 				  });
 			}
@@ -71,6 +70,8 @@
 					.append(divs)
 					.collapsibleset("refresh");
 			}
+			
+			loadingOut();
 		};
 	</script>
 </div>
