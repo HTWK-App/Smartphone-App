@@ -1,68 +1,87 @@
 <div id="building_page" data-role="page" data-dom-cache="true" data-title="Gebäude" data-theme="a" data-content-theme="a">
 	<div data-role="content" class="toblur">
-		<ul data-role="listview" id="buidling_content_list" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true"></ul>
+		<ul id="buidling_content_list" data-role="listview" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true"></ul>
 	</div>
 
 	<script>
 	
-    	$( "#building_page" )
-    		.on("pagecreate", initBuildingsView)
-    		.on("pageshow", function() {
-    			if(!GLOBAL.INIT.builds) loadingIn();
-    			$("#btn_refresh")
-					.off()
-					.on("click", initBuildingsView);
-    		 });
+		/*TODO
+		 * Functions infoLoadExamDetails is the same function, used in Staff. --> Refactoring, so that it is not copy and pasted
+		 */
+	    	$( "#building_page" )
+	    		.on("pagecreate", buildingInitBuildingsView)
+	    		.on("pageshow", function() {
+	    			if(!GLOBAL.INIT.builds) loadingIn();
+	    			$("#btn_refresh")
+						.off()
+						.on("click", buildingInitBuildingsView);
+	    		 });
+		/**
+		 * Fetches buildings from the Server. Will call buildingFillBuildingsList
+		 *
+		 */
+		function buildingInitBuildingsView() {
 
-		function initBuildingsView() {
 			loadingIn();
+
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
-			 .done(function(data, status, jqXHR) {
-				fillBuildingsList(data);
-				loadingOut();
-				GLOBAL.INIT.builds = true;
-			});
-			// TODO fail
-		};
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+					buildingFillBuildingsList(data);
+
+					loadingOut();
+					GLOBAL.INIT.builds = true;
+				})
+				.fail(ajaxErrorHandler);
+		}
 		
-		function fillBuildingsList(data) {
+		/**
+		 * Fills the building list widget.
+		 *
+		 * @ param JSON-Object data
+		 *
+		 */
+		function buildingFillBuildingsList(data) {
+
 			var building, lis = "", desc = "";
 			
-			if(!isEmpty(data))
-			{				
-				for(var k in data)
-				{
-					building = data[k];
-					
-					// TODO better?
-					for(var d in building.description)
-					{
-						if(!isEmpty(building.description[d]))
-							desc += building.description[d];
-					}
-					
-					lis += 	'<li data-bid='+building.id+'><a href="#" class="building">'+
-								'<h3>'+building.fullName+'</h3>'+
-								'<p>'+desc+'</p>'+
-								'<p>'+building.address+'</p>'+
-							'</a></li>';
+			for(var k in data){
+				building = data[k];
+				
+				for(var d in building.description){
+					if(!isEmpty(building.description[d]))
+						desc += building.description[d];
 				}
 				
-				$( "#buidling_content_list" )
-					.off()
-					.empty()
-					.append(lis)
-					.on("click", "a.building", loadBuildingDetails)
-					.listview("refresh")
-					.trigger("updatelayout");
-				
-				$( "body" )
-					.find("div.buildingdetails")
-					.remove();
+				lis += 	'<li data-bid='+building.id+'><a href="#" class="building">'+
+							'<h3>'+building.fullName+'</h3>'+
+							'<p>'+desc+'</p>'+
+							'<p>'+building.address+'</p>'+
+						'</a></li>';
 			}
-		};
+				
+			$( "#buidling_content_list" )
+				.off()
+				.empty()
+				.append(lis)
+				.on("click", "a.building", buildingLoadBuildingDetails)
+				.listview("refresh")
+				.trigger("updatelayout");
+			
+			$( "body" )
+				.find("div.buildingdetails")
+				.remove();
+		}
 		
-		function loadBuildingDetails(e) {
+		/**
+		 * Fetches building detail data from the Server and initalizes a new page in document to change to.
+		 *
+		 * @ param Event e
+		 *
+		 */
+		function buildingLoadBuildingDetails(e) {
+
 			var id = $(e.target).parents("li").first().data("bid");
 
 			if($("#building_"+id).length>0) {
@@ -74,17 +93,17 @@
 			loadingIn();
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)
-			 .done(function(data, status, jqXHR) {
-				var desc = "";
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+					var desc = "";
 				
-				// TODO better?
-				for(var d in data.description)
-				{
-					if(!isEmpty(data.description[d]))
-						desc += data.description[d] + "</br>";
-				}
+					for(var d in data.description){
+						if(!isEmpty(data.description[d]))
+							desc += data.description[d] + "</br>";
+					}
 				
-				var div =	'<div id="building_'+id+'" data-role="page" data-title="Gebäude" data-subpage="true" class="buildingdetails" data-theme="a" data-content-theme="a">'+
+					var div ='<div id="building_'+id+'" data-role="page" data-title="Gebäude" data-subpage="true" class="buildingdetails" data-theme="a" data-content-theme="a">'+
 								'<div data-role="content">'+
 									'<h1>'+data.fullName+'<img src="'+data.pictureLink+'" style="float:right;"/></h1>'+
 									'<p><b>Abkürzung:</b> '+data.id+'</p>'+
@@ -96,19 +115,19 @@
 								'</div>'+
 							'</div>';
 
-				div = $(div);
-				div.find("a").addClass("external");
+					div = $(div);
+					div.find("a").addClass("external");
 				
-				$( "body" )
-					.append(div)
-					.trigger("create");
+					$( "body" )
+						.append(div)
+						.trigger("create");
 				
-				$.mobile.initializePage();
-				$.mobile.changePage("#building_"+id);
+					$.mobile.initializePage();
+					$.mobile.changePage("#building_"+id);
 				
-				loadingOut();
-			  });
-			// TODO fail
-		};
+					loadingOut();
+				})
+				.fail(ajaxErrorHandler);
+		}
 	</script>
 </div>
