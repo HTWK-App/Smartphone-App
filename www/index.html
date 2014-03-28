@@ -129,13 +129,20 @@
 				$.mobile.defaultDialogTransition = "none";
 				$.mobile.buttonMarkup.hoverDelay = 0;
 				$.mobile.changePage.defaults.allowSamePageTransition = true;
+				
+				// swipe Event
+				$.event.special.swipe.scrollSupressionThreshold=10;
+				$.event.special.swipe.durationThreshold=2500;
+				$.event.special.swipe.horizontalDistanceThreshold=20;
+				$.event.special.swipe.verticalDistanceThreshold=50;
+				
+				loadParameters();
+				
 				// Add EventListener for Fastclick Framework//
 				window.addEventListener("load", function() {
 					FastClick.attach(document.body);
 				}, false);
 				$("header, footer").toolbar();
-				
-				loadParameters();
 				
 				if(!CONFIG.GENERAL.student)
 				{
