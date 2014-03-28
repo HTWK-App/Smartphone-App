@@ -34,61 +34,62 @@
 		<a href="#menue_einstellungen_htwk-app" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
 		<h1>&nbsp;HTWK App</h1>
 	</div>
-	<div data-role="content">   
+	<div data-role="content">
 		<div class='inset'>
 			<h1>Einstellungen</h1>
 			
 			<br /><br/>
 			<h2>Login-Daten</h2>
-			<hr/>
-			<label for="username">
-				<strong>
-					Nutzername:
-				</strong>
-			</label>
-			<input type="text" name="username" id="username" value="" placeholder="Nutzername">
-			<label for="password">
-				<strong>
-					Passwort:
-				</strong>
-			</label>
-			<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******">
+
 			
-			<br /><br/>
+			<ul data-inset="true" data-role="listview">
+				<li data-role="fieldcontain">
+					<label for="username"><strong>Nutzername:</strong></label>
+					<input type="text" name="username" id="username" value="" placeholder="Nutzername"/>
+				</li>
+				<li data-role="fieldcontain">
+					<label for="password"><strong>Passwort:</strong></label>
+					<input type="password" name="password" id="password" value="" autocomplete="off" placeholder="******"/>
+				</li>
+			</ul>
+			<br/>
 			<h2>Sprache</h2>
-			<hr/>
-			<label for="default_language_select">
-					<strong>
-						Standardsprache:
-					</strong>
-				</label>
-			<select id="default_language_select" name="default_language_select" data-mini="true">
-			</select>
-			
-			<br /><br/>
+			<ul data-inset="true" data-role="listview">
+				<li data-role="fieldcontain">
+					<label for="default_language_select"><strong>Standardsprache:</strong></label>
+					<select id="default_language_select" data-native-menu="true" name="default_language_select">
+					</select>
+				</li>
+			</ul>
+			<br />
+			<br/>
 			<h2>News</h2>
-			<hr/>
-			<label for="default_news_select">
-				<strong>
-					Standard Newsfeed:
-				</strong>
-			</label>
-			<select id="default_news_select" name="default_news_select" data-mini="true">
-				<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-			</select>
-			
+			<ul data-inset="true" data-role="listview">
+				<li data-role="fieldcontain">
+					<label for="default_news_select">
+						<strong>
+							Standard Newsfeed:
+						</strong>
+					</label>
+					<select id="default_news_select" name="default_news_select">
+						<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+					</select>
+				</li>
+			</ul>
 			<br /><br/>
 			<h2>Mensa</h2>
-			<hr/>
-			
-			<label for="default_canteen_select">
-				<strong>
-					Standard Mensa:
-				</strong>
-			</label>
-			<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
-				<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
-			</select>
+			<ul data-inset="true" data-role="listview">
+				<li data-role="fieldcontain">
+					<label for="default_canteen_select">
+						<strong>
+							Standard Mensa:
+						</strong>
+					</label>
+					<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
+						<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+					</select>
+				</li>
+			</ul>
 			<div data-role="popup" id="popupFail">
 					<p>
 						Tragen Sie bitte ihren Username und ihr Passwort ein!

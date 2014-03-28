@@ -2,11 +2,22 @@ a[data-role="button"] {
 	background-color: #42537F;
 	
 }
+/*html.ui-mobile body.ui-mobile-viewport .ui-page div.ui-panel-wrapper div.ui-content div.inset form div.ui-input-text{
+    border: 2px solid #33B5E5;
+    border-radius: 7px;
+}
+html.ui-mobile body.ui-mobile-viewport .ui-page div.ui-panel-wrapper div.ui-content div.inset form div.ui-input-text input{
+	color:#fff;
+}*/
 
 div[data-role="header"] a[data-role="button"] {
 	padding-right:10px;
 	padding-bottom:8px;
 	
+}
+
+div[data-role="footer"] .ui-btn-icon-right:after,div[data-role="footer"] .ui-btn-icon-top:after,div[data-role="footer"] .ui-btn-icon-left:after{
+	background-image:none;
 }
 
 .ui-bar-b,.ui-body-b .ui-dialog-contain .ui-title {

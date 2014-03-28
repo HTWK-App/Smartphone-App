@@ -57,12 +57,14 @@
 			<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Senden</a>
 		</div>
 		<div id="reply" >
-			<form>
-				<input type="email" data-clear-btn="false" name="email_to" id="email_to" value="" placeholder="Empfänger">
-				<input type="text" name="email_cc" id="email_cc" value="" placeholder="Kopie an">
-				<input type="text" name="email_subject" id="email_subject" value="" placeholder="Betreff">
-				<textarea name="email_content" id="email_content" placeholder="Ihr Text ..."></textarea>
-			</form>
+			<div class="inset">
+				<form>
+					<input type="email" data-clear-btn="false" name="email_to" id="email_to" value="" placeholder="Empfänger">
+					<input type="text" name="email_cc" id="email_cc" value="" placeholder="Kopie an">
+					<input type="text" name="email_subject" id="email_subject" value="" placeholder="Betreff">
+					<textarea name="email_content" id="email_content" placeholder="Ihr Text ..."></textarea>
+				</form>
+			</div>
 		</div>
 		<div id="inbox" >
 			<ul id="mail_list" data-role="listview" data-inset="true">

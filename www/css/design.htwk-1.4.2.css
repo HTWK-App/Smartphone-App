@@ -4,7 +4,67 @@
 .ui-page-theme-b .ui-header .ui-btn:hover{
 	color: #fff;
 }
+.ui-input-text{
+	border-width:1px !important; 
+	border-style: initial;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+.ui-input-text input{
+	color:white;
+}
+.ui-input-text input:focus{
+	outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
+textarea.ui-input-text {
+	background-color:transparent;
+	color:white;
+	min-height:300px;
+}
+textarea.ui-input-text:focus{
+	outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
 
+.ui-input-text:before {
+	background-color: rgba(255, 255, 255, 0.5);
+	bottom: 12.8px;
+	content: "";
+	height: 10px;
+	position: absolute;
+	/* right: -1px; */
+	width: 1px;
+}
+.ui-input-text:after {
+	background-color: rgba(255, 255, 255, 0.5);
+	bottom: 12.9px;
+	content: "";
+	height: 10px;
+	right: 17px;
+	position: absolute;
+	width: 1px;
+}
+
+
+
+.ui-btn-icon-right:after {
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+.ui-btn-icon-left:after {
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+.ui-select .ui-btn {
+
+   background-color: rgba(66, 83, 127, 0.8);
+   background-position: center center;
+   background-repeat: no-repeat;
+   border-radius: 1em;
+
+}
 .ui-bar-b.ui-header {
 	background-color: #2347A0;
 }

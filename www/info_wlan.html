@@ -1,5 +1,5 @@
 ﻿<div data-role="page" data-theme='b'>
-	<div data-role="panel" id="menue" data-theme="a" data-display="push">
+	<div data-role="panel" id="menue_info_wlan" data-theme="a" data-display="push">
 		<ul data-role="listview">
 			<li data-role="list-divider">Hauptmenü</li>
 			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
@@ -31,20 +31,27 @@
 		</ul>
 	</div>
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
-		<a href="#menue" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<a href="#menue_info_wlan" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
 		<h1>&nbsp;HTWK App</h1>
 	</div>
-	<div data-position="fixed" data-role="footer" data-theme='b'> <!--data-tap-toggle="true" setzen falls gewünscht--> 
-			<select name="select-choice-1" id="mensa_mensaSelect" data-native-menu="true">
-				<option selected="selected" value="">Mensa ...</option>
-				<option value="css">Mensa am Park</option>
-				<option value="html">Mensa Academica</option>
-				<option value="csharp">Peterssteinweg</option>
-			</select>
-		</div>
-	<div data-role="content" >
+	<script>
+		if(typeof device !== 'undefined'){
+			if(device.platform =="iPhone"){
+				navigator.app.loadUrl( "http://www.htwk-leipzig.de/fileadmin/hrz/downloads/Netz/wlan/HTWK_MAC-Eduroam.mobileconfig", {openExternal:true} )
+			}
+		}
+	</script>
+	<div data-role="content">
 		<div class="inset">
-		
+				<h1>WLAN Konfiguration</h1>
+				<br/></br>
+				<p><strong>Netzwerkname(SSID):</strong> eduroam</p>
+				<p><strong>Sicherheit:</strong> WPA2-Enterprise</p>
+				<p><strong>Authentifizierung:</strong> EAP-TTLS</p>
+				<p><strong>Verschlüsselung:</strong> AES</p>
+				<p><strong>äußere Identität:</strong> anonymous@htwk-leipzig.de</p>
+				<p><strong>innere Identität:</strong> HRZ-Dienst-Login@htwk-leipzig.de</p>
+				<p><strong>Passwort:</strong> HRZ-Dienste-Passwort</p>
 		</div>
 	</div>
 </div>
