@@ -183,70 +183,102 @@
 					</ul>
 				</div>
 			</div>
+		<!-- ## SIGNIN DIALOG ## -->
+		<div id="signInDialog" data-role="popup" data-dismissible="false" data-theme="b">
+	    		<div data-role="header" data-theme="b">
+	   	 		<h1>Authentifizierung</h1>
+	   	 	</div>
+	   	 	<div role="content" data-theme='b'>
+	   	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
+	   	 		
+	   	 		<label for="username"><strong>Nutzername:</strong></label>
+	   	 		<input type="text" name="username" id="signInDialogUsername" value="" placeholder="Nutzername">
+	   	 		
+	   	 		<label for="password"><strong>Passwort:</strong></label>
+	   	 		<input type="password" name="password" id="signInDialogPassword" value="" autocomplete="off" placeholder="******">
+	   	 		
+	   	 		<a id="signInDialog_Btn_Abort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
+	   	 		<a id="signInDialog_Btn_Save" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Speichern</a>
+	   	 	</div>
 		</div>
+		<!-- ## SIGNIN DIALOG ## -->
+		</div>
+
+		
 		
 		<!---------------------------------------------------------------------------------------------------->
 		<script>
-		// AJAX Setup
-		$.ajaxSetup(CONFIG.AJAX);
-		
-		// GENERAL Setup
-		$( document )
-			.ready(function() {
-				$.mobile.defaultPageTransition   = "none";
-				$.mobile.defaultDialogTransition = "none";
-				$.mobile.buttonMarkup.hoverDelay = 0;
-				$.mobile.changePage.defaults.allowSamePageTransition = true;
-				// Add EventListener for Fastclick Framework//
-				window.addEventListener("load", function() {
-					FastClick.attach(document.body);
-				}, false);
-				//$("header, footer").toolbar();
-				
-				loadParameters();
-				
-				
-				///// FIXME ISSUE FOR EVERY MENUE
-				if(!CONFIG.GENERAL.student)
-				{
-					$("#menuItem_QIS").hide();
-				}
-				GLOBAL.DATE.currentWeek = getWeek(new Date());
-			})
-			
-			/*.on("panelbeforeopen", function( event, ui ) {
-				$(".toblur").addClass("blur");
-			})
-			.on("panelbeforeclose", function( event, ui ) {
-				$(".toblur").removeClass("blur");
-			})
-			*/
-			
-			// Header Update on Page Switch
-			.on("pageshow", "div:jqmData(role='page')", function() {
-				var o = $(this);
-    			var title = o.jqmData("title");
-    			var subpage = !isEmpty(o.jqmData("subpage"));
-    			//var h = $("#header");
-    			var h = $(".ui-page-active div[data-role='header']");
-    			
-    			h.find("h1").text(title);
-    			if(subpage) {
-    				h.find("#btn_back").css("display", "block").end()
-    				 .find("#btn_menu").css("display", "none");
-    			} else {
-    				h.find("#btn_menu").css("display", "block").end()
-    				 .find("#btn_back").css("display", "none");
-    			}
-			})
-			// External Link Handling
-			.on("click", "a.external", openInExternalBrowser);
 
-		// SignIn Dialog
-		$( "#signInDialog_Btn_Abort" )
-			.on("click", function () {
-				$( "#signInDialog" ).popup("close");
-			});
+			// AJAX Setup
+			$.ajaxSetup(CONFIG.AJAX);
+		
+			// GENERAL Setup
+			$( document )
+				.ready(function() {
+					$.mobile.defaultPageTransition   = "none";
+					$.mobile.defaultDialogTransition = "none";
+					$.mobile.buttonMarkup.hoverDelay = 0;
+					$.mobile.changePage.defaults.allowSamePageTransition = true;
+
+					// swipe Event
+					$.event.special.swipe.scrollSupressionThreshold=10;
+					$.event.special.swipe.durationThreshold=2500;
+					$.event.special.swipe.horizontalDistanceThreshold=20;
+					$.event.special.swipe.verticalDistanceThreshold=50;
+
+					// Add EventListener for Fastclick Framework//
+					window.addEventListener("load", function() {
+						FastClick.attach(document.body);
+					}, false);
+					//$("header, footer").toolbar();
+				
+					loadParameters();
+				
+					///// FIXME ISSUE FOR EVERY MENUE
+					if(!CONFIG.GENERAL.student) {
+						$("#menuItem_QIS").hide();
+					}
+
+					GLOBAL.DATE.currentWeek = getWeek(new Date());
+				})
+			
+				/*.on("panelbeforeopen", function( event, ui ) {
+					$(".toblur").addClass("blur");
+				})
+				.on("panelbeforeclose", function( event, ui ) {
+					$(".toblur").removeClass("blur");
+				})
+				*/
+			
+				// Header Update on Page Switch
+				.on("pageshow", "div:jqmData(role='page')", function() {
+					var o = $(this);
+		    			var title = o.jqmData("title");
+		    			var subpage = !isEmpty(o.jqmData("subpage"));
+		    			//var h = $("#header");
+		    			var h = $(".ui-page-active div[data-role='header']");
+		    			
+		    			h.find("h1").text(title);
+		    			if(subpage) {
+		    				h.find("#btn_back").css("display", "block").end()
+		    				 .find("#btn_menu").css("display", "none");
+		    			} else {
+		    				h.find("#btn_menu").css("display", "block").end()
+		    				 .find("#btn_back").css("display", "none");
+		    			}
+				})
+				// External Link Handling
+				.on("click", "a.external", openInExternalBrowser)
+				.on("swiperight", function(event){
+					if(event.swipestart.coords[0] <= 50)
+						$( "#menu" ).panel( "open");
+				});
+
+			// SignIn Dialog
+			$( "#signInDialog_Btn_Abort" )
+				.on("click", function () {
+					$( "#signInDialog" ).popup("close");
+				});
 	</script>
 	</body>
 </html>
