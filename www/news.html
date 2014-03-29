@@ -53,9 +53,6 @@
 		 * 
 		 */
 		$( "#page_news" )
-			.on("pagebeforecreate", function() {
-				GLOBAL.DATE.currentWeek = getWeek(new Date());
-			 })
 			.on("pagecreate", newsInitNewsView)
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.news) loadingIn();
