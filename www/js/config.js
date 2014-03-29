@@ -20,6 +20,7 @@ var CONFIG = {
 		staff: "info/staff/",
 		builds: "info/building",
 		sport: "info/sport",
+		academical: "info/academical/",
 		news: "news",
 		mensa: "mensa",
 		timetable: "timetable/",
@@ -51,7 +52,7 @@ var CONFIG = {
 		semester: null,
 		showDocentFullName: false,
 		faculty : [
-		           {
+		           /*{
 		        	   id : "fb",
 		        	   groups : [
 		        	             {
@@ -85,8 +86,9 @@ var CONFIG = {
 		        	            	 }
 		        	             }
 		        	            ]
-		           }
-		          ]
+		           }*/
+		          ],
+		temporary: []
 	},
 	NEWS: {
 		defaultFeed: "rss.htwk.4"
@@ -136,5 +138,8 @@ var GLOBAL = {
 			6: { id: "Sat" , name: "Samstag"}
 		},
 		currentWeek: null
+	},
+	MAIL: {
+		filter: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g
 	}
 };
