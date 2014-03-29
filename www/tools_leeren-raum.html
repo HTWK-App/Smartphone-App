@@ -1,0 +1,205 @@
+<div id="room_page" data-role="page" data-dom-cache="true" data-theme='b'>
+	<div data-role="panel" id="menue_tools_room" data-theme="a" data-display="push">
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Hauptmenü</li>
+			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
+			<li data-icon="fire"><a href="news.html" >News</a></li>
+			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
+			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
+			
+		</ul>
+		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Info-Center</li>
+			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
+		</ul>
+		<!--</div> -->
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Tools</li>
+			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
+			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+		</ul>
+		<ul data-role="listview">
+			<li data-role="list-divider" role="heading">Einstellungen</li>
+			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+		</ul>
+	</div>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
+		<a href="#menue_tools_room" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
+		<h1>&nbsp;HTWK App</h1>
+	</div>
+	<div data-role="content">
+		<br/>
+		<p>
+			<div data-role="fieldcontain">
+				<label for="room_building_select">Gebäude:</label>
+				<select id="room_building_select" name="room_building_select" data-mini="true">
+					<option selected="selected">Liste der nächsten Gebäude wird geladen...</option>
+				</select>
+			</div>
+			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br></h3>
+			<ul id="room_room_list" data-role="listview"></ul>
+			<br>
+		</p>
+	</div>
+
+	<script>
+		/*TODO
+		 * Not finished yet! see todos
+		 * Needs testing
+		 */
+		$( "#room_page" )
+			.on("pagecreate", roomStartRoomFind)
+			.on("pageshow", function () {
+				$("#btn_refresh")
+					.off()
+					.on("click", roomStartRoomFind);
+
+				setTimeout(roomTemporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
+
+				GLOBAL.INIT.room = true;
+			 });
+
+		var roomRoomCount = 0;
+
+		/**
+		 * Starts looking for empty rooms. Gets geolocation and runs on success locationFound, on fail locationError
+		 *
+		 */
+		function roomStartRoomFind() {
+
+			setTimeout(roomTemporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
+			return;
+
+			loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
+			roomRoomCount = roomRoomCount + 1;
+
+			if(roomRoomCount <= 30)
+				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+			else
+				locationError();
+		}
+
+		/**
+		 * Called when a geolocation was found. Recalls startRoomFind if accuracy was to poor.
+		 *
+		 * @param HTML5_position_object position ... Contains position data. See http://www.w3schools.com/html/html5_geolocation.asp
+		 *
+		 */
+		function roomLocationFound(position){
+
+			if(position.coords.accuracy > 13) { // in m
+				roomStartRoomFind();
+			}else{
+				loadingOut(); loadingIn(); roomRoomCount = 0;
+
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
+					 .done(function(data, status, jqXHR) {
+						if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+						console.log(data); // used for developement and testing purposes TODO Delete someday
+
+						roomFillBuildingsList(data);
+
+						$("#room_content")
+							.append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
+					 })
+					 .fail(ajaxErrorHandler);
+			}
+		}
+
+		/**
+		 * Called when it failed to locate the device.
+		 *
+		 */
+		function roomLocationError(){
+
+			loadingOut();
+			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut", true);
+			setTimeout(loadingOut, 4000);
+			roomRoomCount = 0;
+			$( "#menue_tools_room" ).panel( "open");
+		}
+
+		/**
+		 * Temporary function to display that this feature is currenty disabled. TODO Delete someday
+		 *
+		 */
+		function roomTemporary(){
+			loadingIn("Aktuell besteht kein Zugriff auf den Server, da er nicht im Hochschulnetzwerk eingeloggt ist. Diese Funktion ist derzeit nicht verfügbar!",true);
+			setTimeout(loadingOut, 4000);
+			$( "#menue_tools_room" ).panel( "open");
+		}
+
+		/**
+		 * Fills the List of Buildings, that are nearby. Fetches data for empty rooms of the selected building.
+		 *
+		 * @ param JSON-Object data
+		 *
+		 */
+		function roomFillBuildingsList(data) {
+
+			var tmp, name, id, opts;
+
+			opts = "";
+			
+			for(var k in data){
+				id = data[k].id;
+				tmp = "";
+				name = data[k].fullName;
+
+				if(k == 0)
+					tmp = 'selected="selected"';
+
+				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+			}	
+			
+			$( "#room_building_select" )
+				.empty()
+				.append(opts)
+				.selectmenu("refresh");
+
+			//TODO not the right url yet
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'ss/13/1')
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+					roomFillRoomList(data, $( "#room_building_select" ).first.val()); //TODO bad request!
+				 })
+				 .fail(ajaxErrorHandler);
+		}
+
+		/**
+		 * Fills the List of empty rooms for the selected building. TODO not yet right implemented
+		 *
+		 * @ param JSON-Object data
+		 * @ param ... id ... ....
+		 *
+		 */
+		function roomFillRoomList(data, id){
+
+			var room = "";
+			var lis = "";
+
+			for(var k in data[id]){
+				room = data[id][k];
+
+				lis += 	'<li><h4>'+room.name+'</h4><p>Typ: '+room.type+', Größe: '+room.size+' Plätze</p></li>';
+			}
+			
+			$( "#room_room_list" )
+				.empty()
+				.append(lis)
+				.listview("refresh")
+				.trigger("updatelayout");
+
+			loadingOut();
+		}
+	</script>
+</div>
