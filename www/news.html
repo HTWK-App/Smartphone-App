@@ -1,6 +1,4 @@
-﻿
-
-<div id="page_news" data-role="page" data-theme='b'>
+<div id="page_news" data-role="page" data-dom-cache="true" data-theme='b'>
 	<div data-role="panel" id="menue_news" data-theme="a" data-display="push">
 		<ul data-role="listview">
 			<li data-role="list-divider" role="heading">Hauptmenü</li>
@@ -42,20 +40,23 @@
 		</select>
 	</div>
 	<div data-role="content">   
-		<ul id="news_content_list" data-role="listview" data-inset="true">
-			<li>
-
-			</li>
-		</ul>
+		<ul id="news_content_list" data-role="listview" data-inset="true"></ul>
 		<a data-role="button" id="news-more" data-icon="arrow-d">Mehr</a>
 	</div>
+	<div id="news_popup" data-role="popup">
+		<p>Diese Nachricht besitzt keinen zusätzlichen Inhalt!</p>
+	</div>
+
 	<script>
-		// NEWS Page
+
+		/*TODO
+		 * 
+		 */
 		$( "#page_news" )
 			.on("pagebeforecreate", function() {
 				GLOBAL.DATE.currentWeek = getWeek(new Date());
 			 })
-			.on("pagecreate", initNewsView)
+			.on("pagecreate", newsInitNewsView)
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.news) loadingIn();
 				$("#btn_refresh")
@@ -76,21 +77,23 @@
 			});
 		
 		/**
-		 * Loading the available News-Feeds (Prefill Feed-Selectbox).
+		 * Fetches data from the Server to fill the news view. Calls changeNewsFeed
+		 *
 		 */
-		function initNewsView() {
+		function newsInitNewsView() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-			 .done(function(data, status, jqXHR) {
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
 					var tmp, name, id, opts = "";
 					
-					for(var k in data)
-					{
+					for(var k in data) {
 						id = data[k].id;
 						tmp = id.split(".");
 						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
 						
 						opts += '<option value="'+id+'">'+name+'</option>';
-					}	
+					}
 					
 					$( "#news_select" )
 						.empty()
@@ -102,17 +105,18 @@
 					
 					loadingOut();
 					GLOBAL.INIT.news = true;
-			 });
-			//.fail(ajaxErrorHandler);
-		};
+				})
+				.fail(ajaxErrorHandler);
+		}
 		
 		/**
 		 * Loading all News of the given Feed.
 		 * 
 		 * @param String feed ... News Feed ID
-		 * @param Boolean more ... indicates whether additional News should be loaded
+		 * @param Boolean more ... indicates whether additional News shall be loaded
 		 */
 		function changeNewsFeed(feed, more) {
+
 			var offset = 0;
 			var remove = true;
 			
@@ -124,11 +128,13 @@
 			}
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
-			 .done(function(data, status, jqXHR) {
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
 				 	createNewsEntries(data.responseData.feed.entries, remove);
-			  });
-			//.fail(ajaxErrorHandler);
-		};
+				})
+				.fail(ajaxErrorHandler);
+		}
 		
 		/**
 		 * Creating all News-Entries inclusive Details.
@@ -137,39 +143,44 @@
 		 * @param Boolean remove ... indicates whether old News should be removed or not, due to "More"-Button
 		 */
 		function createNewsEntries(data, remove) {
+
 			var list = $("#news_content_list");
 			var news, link,  date;
 			var c = list.find("li").length;
 			var lis = "";
 			var divs = "";
 			
-			for(var k in data)
-			{
+			for(var k in data) {
 				news = data[k];
 				date = createDateTimeStamp(new Date(news.publishedDate));
 				
-				if(isEmpty(news.content)) link = 'popup" data-rel="popup"';
-				else link = ++c + '"';
+				if(isEmpty(news.content)) 
+					link = 'popup" data-rel="popup"';
+				else 
+					link = ++c + '"';
 	
 				lis += 	'<li><a href="#news_'+link+' data-transition="slide">'+
-							'<h3>'+news.title+'</h3>'+
-							'<p>'+news.contentSnippet+'</p>'+
-							'<p><small>'+date+'</small></p>'+
-						'</a></li>';
-	
+						'<h3>'+news.title+'</h3>'+
+						'<p>'+news.contentSnippet+'</p>'+
+						'<p><small>'+date+'</small></p>'+
+					'</a></li>';
+
 				divs += '<div id="news_'+link+' data-role="page" data-theme ="b" data-title="News" data-subpage="true" class="newsdetails" >'+
-							'<div data-role="header" data-position="fixed" data-theme="b">'+
-								'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
-								'<h1>&nbsp;HTWK App</h1>'+
-							'</div>'+
-						
+						'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b">'+
+						'	<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
+						'	<h1>&nbsp;HTWK App</h1>'+
+						'</div>'+
 						'<div data-role="content"> <div class="inset">'+
-								'<h1>'+news.title+'</h1><br/>'+
-								'<p>'+news.content+'</p>'+
-								'<h6>'+date+'</h6>'+
-								'<p>Quelle: <a href="'+news.link+'">Link zur Nachricht</a></p>'+
-							'</div>'+
-						'</div></div>';
+						'	<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+						'		<li data-cards-type="text" >'+
+						'			<h1>'+news.title+'</h1><hr/>'+
+						'			<p>'+news.content+'<br/><br/></p>'+
+						'			<h6>'+date+'</h6>'+
+						'			<p><b>Quelle:</b> <a href="'+news.link+'">Link zur Nachricht</a></p>'+
+						'		</li>'+
+						'	</ul>'+
+						'</div>'+
+					'</div></div>';
 			}
 			
 			divs = $(divs);
@@ -186,11 +197,10 @@
 				.trigger("updatelayout");
 			
 			$("body").append(divs)
-					 .trigger("create");
-			
-			//$.mobile.initializePage();
+				 .trigger("create");
 			
 			loadingOut();
-		};
+		}
+
 	</script>
 </div>

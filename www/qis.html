@@ -70,7 +70,7 @@
 				 .done(function(data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 
-					fillQIS(data);
+					qisFillQIS(data);
 
 					loadingOut();
 					GLOBAL.INIT.qis = true;
@@ -82,8 +82,10 @@
 		/**
 		 * Fill qis collapsible widget
 		 *
+		 * @param JSON data
+		 *
 		 */
-		function fillQIS(data) {
+		function qisFillQIS(data) {
 
 			var sem, module;
 			var divs = "";
