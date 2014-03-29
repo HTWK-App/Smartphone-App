@@ -1,4 +1,4 @@
-<div id="sport_page" data-dom-cache="true" data-role="page" data-theme='b'>
+<div id="sport_page" data-dom-cache="true" data-role="page" data-dom-cache="true" data-theme='b'>
 	<div data-role="panel" id="menue_sport" data-theme="a" data-display="push">
 		<ul data-role="listview">
 			<li data-role="list-divider">Hauptmenü</li>
@@ -39,29 +39,36 @@
 		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportart..." data-filter="true" data-filter-reveal="true" data-inset="true">
 		</ul>	
 	</div>
-	<script>	
-    	$( "#sport_page" )
-    		.on("pagecreate", initSportsView)
-    		.on("pageshow", function() {
-    			if(!GLOBAL.INIT.sport) loadingIn();
-    			$("#btn_refresh")
-					.off()
-					.on("click", initSportsView);
-    		 });
 
-    	/**
-    	 * Loading the List of all Sport Courses.
-    	 */
-		function initSportsView() {
+	<script>
+
+		/*TODO
+		 * See sportLoadSportDetails
+		 */
+	    	$( "#sport_page" )
+	    		.on("pagecreate", sportInitSportsView)
+	    		.on("pageshow", function() {
+	    			if(!GLOBAL.INIT.sport) loadingIn();
+	    			$("#btn_refresh")
+					.off()
+					.on("click", sportInitSportsView);
+	    		 });
+
+    		/**
+    		 * Fetches the list of all sport courses from Server and fills the list widget.
+    		 */
+		function sportInitSportsView() {
+
 			loadingIn();
+
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport)
-			 .done(function(data, status, jqXHR) {
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
 				 	var sport, lis = "";
 					
-					if(!isEmpty(data))
-					{				
-						for(var k in data)
-						{
+					if(!isEmpty(data)){				
+						for(var k in data){
 							sport = data[k];
 							
 							lis += 	'<li data-sport='+sport.id+'><a href="#" class="sport">'+
@@ -75,7 +82,7 @@
 							.off()
 							.empty()
 							.append(lis)
-							.on("click", "a.sport", loadSportDetails)
+							.on("click", "a.sport", sportLoadSportDetails)
 							.trigger("create")
 							.listview("refresh")
 							.trigger("updatelayout");
@@ -87,15 +94,22 @@
 				
 					loadingOut();
 					GLOBAL.INIT.sport = true;
-			  });
-			//.fail(ajaxErrorHandler);
-		};
+				})
+				.fail(ajaxErrorHandler);
+		}
 
-		function loadSportDetails(e) {
+    		/**
+    		 * Fetches the specfied sport from the server and creates a new page. At least, it changes onto this page.
+		 *
+		 * @param Event e
+		 *
+    		 */
+		function sportLoadSportDetails(e) {
+
 			var id = $(e.target).parents("li").first().data("sport");
 			
 			// already cached?
-			if($("#sport_"+id).length>0) {
+			if($("#sport_"+id).length > 0) {
 				$.mobile.initializePage();
 				$.mobile.changePage("#sport_"+id);
 				return true;
@@ -104,60 +118,74 @@
 			loadingIn();
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport+"/"+id)
-			 .done(function(data, status, jqXHR) {
-				 	// simple Fix for empty Response, TODO better?
-				 	if(isEmpty(data.id)) return;
-				
-    				var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="b" data-content-theme="b">'+
-								'<div data-role="header" data-position="fixed" data-theme="b">'+
-									'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
-									'<h1>&nbsp;HTWK App</h1>'+
-								'</div>'+
-    							'<div data-role="content"><div class="inset"><br/>'+
-    							    '<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" />'+
-    								'<h1>'+data.title+'</h1>'+
-    								'<p><b>Kursnummer:</b> '+data.courseNumber.match(/\d+/)[0]+'</p>'+
-    								'<p><b>Zeitspanne:</b> '+data.time+'</p>'+
-    								'<p><b>Geschlecht:</b> '+data.gender+'</p>'+
-    								'<p><b>Beschreibung:</b> '+data.description+'</p>'+
-    								'<p><a href="'+data.detailedLink+'">Weitere Informationen</a></p>'+
-    								'<p><b>Ort:</b> '+data.location+'</p>'+
-    								'<p><b>Zeiten:</b> '+data.cycle+'</p>'+
-    								'<p><b>Betreuer/in:</b> '+data.leader+'</p>'+
-    								'<p><b>Hinweise:</b></p>';
-				
-    				if(!isEmpty(data.hints))
-    				{
-    					div += '<ul>';
-    					
-    					for(var k in data.hints)
-    					{
-    						div += '<li>'+data.hints[k]+'</li>';
-    					}
-    					
-    					div += '</ul>';
-    				}
-					
-    				div += 			'<p><b>Auslastung des Kurses:</b> '+data.competitor+'</p>'+
-						 	       '</div>'+
-								 '</div>'+
-								'</div>';
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 
-				div = $(div);
-				div.find("div[data-role='content'] a").addClass("external");
+				 	if(isEmpty(data.id)){ // simple Fix for empty Response, TODO better?
+						loadingIn("Es ist ein Fehler aufgetreten!",true);
+						setTimeout(loadingOut, 3000);
+						return;
+					}
 				
-    				$( "body" )
+	    				var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="b">'+
+							'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b">'+
+							'	<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
+							'	<h1>&nbsp;HTWK App</h1>'+
+							'</div>'+
+	    						'<div data-role="content"><div class="inset"><br/>'+
+							'	<h1>'+data.title+'</h1>'+
+							'	<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+							'		<li data-cards-type="text">'+
+							'			<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" />'+
+							'		</li>'+
+							'		<li data-cards-type="text">'+
+							'			<h1>Beschreibung</h1><hr/>'+
+							'			<p>'+data.description+'</p>'+
+							'		</li>'+
+							'		<li data-cards-type="text">'+
+							'			<h1>Info</h1><hr/>'+
+							'			<p>'+
+							'				<b>Zeitspanne:</b><br/>'+data.time+'<br/>'+data.cycle+
+							'				<br/><b>Geschlecht:</b><br/>'+data.gender+
+							'				<br/><b>Auslastung des Kurses:</b></br> '+data.competitor+
+							'				<br/><b>Ort:</b><br/>'+data.location+
+							'				<br/><b>Betreuer/in:</b><br/>'+data.leader+
+							'				<br/><a href="'+data.detailedLink+'">Weitere Informationen</a>'+
+							'			</p>'+
+							'		</li>'+
+							'		<li data-cards-type="text">'+
+							'			<h1>Hinweise</h1><hr/>';
+				
+    					if(!isEmpty(data.hints)){
+    						div += '<ul>';
+    					
+    						for(var k in data.hints){
+    							div += '<li>'+data.hints[k]+'</li>';
+    						}
+    					
+    						div += '</ul>';
+    					}
+					
+	    				div += 		'		</li>'+
+							'	</ul>'+
+						'	</div>'+
+						'</div>'+
+						'</div>';
+
+					div = $(div);
+					div.find("div[data-role='content'] a").addClass("external");
+				
+	    				$( "body" )
 						.append(div)
 						.trigger("create");
 				
-    				$.mobile.initializePage();
-    				$.mobile.changePage("#sport_"+id);
+	    				$.mobile.initializePage();
+	    				$.mobile.changePage("#sport_"+id);
 				
-    				loadingOut();
-			  });
-			//.fail(ajaxErrorHandler);
-			
-			return true;
-		};
+	    				loadingOut();
+			 	})
+				.fail(ajaxErrorHandler);
+		}
+
 	</script>
 </div>

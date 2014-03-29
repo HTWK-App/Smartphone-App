@@ -37,12 +37,8 @@
 	<div data-role="content">
 		<div class='inset'>
 			<h1>Einstellungen</h1>
-			
-			<br /><br/>
-
+			<br />
 			<h2>Login-Daten</h2>
-
-			
 			<ul data-inset="true" data-role="listview">
 				<li data-role="fieldcontain">
 					<label for="input_username"><strong>Nutzername:</strong></label>
@@ -52,44 +48,38 @@
 					<label for="input_password"><strong>Passwort:</strong></label>
 					<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="******"/>
 				</li>
+				<br>
+				<li data-role="fieldcontain">
+					<a id="settings_login_save"data-role="button" data-mini="true" >Speichern</a>
+				<li>
 			</ul>
-			<a id="settings_login_save"data-role="button" data-mini="true" >Speichern</a>
 			<br/>
 			<h2>Sprache</h2>
 			<ul data-inset="true" data-role="listview">
 				<li data-role="fieldcontain">
 					<label for="default_language_select"><strong>Standardsprache:</strong></label>
-					<select id="default_language_select" data-native-menu="true" name="default_language_select">
-					</select>
+					<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
 				</li>
 			</ul>
-			<br />
 			<br/>
 			<h2>News</h2>
 			<ul data-inset="true" data-role="listview">
 				<li data-role="fieldcontain">
-					<label for="default_news_select">
-						<strong>
-							Standard Newsfeed:
-						</strong>
-					</label>
+					<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
 					<select id="default_news_select" name="default_news_select">
 						<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
 					</select>
 				</li>
 			</ul>
-			<br /><br/>
-			<h3>Stundenplan</h3>
-				<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
-			<br /><br/>
+			<br/>
+			<h2>Stundenplan</h2>
+			<br/>
+			<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
+			<hr>
 			<h2>Mensa</h2>
 			<ul data-inset="true" data-role="listview">
 				<li data-role="fieldcontain">
-					<label for="default_canteen_select">
-						<strong>
-							Standard Mensa:
-						</strong>
-					</label>
+					<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
 					<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
 						<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
 					</select>
@@ -108,6 +98,7 @@
 			<a id="settings_timetable_delete" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" data-transition="flow" class="ui-corner-all ui-shadow">Löschen</a>
 		</div>
 	</div>
+
 	<script>
 
 		/*TODO

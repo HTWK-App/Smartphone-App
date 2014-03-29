@@ -161,16 +161,10 @@
 												'<p><img src="'+data.pictureLink+'"/></p>'+
 											'</li>'+
 											'<li data-cards-type="text" >'+
-												'<h1>Info</h2>'+
-												'<p>'+
-													'<strong>Abkürzung: </strong> '+data.id+' <br/>'+
-													'<br/>'+
-													'<strong>Adresse: </strong> '+data.address+' <br/>'+
-													'<br/>'+
-													'<p>'+
-														desc+
-													'</p>'+
-												'</p>'+
+												'<h1>Info</h1><hr>'+
+												'<strong>Abkürzung: </strong>'+data.id+'<br/>'+
+												'<strong>Adresse:</strong><br/>'+data.address+'<br/>'+
+												'<p><br/>'+desc+'</p>'+
 											'</li>'+
 											'<li id="building_'+id+'_map" data-cards-type="traffic">'+
 											//"<li data-cards-type='traffic' data-cards-traffic-route='{\"from\":\"0.00000,0.000000\",\"to\":\""+data.latLng.replace(/ /, '')+"\",\"type\" : \"geolocation\"}'>"+
