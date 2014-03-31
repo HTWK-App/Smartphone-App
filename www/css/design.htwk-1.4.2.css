@@ -687,6 +687,7 @@ html.ui-mobile body.ui-mobile-viewport div.ui-page div.ui-panel-content-wrap div
 }
 html.ui-mobile body.ui-mobile-viewport .ui-page .ui-panel-wrapper div.ui-content form.ui-filterable div.ui-input-search input{
 	color:#A2A9A4;
+	font-size: 16px;
 }
 
 .ui-alt-icon.ui-icon-search:after, .ui-alt-icon .ui-icon-search:after, .ui-input-search:after {

@@ -1,3 +1,17 @@
+.ui-loading .ui-loader {
+    background-color: #000000;
+    border-radius: 10px;
+    color: #FFFFFF;
+    display: block;
+}
+.ui-header a:hover ,.ui-header a:active{
+	background-color:#42537F  !important;
+}
+
+.ui-icon-loading {
+    background: url("ajax-loader.gif") repeat scroll 0 0 / 2.875em 2.875em rgba(0, 0, 0, 0);
+}
+
 a[data-role="button"] {
 	background-color: #42537F;
 	
@@ -15,6 +29,7 @@ div[data-role="header"] a[data-role="button"] {
 	padding-bottom:8px;
 	
 }
+
 
 div[data-role="footer"] .ui-btn-icon-right:after,div[data-role="footer"] .ui-btn-icon-top:after,div[data-role="footer"] .ui-btn-icon-left:after{
 	background-image:none;
