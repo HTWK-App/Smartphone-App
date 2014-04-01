@@ -119,124 +119,124 @@
 				}
 			</style>
 			<select id="timetable_day_select" name="timetable_select" data-native-menu="true">
-				<option selected="selected" data-day="1" value="">Montag</option>
-				<option value="" data-day="2">Dienstag</option>
-				<option value="" data-day="3">Mittwoch</option>
-				<option value="" data-day="4">Donnerstag</option>
-				<option value="" data-day="5">Freitag</option>
-				<option value="" data-day="6">Samstag</option>
-				<option value="" data-day="7">Sonntag</option>
+				<option value="1" data-day="1">Montag</option>
+				<option value="2" data-day="2">Dienstag</option>
+				<option value="3" data-day="3">Mittwoch</option>
+				<option value="4" data-day="4">Donnerstag</option>
+				<option value="5" data-day="5">Freitag</option>
+				<option value="6" data-day="6">Samstag</option>
+				<option value="7" data-day="7">Sonntag</option>
 			</select>
 			<br/>
 		</div>
 		<div id="timetable_day" data-week="-1">
 			<table class="tg">
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="7">
 				<td rowspan="2">07.00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ><span class="start"><span>Termin start</span></span></td>
+				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="8">
 				<td rowspan="2">08.00<br></td>
-				<td ><span class="end"><span>Termin end</span></span></td>
+				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="9">
 				<td rowspan="2">09.00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="10">
 				<td rowspan="2">10.00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="11">
 				<td rowspan="2">11.00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="12">
 				<td  rowspan="2">12.00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="13">
 				<td  rowspan="2">13.00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="14">
 				<td  rowspan="2">14:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="15">
 				<td rowspan="2">15:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="16">
 				<td rowspan="2">16:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="17">
 				<td rowspan="2">17:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="18">
 				<td rowspan="2">18:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="19">
 				<td rowspan="2">19:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="20">
 				<td rowspan="2">20:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="21">
 				<td rowspan="2">21:00</td>
 				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td ></td>
 			  </tr>
-			  <tr class="data full-hour">
+			  <tr class="data full-hour" data-hour="22">
 				<td rowspan="2">22:00</td>
 				<td ></td>
 			  </tr>
@@ -293,11 +293,12 @@
 					}
 			 });
 			
-		/*$( "#timetable_week_select" )//TODO
+		$( "#timetable_day_select" )
 			.on("change", function() {
-				$("#timetable_days table tbody").empty();
-				fillTimetable();
-			 });*/
+				$("#timetable_day span").remove();
+				console.log($(this).val());
+				timetableFill($(this).val());
+			 });
 		$("#extendTimetable")
 			.on("click", showConfigDialog);
 
@@ -598,19 +599,19 @@
 
 			var today = date.getDay();
 			var dayselect = $("#timetable_day_select");
-			dayselect.find('option:jqmData(selected="selected")').removeAttr("selected");
+			dayselect.find('option[selected="selected"]').removeAttr("selected");
 			dayselect.find('option:jqmData(day="'+today+'")').attr("selected", "selected");
 			dayselect.selectmenu("refresh");
 			
-			timetableFill();
+			timetableFill($("#timetable_day_select").find('option[selected="selected"]').val());
 			
 			GLOBAL.INIT.timetable = true;
 		};
-
+		/******************************************************************************************
 		/**
 		 * Loading the selected Week into the Timetable.
 		 */
-		function fillTimetable() {
+		/*function fillTimetable() {
 			var tbs = $("#timetable_days table tbody");
 			var week = $("#timetable_week_select").val();
 			var deferreds = [];
@@ -660,7 +661,7 @@
 				 
 				 loadingOut();
 			 });
-		};
+		};*/
 		
 		/**
 		 * Fill the Timetable Day by Day for the given Faculty and Group in the given Week.
@@ -674,7 +675,7 @@
 		 * 
 		 * @see CONFIG.TIMETABLE
 		 */
-		function fillTimetableWeek(tbs, week, faculty, group) {
+		/*function fillTimetableWeek(tbs, week, faculty, group) {
 			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+faculty+"/week/"+week+"?semgroup="+group.id)
 			 		.done(function (data, status, jqXHR) {
 							if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
@@ -688,7 +689,7 @@
 							loadingOut();
 					})
 					.fail(ajaxErrorHandler);
-		};
+		};*/
 		
 		/**
 		 * Adding Courses from the Request to the Weekday.
@@ -699,7 +700,7 @@
 		 * 
 		 * @see CONFIG.TIMETABLE
 		 */
-		function addTimetableWeekday(tb, courses, group) {
+		/*function addTimetableWeekday(tb, courses, group) {
 			var trs = "";
 			var n, c, d;
 
@@ -729,12 +730,12 @@
 				tb.append(trs)
 				  .trigger("create");
 			}
-		};
+		};*/
 		
 		/**
 		 * 
 		 */
-		function timetableFill() {
+		function timetableFill(day) {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
 			 .done(function(data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
@@ -743,21 +744,87 @@
 					$("#timetable_day").attr("data-week", data.current);
 					$("#actualWeek").empty().append(''+data[data.current]+'');
 			 		
-			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableFillDay();
+			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData(day);
 			})
 			.fail(ajaxErrorHandler);
 		}
 
-		function timetableFillDay(){
+		function timetableGetDayData(day){
+			var week = 15;//$("#timetable_day").attr("data-week");
 			for(var k in CONFIG.TIMETABLE.faculty){
 				var faculty = CONFIG.TIMETABLE.faculty[k];
-				for(var s in CONFIG.TIMETABLE.faculty[k].groups){
-					var group = CONFIG.TIMETABLE.faculty[k].groups[s];
-					for(var l in gropu.courses){
+				for(var s in faculty.groups){
+					var group = faculty.groups[s];
+					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+faculty.id+"/week/"+week+"/"+day+"?semgroup="+group.id)
+					.done(function(data, status, jqXHR) {
+						if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+						timetableFillDay(data);
+					})
+					.fail(ajaxErrorHandler);
+
+//						http://localhost:8080/app/timetable/{semester}/{fac}/week/{kw}/{day}?semgroup={semGroup}
 						//CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //add course to timetable
-					}
 				}
 			}
+		}
+
+		function timetableFillDay(data){
+			var added = false;
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				for(var s in faculty.groups){
+					var group = faculty.groups[s];
+					for(var m in data.dayContent){
+						dayCourse = data.dayContent[m];
+						if(!isEmpty(group.courses[dayCourse.suid])){
+							timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid])
+							added = true;
+						}
+					}	
+				}
+			}
+			if(added == false){
+				$("#timetable_day").find('.full-hour:jqmData(hour="7")').children().eq(1).append('<span class="middle"><span>Nothing to show</span></span>');
+			}
+		}
+		function timetableAddDayCourse(course, name){
+			/*console.log(name);
+			console.log(course);
+			<tr class="data half-hour">
+				<td ><span class="start"><span>Termin start</span></span></td>
+			  </tr>
+			  <tr class="data full-hour">
+				<td rowspan="2">08.00<br></td>
+				<td ><span class="end"><span>Termin end</span></span></td>
+			  </tr>*/
+			var begin = course.begin.split(":");
+			var end = course.end.split(":");
+			var tdBegin = $("#timetable_day").find('.full-hour:jqmData(hour="'+begin[0]+'")');
+			var tdEnd = $("#timetable_day").find('.full-hour:jqmData(hour="'+end[0]+'")');
+			var between = tdBegin.next(); 
+			if(begin[1] != "30"){
+				tdBegin = tdBegin.children().eq(1);
+			} else {
+				tdBegin = tdBegin.next().children();
+			}
+			tdBegin.append('<span class="start"><span>'+name+'</span></span>');
+			if(end[1] != "30"){
+				tdEnd = tdEnd.children().eq(1);
+			} else {
+				tdEnd = tdEnd.next().children();
+			}
+			tdEnd.append('<span class="end"><span>'+course.location+'</span></span>');
+			
+			while(between.find("span").first().text() != course.location){
+				if(between.children().length == 2){
+					between.children().eq(1).append('<span class="middle"><span></span></span>');
+				}else{
+					between.children().append('<span class="middle"><span></span></span>');
+				}
+				between = between.next(); 
+			}
+			$("#timetable_day").trigger("create");
 		}
 	</script>
 </div>
