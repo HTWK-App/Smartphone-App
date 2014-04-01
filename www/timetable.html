@@ -1,12 +1,12 @@
-﻿<div data-role="page" data-theme='b' data-dom-cache="true">
+﻿<div id="timetable_page" data-role="page" data-theme='b' data-dom-cache="true">
 	<div data-role="panel" id="menue_stundenplan" data-theme="a" data-display="push">
 		<ul data-role="listview">
 			<li data-role="list-divider">Hauptmenü</li>
 			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
 			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="timetable.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="canteen.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="mail.html" >Postfach</a></li>
 			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
 			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
 			
@@ -14,20 +14,20 @@
 		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
 		<ul data-role="listview">
 			<li data-role="list-divider">Info-Center</li>
-			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_general.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_staff.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_buildings.html" >Gebäudeplan</a></li>
 			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
 		</ul>
 		<!--</div> -->
 		<ul data-role="listview">
 			<li data-role="list-divider">Tools</li>
-			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
-			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+			<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
+			
 		</ul>
 		<ul data-role="listview">
 			<li data-role="list-divider">Einstellungen</li>
-			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+			<li data-icon="trophy"><a href="settings.html" >HTWK-App</a></li>
 		</ul>
 	</div>
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
@@ -41,401 +41,216 @@
 	</div>
 	<div data-role="content">   
 		<div class="inset">
-			<h1>Stundenplan für KW (slide to next week)</h1>
+			<h1 id="actualWeek">Woche wird geladen</h1>
+			<br/>
+			<style type="text/css">
+				.tg  {
+					border-collapse:collapse;
+					border-spacing:0;
+					width:100%
+				}
+				table.tg td{
+					padding:0px;
+				}
+				table.tg tr td.full-hour:first-child{
+					width:50px;
+				}
+				table.tg tr th:first-child{
+					width:50px;
+				}
+				table.tg th.weekdays{
+					width:13%;
+				}
+				table.tg tr {
+					height:30px;
+				}
+				table.tg tr.full-hour td {
+					border-top:1px solid black;
+					border-left:1px solid black;
+				}
+
+				table.tg tr.half-hour td{
+					border-top:1px dotted #333333;
+					border-left:1px solid black;
+				}
+				table.tg tr.full-hour td:first-child{
+					border-left:0px;
+					border-right:1px solid black;
+					text-align:center;
+				}
+				table.tg tr.head th{
+					border-collapse:separate;
+					border-spacing:0px;
+					border-top:1px solid black;
+					border-left:1px solid black;
+				}
+				table.tg tr.head th.top-left-no-borders {
+					border:0px;
+				}
+				table.tg tr th:last-child, table.tg tr td:last-child{
+					border-right:1px solid black;
+				}
+				table.tg tr:last-child{
+					border-bottom:1px solid black;
+				}
+				table.tg td span {
+					font-size:0.8em;
+					padding:0px;
+					margin-right:7%;
+					background-color:black;
+					color:white;
+					width:85%;
+					height:100%;
+					line-height:29px;
+					float:right;
+					display:block;
+					overflow:auto
+				}
+				table.tg td span.start{
+					-moz-border-radius: 5px 5px 0px 0px;
+					border-radius: 5px 5px 0px 0px;
+				}
+				table.tg td span.middle{
+
+				}
+				table.tg td span.end{
+					-moz-border-radius: 0px 0px 5px 5px;
+					border-radius: 0px 0px 5px 5px;
+				}
+			</style>
+			<select id="timetable_day_select" name="timetable_select" data-native-menu="true">
+				<option selected="selected" data-day="1" value="">Montag</option>
+				<option value="" data-day="2">Dienstag</option>
+				<option value="" data-day="3">Mittwoch</option>
+				<option value="" data-day="4">Donnerstag</option>
+				<option value="" data-day="5">Freitag</option>
+				<option value="" data-day="6">Samstag</option>
+				<option value="" data-day="7">Sonntag</option>
+			</select>
 			<br/>
 		</div>
-		<style type="text/css">
-			.tg  {
-				border-collapse:collapse;
-				border-spacing:0;
-				width:100%
-			}
-			table.tg td{
-				padding:0px;
-			}
-			table.tg tr td.full-hour:first-child{
-				width:50px;
-			}
-			table.tg tr th:first-child{
-				width:50px;
-			}
-			table.tg th.weekdays{
-				width:13%;
-			}
-			table.tg tr {
-				height:30px;
-			}
-			table.tg tr.full-hour td {
-				border-top:1px solid black;
-				border-left:1px solid black;
-			}
-
-			table.tg tr.half-hour td{
-				border-top:1px dotted #333333;
-				border-left:1px solid black;
-			}
-			table.tg tr.full-hour td:first-child{
-				border-left:0px;
-				border-right:1px solid black;
-				text-align:center;
-			}
-			table.tg tr.head th{
-				border-collapse:separate;
-				border-spacing:0px;
-				border-top:1px solid black;
-				border-left:1px solid black;
-			}
-			table.tg tr.head th.top-left-no-borders {
-				border:0px;
-			}
-			table.tg tr th:last-child, table.tg tr td:last-child{
-				border-right:1px solid black;
-			}
-			table.tg tr:last-child{
-				border-bottom:1px solid black;
-			}
-			table.tg td span {
-				font-size:0.8em;
-				padding:0px;
-				margin-right:3px;
-				background-color:black;
-				color:white;
-				width:85%;
-				height:100%;
-				line-height:29px;
-				float:right;
-				display:block;
-				overflow:auto
-			}
-			table.tg td span.start{
-				-moz-border-radius: 5px 5px 0px 0px;
-				border-radius: 5px 5px 0px 0px;
-			}
-			table.tg td span.middle{
-
-			}
-			table.tg td span.end{
-				-moz-border-radius: 0px 0px 5px 5px;
-				border-radius: 0px 0px 5px 5px;
-			}
-		</style>
-		<div id="stundenplan_kalendar">
+		<div id="timetable_day" data-week="-1">
 			<table class="tg">
-			  <tr class="head">
-				<th class="top-left-no-borders">Zeit</th>
-				<th class="weekdays">Mo</th>
-				<th class="weekdays">Die</th>
-				<th class="weekdays">Mi</th>
-				<th class="weekdays">Do</th>
-				<th class="weekdays">Fr</th>
-				<th class="weekdays">Sa</th>
-				<th class="weekdays">So</th>
-			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">07.00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
 				<td ><span class="start"><span>Termin start</span></span></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">08.00<br></td>
-				<td ></td>
 				<td ><span class="end"><span>Termin end</span></span></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">09.00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">10.00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ><span class="start"><span>Termin startet</span></span></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ><span class="middle"><span>Termin dauert</span></span></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">11.00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ><span class="middle"><span>dauert</span></span></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ><span class="end"><span>Termin endet</span></span></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td  rowspan="2">12.00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td  rowspan="2">13.00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td  rowspan="2">14:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">15:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">16:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">17:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">18:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">19:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">20:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">21:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 				<td ></td>
 			  </tr>
 			  <tr class="data full-hour">
 				<td rowspan="2">22:00</td>
 				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			  <tr class="data half-hour">
 				<td></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
-				<td ></td>
 			  </tr>
 			</table>
+		</div>
+	</div>
+	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-theme="b" data-overlyaTheme="b" data-transition="pop">
+    		<div id="timetableDialogHeader" data-role="header" data-theme="b">
+   	 	</div>
+   	 	<div id="timetableDialogContent" data-role="content" data-theme='b' class="inset">
+   	 	</div>
 	</div>
 
 	<script>		
@@ -444,7 +259,7 @@
 	 * View of Timetable isn't the best
 	*/
 		$( "#timetable_page" )
-			//.on("pagecreate", initTimetableView)//TODO
+			.on("pagecreate", initTimetableView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.timetable) loadingIn();
     				$("#btn_refresh")
@@ -490,6 +305,8 @@
 		  * This Area is used for Timetable Configuration Dialogs
 		*/
 
+		var popupOpen = false;
+
 		/**
 		 * Get a Popup with a Heading and a Description
 		 * 
@@ -500,36 +317,24 @@
 		 * 
 		 * @return jQueryMobile Popup
 		 */
-		function getPopup(heading, description, btn_text, func){
-			var p;
-			var div = $('<div data-role="popup" id="timetablePopup'+Math.random()+'"></div>');
-			var btn = $('<a class="popup-abort">Abbrechen</a>')
-						.buttonMarkup({inline : true, icon : "back"})
-						.on("click", abortSetup);
-			var btn_save = ""
-			if(!isEmpty(btn_text)){
-				btn_save = $('<a>'+btn_text+'</a>')
-						.buttonMarkup({inline : true, icon : "check"})
-						.on("click", func);
-			}
-				
-			div.append('<div data-role="header" data-theme="a"><h1>'+heading+'</h1></div><h4>'+description+'</h4>')
-			   .append(btn)
-			   .append(btn_save);
-			
-			p = div.popup({
-					dismissible : false,
-					theme : "b",
-					overlyaTheme : "b",
-					transition : "pop"
-			 	})
-			 	.on("popupafterclose", function() {
-					popupOpen = false;
-					$(this).remove();
-			 	 });
+		function fillPopup(heading, description, btn_text, func){
+			$("#timetableDialogHeader").empty().append('<h3 style="padding: 5% 0 0 10%;">'+heading+'</h3>'); //TODO renew design
+			$("#timetableDialogContent").empty().append('<p>'+description+'</p>');
+			$("#timetableDialogContent").append('<a id="timetableDialogAbort" href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>');
 
-			return p;
-		};
+			if(!isEmpty(btn_text)){
+				$("#timetableDialogContent").append('<a id="timetableDialogSave" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">'+btn_text+'</a>');
+			}
+			$.mobile.activePage.trigger("create");
+			$("#timetableDialog")
+				.popup().off()
+				.on("popupafteropen", function() {popupOpen = true;})
+				.on("popupafterclose", function() {
+					popupOpen = false;
+			 	 });
+			$("#timetableDialogAbort").off().on("click", abortSetup);
+			$("#timetableDialogSave").off().on("click", func);
+		}
 
 		/**
 		 * Aborts the displayed Dialog and resets configurations (if not completed)
@@ -538,14 +343,11 @@
 		 */
 		function abortSetup(e) {
 			if(!isEmpty(e)){
-				var popUp = $(e.target).parents("div", {"data-role": "popup"}).eq(0);
-				if(popUp.data("role") == "popup") popUp.popup("close");
+				$("#timetableDialog").popup("close")
 			}
 			CONFIG.TIMETABLE.temporary= [];
-			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_week_select").change();//TODO
+//			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_week_select").change();//TODO
 		};
-
-		var popupOpen = false;
 
 		/**
 		 * Opens the given Popup whenever another Popup is closed
@@ -558,7 +360,7 @@
 				return;
 			}
 			loadingOut();
-			popUp.popup("open").popup({afteropen: function() {popupOpen = true;}});
+			$("#timetableDialog").popup("open");
 		}
 
 		function noContent(text){
@@ -584,7 +386,7 @@
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
 		 		 .done(function (data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
-		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
+
 					var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
 					
 					for(var k in data) {
@@ -595,12 +397,14 @@
 					}
 
 					ul += '</ul>';
-					
 					ul = $(ul).on("click", "a", facultyChosen);
+
+					fillPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
+					$("#timetableDialogAbort").before(ul);
+					$("#timetableDialog").trigger("create");
+					$("#timetableDialog").popup();
 					
-					popUp.find("a.popup-abort").before(ul);
-					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
-					setTimeout(function(){open(popUp);}, 50);
+					setTimeout(function(){open($("#timetableDialog"));}, 50);
 					
 					loadingOut();
 				})
@@ -629,7 +433,6 @@
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
 
 					var empty = true;
-		 			var popUp = getPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");		 			
 					var lis = '<ul data-role="listview">';
 					
 					for(var k in data) {
@@ -646,14 +449,16 @@
 					}
 					
 					lis += '</ul>';
-					
 					lis = $(lis).on("click", "a", courseChosen); 
+					
+					fillPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
+					$("#timetableDialogAbort").before(lis);
+					$("#timetableDialog").trigger("create");
+					$("#timetableDialog").popup();
 					
 					if(empty == true) {noContent("Es existieren keine Matrikel bzgl. Ihres Studiengangs!"); return;}
 					
-					popUp.find("a.popup-abort").before(lis);
-					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
-					setTimeout(function(){open(popUp);}, 50);
+					setTimeout(function(){open($("#timetableDialog"));}, 50);
 				})
 				.fail(ajaxErrorHandler);
 		};
@@ -669,14 +474,13 @@
 
 			loadingIn();
 			CONFIG.TIMETABLE.temporary[0].groups.push({"id": course, "courses": {}});
-			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+			$("#timetableDialog").popup("close");
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.temporary[0].id+"/courses?semgroup="+course)
 		 		.done(function (data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
 
 					var empty = true;
-		 			var popUp = getPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
 					var check = '<form><fieldset data-role="controlgroup">';
 					
 					for(var k in data) {
@@ -691,9 +495,12 @@
 					if(empty == true) {noContent("Es existieren keine Fächer bzgl. Ihres Matrikels!"); return;}
 					
 					check = $(check); 
-					popUp.find("a.popup-abort").before(check);
-					popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
-					setTimeout(function(){open(popUp);}, 50);
+					fillPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
+					$("#timetableDialogAbort").before(check);
+					$("#timetableDialog").trigger("create");
+					$("#timetableDialog").popup();
+					
+					setTimeout(function(){open($("#timetableDialog"));}, 50);
 				})
 				.fail(ajaxErrorHandler);
 		}
@@ -712,8 +519,7 @@
 					CONFIG.TIMETABLE.temporary[0].groups[0].courses[box.attr("data-hash")] = box.attr("name")
 				}
 			}
-			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
-			var popUp = getPopup("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt","Ok", renameCourses);
+			$("#timetableDialog").popup("close");
 			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
 			var ins = '<form>';
 			for(var k in courses){
@@ -721,9 +527,13 @@
 			}
 			ins += '</form>';
 			ins = $(ins);
-			popUp.find("a.popup-abort").before(ins);
-			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
-			setTimeout(function(){open(popUp);}, 50);
+
+			fillPopup("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt","Ok", renameCourses);
+			$("#timetableDialogAbort").before(ins);
+			$("#timetableDialog").trigger("create");
+			$("#timetableDialog").popup();
+			
+			setTimeout(function(){open($("#timetableDialog"));}, 50);
 		}
 
 		/**
@@ -741,7 +551,7 @@
 				courses[k] = box.val();
 			}
 
-			$(e.target).parents("div", {"data-role": "popup"}).eq(0).popup("close");
+			$("#timetableDialog").popup("close");
 
 			//save courses
 			var pushedc = false; var pushedg = false;
@@ -770,9 +580,9 @@
 			console.log(CONFIG.TIMETABLE.faculty);
 			CONFIG.TIMETABLE.temporary = [];
 
-			var popUp = getPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
-			popUp.trigger("create").popup({afteropen: function() {popupOpen = true;}});
-			setTimeout(function(){open(popUp);}, 50);
+			fillPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
+			
+			setTimeout(function(){open($("#timetableDialog"));}, 50);
 		}
 
 		/*********************************************************************************************************************
@@ -785,17 +595,14 @@
 		function initTimetableView() {
 			var date = new Date();
 			var day = getWeekDay(date).id;
+
+			var today = date.getDay();
+			var dayselect = $("#timetable_day_select");
+			dayselect.find('option:jqmData(selected="selected")').removeAttr("selected");
+			dayselect.find('option:jqmData(day="'+today+'")').attr("selected", "selected");
+			dayselect.selectmenu("refresh");
 			
-			fillTimetableSelect();
-			
-			/*$( "#timetable_week_label" )
-			 	.html("Aktuelle Woche von "+ formatDate(GLOBAL.DATE.currentWeek[0], GLOBAL.DATE.formats.de)+
-					  " bis "+formatDate(GLOBAL.DATE.currentWeek[4], GLOBAL.DATE.formats.de));*/// --> TODO iwie sinnlos...den Platz kann ich besser fürn Button gebrauchen
-			
-			// open the tab for current day
-			$( "#timetable_nav a:jqmData(day='"+day+"')" )
-				.addClass("ui-btn-active")
-				.click();
+			timetableFill();
 			
 			GLOBAL.INIT.timetable = true;
 		};
@@ -925,34 +732,32 @@
 		};
 		
 		/**
-		 * Loading all Weeks for the Timetable.
+		 * 
 		 */
-		function fillTimetableSelect() {
+		function timetableFill() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
 			 .done(function(data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
-			 		var opts = "";
-			 		
-			 		for(var k in data)
-			 		{	
-			 			if(k.search(/^\d+$/)==0)
-			 			{
-			 				opts += '<option value="'+k+'">'+data[k]+'</option>';
-			 			}
-			 		}
-			 		
-			 		// TODO move to Settings
-			 		CONFIG.TIMETABLE.semester = data.semester;
 
-			 		$( "#timetable_week_select" )
-			 			.append(opts)
-			 			.find("option[value='"+data.current+"']")
-			 			.prop("selected", true).end()
-			 			.selectmenu("refresh");
+			 		CONFIG.TIMETABLE.semester = data.semester;
+					$("#timetable_day").attr("data-week", data.current);
+					$("#actualWeek").empty().append(''+data[data.current]+'');
 			 		
-			 		if(CONFIG.TIMETABLE.faculty.length != 0) fillTimetable();
+			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableFillDay();
 			})
 			.fail(ajaxErrorHandler);
-		};
+		}
+
+		function timetableFillDay(){
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				for(var s in CONFIG.TIMETABLE.faculty[k].groups){
+					var group = CONFIG.TIMETABLE.faculty[k].groups[s];
+					for(var l in gropu.courses){
+						//CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //add course to timetable
+					}
+				}
+			}
+		}
 	</script>
 </div>

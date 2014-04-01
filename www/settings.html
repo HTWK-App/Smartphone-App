@@ -4,9 +4,9 @@
 			<li data-role="list-divider" role="heading">Hauptmenü</li>
 			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
 			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="timetable.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="canteen.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="mail.html" >Postfach</a></li>
 			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
 			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
 			
@@ -14,20 +14,20 @@
 		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
 		<ul data-role="listview">
 			<li data-role="list-divider" role="heading">Info-Center</li>
-			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_general.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_staff.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_buildings.html" >Gebäudeplan</a></li>
 			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
 		</ul>
 		<!--</div> -->
 		<ul data-role="listview">
 			<li data-role="list-divider" role="heading">Tools</li>
-			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
-			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+			<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
+			
 		</ul>
 		<ul data-role="listview">
 			<li data-role="list-divider" role="heading">Einstellungen</li>
-			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+			<li data-icon="trophy"><a href="settings.html" >HTWK-App</a></li>
 		</ul>
 	</div>
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
@@ -37,61 +37,56 @@
 	<div data-role="content">
 		<div class='inset'>
 			<h1>Einstellungen</h1>
-			<br />
+			<br/>
 			<h2>Login-Daten</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="input_username"><strong>Nutzername:</strong></label>
-					<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername"/>
-				</li>
-				<li data-role="fieldcontain">
-					<label for="input_password"><strong>Passwort:</strong></label>
-					<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="******"/>
-				</li>
+			<br/>
+			<div class='inset'>
+				<label for="input_username"><strong>Nutzername:</strong></label>
+				<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername"/>
+				<label for="input_password"><strong>Passwort:</strong></label>
+				<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="******"/>
 				<br>
-				<li data-role="fieldcontain">
-					<a id="settings_login_save"data-role="button" data-mini="true" >Speichern</a>
-				<li>
-			</ul>
-			<br/>
+				<a id="settings_login_save"data-role="button" data-mini="true">Speichern</a>
+			</div>
+			<hr/>
 			<h2>Sprache</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="default_language_select"><strong>Standardsprache:</strong></label>
-					<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
-				</li>
-			</ul>
 			<br/>
+			<div class='inset'>
+				<label for="default_language_select"><strong>Standardsprache:</strong></label>
+				<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
+			</div>
+			<hr/>
 			<h2>News</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
-					<select id="default_news_select" name="default_news_select">
-						<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-					</select>
-				</li>
-			</ul>
 			<br/>
+			<div class='inset'>
+				<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
+				<select id="default_news_select" name="default_news_select">
+					<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+				</select>
+			</div>
+			<hr/>
 			<h2>Stundenplan</h2>
 			<br/>
-			<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
-			<hr>
+			<div class='inset'>
+				<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
+			</div>
+			<hr/>
 			<h2>Mensa</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
-					<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
-						<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
-					</select>
-				</li>
-			</ul>
+			<br/>
+			<div class='inset'>
+				<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
+				<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
+					<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+				</select>
+			</div>
+			<br/>
 		</div>
 	</div>
-	<div id="popup_timetable_delete" data-role="popup" data-theme="b" data-content-theme="b">
+	<div id="popup_timetable_delete" data-role="popup" data-theme="b">
 		<div data-role="header" data-theme="b">
 			<h3>Wirklich Löschen?</h3>
 		</div>
-		<div role="main" class="ui-content">
+		<div role="main" class="ui-content" data-theme="b">
 			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
 			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p><br>
 			<a href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>
@@ -113,7 +108,6 @@
 				settingsFillFields();
 			})
 			.on("pageshow", function () {
-				loadingIn();
 				$("#btn_refresh").hide();
 			 })
 			.on("pagehide", function() {
@@ -125,6 +119,8 @@
 		 *
 		 */
 		function settingsGetNewsFeeds() {
+			
+			loadingIn();
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 				 .done(function(data, status, jqXHR) {

@@ -4,9 +4,9 @@
 			<li data-role="list-divider">Hauptmenü</li>
 			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
 			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+			<li data-icon="trophy"><a href="timetable.html" >Stundenplan</a></li>
+			<li data-icon="trophy"><a href="canteen.html" >Mensa</a></li>
+			<li data-icon="trophy"><a href="mail.html" >Postfach</a></li>
 			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
 			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
 			
@@ -14,20 +14,20 @@
 		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
 		<ul data-role="listview">
 			<li data-role="list-divider">Info-Center</li>
-			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+			<li data-icon="trophy"><a href="info_general.html" >Allgemein</a></li>
+			<li data-icon="trophy"><a href="info_staff.html" >Mitarbeiter</a></li>
+			<li data-icon="trophy"><a href="info_buildings.html" >Gebäudeplan</a></li>
 			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
 		</ul>
 		<!--</div> -->
 		<ul data-role="listview">
 			<li data-role="list-divider">Tools</li>
-			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
-			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+			<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
+			
 		</ul>
 		<ul data-role="listview">
 			<li data-role="list-divider">Einstellungen</li>
-			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
+			<li data-icon="trophy"><a href="settings.html" >HTWK-App</a></li>
 		</ul>
 	</div>
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
@@ -35,15 +35,13 @@
 		<h1>&nbsp;HTWK App</h1>
 	</div>
 	<div data-position="fixed" data-role="footer" data-theme='b'> <!--data-tap-toggle="true" setzen falls gewünscht--> 
-		<div data-role="fieldcontain">
-			<fieldset data-role="controlgroup" data-type="horizontal">
-				<select name="canteen_select" id="canteen_select" data-native-menu="true">
-					<option selected="selected" value="">Mensa...</option>
-				</select>
-				<label for="canteen_veggie_mode">Vegetarische Gerichte</label>
-				<input type="checkbox" id="canteen_veggie_mode" name="canteen_veggie_mode" />
-			</fieldset>
-		</div>
+		<fieldset data-role="controlgroup" data-type="horizontal">
+			<select name="canteen_select" id="canteen_select" data-native-menu="true">
+				<option selected="selected" value="">Mensa...</option>
+			</select>
+			<label for="canteen_veggie_mode">Vegetarische Gerichte</label>
+			<input type="checkbox" id="canteen_veggie_mode" name="canteen_veggie_mode" />
+		</fieldset>
 	</div>
 	<div data-role="content" >
 		<div class="inset">
@@ -108,15 +106,15 @@
 		$( "#canteen_select" )
 			.on("change", function() {
 				$("#canteen_page div.canteen_content").empty();
-				fillCanteen($(this).val(), GLOBAL.DATE.currentWeek);
+				canteenFillCanteen($(this).val(), GLOBAL.DATE.currentWeek);
 			 });
 		
 		$( "#canteen_veggie_mode" )
 			.on("click", function() {
 				if($(this).is(":checked")){
-					$("#canteen_page div.canteen_content div.non_veggie").hide();
+					$("#canteen_page div.canteen_content li.non_veggie").hide();
 				} else {
-					$("#canteen_page div.canteen_content div.non_veggie").show();
+					$("#canteen_page div.canteen_content li.non_veggie").show();
 				}
 			});
 
@@ -191,7 +189,7 @@
 		function canteenFillCanteenDay(o, id, date) {
 			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+id+"/"+createServerDateStamp(date))
 				.done(function (data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, canteenEmpty); return;}
 
 			 		var title, desc, addits;
 			 		var priceStud, priceEmp, priceExt;
@@ -199,7 +197,12 @@
 			 		var veggie = false;
 
 			 		if(isEmpty(data.dayContent)) {
-			 			meals = '<div class="no_meals_today">Keine Angebote verfügbar.</div>';
+			 			meals += '<li data-cards-type="text">'+
+								'<div class="inset">'+
+									'<p>Leider sind keine Angebote verfügbar :-(</p>'+
+								'</div>'+
+							'</li>'+
+							'</ul>';		
 			 		} else {
 				 		for(var k in data.dayContent) {
 							meal = data.dayContent[k];
@@ -227,15 +230,18 @@
 							priceEmp = parseFloat(meal.price[1]).toFixed(2).replace(/\./, ",");
 							priceExt = parseFloat(meal.price[2]).toFixed(2).replace(/\./, ",");
 						
-							meals += '<li data-cards-type="text" '+(veggie?'':'class="non_veggie"')+'><div class="inset">'+
-									'<h1>'+title+'</h1><hr/>'+
-									'<p>'+desc+'<br/><br/>'+
-									'<small>Zusätzliche Inhaltsstoffe:</br>'+addits+'</small><br/></p>'+
-									'<p>'+
-										'<b>Studenten: </b>'+priceStud+' &euro;<br/>'+
-										'<b>Mitarbeiter: </b>'+priceEmp+' &euro;<br/>'+
-										'<b>Externe: </b>'+priceExt+' &euro;'+
-									'</p>'+
+							meals += '<li data-cards-type="text" '+(veggie?'':'class="non_veggie"')+'>'+
+									'<div class="inset">'+
+										'<h1>'+title+'</h1><hr/>'+
+										'<p>'+
+											desc+'<br/><br/>'+
+											'<small>Zusätzliche Inhaltsstoffe:</br>'+addits+'</small><br/>'+
+										'</p>'+
+										'<p>'+
+											'<b>Studenten: </b>'+priceStud+' &euro;<br/>'+
+											'<b>Mitarbeiter: </b>'+priceEmp+' &euro;<br/>'+
+											'<b>Externe: </b>'+priceExt+' &euro;'+
+										'</p>'+
 									'</div>'+
 								'</li>';
 						}
@@ -250,6 +256,20 @@
 					loadingOut();
 				})
 				.fail(ajaxErrorHandler);
+		}
+
+		function canteenEmpty(){
+			var div = '<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+			 		'<li data-cards-type="text">'+
+						'<div class="inset">'+
+							'<p>Leider sind keine Angebote verfügbar :-(</p>'+
+						'</div>'+
+					'</li>'+
+				'</ul>';
+			$( "#canteen_page div.canteen_content")
+				.empty()
+				.append(div)
+				.trigger("create");
 		}
 		
 		/**
