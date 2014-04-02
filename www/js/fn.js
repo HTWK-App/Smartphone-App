@@ -318,13 +318,9 @@ function saveParameters(){
 function ajaxErrorHandler(data, status, jqXHR, callback){
 	loadingOut();
 	var text = "Leider ist ein Fehler aufgetreten. Versuchen Sie es später erneut!";
-	if(!isEmpty(data) && !isEmpty(data.message)){
-		text = "Leider ist ein Fehler aufgetreten. Eine Fehlermeldung wurde zu Debug Zwecken in die Konsole geschrieben.";
-		console.log("Error-Message: "+data.message+"\n Exception: "+data.exception+"\n URL: "+data.url);
-	}
 	loadingIn(text,true);
 	$( "#menu" ).panel( "open");
 	setTimeout(loadingOut, 4000);
-	if(!isEmpty(callback))
+	if($.isFunction(callback))
 		callback.call(this);
 };

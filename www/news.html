@@ -1,66 +1,35 @@
-<div id="page_news" data-role="page" data-dom-cache="true" data-theme='b'>
-	<div data-role="panel" id="menue_news" data-theme="a" data-display="push">
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Hauptmenü</li>
-			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
-			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="timetable.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="canteen.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="mail.html" >Postfach</a></li>
-			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
-			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
-			
-		</ul>
-		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Info-Center</li>
-			<li data-icon="trophy"><a href="info_general.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_staff.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_buildings.html" >Gebäudeplan</a></li>
-			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
-		</ul>
-		<!--</div> -->
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Tools</li>
-			<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
-			
-		</ul>
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Einstellungen</li>
-			<li data-icon="trophy"><a href="settings.html" >HTWK-App</a></li>
-		</ul>
+<div id="news_page" data-role="page" data-title="News" data-dom-cache="true" data-theme='b'>
+	<!--- HEADER --->
+	<div data-role="header" data-position="fixed" data-theme='b' class="header">
+		<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+		<h1>HTWK App</h1>
 	</div>
-	<div data-role="header" data-position="fixed" data-theme='b'>
-		<a href="#menue_news" data-role="button" data-iconpos='left' data-mini="true"><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
-		<h1>&nbsp;HTWK App</h1>
-	</div>
-	<div data-position="fixed" data-role="footer" data-theme='b'> <!--data-tap-toggle="true" setzen falls gewünscht--> 
-		<select id="news_select" name="select-choice-1" data-native-menu="true">
-			<option selected="selected" value="">News Feed ...</option>
-		</select>
-	</div>
+	<!--- HEADER --->
+	
 	<div data-role="content">   
 		<ul id="news_content_list" data-role="listview" data-inset="true"></ul>
-		<a data-role="button" id="news-more" data-icon="arrow-d">Mehr</a>
+		<a data-role="button" id="news_btn_more" data-icon="arrow-d">Mehr</a>
 	</div>
 	<div id="news_popup" data-role="popup">
 		<p>Diese Nachricht besitzt keinen zusätzlichen Inhalt!</p>
 	</div>
+	
+	<div data-role="footer" data-tap-toggle="true" data-position="fixed" data-theme='b'> 
+		<select id="news_select" data-native-menu="true">
+			<option selected="selected" value="">Verfügbare News-Feeds werden geladen ...</option>
+		</select>
+	</div>
 
 	<script>
-
-		/*TODO
-		 * 
-		 */
-		$( "#page_news" )
-			.on("pagecreate", newsInitNewsView)
+		$( "#news_page" )
+			.on("pagecreate", initNewsView)
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.news) loadingIn();
-				$("#btn_refresh")
+				/*$("#btn_refresh")
 					.off()
 					.on("click", function() { 
 						$("#news_select").change(); 
-				 	});
+				 	});*/
 			});
 		
 		$( "#news_select" )
@@ -68,19 +37,19 @@
 				changeNewsFeed($(this).val(),false);
 			});
 		
-		$("#news-more")
-			.click(function () {
+		$( "#news_btn_more" )
+			.click(function() {
 				changeNewsFeed($("#news_select").val(),true);
 			});
 		
 		/**
-		 * Fetches data from the Server to fill the news view. Calls changeNewsFeed
-		 *
+		 * Fetches Data from the Server to fill the News-View. Calls changeNewsFeed.
 		 */
-		function newsInitNewsView() {
+		function initNewsView() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+			 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 					var tmp, name, id, opts = "";
 					
@@ -102,8 +71,8 @@
 					
 					loadingOut();
 					GLOBAL.INIT.news = true;
-				})
-				.fail(ajaxErrorHandler);
+			  })
+			 .fail(ajaxErrorHandler);
 		}
 		
 		/**
@@ -125,12 +94,13 @@
 			}
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
-				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+			 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 				 	createNewsEntries(data.responseData.feed.entries, remove);
-				})
-				.fail(ajaxErrorHandler);
+			  })
+			 .fail(ajaxErrorHandler);
 		}
 		
 		/**
@@ -140,9 +110,8 @@
 		 * @param Boolean remove ... indicates whether old News should be removed or not, due to "More"-Button
 		 */
 		function createNewsEntries(data, remove) {
-
 			var list = $("#news_content_list");
-			var news, link,  date;
+			var news, link, date;
 			var c = list.find("li").length;
 			var lis = "";
 			var divs = "";
@@ -157,32 +126,34 @@
 					link = ++c + '"';
 	
 				lis += 	'<li><a href="#news_'+link+' data-transition="slide">'+
-						'<h3>'+news.title+'</h3>'+
-						'<p>'+news.contentSnippet+'</p>'+
-						'<p><small>'+date+'</small></p>'+
-					'</a></li>';
+							'<h3>'+news.title+'</h3>'+
+							'<p>'+news.contentSnippet+'</p>'+
+							'<p><small>'+date+'</small></p>'+
+						'</a></li>';
 
-				divs += '<div id="news_'+link+' data-role="page" data-theme ="b" data-title="News" data-subpage="true" class="newsdetails" >'+
-						'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b">'+
-						'	<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
-						'	<h1>&nbsp;HTWK App</h1>'+
-						'</div>'+
-						'<div data-role="content"> <div class="inset">'+
-						'	<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
-						'		<li data-cards-type="text" >'+
-						'			<h1>'+news.title+'</h1><hr/>'+
-						'			<p>'+news.content+'<br/><br/></p>'+
-						'			<h6>'+date+'</h6>'+
-						'			<p><b>Quelle:</b> <a href="'+news.link+'">Link zur Nachricht</a></p>'+
-						'		</li>'+
-						'	</ul>'+
-						'</div>'+
-					'</div></div>';
+				divs += '<div id="news_'+link+' data-role="page" data-theme="b" data-title="News" data-subpage="true" class="newsdetails">'+
+							'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">'+
+								'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><span class="icon-angle-left"></span></a>'+
+								'<h1>HTWK App</h1>'+
+							'</div>'+
+    						'<div data-role="content"><div class="inset">'+
+    							'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+    								'<li data-cards-type="text">'+
+    									'<h1>'+news.title+'</h1><hr/>'+
+    									'<p>'+news.content+'<br/><br/></p>'+
+    									'<h6>'+date+'</h6>'+
+    									'<p><b>Quelle:</b> <a href="'+news.link+'">Link zur Nachricht</a></p>'+
+    								'</li>'+
+    							'</ul>'+
+    						'</div>'+
+    					'</div></div>';
 			}
 			
 			divs = $(divs);
 			
-			divs.find("div[data-role='content'] a").addClass("external");
+			divs.find("div:jqmData(role='content')").find("a").addClass("external").end()
+													.find("img").css("max-width", "100%")
+																.css("max-height", "100%");
 			
 			if(remove == true) {
 				list.empty();
@@ -194,10 +165,9 @@
 				.trigger("updatelayout");
 			
 			$("body").append(divs)
-				 .trigger("create");
+				 	 .trigger("create");
 			
 			loadingOut();
 		}
-
 	</script>
 </div>

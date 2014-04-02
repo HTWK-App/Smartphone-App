@@ -1,39 +1,11 @@
-﻿<div id="settings_page" data-role="page" data-theme='b'>
-	<div data-role="panel" id="menue_einstellungen_htwk-app" data-theme="a" data-display="push">
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Hauptmenü</li>
-			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
-			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="timetable.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="canteen.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="mail.html" >Postfach</a></li>
-			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
-			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
-			
-		</ul>
-		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Info-Center</li>
-			<li data-icon="trophy"><a href="info_general.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_staff.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_buildings.html" >Gebäudeplan</a></li>
-			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
-		</ul>
-		<!--</div> -->
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Tools</li>
-			<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
-			
-		</ul>
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Einstellungen</li>
-			<li data-icon="trophy"><a href="settings.html" >HTWK-App</a></li>
-		</ul>
-	</div>
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
-		<a href="#menue_einstellungen_htwk-app" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
-		<h1>&nbsp;HTWK App</h1>
-	</div>
+﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme='b'>
+    <!--- HEADER --->
+    <div data-role="header" data-position="fixed" data-theme='b' class="header">
+    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+    	<h1>HTWK App</h1>
+    </div>
+    <!--- HEADER --->
+    
 	<div data-role="content">
 		<div class='inset'>
 			<h1>Einstellungen</h1>
@@ -124,7 +96,8 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 				 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 					var tmp, name, id, opts;
 					opts = "";
@@ -158,7 +131,8 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
 				 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 			 		var opts = "";
 			 		
