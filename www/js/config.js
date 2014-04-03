@@ -156,7 +156,8 @@ var GLOBAL = {
 			"rss.medien" : "ME Nachrichten",
 			"rss.sport" : "Sportportal",
 			"rss.stura" : "HTWK Studentenrat",
-			"rss.wiwi" : "WiWi Fachschaftsrats-Termine"
+			"rss.wiwi" : "WiWi Fachschaftsrats-Termine",
+			"rss.lvz.news" : "LVZ Leipzig Nachrichten"
 			}
 	},
 	MAIL: {

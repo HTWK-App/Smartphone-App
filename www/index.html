@@ -206,15 +206,18 @@
 
 		// ## Index Page #############################################################
 			$("#index")
-				.on("pagecreate", function() {
-					getWeatherLocation(); 
-					//fillCard("LVZLeipzig", "LVZNews", "News der LVZ Leipzig");
-					fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
-					fillCard("rss.htwk.4", "HTWKNews", "Neuste HTWK Nachrichten");
-				})
+				.on("pagecreate", function() {})
 				.on("pageshow", function () {
 					if(!GLOBAL.INIT.index) loadingIn();
+					fillCards();
 				});
+
+			function fillCards(){
+				getWeatherLocation();
+				fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig");
+				fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
+				fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
+			};
 
 			function getWeatherLocation(){
 				navigator.geolocation.getCurrentPosition(fillWeatherCard, onGeoGetFail, { maximumAge: 7000, timeout: 30000});
@@ -271,7 +274,7 @@
 						}
 						div += '</ul>';
 
-						weathercard.empty().append(div).trigger("refresh");
+						weathercard.empty().append(div).trigger("create");
 
 						loadingOut();
 						GLOBAL.INIT.index = true;
@@ -280,6 +283,9 @@
 			};
 
 			function fillCard(feed, card, heading){
+
+				loadingIn();
+
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+'/get?feed='+feed+'&limit=2')
 				 .done(function(data, status, jqXHR) {
 						if(!isEmpty(data.exception))
@@ -290,10 +296,16 @@
 
 						for(var k in data.responseData.feed.entries) {
 							event = data.responseData.feed.entries[k];
-							date = createDateTimeStamp(new Date(event.publishedDate));
+							var image = event.content.slice(0,300).match(/<img.+>/g);
+							if(!isEmpty(image)){
+								//image = $(image[0]).removeAttr("style").attr("width", "100%");//TODO
+							}else{
+								image = "";
+							}
+							var contentSnippet = event.content.replace(/<img.+>/g, "").slice(0,300)+"...";
 				
 							if(!isEmpty(event.content)){
-								div += '<strong>'+event.title+'</strong><p>'+event.content.slice(0,250)+'...</p><a href="'+event.link+'" class="external" data-role="button">Weiterlesen...</a>';
+								div += '<strong>'+event.title+'</strong><p>'+image+contentSnippet+'</p><a href="'+event.link+'" class="external" data-role="button">Weiterlesen...</a>';
 							}
 							if(count != data.responseData.feed.entries.length){
 								div += '<hr/>';
@@ -302,6 +314,8 @@
 						}
 
 						$("#"+card+"").empty().append(div).trigger("create");
+
+						loadingOut();
 				  })
 				 .fail(ajaxErrorHandler);
 			};
