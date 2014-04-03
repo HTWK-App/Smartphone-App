@@ -110,6 +110,7 @@ var CONFIG = {
 var GLOBAL = {
 	INIT: {
 		news: false,
+		index: false,
 		timetable: false,
 		mensa: false,
 		mail: false,
@@ -139,6 +140,25 @@ var GLOBAL = {
 			6: { id: "Sat" , name: "Samstag"}
 		},
 		currentWeek: null
+	},
+	NEWS: {
+		titles: {
+			"rss.digiboard": "HTWK Digiboard",
+			"rss.eit.1" : "EIT Kolloquien-Termine",
+			"rss.eit.2" : "EIT Kolloquien-Nachrichten",
+			"rss.htwk.1" : "HTWK Veranstaltungen",
+			"rss.htwk.2" : "HTWK Stellenausschreibungen",
+			"rss.htwk.3" : "HTWK Nachrichten",
+			"rss.imn.1" : "IMN Nachrichten",
+			"rss.imn.2" : "IMN Verteidigungen",
+			"rss.imn.3" : "IMN Termine",
+			"rss.me.1" : "ME Fachschaftsrat",
+			"rss.medien" : "ME Nachrichten",
+			"rss.sport" : "Sportportal",
+			"rss.stura" : "HTWK Studentenrat",
+			"rss.wiwi" : "WiWi Fachschaftsrats-Termine",
+			"rss.lvz.news" : "LVZ Leipzig Nachrichten"
+			}
 	},
 	MAIL: {
 		filter: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g

@@ -58,7 +58,7 @@
 						tmp = id.split(".");
 						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
 						
-						opts += '<option value="'+id+'">'+name+'</option>';
+						opts += '<option value="'+id+'">'+GLOBAL.NEWS.titles[id]+'</option>';
 					}
 					
 					$( "#news_select" )

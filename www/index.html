@@ -87,30 +87,11 @@
 					<ul data-nativedroid-plugin='cards' class="nativeDroidCards">
 						<li id="weatherCard" data-cards-type='weather'>
 						</li>
-						<li data-cards-type='text'>
-							<h1>Neuste HTWK-Nachricht</h1>
-							<h2>19.03.14, Herzlich Willkommen!</h2>
-							<p>Gemeinsam haben die Mitarbeiter des Akademischen Auslandsamtes und des Hochschulsprachenzentrums am Dienstag die neuen Teilstudenten von unseren internationalen Partnerhochschulen (Incomings) begrüßt. Im Sommersemester 2014 beginnen 20 Studierende aus Frankreich, Italien, Jordanien, Russland, der Türkei und Ungarn ihr Teilstudium an der HTWK Leipzig.</p>
-							<p><a href="news.html">Weiterlesen </a></p>
+						<li id="HTWKNews" data-cards-type='text'>
 						</li>
-						<li data-cards-type='text'>
-							<h1>Kommende Veranstaltungen</h1>
-							<br/>
-							<h2>AUSSTELLUNG "AUFGERISSEN"</h2>
-							<h3>18.02.2014 - 11.04.2014</h3>
-							<p> Auch in diesem Jahr lädt die Fakultät Medien zu der Ausstellung „AUFGERISSEN VI“ ins Foyer der Hochschulbibliothek ein, um Entwürfe von Studier...</p>
-							<p><a href="#" >mehr </a></p>
-							<br/> 
-							<h2>TREFFEN LEAN HOCHSCHULGRUPPE (2/14)</h2>
-							<h3>28.03.2014</h3>
-							<p> Wir laden euch ganz herzlich zu unserem zweiten Treffen in diesem Jahr am 28.03.2014 um 12.00 Uhr ein! Willkommen sind natürlich wieder alle interess...</p>
-							<p><a href="#" >mehr </a></p>
+						<li id="HTWKEvents" data-cards-type='text'>
 						</li>
-						<li data-cards-type='text'>
-							<h1>Leipzig News LVZ</h1>
-							<h2>19.03.14, Blab bla bla</h2>
-							<p>Eisenbahnstraße,... bla,... tod.. schmerz... bla</p>
-							<p><a href="#" >Weiterlesen </a></p>
+						<li id="LVZNews" data-cards-type='text'>
 						</li>
 					</ul>
 				</div>
@@ -225,10 +206,18 @@
 
 		// ## Index Page #############################################################
 			$("#index")
-				.on("pagecreate", getWeatherLocation)
+				.on("pagecreate", function() {})
 				.on("pageshow", function () {
-					if(!GLOBAL.INIT.news) loadingIn();
+					if(!GLOBAL.INIT.index) loadingIn();
+					fillCards();
 				});
+
+			function fillCards(){
+				getWeatherLocation();
+				fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig");
+				fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
+				fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
+			};
 
 			function getWeatherLocation(){
 				navigator.geolocation.getCurrentPosition(fillWeatherCard, onGeoGetFail, { maximumAge: 7000, timeout: 30000});
@@ -285,12 +274,50 @@
 						}
 						div += '</ul>';
 
-						weathercard.empty().append(div).trigger("refresh");
+						weathercard.empty().append(div).trigger("create");
 
 						loadingOut();
-						GLOBAL.INIT.news = true;
+						GLOBAL.INIT.index = true;
 					})
 					.fail(ajaxErrorHandler);
+			};
+
+			function fillCard(feed, card, heading){
+
+				loadingIn();
+
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+'/get?feed='+feed+'&limit=2')
+				 .done(function(data, status, jqXHR) {
+						if(!isEmpty(data.exception))
+							{ ajaxErrorHandler(data, status, jqXHR); return; }
+
+						var div = "<h1>"+heading+"</h1><hr>";
+						var count = 1;
+
+						for(var k in data.responseData.feed.entries) {
+							event = data.responseData.feed.entries[k];
+							var image = event.content.slice(0,300).match(/<img.+>/g);
+							if(!isEmpty(image)){
+								//image = $(image[0]).removeAttr("style").attr("width", "100%");//TODO
+							}else{
+								image = "";
+							}
+							var contentSnippet = event.content.replace(/<img.+>/g, "").slice(0,300)+"...";
+				
+							if(!isEmpty(event.content)){
+								div += '<strong>'+event.title+'</strong><p>'+image+contentSnippet+'</p><a href="'+event.link+'" class="external" data-role="button">Weiterlesen...</a>';
+							}
+							if(count != data.responseData.feed.entries.length){
+								div += '<hr/>';
+							}
+							count += 1;
+						}
+
+						$("#"+card+"").empty().append(div).trigger("create");
+
+						loadingOut();
+				  })
+				 .fail(ajaxErrorHandler);
 			};
 		</script>
 	</body>
