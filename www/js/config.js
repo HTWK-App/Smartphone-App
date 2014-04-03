@@ -22,6 +22,7 @@ var CONFIG = {
 		sport: "info/sport",
 		academical: "info/academical/",
 		news: "news",
+		weather: "weather?location=",
 		mensa: "mensa",
 		timetable: "timetable/",
 		auth: "auth",

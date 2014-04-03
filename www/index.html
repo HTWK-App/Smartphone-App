@@ -4,16 +4,16 @@
         <title>HTWK App</title>
 		
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
         <link rel="stylesheet" href="css/jquerymobile-1.4.2.css" />
         <link rel="stylesheet" href="css/design-1.4.2.css" />
         <link rel="stylesheet" href="css/design.htwk-1.4.2.css"  id='jQMnDTheme' />
         <link rel="stylesheet" href="css/design.color.htwk.css" id='jQMnDColor' />
         
-		<script type="application/javascript" src="js/lib/fastclick.js"></script>
-		<script type="application/javascript" src="js/lib/jquery-2.1.0.min.js"></script>
+	<script type="application/javascript" src="js/lib/fastclick.js"></script>
+	<script type="application/javascript" src="js/lib/jquery-2.1.0.min.js"></script>
         <script type="application/javascript" src="js/lib/jquery.mobile-1.4.2.min.js"></script>
         <script type="application/javascript" src="js/lib/jquery.i18n-1.0.min.js"></script>
         
@@ -21,16 +21,27 @@
         
         <script type="application/javascript" src="cordova.js"></script>
         
-		<script type="application/javascript" src="js/config.js"></script>
-		<script type="application/javascript" src="js/fn.js"></script>
-		<script type="application/javascript" src="js/gmaps.js"></script>
+	<script type="application/javascript" src="js/config.js"></script>
+	<script type="application/javascript" src="js/fn.js"></script>
+	<script type="application/javascript" src="js/gmaps.js"></script>
 		
-		<style>.map-canvas{height:250px;}</style>
+	<style>
+		.map-canvas{
+			height:250px;
+		}
+		.blur {
+			-webkit-filter: blur(2px);
+			-moz-filter: blur(2px);
+			-ms-filter: blur(2px);
+			-o-filter: blur(2px);
+			filter: blur(2px);
+		}
+	</style>
 	</head>
 	<body>
 		<div id="index" data-role="page" data-theme='b'>
 			<!--- HEADER --->
-			<div data-role="header" data-position="fixed" data-theme='b' class="header">
+			<div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
 				<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
 				<h1>HTWK App</h1>
 			</div>
@@ -70,46 +81,11 @@
 			</div>
 			<!--- MENU --->
 			
-			<div data-role="content">   
+			<div data-role="content" class="toblur">   
 				<div class='inset cardAnimated'>
 					<h1>Willkommen ...</h1>
 					<ul data-nativedroid-plugin='cards' class="nativeDroidCards">
-						<li data-cards-type='weather'>
-							<h1>Leipzig</h1>
-							<h2>Deutschland</h2>
-							<ul class='detail'>
-								<li><i class='icon-circle sunny'></i>
-									<span>Sonnig</span>
-									<span><i class='icon-fire'></i> 12km/h</span>
-								</li>
-								<li>28&deg;</li>
-							</ul>
-							<ul class='week'>
-								<li>
-									<span>Mo</span>
-									<i class='icon-cloud'></i>
-									<strong>24&deg;</strong>
-									<span>11&deg;</span>
-								</li>
-								<li>
-									<span>Die</span>
-									<i class='icon-cloud'></i>
-									<strong>20&deg;</strong>
-									<span>10&deg;</span>
-								</li>
-								<li>
-									<span>Mi</span>
-									<i class='icon-cloud'></i>
-									<strong>11&deg;</strong>
-									<span>3&deg;</span>
-								</li>
-								<li>
-									<span>Do</span>
-									<i class='icon-cloud'></i>
-									<strong>4&deg;</strong>
-									<span>0&deg;</span>
-								</li>
-							</ul>
+						<li id="weatherCard" data-cards-type='weather'>
 						</li>
 						<li data-cards-type='text'>
 							<h1>Neuste HTWK-Nachricht</h1>
@@ -193,14 +169,12 @@
 
 					GLOBAL.DATE.currentWeek = getWeek(new Date());
 				})
-			
-				// TODO deprecated?
-				/*.on("panelbeforeopen", function( event, ui ) {
+				.on("panelbeforeopen", function( event, ui ) {
 					$(".toblur").addClass("blur");
 				})
 				.on("panelbeforeclose", function( event, ui ) {
 					$(".toblur").removeClass("blur");
-				})*/
+				})
 				// Copy Menu to new Pages
 				.on("pagebeforecreate", "div:jqmData(role='page')", function() {
 					var m = $("#index div.menu").eq(0).clone();
@@ -248,6 +222,72 @@
 				.on("click", function () {
 					$( "#signInDialog" ).popup("close");
 				});
-	</script>
+
+		// ## Index Page #############################################################
+			$("#index")
+				.on("pagecreate", fillWeatherCard)
+				.on("pageshow", function () {
+					if(!GLOBAL.INIT.news) loadingIn();
+				});
+
+			function fillWeatherCard(){
+				
+				loadingIn();
+
+				var weathercard = $("#weatherCard");
+			
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+"Leipzig&days=5")
+					 .done(function(data, status, jqXHR) {
+						if(!isEmpty(data.exception))
+							{ ajaxErrorHandler(data, status, jqXHR); return; }
+
+						var div = "";
+						var count = 0;
+						var weekday = new Array(7); weekday[0] = "So"; weekday[1] = "Mo"; weekday[2] = "Di"; weekday[3] = "Mi"; weekday[4] = "Do"; weekday[5] = "Fr"; weekday[6] = "Sa";
+
+						for(var k in data){
+							var day = data[k];
+							var date = new Date(day.dt*1000);
+							date = date.getDay();
+							var temp;
+
+							if(k == 0){
+								div += '<h1>'+day.name+'</h1><h2>'+day.country+'</h2>';
+							}
+
+							if(count == 1 && k != 0){
+								temp = day.temp.day.toFixed(1);
+								div += '<ul class="detail">'+
+									'	<li>'+
+									'		<span><img src="'+day.weather[0].iconData+'" style="margin: -10px 0 -17px 0;"></span>'+
+									'		<span>'+day.weather[0].descriptionDe+'</span>'+
+									'		<span class="icon-flag"> '+day.speed+' m/s</span>'+
+									'	</li>'+
+									'	<li>'+temp+'&deg;</li>'+
+									'</ul>';
+							}else if(k != 0){
+								temp = [day.temp.max.toFixed(1),day.temp.min.toFixed(1)];
+								if(count == 2){
+									div+= '<ul class="week">'
+								}
+								div += '<li>'+
+									'	<span>'+weekday[date]+'</span>'+
+									'	<span><img src="'+day.weather[0].iconData+'" style="margin: -10px 0 -17px 0;"></span>'+
+									'	<strong>'+temp[0]+'&deg;</strong>'+
+									'	<span>'+temp[1]+'&deg;</span>'+
+									'</li>';
+							}
+							count += 1;
+						}
+						div += '</ul>';
+
+						weathercard.empty().append(div).trigger("refresh");
+
+						loadingOut();
+						GLOBAL.INIT.news = true;
+					})
+					.fail(ajaxErrorHandler);
+			};
+		</script>
 	</body>
 </html>
