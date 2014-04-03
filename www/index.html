@@ -91,11 +91,7 @@
 						</li>
 						<li id="HTWKEvents" data-cards-type='text'>
 						</li>
-						<li data-cards-type='text'>
-							<h1>Leipzig News LVZ</h1>
-							<h2>19.03.14, Blab bla bla</h2>
-							<p>Eisenbahnstraße,... bla,... tod.. schmerz... bla</p>
-							<p><a href="#" >Weiterlesen </a></p>
+						<li id="LVZNews" data-cards-type='text'>
 						</li>
 					</ul>
 				</div>
@@ -212,7 +208,8 @@
 			$("#index")
 				.on("pagecreate", function() {
 					getWeatherLocation(); 
-					fillCard("rss.htwk.1", "HTWKEvents", "Kommende Veranstaltungen");
+					//fillCard("LVZLeipzig", "LVZNews", "News der LVZ Leipzig");
+					fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
 					fillCard("rss.htwk.4", "HTWKNews", "Neuste HTWK Nachrichten");
 				})
 				.on("pageshow", function () {
@@ -296,7 +293,7 @@
 							date = createDateTimeStamp(new Date(event.publishedDate));
 				
 							if(!isEmpty(event.content)){
-								div += '<strong>'+event.title+'</strong><p>'+event.content.slice(0,250)+'...</p><a href="'+event.link+'" class="external">Zur Meldung</a>';
+								div += '<strong>'+event.title+'</strong><p>'+event.content.slice(0,250)+'...</p><a href="'+event.link+'" class="external" data-role="button">Weiterlesen...</a>';
 							}
 							if(count != data.responseData.feed.entries.length){
 								div += '<hr/>';
@@ -304,7 +301,7 @@
 							count += 1;
 						}
 
-						$("#"+card+"").empty().append(div).trigger("refresh");
+						$("#"+card+"").empty().append(div).trigger("create");
 				  })
 				 .fail(ajaxErrorHandler);
 			};
