@@ -225,18 +225,22 @@
 
 		// ## Index Page #############################################################
 			$("#index")
-				.on("pagecreate", fillWeatherCard)
+				.on("pagecreate", getWeatherLocation)
 				.on("pageshow", function () {
 					if(!GLOBAL.INIT.news) loadingIn();
 				});
 
-			function fillWeatherCard(){
+			function getWeatherLocation(){
+				navigator.geolocation.getCurrentPosition(fillWeatherCard, onGeoGetFail, { maximumAge: 7000, timeout: 30000});
+			}
+
+			function fillWeatherCard(position){
 				
 				loadingIn();
 
 				var weathercard = $("#weatherCard");
 			
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+"Leipzig&days=5")
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+position.coords.latitude+','+position.coords.longitude+"&days=5")
 					 .done(function(data, status, jqXHR) {
 						if(!isEmpty(data.exception))
 							{ ajaxErrorHandler(data, status, jqXHR); return; }
