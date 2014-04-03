@@ -92,7 +92,7 @@ var CONFIG = {
 		temporary: []
 	},
 	NEWS: {
-		defaultFeed: "rss.htwk.4"
+		defaultFeed: "rss.htwk.3"
 	},
 	MENSA: {
 		defaultCanteen: 118

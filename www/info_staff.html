@@ -12,9 +12,6 @@
 	</div>
 	<script>
 
-		/*TODO
-		 * Resize Staff Picture --> it's to big
-		 */
     		$( "#staff_page" )
 	    		.on("pagecreate", staffInitStaffView)
 	    		.on("pageshow", function() {
@@ -67,7 +64,7 @@
 			
 				lis += '<li class="ui-screen-hidden" data-cuid="'+emp.cuid+'">'+
 						'<a href="#" class="staff">'+
-						'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+emp.cuid+'/thumb" style="margin:8px 0 0 8px;">'+
+						'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+emp.cuid+'/thumb" style="margin: 5px 0 5px 0;">'+
 							name[1]+' '+name[0]+', '+emp.degree+
 							'<p>'+emp.faculty+'</p>'+
 						'</a></li>';

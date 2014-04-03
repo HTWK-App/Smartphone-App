@@ -9,7 +9,7 @@
 			var directionsService;
 
 			function onGeoGetSuccess (p){
-				//alert("geosuccess");
+//				alert("geosuccess");
 				fromLat = parseFloat(p.coords.latitude);
 				fromLng = parseFloat(p.coords.longitude);
 				calcRoute();
@@ -24,10 +24,11 @@
 				end = new google.maps.LatLng(toLat, toLng);
 				var request = {
 					origin: start,
-					destination:end,
+					destination: end,
 					travelMode: google.maps.TravelMode.WALKING
 				};
 				directionsService.route(request, function(response, status) {
+					console.log(response);
 					if (status == google.maps.DirectionsStatus.OK) {
 					  directionsDisplay.setDirections(response);
 					}

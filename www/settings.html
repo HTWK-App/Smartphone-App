@@ -71,7 +71,6 @@
 		/*TODO
 		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
 		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
-		 * Heading of the Popup is displayed as "Wirklich Lösch..." on mobile phones --> should be fixed
 		 */
 		$( "#settings_page" )
 			.on("pagecreate", function () {
@@ -111,7 +110,7 @@
 							tmp = 'selected="selected"';
 						else
 							tmp = "";
-						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+						opts += '<option value="'+id+'" '+tmp+'>'+GLOBAL.NEWS.titles[id]+'</option>'; 
 					}
 				
 					$( "#default_news_select" )

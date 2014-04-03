@@ -29,7 +29,7 @@
 		.map-canvas{
 			height:250px;
 		}
-		.blur {
+		.blur { 
 			-webkit-filter: blur(2px);
 			-moz-filter: blur(2px);
 			-ms-filter: blur(2px);
@@ -96,12 +96,16 @@
 					</ul>
 				</div>
 			</div>
+		</div>
 		<!-- ## SIGNIN DIALOG ## -->
-		<div id="signInDialog" data-role="popup" data-dismissible="false" data-theme="b">
-	    	<div data-role="header" data-theme="b">
-	   	 		<h1>Authentifizierung</h1>
+		<div id="signInDialog" data-role="popup" data-dismissible="false" data-theme="b" data-overlyaTheme="b" data-transition="pop">
+			<style>
+				h2, h4, a, label{color: white;}
+			</style>
+	    		<div data-role="header" data-theme="b">
+	   	 		<h2>Authentifizierung</h2>
 	   	 	</div>
-	   	 	<div role="content" data-theme='b'>
+	   	 	<div data-role="content" data-theme="b" class="inset">
 	   	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
 	   	 		
 	   	 		<label for="username"><strong>Nutzername:</strong></label>
@@ -110,15 +114,19 @@
 	   	 		<label for="password"><strong>Passwort:</strong></label>
 	   	 		<input type="password" name="password" id="signInDialogPassword" value="" autocomplete="off" placeholder="******">
 	   	 		
-	   	 		<a id="signInDialog_Btn_Abort" href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Abbrechen</a>
-	   	 		<a id="signInDialog_Btn_Save" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Speichern</a>
+	   	 		<a id="signInDialog_Btn_Abort" href="#" data-role="button" data-inline="true" data-rel="back">Abbrechen</a>
+	   	 		<a id="signInDialog_Btn_Save" href="#" data-role="button" data-inline="true">Speichern</a>
 	   	 	</div>
 		</div>
 		<!-- ## SIGNIN DIALOG ## -->
-		</div>
 
 		<!---------------------------------------------------------------------------------------------------->
 		<script>
+
+			/*TODO
+			 * Blur effect is very expensive! Even the desktop browser begans to be laggy :/
+			 * Placing of images at fillCard (by card LVZ) isn't the best for Smartphones
+			 */
 
 			// AJAX Setup
 			$.ajaxSetup(CONFIG.AJAX);
@@ -149,7 +157,9 @@
 					}
 
 					GLOBAL.DATE.currentWeek = getWeek(new Date());
+					$("#signInDialog").trigger("create").popup();
 				})
+				//TODO Blur effect is very expensive! Even the desktop browser begans to be laggy :/
 				.on("panelbeforeopen", function( event, ui ) {
 					$(".toblur").addClass("blur");
 				})
@@ -174,13 +184,6 @@
 		    			var h = o.find("div.header");
 		    			
 		    			h.find("h1").text(title);
-		    			/*if(subpage) {
-		    				h.find("#btn_back").css("display", "block").end()
-		    				 .find("#btn_menu").css("display", "none");
-		    			} else {
-		    				h.find("#btn_menu").css("display", "block").end()
-		    				 .find("#btn_back").css("display", "none");
-		    			}*/
 				})
 				// External Link Handling
 				.on("click", "a.external", openInExternalBrowser)
@@ -202,6 +205,8 @@
 			$( "#signInDialog_Btn_Abort" )
 				.on("click", function () {
 					$( "#signInDialog" ).popup("close");
+					var o = $("body").pagecontainer("getActivePage");
+					o.find("div.menu").panel("open");
 				});
 
 		// ## Index Page #############################################################
@@ -212,6 +217,10 @@
 					fillCards();
 				});
 
+			/**
+			 * Fills all corresponding cards (named as arguments) with content
+			 *
+			 */
 			function fillCards(){
 				getWeatherLocation();
 				fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig");
@@ -219,10 +228,19 @@
 				fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
 			};
 
+			/**
+			 * Gets the user location and calls on succes: fillWeatherCard, on fail: onGeoGetFail
+			 *
+			 */
 			function getWeatherLocation(){
 				navigator.geolocation.getCurrentPosition(fillWeatherCard, onGeoGetFail, { maximumAge: 7000, timeout: 30000});
-			}
+			};
 
+			/**
+			 * Fills the weather card, with the weather for the specified location
+			 *
+			 * @param GeoData-Object positon ... Geo Position Object, See W3C documentation
+			 */
 			function fillWeatherCard(position){
 				
 				loadingIn();
@@ -282,6 +300,13 @@
 					.fail(ajaxErrorHandler);
 			};
 
+			/**
+			 * Fills a card, given by parameter card, with one of the specified news feeds
+			 *
+			 * @ param String feed ... a valid feed name to fetch from the Server
+			 * @ param String card ... the id of the card to be filled
+			 * @ param String heading ... the heading of the card
+			 */
 			function fillCard(feed, card, heading){
 
 				loadingIn();
@@ -298,7 +323,7 @@
 							event = data.responseData.feed.entries[k];
 							var image = event.content.slice(0,300).match(/<img.+>/g);
 							if(!isEmpty(image)){
-								//image = $(image[0]).removeAttr("style").attr("width", "100%");//TODO
+								//image = $(image[0]).removeAttr("style").attr("width", "100%");//TODO Better placing of the image
 							}else{
 								image = "";
 							}
