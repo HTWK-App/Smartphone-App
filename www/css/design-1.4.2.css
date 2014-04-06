@@ -104,7 +104,7 @@ width: 91px;
 
 .ui-header .ui-title, .ui-footer .ui-title {
 	text-align: left;
-	margin: 3px 25px 7px 55px;
+	margin: 3px 25px 7px 75px;
 	padding: 7px 0px 0px 0px;
 	font-size: 25px;
 	font-weight: 300;
@@ -854,7 +854,7 @@ progress  {
 	-webkit-perspective: 500;
 }
 
-.nativeDroidCards > li {
+.cardAnimated .nativeDroidCards > li {
 	padding: 10px;
 	margin: 12px;
 	display: block;
@@ -870,7 +870,7 @@ progress  {
 	animation-fill-mode: forwards;
 }
 
-.nativeDroidCards > li:nth-child(even) {
+.cardAnimated .nativeDroidCards > li:nth-child(even) {
 	-webkit-animation: slideFromRight 1.5s 1;
 	-webkit-animation-fill-mode: forwards;
 	-moz-animation: slideFromRight 1.5s 1;
@@ -878,20 +878,13 @@ progress  {
 	animation: slideFromRight 1.5s 1;
 	animation-fill-mode: forwards;
 }
-.cardAnimated  .nativeDroidCards > li {
+.nativeDroidCards > li {
 	padding: 10px;
 	margin: 12px;
 	display: block;
 	opacity: 1;
 	top: 0px;
-	left: -100%;
 	position: relative;
-	-webkit-animation: slideFromLeft 1.0s 1;
-	-webkit-animation-fill-mode: forwards;
-	-moz-animation: slideFromLeft 1.0s 1;
-	-moz-animation-fill-mode: forwards;
-	animation: slideFromLeft 1.0s 1;
-	animation-fill-mode: forwards;
 }
 
 .cardAnimated .nativeDroidCards > li:nth-child(even) {
@@ -902,6 +895,11 @@ progress  {
 	animation: slideFromRight 1.0s 1;
 	animation-fill-mode: forwards;
 }
+.maildetails .nativeDroidCards li{
+	width: 97%;
+}
+
+
 .nativeDroidCards > li:nth-child(1) { -webkit-animation-delay: 0.5s; -moz-animation-delay: 0.5s;  -o-animation-delay: 0.5s; -ms-animation-delay: 0.5s; animation-delay: 0.5s;}
 .nativeDroidCards > li:nth-child(2) { -webkit-animation-delay: 1s;  -moz-animation-delay: 1s;  }
 .nativeDroidCards > li:nth-child(3) { -webkit-animation-delay: 1.5s;  -moz-animation-delay: 1.5s;  }
