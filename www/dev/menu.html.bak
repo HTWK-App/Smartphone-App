@@ -2,9 +2,9 @@
 	<li data-role="list-divider" role="heading">Hauptmenü</li>
 	<li data-icon="fire"><a href="index.html" >Startseite</a></li>
 	<li data-icon="fire"><a href="news.html" >News</a></li>
-	<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
-	<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
-	<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
+	<li data-icon="trophy"><a href="timetable.html" >Stundenplan</a></li>
+	<li data-icon="trophy"><a href="canteen.html" >Mensa</a></li>
+	<li data-icon="trophy"><a href="mail.html" >Postfach</a></li>
 	<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
 	<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
 	
@@ -12,16 +12,16 @@
 <!--<div data-role="collapsible"><h4>Info-Center</h4> -->
 <ul data-role="listview">
 	<li data-role="list-divider" role="heading">Info-Center</li>
-	<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
-	<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
-	<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
+	<li data-icon="trophy"><a href="info_general.html" >Allgemein</a></li>
+	<li data-icon="trophy"><a href="info_staff.html" >Mitarbeiter</a></li>
+	<li data-icon="trophy"><a href="info_buildings.html" >Gebäudeplan</a></li>
 	<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
 </ul>
 <!--</div> -->
 <ul data-role="listview">
 	<li data-role="list-divider" role="heading">Tools</li>
-	<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
-	<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
+	<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
+	
 </ul>
 <ul data-role="listview">
 	<li data-role="list-divider" role="heading">Einstellungen</li>

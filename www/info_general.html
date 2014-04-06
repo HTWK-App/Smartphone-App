@@ -1,0 +1,219 @@
+<div id="info_page" data-role="page" data-dom-cache="true" data-theme="b">
+    <!--- HEADER --->
+    <div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
+    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+    	<h1>HTWK App</h1>
+    </div>
+    <!--- HEADER --->
+    
+	<div data-role="content"  class="toblur">
+		<div class="inset">
+			<h1>Allgemeine Informationen</h1><br/>
+			<ul id="scroll_table" data-role="listview" data-inset="true">
+				<li><a href="#semPlan">Semester-Plan</a></li>
+				<li><a href="#opal">Opal</a></li>
+				<li><a href="#specialPlaces">Spezielle Orte</a></li>
+				<li><a href="#mailCard">E-Mail Einrichtung</a></li>
+				<li><a href="#maillist">E-Mail Listen</a></li>
+				<li><a href="#vpncard">VPN</a></li>
+			</ul><br/>
+			<ul data-nativedroid-plugin="cards" class="nativeDroidCards">
+				<li data-cards-type="text" id="semPlan">
+					<h1>Semester-Plan</h1><hr/>
+					<div id="info_academical" class="inset" ></div>
+				</li>
+				<li data-cards-type="text" id="opal">
+					<h1>Opal</h1><hr/>
+					<a href="https://shib1.rz.htwk-leipzig.de/idp/Authn/UserPassword" class="external" data-role="button">Zur Website</a>
+				</li>
+				<li data-cards-type="text" id="specialPlaces">
+					<h1>Spezielle Orte</h1><hr/>
+					<h1>HTWK-Card</h1><br/>
+					<p><strong>Aktualisierung:</strong><br/>Terminal im Foyer des Lipsius Baus<br/>
+					<strong>Probleme:</strong><br><a href="http://www.htwk-leipzig.de/de/studierende/beratungs-servicestellen/htwk-card/" class="external" data-role="button">Zur Website</a></p>
+					<hr><h1>Prüfungsämter</h1><br/>
+					<ul id="info_exam_table" data-role="listview" data-inset="true">
+						<li><a href="#" class="exam" data-cuid="431">Angewandte Sozialwissenschaften</a></li>
+						<li><a href="#" class="exam" data-cuid="100">Bauwesen</a></li>
+						<li><a href="#" class="exam" data-cuid="197">Elektro- und Informationstechnik</a></li>
+						<li><a href="#" class="exam" data-cuid="288">Informatik, Mathematik, Naturwissenschaften</a></li>
+						<li><a href="#" class="exam" data-cuid="293">Maschinenbau und Energietechnik 1</a></li>
+						<li><a href="#" class="exam" data-cuid="320">Maschinenbau und Energietechnik 2</a></li>
+						<li><a href="#" class="exam" data-cuid="395">Medien 1</a></li>
+						<li><a href="#" class="exam" data-cuid="407">Medien 2</a></li>
+						<li><a href="#" class="exam" data-cuid="460">Wirtschaftswissenschaften</a></li>
+					</ul>
+				</li>
+				<li data-cards-type="text" id="mailCard">
+					<h1>Mail-Client einrichten</h1><hr/>
+					<p>Um einen Mail-Client mit ihrem HTWK Mail-Konto zu verknüpfen, benutzten Sie bitte folgende Einstellungen:<br/><br/>
+					<strong>Posteingangsserver: </strong><br/>mail.htwk-leipzig.de<br/>
+					<strong>IMAP Port: </strong><br/>143<br/>
+					<strong>POP Port: </strong><br/>10<br/>
+					<strong>Postausgangsserver: </strong><br/>send.htwk-leipzig.de<br/>
+					<strong>Port: </strong><br/>587<br/>
+					<strong>Verbindungssicherheit: </strong><br/>STARTTLS oder TLS<br/>
+					<strong>Authentifizierungsmethode: </strong><br/>Passwort/normal<br/>
+					<strong>Login: </strong><br/>Ihr HRZ Login</p>
+				</li>
+				<li data-cards-type="text" id="maillist">
+					<h1>E-Mail Listen</h1><hr/>
+					<p>Leider bietet die HTWK Leipzig keine öffentlichen Verteilerlisten an. Sofern Sie etwas an Studenten senden möchten, wenden Sie sich an den Studentenrat. Sofern Sie etwas an Mitarbeiter senden möchten, wenden Sie sich bitte an das Büro der Rektorin.</p>
+				</li>
+				<li data-cards-type="text" id="vpncard">
+					<h1>VPN-Zugang</h1><hr/>
+					<p><a href="http://www.htwk-leipzig.de/de/rzpages/services/vpn/" class="external" data-role="button">Zur Website</a></p>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<script>
+
+		/*TODO
+		 * Functions infoLoadExamDetails is the same function, used in Staff. --> Refactoring, so that it is not copy and pasted
+		 * Quicklinks to scroll an Website FIXME
+		 */
+		$( "#info_page" )
+			.on("pagecreate", infoFillAcademical)
+			.on("pageshow", function () {
+				//$("#btn_refresh").hide();
+				if(!GLOBAL.INIT.info)
+					loadingIn();
+				$( "body" )
+					.find("div.examdetails") //TODO see global todo list
+					.remove();
+			 })
+			/*.on("pagehide", function() {
+				$("#btn_refresh").show();
+			 });*/
+
+		$( "#info_exam_table" )
+			.on("click", "a.exam", infoLoadExamDetails);
+
+		/**
+		 * Fetches data from the Server to fill the academical calender
+		 *
+		 */
+		function infoFillAcademical(){
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
+				.done(function (data, status, jqXHR) {
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
+
+					var semester = data.semester;
+
+					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.academical+semester)
+						.done(function (data, status, jqXHR) {
+							if(!isEmpty(data.exception))
+								{ ajaxErrorHandler(data, status, jqXHR); return; }
+
+							var div = "";
+							var runs = 0;
+							var length = 0;
+
+							for(var k in data){
+								length = length+1;
+							}
+
+							for(var k in data){
+								var textarray = data[k];
+								div += '<h1>'+k+'</h1><hr/>';
+
+								for( var s in textarray){
+									var line = textarray[s];
+
+									line = line.split(":");
+									div += "<strong>"+line[0]+":</strong><br/>"+line[1]+"<br>";
+								}
+
+								runs = runs + 1;
+								div += '<br/>';
+							}
+
+							$("#info_academical")
+								.empty()
+								.append(div);
+
+							loadingOut();
+							GLOBAL.INIT.info = true;
+						})
+						.fail(ajaxErrorHandler);
+				})
+				.fail(ajaxErrorHandler);
+		}
+
+		/**
+		 * Fetches data from the Server to create a new page inside the document, filled with informations about examination office.
+		 * TODO see global todo list
+		 *
+		 * @ param Event e ... Event from element with cuid
+		 *
+		 */
+		function infoLoadExamDetails(e) {
+			var id = $(e.target).first().data("cuid");
+			
+			if($("#exam_"+id).length > 0) {
+				$.mobile.initializePage();
+				$.mobile.changePage("#staff_"+id);
+				return;
+			}
+			
+			loadingIn();
+			
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)
+				 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
+
+					var name = data.name.split(", ");
+
+					var div = '<div id="exam_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Mitarbeiter" class="examdetails">'+
+							'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b">'+
+							'	<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><i class="icon-angle-left"></i></a>'+
+							'	<h1>&nbsp;HTWK App</h1>'+
+							'</div>'+
+							'<div data-role="content">'+
+							'	<div class="inset">'+
+							'		<h1>'+data.degree+' '+name[1]+' '+name[0]+'</h1>'+
+							'		<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+							'			<li data-cards-type="text">'+
+							'				<!--<h2>Info</h2> BILD -->'+
+							'				<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+id+'/pic"/>'+
+							'			</li>'+
+							'			<li data-cards-type="text">'+
+							'				<h1>Info</h1><hr/>'+
+							'				<strong>Grad:</strong> '+data.degree+'<br/>'+
+							'				<strong>Bereich:</strong> '+data.faculty+'<br/>'+
+							'				<strong>Objekt:</strong> '+data.location+'<br/>'+
+							'				<p>'+data.description+'</p>'+
+							'			</li>'+
+							'			<li data-cards-type="text">'+
+							'				<h1>Kontakt</h1><hr/>'+
+							'				<strong>E-Mail:</strong> <a href="mailto:'+data.email+'">'+data.email+'</a><br/>'+
+							'				<strong>Telefon:</strong> <a href="tel:'+data.telephone+'">'+data.telephone+'</a><br/>'+
+							'				<strong>Fax:</strong><hr/> '+data.telefax+
+							'			</li>'+
+							'			<li data-cards-type="text">'+
+							'				<h1>Links</h1><hr/>'+
+							'				<strong><a href="'+data.detailLink+'" class="external">Details zur Person</a></strong> '+
+							'				<strong><a href="'+data.vcardLink+'" class="external">V-Card</a></strong>'+
+							'			</li>'+
+							'		</ul>'+
+							'	</div>'+
+							'</div>';
+
+					$( "body" )
+						.append(div)
+						.trigger("create");
+				
+					$.mobile.initializePage();
+					$.mobile.changePage("#exam_"+id);
+				
+					loadingOut();
+				})
+				.fail(ajaxErrorHandler);
+		}
+	</script>
+</div>

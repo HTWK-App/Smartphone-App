@@ -1,48 +1,15 @@
 <div id="mail_page" data-dom-cache="true" data-title="Postfach" data-role="page" data-theme='b'>
-	<div data-role="panel" id="menue_postfach" data-theme="a" data-display="push">
-		<ul data-role="listview">
-			<li data-role="list-divider">Hauptmenü</li>
-			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
-			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
-			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
-			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
-			
-		</ul>
-		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
-		<ul data-role="listview">
-			<li data-role="list-divider">Info-Center</li>
-			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
-			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
-		</ul>
-		<!--</div> -->
-		<ul data-role="listview">
-			<li data-role="list-divider">Tools</li>
-			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
-			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
-		</ul>
-		<ul data-role="listview">
-			<li data-role="list-divider">Einstellungen</li>
-			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
-		</ul>
-	</div>
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
-		<a href="#menue_postfach" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
-		<h1>&nbsp;HTWK App</h1>
-	</div>
-	<style>
-		.ui-btn-icon-top {
-			padding-top: 0.75em !important;
-		}
-	</style>
-	<div data-role="content" >
+    <!--- HEADER --->
+	<div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
+    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+    	<h1>HTWK App</h1>
+    </div>
+    <!--- HEADER --->
+    
+	<div data-role="content"  class="toblur">
 		<div id="mail_inbox" data-role="content" class="toblur">
 			<ul id="mail_list" data-role="listview" data-inset="true"></ul>
-			<a data-role="button" id="mail_more" data-icon="arrow-d">Mehr</a>
+			<a data-role="button" id="mail_btn_more" data-icon="arrow-d">Mehr</a>
 		</div>
 		<div id="mail_sendForm" data-role="content" class="toblur">
 			<form>
@@ -62,24 +29,17 @@
 				<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Senden</a>
 		    </div>
 		</div>
-		<footer id="mail_footer" data-role="footer" data-position="fixed" class="toblur">
-			<div data-role="navbar">
-				<ul>
-					<li><a id="btn_mail_abort" href="#" data-role="button" data-icon="back" data-mini="true">Abbrechen</a></li>
-					<li><a id="btn_mail_write" href="#" data-role="button" data-icon="forward" data-mini="true">Neue Mail</a></li>
-					<li><a id="btn_mail_send" href="#" data-role="button" data-icon="mail" data-mini="true">Senden</a></li>
-				</ul>
-			</div>
-		</footer>
-		<div id="mail_footer" data-role="footer" data-position="fixed" data-theme="b">
-			<div data-role="navbar">
-		    <ul>
-					<li><a id="btn_mail_write" href="#" data-icon="forward"  back="false">E-Mail schreiben ...</a></li>
-					<li><a id="btn_mail_send" href="#" data-icon="mail" >Senden</a></li>
-				</ul>
-			</div>
-		</div>
 	</div>
+	
+	<footer id="mail_footer" data-role="footer" data-position="fixed" data-theme="b" class="toblur">
+	<div data-role="navbar">
+		<ul>
+			<li><a id="btn_mail_abort" href="#" data-role="button" data-icon="back" data-mini="true">Abbrechen</a></li>
+			<li><a id="btn_mail_write" href="#" data-role="button" data-icon="forward" data-mini="true">Neue Mail</a></li>
+			<li><a id="btn_mail_send" href="#" data-role="button" data-icon="mail" data-mini="true">Senden</a></li>
+		</ul>
+	</div>
+	</footer>
 	
 	<script>
 		$( "#mail_page" )
@@ -93,9 +53,9 @@
 				initMailView(false);
 			})
 			.on("pageshow", function() {
-				$("#btn_refresh")
+				/*$("#btn_refresh")
 					.off()
-					.on("click", initMailView);
+					.on("click", initMailView);*/
 				if(isEmpty(CONFIG.AUTH.credentials)) {
 	    			openSignInDialog(initMailView);
 	    		}
@@ -107,7 +67,7 @@
 		$("#btn_mail_write").on("click", showMailSendForm);
 		$("#btn_mail_abort").on("click", showMailInBox);
 		
-		$("#mail_more").click(function () {
+		$("#mail_btn_more").click(function () {
 			initMailView(true);
 		});
 
@@ -137,7 +97,7 @@
 															salt: CONFIG.AUTH.salt, 
 															to: to, cc: cc, 
 															subject: subject, message: content})
-				.done(function(data, status, jqXHR) {
+			 .done(function(data, status, jqXHR) {
 					loadingOut();
 					if(!isEmpty(data.exception)) {
 						loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);
@@ -147,8 +107,8 @@
 					}
 					setTimeout(loadingOut, 3000);
 					showMailInBox();
-				});
-			//.fail(ajaxErrorHandler);
+				})
+			.fail(ajaxErrorHandler);
 		});
 
 		/**
@@ -167,7 +127,7 @@
 			$("#mail_new_to").val(from);
 			$("#mail_new_subject").val("Re: "+subj);
 			
-			$("#btn_back").click();
+			//$("#btn_back").click();
 			showMailSendForm();
 		};
 
@@ -178,7 +138,7 @@
 			$("#mail_sendForm").hide();
 			$("#mail_inbox").show();
 			
-			$("#btn_refresh").show();
+			//$("#btn_refresh").show();
 			$("#btn_mail_abort").hide();
 			$("#btn_mail_write").show();
 			$("#btn_mail_send").hide();
@@ -196,7 +156,7 @@
 			$("#mail_inbox").hide();
 			$("#mail_sendForm").show();
 			
-			$("#btn_refresh").hide();
+			//$("#btn_refresh").hide();
 			$("#btn_mail_abort").show();
 			$("#btn_mail_write").hide();
 			$("#btn_mail_send").show();
@@ -231,9 +191,9 @@
 							loadingIn("Es konnten keine Mails abgerufen werden!", true);
 							setTimeout(loadingOut, 3000);
 						}
-				  });
+				  })
+				 .fail(ajaxErrorHandler);
 			}
-			//.fail(ajaxErrorHandler);
 		};
 		
 		function fillMailList(data, remove) {
@@ -317,23 +277,30 @@
 			subj = escape(mail.subject);
 			
 			toList = mail.toList?mail.toList.toString():"";
-			toList = toList.slice(0, toList.lastIndexOf(",")).replace(/[;:]/g, "");
+			toList = toList.replace(/[;:]/g, "").split(",").toString();
 			toList = escape(toList);
 			
-			msg = $.parseHTML(mail.message);
-			msg = $('<pre class="mail-content-iframe" />').append(msg).html();
+			msg = '<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">'+mail.message+'</pre></div>';
 			
-			div = $('<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="a" data-content-theme="a">'+
+			div = $('<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="b">'+
+					'<!--- HEADER --->'+
+						'<div data-role="header" data-position="fixed" data-theme="b" class="header">'+
+							'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><span class="icon-angle-left"></span></a>'+
+							'<h1>HTWK App</h1>'+
+						'</div>'+
+					'<!--- HEADER --->'+
 					'<div data-role="content">'+
-						'<p><strong>Von: </strong><span class="mail-from">'+from+'</span></br>'+
-						'<strong>An: </strong>'+toList+'</br>'+
-						'<strong>Betreff: </strong><span class="mail-subject">'+subj+'</span></br>'+
-						'</p><hr>'+msg+
-						'<hr><a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b btn_mail_answer" data-icon="forward">Antworten</a>'+
+						'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+							'<li data-cards-type="text">'+
+        						'<p><strong>Von: </strong><span class="mail-from">'+from+'</span></br>'+
+        						'<strong>An: </strong>'+toList+'</br>'+
+        						'<strong>Betreff: </strong><span class="mail-subject">'+subj+'</span></br>'+
+        						'</p><hr>'+msg+
+        						'<hr><a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b btn_mail_answer" data-icon="forward">Antworten</a>'+
+        					'</li>'+
+    					'</ul>'+
 					'</div>'+
 				'</div>');
-			
-			//msg.contents().find("html").find("a").addClass("external");
 			
 			div.find("a.btn_mail_answer").click(answerMail);
 			

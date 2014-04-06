@@ -1,97 +1,64 @@
-﻿<div id="settings_page" data-role="page" data-theme='b'>
-	<div data-role="panel" id="menue_einstellungen_htwk-app" data-theme="a" data-display="push">
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Hauptmenü</li>
-			<li data-icon="fire"><a href="index.html" >Startseite</a></li>
-			<li data-icon="fire"><a href="news.html" >News</a></li>
-			<li data-icon="trophy"><a href="stundenplan.html" >Stundenplan</a></li>
-			<li data-icon="trophy"><a href="mensa.html" >Mensa</a></li>
-			<li data-icon="trophy"><a href="postfach.html" >Postfach</a></li>
-			<li data-icon="trophy"><a href="qis.html" >QIS</a></li>
-			<li data-icon="trophy"><a href="sport.html" >Hochschulsport</a></li>
-			
-		</ul>
-		<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Info-Center</li>
-			<li data-icon="trophy"><a href="info_allgemein.html" >Allgemein</a></li>
-			<li data-icon="trophy"><a href="info_mitarbeiter.html" >Mitarbeiter</a></li>
-			<li data-icon="trophy"><a href="info_gebaeudeplan.html" >Gebäudeplan</a></li>
-			<li data-icon="trophy"><a href="info_wlan.html" >WLAN-Konfiguration</a></li>
-		</ul>
-		<!--</div> -->
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Tools</li>
-			<li data-icon="trophy"><a href="tools_leeren-raum.html" >Leeren Raum finden</a></li>
-			<li data-icon="trophy"><a href="tools_buch.html" >Buchausleihe</a></li>
-		</ul>
-		<ul data-role="listview">
-			<li data-role="list-divider" role="heading">Einstellungen</li>
-			<li data-icon="trophy"><a href="einstellungen_htwk-app.html" >HTWK-App</a></li>
-		</ul>
-	</div>
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b'>
-		<a href="#menue_einstellungen_htwk-app" data-role='button' role="button" data-iconpos='left' data-inline='true'><i class="icon-ellipsis-vertical"></i>&nbsp;</a>
-		<h1>&nbsp;HTWK App</h1>
-	</div>
-	<div data-role="content">
+﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme='b'>
+    <!--- HEADER --->
+    <div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
+    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+    	<h1>HTWK App</h1>
+    </div>
+    <!--- HEADER --->
+    
+	<div data-role="content"  class="toblur">
 		<div class='inset'>
 			<h1>Einstellungen</h1>
-			<br />
+			<br/>
 			<h2>Login-Daten</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="input_username"><strong>Nutzername:</strong></label>
-					<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername"/>
-				</li>
-				<li data-role="fieldcontain">
-					<label for="input_password"><strong>Passwort:</strong></label>
-					<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="******"/>
-				</li>
+			<br/>
+			<div class='inset'>
+				<label for="input_username"><strong>Nutzername:</strong></label>
+				<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername"/>
+				<label for="input_password"><strong>Passwort:</strong></label>
+				<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="******"/>
 				<br>
-				<li data-role="fieldcontain">
-					<a id="settings_login_save"data-role="button" data-mini="true" >Speichern</a>
-				<li>
-			</ul>
-			<br/>
+				<a id="settings_login_save"data-role="button" data-mini="true">Speichern</a>
+			</div>
+			<hr/>
 			<h2>Sprache</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="default_language_select"><strong>Standardsprache:</strong></label>
-					<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
-				</li>
-			</ul>
 			<br/>
+			<div class='inset'>
+				<label for="default_language_select"><strong>Standardsprache:</strong></label>
+				<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
+			</div>
+			<hr/>
 			<h2>News</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
-					<select id="default_news_select" name="default_news_select">
-						<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-					</select>
-				</li>
-			</ul>
 			<br/>
+			<div class='inset'>
+				<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
+				<select id="default_news_select" name="default_news_select">
+					<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+				</select>
+			</div>
+			<hr/>
 			<h2>Stundenplan</h2>
 			<br/>
-			<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
-			<hr>
+			<div class='inset'>
+				<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
+			</div>
+			<hr/>
 			<h2>Mensa</h2>
-			<ul data-inset="true" data-role="listview">
-				<li data-role="fieldcontain">
-					<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
-					<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
-						<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
-					</select>
-				</li>
-			</ul>
+			<br/>
+			<div class='inset'>
+				<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
+				<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
+					<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+				</select>
+			</div>
+			<br/>
 		</div>
 	</div>
-	<div id="popup_timetable_delete" data-role="popup" data-theme="b" data-content-theme="b">
+	<div id="popup_timetable_delete" data-role="popup" data-theme="b">
 		<div data-role="header" data-theme="b">
 			<h3>Wirklich Löschen?</h3>
 		</div>
-		<div role="main" class="ui-content">
+		<div role="main" class="ui-content" data-theme="b">
 			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
 			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p><br>
 			<a href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>
@@ -104,7 +71,6 @@
 		/*TODO
 		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
 		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
-		 * Heading of the Popup is displayed as "Wirklich Lösch..." on mobile phones --> should be fixed
 		 */
 		$( "#settings_page" )
 			.on("pagecreate", function () {
@@ -113,7 +79,6 @@
 				settingsFillFields();
 			})
 			.on("pageshow", function () {
-				loadingIn();
 				$("#btn_refresh").hide();
 			 })
 			.on("pagehide", function() {
@@ -125,10 +90,13 @@
 		 *
 		 */
 		function settingsGetNewsFeeds() {
+			
+			loadingIn();
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 				 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 					var tmp, name, id, opts;
 					opts = "";
@@ -142,7 +110,7 @@
 							tmp = 'selected="selected"';
 						else
 							tmp = "";
-						opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
+						opts += '<option value="'+id+'" '+tmp+'>'+GLOBAL.NEWS.titles[id]+'</option>'; 
 					}
 				
 					$( "#default_news_select" )
@@ -162,7 +130,8 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
 				 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+					if(!isEmpty(data.exception))
+						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 			 		var opts = "";
 			 		

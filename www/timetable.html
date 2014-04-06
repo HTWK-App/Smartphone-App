@@ -1,0 +1,666 @@
+﻿<div id="timetable_page" data-role="page" data-theme='b' data-dom-cache="true">
+	<!--- HEADER --->
+	<div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
+		<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+		<h1>HTWK App</h1>
+		<a href="#timetableInfoPopup" data-role="button" data-icon="info" data-iconpos='right' data-rel="popup" data-position-to="window" data-transition="pop">&nbsp</a>
+	</div>
+	<!--- HEADER --->
+	<div data-position="fixed" data-role="footer" data-theme='b'> <!--data-tap-toggle="true" setzen falls gewünscht--> 
+		<div class="center">
+			<a data-role="button" href="#" id="extendTimetable">Kalender erweitern...</a>
+		</div>
+	</div>
+	<div data-role="content">   
+		<div class="inset">
+			<h1 id="actualWeek">Woche wird geladen</h1>
+			<br/>
+			<style type="text/css">
+				.tg  {
+					border-collapse:collapse;
+					border-spacing:0;
+					width:100%
+				}
+				table.tg td{
+					padding:0px;
+				}
+				table.tg tr td.full-hour:first-child{
+					width:50px;
+				}
+				table.tg tr th:first-child{
+					width:50px;
+				}
+				table.tg th.weekdays{
+					width:13%;
+				}
+				table.tg tr {
+					height:30px;
+				}
+				table.tg tr.full-hour td {
+					border-top:1px solid black;
+					border-left:1px solid black;
+				}
+
+				table.tg tr.half-hour td{
+					border-top:1px dotted #333333;
+					border-left:1px solid black;
+				}
+				table.tg tr.full-hour td:first-child{
+					border-left:0px;
+					border-right:1px solid black;
+					text-align:center;
+				}
+				table.tg tr.head th{
+					border-collapse:separate;
+					border-spacing:0px;
+					border-top:1px solid black;
+					border-left:1px solid black;
+				}
+				table.tg tr.head th.top-left-no-borders {
+					border:0px;
+				}
+				table.tg tr th:last-child, table.tg tr td:last-child{
+					border-right:1px solid black;
+				}
+				table.tg tr:last-child{
+					border-bottom:1px solid black;
+				}
+				table.tg td span {
+					font-size:0.8em;
+					padding:0px;
+					margin-right:7%;
+					background-color:black;
+					color:white;
+					width:85%;
+					height:100%;
+					line-height:29px;
+					float:right;
+					display:block;
+					overflow:auto
+				}
+				table.tg td span.start{
+					-moz-border-radius: 5px 5px 0px 0px;
+					border-radius: 5px 5px 0px 0px;
+				}
+				table.tg td span.middle{
+
+				}
+				table.tg td span.end{
+					-moz-border-radius: 0px 0px 5px 5px;
+					border-radius: 0px 0px 5px 5px;
+				}
+			</style>
+			<select id="timetable_day_select" name="timetable_select" data-native-menu="true">
+				<option value="1" data-day="1">Montag</option>
+				<option value="2" data-day="2">Dienstag</option>
+				<option value="3" data-day="3">Mittwoch</option>
+				<option value="4" data-day="4">Donnerstag</option>
+				<option value="5" data-day="5">Freitag</option>
+				<option value="6" data-day="6">Samstag</option>
+				<option value="7" data-day="7">Sonntag</option>
+			</select>
+			<br/>
+		</div>
+		<div id="timetable_day" data-week="-1">
+			<table class="tg">
+			  <tr class="data full-hour" data-hour="7">
+				<td rowspan="2">07.00</td>
+				<td ><span class="middle"><span>Nothing to show</span></span></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="8">
+				<td rowspan="2">08.00<br></td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="9">
+				<td rowspan="2">09.00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="10">
+				<td rowspan="2">10.00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="11">
+				<td rowspan="2">11.00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="12">
+				<td  rowspan="2">12.00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="13">
+				<td  rowspan="2">13.00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="14">
+				<td  rowspan="2">14:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="15">
+				<td rowspan="2">15:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="16">
+				<td rowspan="2">16:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="17">
+				<td rowspan="2">17:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="18">
+				<td rowspan="2">18:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="19">
+				<td rowspan="2">19:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="20">
+				<td rowspan="2">20:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="21">
+				<td rowspan="2">21:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td ></td>
+			  </tr>
+			  <tr class="data full-hour" data-hour="22">
+				<td rowspan="2">22:00</td>
+				<td ></td>
+			  </tr>
+			  <tr class="data half-hour">
+				<td></td>
+			  </tr>
+			</table>
+		</div>
+	</div>
+	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-theme="b" data-overlyaTheme="b" data-transition="pop">
+		<style>
+			h2, h3, h4, a, label, ul, li{color: white;}
+		</style>
+    		<div id="timetableDialogHeader" data-role="header" data-theme="b">
+   	 	</div>
+   	 	<div id="timetableDialogContent" data-role="content" data-theme='b' class="inset">
+   	 	</div>
+	</div>
+	<div id="timetableInfoPopup" data-role="popup" data-dismissible="true" data-theme="b" data-overlyaTheme="b" data-transition="pop">
+    		<div data-role="header" data-theme="b">
+			<h2>Informationen</h2>
+   	 	</div>
+   	 	<div data-role="content" data-theme='b' class="inset">
+			<p>Leider bietet die App es bisher nicht, den von dir zusammgenstellten Stundenplan in den Systemkalender zu übernehmen. Du kannst das aber komfortable auf einer Website machen. Dort ist auch erklärt, wie man den Kalender fast überall einbindet.<br/>Du kommst über folgenden Button zur Website: </p>
+			<a href="http://www.htwk-stundenplan.de" class="external" data-role="button" data-icon="forward" data-mini="true" data-inline="true">Zur Website</a>
+			<hr/>
+			<a href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Zurück</a>
+   	 	</div>
+	</div>
+
+	<script>		
+	/*TODO
+	 * timetableInfoPopup Button "zur website" doesn't open
+	 * Add function do delete timetable, when semester has changed (+ inform/request user)
+	*/
+		$( "#timetable_page" )
+			.on("pagecreate", initTimetableView)
+			.on("pageshow", function() {
+				if(!GLOBAL.INIT.timetable) loadingIn();
+    				$("#btn_refresh")
+					.off()
+					.on("click", function() {
+						$("#timetable_week_select").change(); 
+					 });
+				if(CONFIG.TIMETABLE.faculty.length == 0) showConfigDialog();
+			 })
+			.on("swipeleft", function() { //next week
+				var week = parseInt($("#timetable_day").attr("data-week"))+1;
+				$("#timetable_day").attr("data-week", week);
+				$("#timetable_day_select").change();
+			 })
+			.on("swiperight", "#timetable_day", function() { //previous week
+				var week = parseInt($("#timetable_day").attr("data-week"))-1;
+				$("#timetable_day").attr("data-week", week);
+				$("#timetable_day_select").change();
+			 });
+			
+		$( "#timetable_day_select" )
+			.on("change", function() {
+				$("#timetable_day span").remove();
+				console.log($(this).val());
+				timetableGetDayData($(this).val());
+			 });
+		$("#extendTimetable")
+			.on("click", showConfigDialog);
+
+		/*********************************************************************************************************************
+		  * This Area is used for Timetable Configuration Dialogs
+		*/
+
+		var popupOpen = false;
+
+		/**
+		 * Get a Popup with a Heading and a Description
+		 * 
+		 * @param String heading ... Heading of the Popup
+		 * @param String description ... Text to display in the Popup
+		 * @param Optional String btn_text ... If set, another button with btn_text as text will be displayd
+		 * @param Optional Function func ... Callbackfunction for optional button
+		 * 
+		 * @return jQueryMobile Popup
+		 */
+		function fillPopup(heading, description, btn_text, func){
+			$("#timetableDialogHeader").empty().append('<h3 style="padding: 5% 0 0 10%;">'+heading+'</h3>'); //TODO renew design
+			$("#timetableDialogContent").empty().append('<p>'+description+'</p>');
+			$("#timetableDialogContent").append('<a id="timetableDialogAbort" href="#" data-role="button" data-icon="back" data-mini="true" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>');
+
+			if(!isEmpty(btn_text)){
+				$("#timetableDialogContent").append('<a id="timetableDialogSave" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">'+btn_text+'</a>');
+			}
+			$.mobile.activePage.trigger("create");
+			$("#timetableDialog")
+				.popup().off()
+				.on("popupafteropen", function() {popupOpen = true;})
+				.on("popupafterclose", function() {
+					popupOpen = false;
+			 	 });
+			$("#timetableDialogAbort").off().on("click", abortSetup);
+			$("#timetableDialogSave").off().on("click", func);
+		}
+
+		/**
+		 * Aborts the displayed Dialog and resets configurations (if not completed)
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function abortSetup(e) {
+			$("#timetableDialog").popup("close")
+			CONFIG.TIMETABLE.temporary= [];
+			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_day_select").change();
+		};
+
+		/**
+		 * Opens the given Popup whenever another Popup is closed
+		 * 
+		 * @param JQueryMobile Popub popUp ... Popup to open
+		 */
+		function open(popUp){
+			if(popupOpen == true){
+				setTimeout(function(){open(popUp);}, 50);
+				return;
+			}
+			loadingOut();
+			$("#timetableDialog").popup("open");
+		}
+
+		function noContent(text){
+			loadingOut();
+			loadingIn(text,true);
+			setTimeout(loadingOut, 3000);
+			CONFIG.TIMETABLE.temporary= [];
+		}
+
+		/**
+		 * Starts Configuration Dialog for Timetable.
+		 * 
+		 * @param Optional Event e ... Click-Event of Link
+		 */
+		function showConfigDialog(e) {	
+			loadingIn();
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
+			 .done(function (data, status, jqXHR) {
+				if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+				CONFIG.TIMETABLE.semester = data.semester;
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+data.semester)
+		 		 .done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+
+					var ul = '<ul id="chooseCourse" data-func="course" data-role="listview" data-inset="true" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Suche Studiengang...">';
+					
+					for(var k in data) {
+						for(var s in data[k].courses) {
+							var course = data[k].courses[s];
+							ul += '<li class="ui-screen-hidden" data-course="'+course.id+'" data-faculty="'+data[k].id+'"><a href="#">'+course.name+'</a></li>';
+						}
+					}
+
+					ul += '</ul>';
+					ul = $(ul).on("click", "a", facultyChosen);
+
+					fillPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
+					$("#timetableDialogAbort").before(ul);
+					$("#timetableDialog").trigger("create");
+					$("#timetableDialog").popup();
+					
+					setTimeout(function(){open($("#timetableDialog"));}, 50);
+					
+					loadingOut();
+				})
+				.fail(ajaxErrorHandler);
+			})
+			.fail(ajaxErrorHandler);
+		};
+
+		/**
+		 * Called by Configuration Dialog. At this point, a faculty was chosen.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function facultyChosen(e) {
+			var li = $(e.target).parent("li");
+			var id = li.jqmData("course");
+			var fac = li.jqmData("faculty");
+			
+			loadingIn();
+			CONFIG.TIMETABLE.temporary.push({"id": id, "groups": []});
+			
+			li.closest("div:jqmData(role='popup')").popup("close");
+			
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester)
+		 		.done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+
+					var empty = true;
+					var lis = '<ul data-role="listview">';
+					
+					for(var k in data) {
+						for(var s in data[k].courses) {
+							var course = data[k].courses[s];
+							
+							if(course.id === id) {
+								for(var p in course.semGroups) {
+									lis += '<li><a href="#">'+course.semGroups[p]+'</a></li>';
+									empty = false;
+								}
+							}
+						}
+					}
+					
+					lis += '</ul>';
+					lis = $(lis).on("click", "a", courseChosen); 
+					
+					fillPopup("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
+					$("#timetableDialogAbort").before(lis);
+					$("#timetableDialog").trigger("create");
+					$("#timetableDialog").popup();
+					
+					if(empty == true) {noContent("Es existieren keine Matrikel bzgl. Ihres Studiengangs!"); return;}
+					
+					setTimeout(function(){open($("#timetableDialog"));}, 50);
+				})
+				.fail(ajaxErrorHandler);
+		};
+
+		/**
+		 * Called by Configuration Dialog. At this point, a course was chosen.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function courseChosen(e){
+			var element = $(e.target);
+			var course = element.text();
+
+			loadingIn();
+			CONFIG.TIMETABLE.temporary[0].groups.push({"id": course, "courses": {}});
+			$("#timetableDialog").popup("close");
+
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+CONFIG.TIMETABLE.temporary[0].id+"/courses?semgroup="+course)
+		 		.done(function (data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
+
+					var empty = true;
+					var check = '<form><fieldset data-role="controlgroup">';
+					
+					for(var k in data) {
+						var course = data[k];
+							
+						check += '<input type="checkbox" name="'+course+'" id="'+course+'" data-hash="'+k+'"><label for="'+course+'">'+course+'</label>';
+						empty = false;
+					}
+					
+					check += '</fieldset></form>';
+
+					if(empty == true) {noContent("Es existieren keine Fächer bzgl. Ihres Matrikels!"); return;}
+					
+					check = $(check); 
+					fillPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
+					$("#timetableDialogAbort").before(check);
+					$("#timetableDialog").trigger("create");
+					$("#timetableDialog").popup();
+					
+					setTimeout(function(){open($("#timetableDialog"));}, 50);
+				})
+				.fail(ajaxErrorHandler);
+		}
+
+		/**
+		 * Called by Configuration Dialog. At this point, all needed subjects were marked.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function setCourses(e){
+			var element = $(e.target);
+			var boxes = element.siblings("form").find("input");
+			for(var k = 0; k < boxes.length; k++){
+				var box = boxes.eq(k);
+				if(box.prop("checked")){
+					CONFIG.TIMETABLE.temporary[0].groups[0].courses[box.attr("data-hash")] = box.attr("name")
+				}
+			}
+			$("#timetableDialog").popup("close");
+			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
+			var ins = '<form>';
+			for(var k in courses){
+				ins += '<input type="text" name="text-'+k+'" id="text-'+k+'" value="'+courses[k]+'">';
+			}
+			ins += '</form>';
+			ins = $(ins);
+
+			fillPopup("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt","Ok", renameCourses);
+			$("#timetableDialogAbort").before(ins);
+			$("#timetableDialog").trigger("create");
+			$("#timetableDialog").popup();
+			
+			setTimeout(function(){open($("#timetableDialog"));}, 50);
+		}
+
+		/**
+		 * Called by Configuration Dialog. At this point, subjects were renamed. In this step, made configurations are saved permenantly.
+		 * 
+		 * @param Event e ... Click-Event of Link
+		 */
+		function renameCourses(e){
+			var element = $(e.target);
+			var boxes = element.siblings("form");
+			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
+
+			for(var k in courses){
+				var box = boxes.find('#text-'+k);
+				courses[k] = box.val();
+			}
+
+			$("#timetableDialog").popup("close");
+
+			//save courses
+			var pushedc = false; var pushedg = false;
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				if(faculty.id == CONFIG.TIMETABLE.temporary[0].id){
+					for(var s in CONFIG.TIMETABLE.faculty[k].groups){
+						var group = CONFIG.TIMETABLE.faculty[k].groups[s];
+						if(group.id == CONFIG.TIMETABLE.temporary[0].groups[0].id){
+							for(var l in courses){
+								CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //Add/Rename Courses
+							}
+							pushedc = true;
+						}
+					}
+					if(pushedc == false) { //Nothing was pushed
+						CONFIG.TIMETABLE.faculty[k].groups.push(CONFIG.TIMETABLE.temporary[0].groups[0]);//Add group
+						pushedg = true;
+					}
+				}
+			}
+			if(pushedc == false && pushedg == false){//Nothing was pushed
+				CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);//Add faculty
+			}
+			saveParameters();
+			CONFIG.TIMETABLE.temporary = [];
+
+			fillPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
+			
+			setTimeout(function(){open($("#timetableDialog"));}, 50);
+		}
+
+		/*********************************************************************************************************************
+		  * END of "This Area is used for Timetable Configuration Dialogs"
+		*/
+
+		/**
+		 * Loading the available Weeks and fill the preselected Timetable.
+		 */
+		function initTimetableView() {
+			var date = new Date();
+			var day = getWeekDay(date).id;
+
+			var today = date.getDay();
+			var dayselect = $("#timetable_day_select");
+			dayselect.find('option[selected="selected"]').removeAttr("selected");
+			dayselect.find('option:jqmData(day="'+today+'")').attr("selected", "selected");
+			dayselect.selectmenu("refresh");
+			
+			timetableFill($("#timetable_day_select").find('option[selected="selected"]').val());
+			
+			GLOBAL.INIT.timetable = true;
+		};
+		
+		/**
+		 * 
+		 */
+		function timetableFill(day) {
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
+			 .done(function(data, status, jqXHR) {
+					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+			 		CONFIG.TIMETABLE.semester = data.semester;
+					$("#timetable_day").attr("data-week", data.current);
+					$("#actualWeek").empty().append(''+data.current+'. Planungswoche');
+			 		
+			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData(day);
+			})
+			.fail(ajaxErrorHandler);
+		}
+
+		function timetableGetDayData(day){
+			var week = $("#timetable_day").attr("data-week");
+			$("#actualWeek").empty().append(''+week+'. Planungswoche');
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				for(var s in faculty.groups){
+					var group = faculty.groups[s];
+					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+CONFIG.TIMETABLE.semester+"/"+faculty.id+"/week/"+week+"/"+day+"?semgroup="+group.id)
+					.done(function(data, status, jqXHR) {
+						if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+
+						timetableFillDay(data);
+					})
+					.fail(ajaxErrorHandler);
+
+//						http://localhost:8080/app/timetable/{semester}/{fac}/week/{kw}/{day}?semgroup={semGroup}
+						//CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //add course to timetable
+				}
+			}
+		}
+
+		function timetableFillDay(data){
+			var added = false;
+			for(var k in CONFIG.TIMETABLE.faculty){
+				var faculty = CONFIG.TIMETABLE.faculty[k];
+				for(var s in faculty.groups){
+					var group = faculty.groups[s];
+					for(var m in data.dayContent){
+						dayCourse = data.dayContent[m];
+						if(!isEmpty(group.courses[dayCourse.suid])){
+							timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid])
+							added = true;
+						}
+					}	
+				}
+			}
+			if(added == false){
+				$("#timetable_day").find('.full-hour:jqmData(hour="7")').children().eq(1).append('<span class="middle"><span>Nothing to show</span></span>');
+			}
+		}
+		function timetableAddDayCourse(course, name){
+			var begin = course.begin.split(":");
+			var end = course.end.split(":");
+			var tdBegin = $("#timetable_day").find('.full-hour:jqmData(hour="'+begin[0]+'")');
+			var tdEnd = $("#timetable_day").find('.full-hour:jqmData(hour="'+end[0]+'")');
+			var between = tdBegin.next(); 
+			if(begin[1] != "30"){
+				tdBegin = tdBegin.children().eq(1);
+			} else {
+				tdBegin = tdBegin.next().children();
+			}
+			tdBegin.append('<span class="start"><span>'+name+'</span></span>');
+			if(end[1] != "30"){
+				tdEnd = tdEnd.children().eq(1);
+			} else {
+				tdEnd = tdEnd.next().children();
+			}
+			tdEnd.append('<span class="end"><span>'+course.location+'</span></span>');
+			
+			while(between.find("span").first().text() != course.location){
+				if(between.children().length == 2){
+					between.children().eq(1).append('<span class="middle"><span></span></span>');
+				}else{
+					between.children().append('<span class="middle"><span></span></span>');
+				}
+				between = between.next(); 
+			}
+			$("#timetable_day").trigger("create");
+		}
+	</script>
+</div>
