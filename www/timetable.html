@@ -1,4 +1,4 @@
-﻿<div id="timetable_page" data-role="page" data-theme='b' data-dom-cache="true">
+﻿<div id="timetable_page" data-role="page" data-title="Stundenplan" data-theme='b' data-dom-cache="true">
 	<!--- HEADER --->
 	<div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
 		<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
@@ -13,8 +13,9 @@
 	</div>
 	<div data-role="content">   
 		<div class="inset">
-			<h1 id="actualWeek" data-week="">Woche wird geladen</h1>
-			<h1 id="actualDay" data-day=""></h1><hr/>
+			<h1 id="actualWeek" data-week="-1">Woche wird geladen...</h1>
+			<h1 id="actualDay" data-day=""></h1>
+			<hr/>
 			<ul id="dayCards" data-nativedroid-plugin='cards' class="nativeDroidCards">
 			</ul>
 		</div>
@@ -44,12 +45,17 @@
 	/*TODO
 	 * timetableInfoPopup Button "zur website" doesn't open
 	 * Add function do delete timetable, when semester has changed (+ inform/request user)
+	 * sort timetable list
 	*/
 		$( "#timetable_page" )
 			.on("pagecreate", initTimetableView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.timetable) loadingIn();
-				if(CONFIG.TIMETABLE.faculty.length == 0) showConfigDialog();
+				if(CONFIG.TIMETABLE.faculty.length == 0) {
+					showConfigDialog();
+				} else if($("#actualWeek").attr("data-week") != -1){
+					timetableGetDayData();
+				}
 			 })
 			.on("swipeleft", function() { //next day
 				var aDay = $("#actualDay");
@@ -352,8 +358,8 @@
 			if(pushedc == false && pushedg == false){//Nothing was pushed
 				CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);//Add faculty
 			}
-			saveParameters();
 			CONFIG.TIMETABLE.temporary = [];
+			saveParameters();
 
 			fillPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
 			
@@ -365,7 +371,7 @@
 		*/
 
 		/**
-		 * Loading the available Weeks and fill the preselected Timetable.
+		 * Sets the day to the actual day and then fetches the calendar data
 		 */
 		function initTimetableView() {
 			var date = new Date();
@@ -378,7 +384,7 @@
 		};
 		
 		/**
-		 * 
+		 * Fetches the calendar data, sets the actual week und then fills the timetable for the actual day
 		 */
 		function timetableFill() {
 
@@ -386,23 +392,35 @@
 			 .done(function(data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 
-			 		CONFIG.TIMETABLE.semester = data.semester;
-					$("#actualWeek").attr("data-week", data.current);
-			 		
-			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData();
+			 		if(isEmpty(CONFIG.TIMETABLE.semester))
+						CONFIG.TIMETABLE.semester = data.semester;
+					else if(CONFIG.TIMETABLE.semester != data.semester){
+						//TODO Delete Plan and ask for new one
+					} else {
+						$("#actualWeek").attr("data-week", data.current);
+				 		
+				 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData();
+					}
 			})
 			.fail(ajaxErrorHandler);
 		}
 
+		/**
+		 * Fetchas all courses for the actual day/week that are configured by the user
+		 */
 		function timetableGetDayData(){
+
+			loadingIn();
 
 			var aWeek = $("#actualWeek"); 
 			var aDay = $("#actualDay");
 			var week = aWeek.attr("data-week");
-			aWeek.empty().append(''+week+'. Planungswoche');
 			var day = aDay.attr("data-day");
-			var weekday = ["abc", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
-			aDay.empty().append(weekday[day]);
+			var weekdays = ["abc", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+			aWeek.empty().append(''+week+'. Planungswoche');
+			aDay.empty().append(weekdays[day]);
+
+			$("#dayCards").empty().append('<li id="nothingToShow" data-cards-type="text"><h1>Keine Veranstaltungen!</h1></li>').trigger("create");
 
 			for(var k in CONFIG.TIMETABLE.faculty){
 				var faculty = CONFIG.TIMETABLE.faculty[k];
@@ -419,11 +437,16 @@
 			}
 		}
 
+		/**
+		 * Filters for courses, configured by the user and than adds them to the view
+		 *
+		 * @param JSON-Object data
+		 */
 		function timetableFillDay(data){
 
-			$("#dayCards").empty();
-
+			var li = '';
 			var added = false;
+
 			for(var k in CONFIG.TIMETABLE.faculty){
 				var faculty = CONFIG.TIMETABLE.faculty[k];
 				for(var s in faculty.groups){
@@ -431,28 +454,47 @@
 					for(var m in data.dayContent){
 						dayCourse = data.dayContent[m];
 						if(!isEmpty(group.courses[dayCourse.suid])){
-							timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid])
+							li += timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid])
 							added = true;
 						}
 					}	
 				}
 			}
-			if(added == false){
-				$("#dayCards").append('<li data-cards-type="text"><h1>Keine Veranstaltungen!</h1></li>').trigger("create");	
+			if(added == true && $("#nothingToShow").length != 0){
+				$("#dayCards").empty();
 			}
+
+			$("#dayCards").append(li);
+			sortDayList();
+			loadingOut(); //TODO if there are more than one faculty, this is called too early
 		}
+
+		/**
+		 * Adds an specific course to the view
+		 *
+		 * @param JSON-Object course
+		 * @param String name ... name of the course (configured by the user)
+		 */
 		function timetableAddDayCourse(course, name){
 			
-			var li ='<li data-cards-type="text">';
+			var li ='<li data-cards-type="text" data-begin="'+course.begin.split(":")[0]+'">'+
+					'<h1>'+name+'</h1><hr/>'+
+					'<p><strong>'+course.begin+'-'+course.end+'</strong><br/>'+
+					'<strong>Dozent:</strong> '+course.docentDetailed+'<br/>'+
+					'<strong>Ort:</strong> '+course.location+'<br/>'+
+					'<strong>Typ:</strong> '+course.type+'</p>'+
+				'</li>';
+			return li;
+		}
 
-			li += '<h1>'+name+'</h1><hr/>'+
-				'<p><strong>'+course.begin+'-'+course.end+'</strong><br/>'+
-				'<strong>Dozent:</strong> '+course.docentDetailed+'<br/>'+
-				'<strong>Ort:</strong> '+course.location+'<br/>'+
-				'<strong>Typ:</strong> '+course.type+'</p>';
-
-			li += '</li>';
-			$("#dayCards").append(li).trigger("create");
+		function sortDayList() {
+			$("#dayCards li").sort(asc_sort).appendTo("#dayCards").trigger("create");
+			// accending sort
+			function asc_sort(a, b){
+				var first = parseInt($(a).attr("data-begin"));
+				var second = parseInt($(b).attr("data-begin"));
+			    return (first < second) ? -1 : (first > second) ? 1 : 0;
+			}
 		}
 	</script>
 </div>
