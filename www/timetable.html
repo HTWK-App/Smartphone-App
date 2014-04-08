@@ -13,209 +13,10 @@
 	</div>
 	<div data-role="content">   
 		<div class="inset">
-			<h1 id="actualWeek">Woche wird geladen</h1>
-			<br/>
-			<style type="text/css">
-				.tg  {
-					border-collapse:collapse;
-					border-spacing:0;
-					width:100%
-				}
-				table.tg td{
-					padding:0px;
-				}
-				table.tg tr td.full-hour:first-child{
-					width:50px;
-				}
-				table.tg tr th:first-child{
-					width:50px;
-				}
-				table.tg th.weekdays{
-					width:13%;
-				}
-				table.tg tr {
-					height:30px;
-				}
-				table.tg tr.full-hour td {
-					border-top:1px solid black;
-					border-left:1px solid black;
-				}
-
-				table.tg tr.half-hour td{
-					border-top:1px dotted #333333;
-					border-left:1px solid black;
-				}
-				table.tg tr.full-hour td:first-child{
-					border-left:0px;
-					border-right:1px solid black;
-					text-align:center;
-				}
-				table.tg tr.head th{
-					border-collapse:separate;
-					border-spacing:0px;
-					border-top:1px solid black;
-					border-left:1px solid black;
-				}
-				table.tg tr.head th.top-left-no-borders {
-					border:0px;
-				}
-				table.tg tr th:last-child, table.tg tr td:last-child{
-					border-right:1px solid black;
-				}
-				table.tg tr:last-child{
-					border-bottom:1px solid black;
-				}
-				table.tg td span {
-					font-size:0.8em;
-					padding:0px;
-					margin-right:7%;
-					background-color:black;
-					color:white;
-					width:85%;
-					height:100%;
-					line-height:29px;
-					float:right;
-					display:block;
-					overflow:auto
-				}
-				table.tg td span.start{
-					-moz-border-radius: 5px 5px 0px 0px;
-					border-radius: 5px 5px 0px 0px;
-				}
-				table.tg td span.middle{
-
-				}
-				table.tg td span.end{
-					-moz-border-radius: 0px 0px 5px 5px;
-					border-radius: 0px 0px 5px 5px;
-				}
-			</style>
-			<select id="timetable_day_select" name="timetable_select" data-native-menu="true">
-				<option value="1" data-day="1">Montag</option>
-				<option value="2" data-day="2">Dienstag</option>
-				<option value="3" data-day="3">Mittwoch</option>
-				<option value="4" data-day="4">Donnerstag</option>
-				<option value="5" data-day="5">Freitag</option>
-				<option value="6" data-day="6">Samstag</option>
-				<option value="7" data-day="7">Sonntag</option>
-			</select>
-			<br/>
-		</div>
-		<div id="timetable_day" data-week="-1">
-			<table class="tg">
-			  <tr class="data full-hour" data-hour="7">
-				<td rowspan="2">07.00</td>
-				<td ><span class="middle"><span>Nothing to show</span></span></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="8">
-				<td rowspan="2">08.00<br></td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="9">
-				<td rowspan="2">09.00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="10">
-				<td rowspan="2">10.00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="11">
-				<td rowspan="2">11.00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="12">
-				<td  rowspan="2">12.00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="13">
-				<td  rowspan="2">13.00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="14">
-				<td  rowspan="2">14:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="15">
-				<td rowspan="2">15:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="16">
-				<td rowspan="2">16:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="17">
-				<td rowspan="2">17:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="18">
-				<td rowspan="2">18:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="19">
-				<td rowspan="2">19:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="20">
-				<td rowspan="2">20:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="21">
-				<td rowspan="2">21:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td ></td>
-			  </tr>
-			  <tr class="data full-hour" data-hour="22">
-				<td rowspan="2">22:00</td>
-				<td ></td>
-			  </tr>
-			  <tr class="data half-hour">
-				<td></td>
-			  </tr>
-			</table>
+			<h1 id="actualWeek" data-week="">Woche wird geladen</h1>
+			<h1 id="actualDay" data-day=""></h1><hr/>
+			<ul id="dayCards" data-nativedroid-plugin='cards' class="nativeDroidCards">
+			</ul>
 		</div>
 	</div>
 	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-theme="b" data-overlyaTheme="b" data-transition="pop">
@@ -248,30 +49,35 @@
 			.on("pagecreate", initTimetableView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.timetable) loadingIn();
-    				$("#btn_refresh")
-					.off()
-					.on("click", function() {
-						$("#timetable_week_select").change(); 
-					 });
 				if(CONFIG.TIMETABLE.faculty.length == 0) showConfigDialog();
 			 })
-			.on("swipeleft", function() { //next week
-				var week = parseInt($("#timetable_day").attr("data-week"))+1;
-				$("#timetable_day").attr("data-week", week);
-				$("#timetable_day_select").change();
+			.on("swipeleft", function() { //next day
+				var aDay = $("#actualDay");
+				var aWeek = $("#actualWeek");
+				var day = parseInt(aDay.attr("data-day"))+1;
+				var week = parseInt(aWeek.attr("data-week"));
+				if(day > 7){
+					day = 1;
+					week += 1;
+					aWeek.attr("data-week", week);
+				}
+				aDay.attr("data-day", day);
+				timetableGetDayData();
 			 })
-			.on("swiperight", "#timetable_day", function() { //previous week
-				var week = parseInt($("#timetable_day").attr("data-week"))-1;
-				$("#timetable_day").attr("data-week", week);
-				$("#timetable_day_select").change();
+			.on("swiperight", function() { //previous day
+				var aDay = $("#actualDay");
+				var aWeek = $("#actualWeek");
+				var day = parseInt(aDay.attr("data-day"))-1;
+				var week = parseInt(aWeek.attr("data-week"));
+				if(day < 1){
+					day = 7;
+					week -= 1;
+					aWeek.attr("data-week", week);
+				}
+				aDay.attr("data-day", day);
+				timetableGetDayData();
 			 });
 			
-		$( "#timetable_day_select" )
-			.on("change", function() {
-				$("#timetable_day span").remove();
-				console.log($(this).val());
-				timetableGetDayData($(this).val());
-			 });
 		$("#extendTimetable")
 			.on("click", showConfigDialog);
 
@@ -318,7 +124,7 @@
 		function abortSetup(e) {
 			$("#timetableDialog").popup("close")
 			CONFIG.TIMETABLE.temporary= [];
-			if(CONFIG.TIMETABLE.faculty.length != 0) $("#timetable_day_select").change();
+			if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData();
 		};
 
 		/**
@@ -563,15 +369,10 @@
 		 */
 		function initTimetableView() {
 			var date = new Date();
-			var day = getWeekDay(date).id;
-
 			var today = date.getDay();
-			var dayselect = $("#timetable_day_select");
-			dayselect.find('option[selected="selected"]').removeAttr("selected");
-			dayselect.find('option:jqmData(day="'+today+'")').attr("selected", "selected");
-			dayselect.selectmenu("refresh");
-			
-			timetableFill($("#timetable_day_select").find('option[selected="selected"]').val());
+
+			$("#actualDay").attr("data-day",today);
+			timetableFill();
 			
 			GLOBAL.INIT.timetable = true;
 		};
@@ -579,23 +380,30 @@
 		/**
 		 * 
 		 */
-		function timetableFill(day) {
+		function timetableFill() {
+
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
 			 .done(function(data, status, jqXHR) {
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
 
 			 		CONFIG.TIMETABLE.semester = data.semester;
-					$("#timetable_day").attr("data-week", data.current);
-					$("#actualWeek").empty().append(''+data.current+'. Planungswoche');
+					$("#actualWeek").attr("data-week", data.current);
 			 		
-			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData(day);
+			 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData();
 			})
 			.fail(ajaxErrorHandler);
 		}
 
-		function timetableGetDayData(day){
-			var week = $("#timetable_day").attr("data-week");
-			$("#actualWeek").empty().append(''+week+'. Planungswoche');
+		function timetableGetDayData(){
+
+			var aWeek = $("#actualWeek"); 
+			var aDay = $("#actualDay");
+			var week = aWeek.attr("data-week");
+			aWeek.empty().append(''+week+'. Planungswoche');
+			var day = aDay.attr("data-day");
+			var weekday = ["abc", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+			aDay.empty().append(weekday[day]);
+
 			for(var k in CONFIG.TIMETABLE.faculty){
 				var faculty = CONFIG.TIMETABLE.faculty[k];
 				for(var s in faculty.groups){
@@ -607,14 +415,14 @@
 						timetableFillDay(data);
 					})
 					.fail(ajaxErrorHandler);
-
-//						http://localhost:8080/app/timetable/{semester}/{fac}/week/{kw}/{day}?semgroup={semGroup}
-						//CONFIG.TIMETABLE.faculty[k].groups[s].courses[l] = courses[l]; //add course to timetable
 				}
 			}
 		}
 
 		function timetableFillDay(data){
+
+			$("#dayCards").empty();
+
 			var added = false;
 			for(var k in CONFIG.TIMETABLE.faculty){
 				var faculty = CONFIG.TIMETABLE.faculty[k];
@@ -630,37 +438,21 @@
 				}
 			}
 			if(added == false){
-				$("#timetable_day").find('.full-hour:jqmData(hour="7")').children().eq(1).append('<span class="middle"><span>Nothing to show</span></span>');
+				$("#dayCards").append('<li data-cards-type="text"><h1>Keine Veranstaltungen!</h1></li>').trigger("create");	
 			}
 		}
 		function timetableAddDayCourse(course, name){
-			var begin = course.begin.split(":");
-			var end = course.end.split(":");
-			var tdBegin = $("#timetable_day").find('.full-hour:jqmData(hour="'+begin[0]+'")');
-			var tdEnd = $("#timetable_day").find('.full-hour:jqmData(hour="'+end[0]+'")');
-			var between = tdBegin.next(); 
-			if(begin[1] != "30"){
-				tdBegin = tdBegin.children().eq(1);
-			} else {
-				tdBegin = tdBegin.next().children();
-			}
-			tdBegin.append('<span class="start"><span>'+name+'</span></span>');
-			if(end[1] != "30"){
-				tdEnd = tdEnd.children().eq(1);
-			} else {
-				tdEnd = tdEnd.next().children();
-			}
-			tdEnd.append('<span class="end"><span>'+course.location+'</span></span>');
 			
-			while(between.find("span").first().text() != course.location){
-				if(between.children().length == 2){
-					between.children().eq(1).append('<span class="middle"><span></span></span>');
-				}else{
-					between.children().append('<span class="middle"><span></span></span>');
-				}
-				between = between.next(); 
-			}
-			$("#timetable_day").trigger("create");
+			var li ='<li data-cards-type="text">';
+
+			li += '<h1>'+name+'</h1><hr/>'+
+				'<p><strong>'+course.begin+'-'+course.end+'</strong><br/>'+
+				'<strong>Dozent:</strong> '+course.docentDetailed+'<br/>'+
+				'<strong>Ort:</strong> '+course.location+'<br/>'+
+				'<strong>Typ:</strong> '+course.type+'</p>';
+
+			li += '</li>';
+			$("#dayCards").append(li).trigger("create");
 		}
 	</script>
 </div>
