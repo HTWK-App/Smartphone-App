@@ -209,6 +209,7 @@
 		$( "#settings_timetable_delete" )
 			.on("click", function() {
 				CONFIG.TIMETABLE.faculty = [];
+				CONFIG.TIMETABLE.temporary = [];
 				saveParameters();
 				
 			});

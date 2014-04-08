@@ -13,7 +13,7 @@
 	</div>
 	<div data-role="content">   
 		<div class="inset">
-			<h1 id="actualWeek" data-week="">Woche wird geladen</h1>
+			<h1 id="actualWeek" data-week="">Woche wird geladen...</h1>
 			<h1 id="actualDay" data-day=""></h1><hr/>
 			<ul id="dayCards" data-nativedroid-plugin='cards' class="nativeDroidCards">
 			</ul>
@@ -352,8 +352,8 @@
 			if(pushedc == false && pushedg == false){//Nothing was pushed
 				CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);//Add faculty
 			}
-			saveParameters();
 			CONFIG.TIMETABLE.temporary = [];
+			saveParameters();
 
 			fillPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
 			
