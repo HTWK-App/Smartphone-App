@@ -103,10 +103,11 @@
 		 * 
 		 * @return jQueryMobile Popup
 		 */
-		function fillPopup(heading, description, btn_text, func){
+		function fillPopup(heading, description, btn_text, func, btn_abr_text){
+			if(isEmpty(btn_abr_text)) btn_abr_text = "Abbrechen";
 			$("#timetableDialogHeader").empty().append('<h3 style="padding: 5% 0 0 10%;">'+heading+'</h3>'); //TODO renew design
 			$("#timetableDialogContent").empty().append('<p>'+description+'</p>');
-			$("#timetableDialogContent").append('<a id="timetableDialogAbort" href="#" data-role="button" data-icon="back" data-mini="true" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>');
+			$("#timetableDialogContent").append('<a id="timetableDialogAbort" href="#" data-role="button" data-icon="back" data-mini="true" data-inline="true" class="ui-corner-all ui-shadow">'+btn_abr_text+'</a>');
 
 			if(!isEmpty(btn_text)){
 				$("#timetableDialogContent").append('<a id="timetableDialogSave" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">'+btn_text+'</a>');
@@ -361,7 +362,7 @@
 			CONFIG.TIMETABLE.temporary = [];
 			saveParameters();
 
-			fillPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog);
+			fillPopup("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigDialog, "Nein");
 			
 			setTimeout(function(){open($("#timetableDialog"));}, 50);
 		}
