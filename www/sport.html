@@ -145,6 +145,7 @@
 	    			$( "body" )
 						.append(div)
 						.trigger("create");
+				div.on("pagehide",function(){$(this).remove();});
 				
 	    			$.mobile.initializePage();
 	    			$.mobile.changePage("#sport_"+id);

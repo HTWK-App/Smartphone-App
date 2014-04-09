@@ -22,7 +22,7 @@
 	<script>
 		
 		/*TODO
-		 * Google Maps won't show up
+		 *
 		 */
 	    	$( "#building_page" )
 	    		.on("pagecreate", buildingInitBuildingsView)
@@ -31,7 +31,7 @@
 	    			/*$("#btn_refresh")
 						.off()
 						.on("click", buildingInitBuildingsView);*/
-	    		 });
+	    		 })
 
 		/**
 		 * Fetches buildings from the Server. Will call buildingFillBuildingsList
@@ -122,7 +122,7 @@
 							desc += data.description[d] + "</br>";
 					}
 				
-					var div ='<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebäude" class="building_page" data-destination="'+data.latLng.replace(/ /, '')+'">'+
+					var div ='<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebäude" data-destination="'+data.latLng.replace(/ /, '')+'">'+
 								'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">'+
 									'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><span class="icon-angle-left"></span></a>'+
 									'<h1>HTWK App</h1>'+
@@ -163,11 +163,14 @@
 					$( "body" )
 						.append(div)
 						.trigger("create");
-				
-					$(".building_page").on("pageshow",function(){
+
+					div.on("pageshow",function(){
 						var thi = $(this);
 
 						GMAPS.initGmap(thi.attr('data-destination').split(','),thi);
+					})
+					.on("pagehide", function(){
+						$(this).remove();
 					});
 				
 					$.mobile.initializePage();
