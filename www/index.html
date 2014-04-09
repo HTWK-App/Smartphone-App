@@ -195,7 +195,7 @@
 				// Button Menu
 				.on("click", "a.btn_menu", function(e) {
 					var o = $("body").pagecontainer("getActivePage");
-					o.find("div.menu").panel("open");
+					o.find("div.menu").panel("toggle");
 				})
 				// Swipe Event Menu
 				.on("swiperight", function(e) {
@@ -312,8 +312,7 @@
 			 * @ param String card ... the id of the card to be filled
 			 * @ param String heading ... the heading of the card
 			 */
-			function fillCard(feed, card, heading){
-
+			function fillCard(feed, card, heading) {
 				loadingIn();
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+'/get?feed='+feed+'&limit=2')
@@ -321,29 +320,36 @@
 						if(!isEmpty(data.exception))
 							{ ajaxErrorHandler(data, status, jqXHR); return; }
 
-						var div = "<h1>"+heading+"</h1><hr>";
-						var count = 1;
-
+						var divs = "<h1>"+heading+"</h1><hr>";
+						
 						for(var k in data.responseData.feed.entries) {
-							event = data.responseData.feed.entries[k];
-							var image = event.content.slice(0,300).match(/<img.+>/g);
-							if(!isEmpty(image)){
-								//image = $(image[0]).removeAttr("style").attr("width", "100%");//TODO Better placing of the image
-							}else{
-								image = "";
-							}
-							var contentSnippet = event.content.replace(/<img.+>/g, "").slice(0,300)+"...";
+							entry = data.responseData.feed.entries[k];
+							
+							//var img = entry.content.match(/^(.*)<img ([a-zA-Z0-9\-]=("|')?(.*)("|')?)+ \/?>(.*)$/);
+							var img = entry.content.match(/<img .*\/?>/);
+							
+							if(!isEmpty(img)) img = '<div style="float:left;max-width:100%;overflow:hidden;">'+img[0]+'</div>';
+							else img = "";
 				
-							if(!isEmpty(event.content)){
-								div += '<strong>'+event.title+'</strong><p>'+image+contentSnippet+'</p><a href="'+event.link+'" class="external" data-role="button">Weiterlesen...</a>';
+							if(!isEmpty(entry.content)) {
+								divs += '<strong>'+entry.title+'</strong>'+
+										'<p>'+img+'<div>'+entry.contentSnippet+'</div></p>'+
+										'<a href="'+entry.link+'" class="external" style="clear:both;" data-role="button">Weiterlesen...</a>';
 							}
-							if(count != data.responseData.feed.entries.length){
-								div += '<hr/>';
-							}
-							count += 1;
+							
+							divs += '<hr>';
 						}
-
-						$("#"+card+"").empty().append(div).trigger("create");
+						
+						divs = $(divs);
+						
+						$("#"+card)
+							.empty()
+							.append(divs)
+							.trigger("create");
+						
+						divs.filter("hr")
+							.last()
+							.remove();
 
 						loadingOut();
 				  })
