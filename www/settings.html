@@ -21,13 +21,13 @@
 				<a id="settings_login_save"data-role="button" data-mini="true">Speichern</a>
 			</div>
 			<hr/>
-			<h2>Sprache</h2>
+			<!--<h2>Sprache</h2>
 			<br/>
 			<div class='inset'>
 				<label for="default_language_select"><strong>Standardsprache:</strong></label>
 				<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
 			</div>
-			<hr/>
+			<hr/>-->
 			<h2>News</h2>
 			<br/>
 			<div class='inset'>
@@ -165,7 +165,7 @@
 					.attr("placeholder", CONFIG.AUTH.username)
 					.val(CONFIG.AUTH.username);
 			}
-
+			/*
 			for(var k in CONFIG.LANGUAGE.availableShort){
 	 			opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
 
@@ -179,14 +179,15 @@
 				.empty()
 	 			.append(opts)
 	 			.selectmenu("refresh");
+			*/
 		};
-
+/*
 		$( "#default_language_select")
 			.change(function() {
 				CONFIG.LANGUAGE.set = $(this).val();
 				saveParameters();
 			});
-
+*/
 		$("#settings_login_save")
 			.on("click", function () {
 				var pass = $("#input_password").val();
