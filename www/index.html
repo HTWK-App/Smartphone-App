@@ -147,8 +147,8 @@
 					// swipe Event
 					$.event.special.swipe.scrollSupressionThreshold=10;
 					$.event.special.swipe.durationThreshold=2500;
-					$.event.special.swipe.horizontalDistanceThreshold=20;
-					$.event.special.swipe.verticalDistanceThreshold=50;
+					$.event.special.swipe.horizontalDistanceThreshold=30;
+					$.event.special.swipe.verticalDistanceThreshold=75;
 
 					// Add EventListener for Fastclick Framework//
 					window.addEventListener("load", function() {
@@ -238,7 +238,11 @@
 			 *
 			 */
 			function getWeatherLocation(){
-				navigator.geolocation.getCurrentPosition(fillWeatherCard, onGeoGetFail, { maximumAge: 7000, timeout: 30000});
+				navigator.geolocation.getCurrentPosition(fillWeatherCard, weatherLocationError, { maximumAge: 7000, timeout: 30000});
+			};
+
+			function weatherLocationError(){
+				$("#weatherCard").empty().append("<p>Ihre Position konnte leider nicht bestimmt werden</p>");
 			};
 
 			/**
@@ -333,7 +337,7 @@
 				
 							if(!isEmpty(entry.content)) {
 								divs += '<strong>'+entry.title+'</strong>'+
-										'<p>'+img+'<div>'+entry.contentSnippet+'</div></p>'+
+										'<p>'+img+'<div>'+entry.content.split(">")[1].slice(0,300)+'</div></p>'+
 										'<a href="'+entry.link+'" class="external" style="clear:both;" data-role="button">Weiterlesen...</a>';
 							}
 							

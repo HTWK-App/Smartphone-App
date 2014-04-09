@@ -165,15 +165,9 @@
 						.trigger("create");
 				
 					$(".building_page").on("pageshow",function(){
-						t = $(this)
-						c = t.attr('data-destination').split(',');
-						toLat = c[0];
-						toLng = c[1];
-						mapcontainer = t;
-					
-						initGmap();
+						var thi = $(this);
 
-						//alert("pageload");
+						GMAPS.initGmap(thi.attr('data-destination').split(','),thi);
 					});
 				
 					$.mobile.initializePage();
