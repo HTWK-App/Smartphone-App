@@ -64,7 +64,7 @@
 	    		}
 			 });
 
-		$("#btn_mail_write").on("click", showMailSendForm);
+		$("#btn_mail_write").on("click", function() { showMailSendForm(false);});
 		$("#btn_mail_abort").on("click", showMailInBox);
 		
 		$("#mail_btn_more").click(function () {
@@ -96,7 +96,8 @@
 			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails, {credentials: CONFIG.AUTH.credentials,
 															salt: CONFIG.AUTH.salt, 
 															to: to, cc: cc, 
-															subject: subject, message: content})
+															subject: subject, message: content,
+															from: "webmailer@htwk-leipzig.de"})
 			 .done(function(data, status, jqXHR) {
 					loadingOut();
 					if(!isEmpty(data.exception)) {
@@ -127,8 +128,8 @@
 			$("#mail_new_to").val(from);
 			$("#mail_new_subject").val("Re: "+subj);
 			
-			//$("#btn_back").click();
-			showMailSendForm();
+			history.back();
+			showMailSendForm(true);
 		};
 
 		/**
@@ -147,10 +148,12 @@
 		/**
 		 * Display Mail Send-Formular.
 		 */
-		function showMailSendForm() {
-			$("#mail_new_to").val("");
+		function showMailSendForm(answer) {
+			if(isEmpty(answer)) answer = false;
+
+			if(!answer) $("#mail_new_to").val("");
 			$("#mail_new_cc").val("");
-			$("#mail_new_subject").val("");
+			if(!answer) $("#mail_new_subject").val("");
 			$("#mail_new_content").val("");
 			
 			$("#mail_inbox").hide();
@@ -179,7 +182,9 @@
 			if(!isEmpty(CONFIG.AUTH.credentials))
 			{
 				loadingIn();
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg, {credentials: CONFIG.AUTH.credentials, salt: CONFIG.AUTH.salt, offset: offset})
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg, {credentials: CONFIG.AUTH.credentials, 
+																   salt: CONFIG.AUTH.salt, 
+																   offset: offset})
 				 .done(function(data, status, jqXHR) {
 						if(isEmpty(data.exception)) {
 						 	fillMailList(data, remove);
