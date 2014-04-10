@@ -29,7 +29,7 @@ function buildingLoadBuildingDetails(id) {
 							'<h1>'+data.fullName+'</h1>'+
 							'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
 								'<li data-cards-type="text" >'+
-									'<p><img src="'+data.pictureLink+'"/></p>'+
+									'<p><img src="'+data.pictureData+'"/></p>'+
 								'</li>'+
 								'<li data-cards-type="text" >'+
 									'<h1>Info</h1><hr>'+
