@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="css/design.htwk-1.4.2.css"  id='jQMnDTheme' />
         <link rel="stylesheet" href="css/design.color.htwk.css" id='jQMnDColor' />
         
-	<script type="application/javascript" src="js/lib/fastclick.min.js"></script>
+	<!--<script type="application/javascript" src="js/lib/fastclick.min.js"></script>-->
 	<script type="application/javascript" src="js/lib/jquery-2.1.0.min.js"></script>
         <script type="application/javascript" src="js/lib/jquery.mobile-1.4.2.min.js"></script>
         <script type="application/javascript" src="js/lib/jquery.i18n-1.0.min.js" defer></script>
@@ -139,21 +139,26 @@
 			// GENERAL Setup
 			$( document )
 				.ready(function() {
-					$.mobile.defaultPageTransition   = "none";
-					$.mobile.defaultDialogTransition = "none";
+					$.mobile.defaultPageTransition   = "fade";
+					$.mobile.defaultDialogTransition = "fade";
 					$.mobile.buttonMarkup.hoverDelay = 0;
 					$.mobile.changePage.defaults.allowSamePageTransition = true;
 
 					// swipe Event
-					$.event.special.swipe.scrollSupressionThreshold=10;
-					$.event.special.swipe.durationThreshold=2500;
-					$.event.special.swipe.horizontalDistanceThreshold=30;
-					$.event.special.swipe.verticalDistanceThreshold=75;
+					GLOBAL.SCREEN.height = window.screen.height;
+					GLOBAL.SCREEN.width = window.screen.width;
+					$.event.special.swipe.scrollSupressionThreshold=Math.round(0.3*GLOBAL.SCREEN.width);
+					$.event.special.swipe.horizontalDistanceThreshold = 5; // Swipe horizontal displacement must be more than this.
+					$.event.special.swipe.durationThreshold = 5000;  // More time than this, and it isn't a swipe.
+					$.event.special.swipe.verticalDistanceThreshold = 75; // Swipe vertical displacement must be less than this.
+					//$.event.special.swipe.durationThreshold=1000;
+					//$.event.special.swipe.horizontalDistanceThreshold=Math.round(0.2*GLOBAL.SCREEN.width);
+					//$.event.special.swipe.verticalDistanceThreshold=Math.round(GLOBAL.SCREEN.height);
 
 					// Add EventListener for Fastclick Framework//
-					window.addEventListener("load", function() {
-						FastClick.attach(document.body);
-					}, false);
+					//window.addEventListener("load", function() {
+					//	FastClick.attach(document.body);
+					//}, false);
 				
 					loadParameters();
 				
@@ -199,8 +204,10 @@
 				})
 				// Swipe Event Menu
 				.on("swiperight", function(e) {
-					if(e.swipestart.coords[0] <= 50)
-					{
+					var start = e.swipestart.coords;
+					var stop = e.swipestop.coords;
+					alert(e.swipestart.coords+" "+e.swipestop.coords);
+					if(start[0] <= 0.1*GLOBAL.SCREEN.width){
 						var o = $("body").pagecontainer("getActivePage");
 						o.find("div.menu").panel("open");
 					}
@@ -331,13 +338,15 @@
 							
 							//var img = entry.content.match(/^(.*)<img ([a-zA-Z0-9\-]=("|')?(.*)("|')?)+ \/?>(.*)$/);
 							var img = entry.content.match(/<img .*\/?>/);
+							var imgEnd = entry.content.indexOf(">")+1;
+							var content = entry.content.slice(imgEnd, imgEnd+300)+"...";
 							
-							if(!isEmpty(img)) img = '<div style="float:left;max-width:100%;overflow:hidden;">'+img[0]+'</div>';
+							if(!isEmpty(img)) img = '<div style="float: left; max-width: 100%; overflow: hidden;">'+img[0]+'</div>';
 							else img = "";
 				
 							if(!isEmpty(entry.content)) {
 								divs += '<strong>'+entry.title+'</strong>'+
-										'<p>'+img+'<div>'+entry.content.split(">")[1].slice(0,300)+'</div></p>'+
+										'<p>'+img+content+'</p>'+
 										'<a href="'+entry.link+'" class="external" style="clear:both;" data-role="button">Weiterlesen...</a>';
 							}
 							

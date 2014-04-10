@@ -119,6 +119,10 @@ var CONFIG = {
 };
 
 var GLOBAL = {
+	SCREEN: {
+		height: 0,
+		width: 0
+	},
 	INIT: {
 		news: false,
 		index: false,
