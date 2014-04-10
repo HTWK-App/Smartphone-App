@@ -93,11 +93,11 @@
 			
 			loadingIn("Ihre Mail wird versendet ...");
 			
-			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails, {credentials: CONFIG.AUTH.credentials,
-															salt: CONFIG.AUTH.salt, 
-															to: to, cc: cc, 
-															subject: subject, message: content,
-															from: "webmailer@htwk-leipzig.de"})
+			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+CONFIG.AUTH.credentials+
+														  "&salt="+CONFIG.AUTH.salt+ 
+														  "&to="+to+"&cc="+cc+ 
+														  "&subject="+subject+"&message="+content+
+														  "&from=hrz@htwk-leipzig.de")
 			 .done(function(data, status, jqXHR) {
 					loadingOut();
 					if(!isEmpty(data.exception)) {
