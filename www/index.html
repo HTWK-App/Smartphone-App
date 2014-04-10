@@ -206,7 +206,7 @@
 				.on("swiperight", function(e) {
 					var start = e.swipestart.coords;
 					var stop = e.swipestop.coords;
-					alert(e.swipestart.coords+" "+e.swipestop.coords);
+					//alert(e.swipestart.coords+" "+e.swipestop.coords);
 					if(start[0] <= 0.1*GLOBAL.SCREEN.width){
 						var o = $("body").pagecontainer("getActivePage");
 						o.find("div.menu").panel("open");
