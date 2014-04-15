@@ -1,26 +1,41 @@
-﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme='b'>
-    <!--- HEADER --->
-    <div data-role="header" data-position="fixed" data-theme='b' class="header toblur">
-    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
-    	<h1>HTWK App</h1>
-    </div>
-    <!--- HEADER --->
-    
-	<div data-role="content"  class="toblur">
+﻿<div id="settings_page" data-role="page" data-title="Einstellungen"
+	data-theme='b'>
+	<!--- HEADER --->
+	<div data-role="header" data-position="fixed" data-theme='b'
+		class="header toblur">
+		<a data-role="button" data-iconpos='left' class="btn_menu"><span
+			class="icon-ellipsis-vertical"></span></a>
+		<h1>HTWK App</h1>
+	</div>
+	<!--- HEADER --->
+
+	<div data-role="content" class="toblur">
 		<div class='inset'>
 			<h1>Einstellungen</h1>
-			<br/>
+			<br />
 			<h2>Login-Daten</h2>
-			<br/>
+			<br />
 			<div class='inset'>
-				<label for="input_username"><strong>Nutzername:</strong></label>
-				<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername"/>
-				<label for="input_password"><strong>Passwort:</strong></label>
-				<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="******"/>
-				<br>
-				<a id="settings_login_save"data-role="button" data-mini="true">Speichern</a>
+				<label for="input_username"><strong>Nutzername:</strong></label> <input
+					type="text" name="input_username" id="input_username" value=""
+					placeholder="Nutzername" /> <label for="input_password"><strong>Passwort:</strong></label>
+				<input type="password" name="input_password" id="input_password"
+					value="" autocomplete="off" placeholder="******" /> <br> <a
+					id="settings_login_save" data-role="button" data-mini="true">Speichern</a>
 			</div>
-			<hr/>
+			<hr />
+			<!-- <h2>PushNotifications</h2>
+			<br />
+			<div class="inset">
+				<a id="pushNotifications" data-role="button" data-mini="true"></a>
+				<div id="app-status-div">
+					<div id="app-status"></div>
+					<ul id="app-status-ul" style="display: none;">
+						<li></li>
+					</ul>
+				</div>
+			</div>
+			<hr /> -->
 			<!--<h2>Sprache</h2>
 			<br/>
 			<div class='inset'>
@@ -29,29 +44,35 @@
 			</div>
 			<hr/>-->
 			<h2>News</h2>
-			<br/>
+			<br />
 			<div class='inset'>
-				<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
-				<select id="default_news_select" name="default_news_select">
-					<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+				<label for="default_news_select"><strong>Standard
+						Newsfeed:</strong></label> <select id="default_news_select"
+					name="default_news_select">
+					<option selected="selected">Liste der verfügbaren
+						News-Feeds wird geladen...</option>
 				</select>
 			</div>
-			<hr/>
+			<hr />
 			<h2>Stundenplan</h2>
-			<br/>
+			<br />
 			<div class='inset'>
-				<a href="#popup_timetable_delete" data-role="button" data-mini="true" data-rel="popup" data-position-to="window" data-transition="pop">Stundenplan löschen...</a>
+				<a href="#popup_timetable_delete" data-role="button"
+					data-mini="true" data-rel="popup" data-position-to="window"
+					data-transition="pop">Stundenplan löschen...</a>
 			</div>
-			<hr/>
+			<hr />
 			<h2>Mensa</h2>
-			<br/>
+			<br />
 			<div class='inset'>
-				<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
-				<select id="default_canteen_select" name="default_canteen_select" data-mini="true">
-					<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+				<label for="default_canteen_select"><strong>Standard
+						Mensa:</strong></label> <select id="default_canteen_select"
+					name="default_canteen_select" data-mini="true">
+					<option selected="selected">Liste der verfügbaren Mensen
+						wird geladen...</option>
 				</select>
 			</div>
-			<br/>
+			<br />
 		</div>
 	</div>
 	<div id="popup_timetable_delete" data-role="popup" data-theme="b">
@@ -59,67 +80,70 @@
 			<h3>Wirklich Löschen?</h3>
 		</div>
 		<div role="main" class="ui-content" data-theme="b">
-			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
-			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p><br>
-			<a href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Abbrechen</a>
-			<a id="settings_timetable_delete" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" data-transition="flow" class="ui-corner-all ui-shadow">Löschen</a>
+			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des
+				Stundenplans löschen?</h4>
+			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
+			<br> <a href="#" data-role="button" data-icon="back"
+				data-mini="true" data-rel="back" data-inline="true"
+				class="ui-corner-all ui-shadow">Abbrechen</a> <a
+				id="settings_timetable_delete" href="#" data-role="button"
+				data-icon="check" data-mini="true" data-rel="back"
+				data-inline="true" data-transition="flow"
+				class="ui-corner-all ui-shadow">Löschen</a>
 		</div>
 	</div>
 
 	<script>
-
 		/*TODO
 		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
 		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
 		 */
-		$( "#settings_page" )
-			.on("pagecreate", function () {
-				settingsGetNewsFeeds(); 
-				settingsGetCanteens();
-				settingsFillFields();
-			})
-			.on("pageshow", function () {
-				$("#btn_refresh").hide();
-			 })
-			.on("pagehide", function() {
-				$("#btn_refresh").show();
-			 });
+		$("#settings_page").on("pagecreate", function() {
+			settingsGetNewsFeeds();
+			settingsGetCanteens();
+			settingsFillFields();
+		}).on("pageshow", function() {
+			$("#btn_refresh").hide();
+		}).on("pagehide", function() {
+			$("#btn_refresh").show();
+		});
 
 		/**
 		 * Get all Newsfeeds from the Server and fill them into the select widget. Default Feed will be selected.
 		 *
 		 */
 		function settingsGetNewsFeeds() {
-			
+
 			loadingIn();
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-				 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news).done(
+					function(data, status, jqXHR) {
+						if (!isEmpty(data.exception)) {
+							ajaxErrorHandler(data, status, jqXHR);
+							return;
+						}
 
-					var tmp, name, id, opts;
-					opts = "";
-				
-					for(var k in data){
-						id = data[k].id;
-						tmp = id.split(".");
-						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
+						var tmp, name, id, opts;
+						opts = "";
 
-						if(id == CONFIG.NEWS.defaultFeed)
-							tmp = 'selected="selected"';
-						else
-							tmp = "";
-						opts += '<option value="'+id+'" '+tmp+'>'+GLOBAL.NEWS.titles[id]+'</option>'; 
-					}
-				
-					$( "#default_news_select" )
-						.empty()
-						.append(opts)
-						.selectmenu("refresh");
-					loadingOut();
-				 })
-				.fail(ajaxErrorHandler);
+						for ( var k in data) {
+							id = data[k].id;
+							tmp = id.split(".");
+							name = capitalize(tmp[1])
+									+ (tmp.length == 3 ? " " + tmp[2] : "");
+
+							if (id == CONFIG.NEWS.defaultFeed)
+								tmp = 'selected="selected"';
+							else
+								tmp = "";
+							opts += '<option value="'+id+'" '+tmp+'>'
+									+ GLOBAL.NEWS.titles[id] + '</option>';
+						}
+
+						$("#default_news_select").empty().append(opts)
+								.selectmenu("refresh");
+						loadingOut();
+					}).fail(ajaxErrorHandler);
 		};
 
 		/**
@@ -128,97 +152,119 @@
 		 */
 		function settingsGetCanteens() {
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
-				 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa).done(
+					function(data, status, jqXHR) {
+						if (!isEmpty(data.exception)) {
+							ajaxErrorHandler(data, status, jqXHR);
+							return;
+						}
 
-			 		var opts = "";
-			 		
-			 		for(var k in data.location){	
-			 			opts += '<option value="'+k+'" ';
-			 			
-			 			if(k == CONFIG.MENSA.defaultCanteen)
-			 				opts += 'selected="selected"';
-			 			
-			 			opts += '>'+data.location[k]+'</option>';
-			 		}
+						var opts = "";
 
-			 		$( "#default_canteen_select" )
-						.empty()
-			 			.append(opts)
-			 			.selectmenu("refresh");
-				})
-				.fail(ajaxErrorHandler);
+						for ( var k in data.location) {
+							opts += '<option value="' + k + '" ';
+
+							if (k == CONFIG.MENSA.defaultCanteen)
+								opts += 'selected="selected"';
+
+							opts += '>' + data.location[k] + '</option>';
+						}
+
+						$("#default_canteen_select").empty().append(opts)
+								.selectmenu("refresh");
+					}).fail(ajaxErrorHandler);
 		};
 
 		/**
 		 * Fill existing widgets with data, if present. To be filled: Username textbox, Language select
 		 *
 		 */
-		function settingsFillFields(){
+		function settingsFillFields() {
 
 			var opts = "";
 
-			if(CONFIG.AUTH.username != undefined && CONFIG.AUTH.username != ""){
-				$("#input_username")
-					.attr("placeholder", CONFIG.AUTH.username)
-					.val(CONFIG.AUTH.username);
+			if (CONFIG.AUTH.username != undefined && CONFIG.AUTH.username != "") {
+				$("#input_username").attr("placeholder", CONFIG.AUTH.username)
+						.val(CONFIG.AUTH.username);
 			}
 			/*
 			for(var k in CONFIG.LANGUAGE.availableShort){
-	 			opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
+				opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
 
-	 			if(CONFIG.LANGUAGE.availableShort[k] == CONFIG.LANGUAGE.set)
-	 				opts += 'selected="selected"';
+				if(CONFIG.LANGUAGE.availableShort[k] == CONFIG.LANGUAGE.set)
+					opts += 'selected="selected"';
 
-	 			opts += '>'+CONFIG.LANGUAGE.availableLong[k]+'</option>';
-	 		}
+				opts += '>'+CONFIG.LANGUAGE.availableLong[k]+'</option>';
+			}
 
-	 		$( "#default_language_select" )
+			$( "#default_language_select" )
 				.empty()
-	 			.append(opts)
-	 			.selectmenu("refresh");
-			*/
+				.append(opts)
+				.selectmenu("refresh");
+			 */
 		};
-/*
-		$( "#default_language_select")
-			.change(function() {
-				CONFIG.LANGUAGE.set = $(this).val();
-				saveParameters();
-			});
-*/
+		/*
+		 $( "#default_language_select")
+		 .change(function() {
+		 CONFIG.LANGUAGE.set = $(this).val();
+		 saveParameters();
+		 });
+		 */
 		$("#settings_login_save")
-			.on("click", function () {
-				var pass = $("#input_password").val();
-				var user = $("#input_username").val();
+				.on(
+						"click",
+						function() {
+							var pass = $("#input_password").val();
+							var user = $("#input_username").val();
 
-				if(pass == "" || user == ""){
-					loadingIn("Tragen Sie bitte Ihren Nutzernamen und ihr Passwort ein!", true);
-					setTimeout(loadingOut, 2500);
-				}else{
-					saveUsernamePassword(user,pass);
-				}
-			});
+							if (pass == "" || user == "") {
+								loadingIn(
+										"Tragen Sie bitte Ihren Nutzernamen und ihr Passwort ein!",
+										true);
+								setTimeout(loadingOut, 2500);
+							} else {
+								saveUsernamePassword(user, pass);
+							}
+						});
 
-		$( "#default_news_select" )
-			.change(function() {
-				CONFIG.NEWS.defaultFeed = $(this).val();
-				saveParameters();
-			});
+		$("#default_news_select").change(function() {
+			CONFIG.NEWS.defaultFeed = $(this).val();
+			saveParameters();
+		});
 
-		$( "#settings_timetable_delete" )
-			.on("click", function() {
-				CONFIG.TIMETABLE.faculty = [];
-				CONFIG.TIMETABLE.temporary = [];
-				saveParameters();
-				
-			});
+		$("#settings_timetable_delete").on("click", function() {
+			CONFIG.TIMETABLE.faculty = [];
+			CONFIG.TIMETABLE.temporary = [];
+			saveParameters();
 
-		$( "#default_canteen_select" )
-			.on("change", function() {
-				CONFIG.MENSA.defaultCanteen = $(this).val();
-				saveParameters();
-			});
+		});
+
+		$("#default_canteen_select").on("change", function() {
+			CONFIG.MENSA.defaultCanteen = $(this).val();
+			saveParameters();
+		});
+
+// 		$("#pushNotifications").on("click", function() {
+// 			if (CONFIG.PUSH.registered) {
+// 				unregisterDevice();
+// 				// 				console.log("registered")
+// 			} else {
+// 				registerDevice();
+// 				// 				console.log("not registered")
+// 			}
+// 			validatePushNotificationDescription();
+
+// 		});
+// 		validatePushNotificationDescription();
+
+// 		function validatePushNotificationDescription() {
+// 			if (CONFIG.PUSH.registered) {
+// 				$("#pushNotifications").text("Unregister");
+// 				$("#app-status").text("Status: registered");
+// 			} else {
+// 				$("#pushNotifications").text("Register");
+// 				$("#app-status").text("Status: not registered");
+// 			}
+// 		}
 	</script>
 </div>

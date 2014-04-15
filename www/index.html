@@ -90,6 +90,8 @@
 				<div class='inset cardAnimated'>
 					<h1>Willkommen ...</h1>
 					<ul data-nativedroid-plugin='cards' class="nativeDroidCards">
+						<li id="PushNotification" data-cards-type='text' style="display: none;">
+						</li>
 						<li id="weatherCard" data-cards-type='weather'>
 						</li>
 						<li id="HTWKNews" data-cards-type='text'>
@@ -368,6 +370,29 @@
 				  })
 				 .fail(ajaxErrorHandler);
 			};
+			
+			function fillPushNotifictionCard(title, message){
+				
+				var div = "<h1>ServerInfo</h1><hr>";
+				div+= '<strong>'+title+'</strong>';
+				div+='<p>'+message+'</p>';
+				div+='<a href="#" style="clear:both;" data-role="button" onclick="hideCard(\'PushNotification\')">Okay...</a>';
+				$("#PushNotification")
+				.empty()
+				.append(div)
+				.trigger("create").show();
+				scrollToElement("PushNotification", -50);
+			}
+			
+			function scrollToElement(element, offset) {
+			    var myDivPos =offset + $("#"+element).offset().top;
+			    $.mobile.silentScroll( myDivPos );
+			}
+			
+			function hideCard(element){
+				$("#"+element).hide();
+			}
+			
 		</script>
 	</body>
 </html>

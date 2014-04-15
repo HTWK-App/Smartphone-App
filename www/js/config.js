@@ -52,7 +52,7 @@ var CONFIG = {
 		registered: false,
 		STATUS: {
 			2000: "newNews",
-			4001: "newMails"
+			4001: "newMail"
 		}
 	},
 
