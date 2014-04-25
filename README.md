@@ -1,7 +1,7 @@
 Smartphone-App
 ==============
 
-This repo holds the code for the Smartphone Application of the HTWK Leipzig, that is created with the following frameworks:
+This repository contains the code for the Smartphone-Application of the HTWK Leipzig, that is created with help of the following frameworks:
 
 * Apache Cordova (3.4.0)
 * Fastclick (1.0.0)
