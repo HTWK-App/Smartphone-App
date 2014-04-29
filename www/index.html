@@ -292,7 +292,7 @@
 									'		<span>'+day.weather[0].descriptionDe+'</span>'+
 									'		<span class="icon-flag"> '+day.speed+' m/s</span>'+
 									'	</li>'+
-									'	<li>'+temp+'&deg;</li>'+
+									'	<li id="actemp">'+temp+'&deg;</li>'+
 									'</ul>';
 							}else if(k != 0){
 								temp = [day.temp.max.toFixed(1),day.temp.min.toFixed(1)];
@@ -311,6 +311,12 @@
 						div += '</ul>';
 
 						weathercard.empty().append(div).trigger("create");
+
+						//auto adjust font-size for weather
+						var actemp = $("#actemp"); 
+						var width = actemp.width()/37;
+						if(width > 7) width = 7;
+						actemp.css('font-size', width+"em" ); 
 
 						loadingOut();
 						GLOBAL.INIT.index = true;

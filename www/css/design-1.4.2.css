@@ -982,7 +982,7 @@ progress  {
 }
 .nativeDroidCards > li[data-cards-type="weather"] .detail li:nth-child(2) {
 	width: 70%;
-	font-size: 6em;
+	font-size: 115px;
 	text-align: right;
 }
 
