@@ -57,20 +57,23 @@
 					.find("div:jqmData(day='"+$(e.target).jqmData("day")+"')")
 					.show();
 			 })
-			.on("swipeleft", "div.canteen_content", function() {
-				var o = $(this);	
+			.on("swipeleft", "div.canteen_content", function(e) {
+				var o = $(this);
+				var start = e.swipestart.coords;
 				
-				if(o.index() < 5){	
+				if(o.index() < 5 && start[0] > 0.1*GLOBAL.SCREEN.width){	
 					$("#canteen_nav a").eq(o.index()).not(".ui-disabled").click();
 				}
 			 })
-			.on("swiperight", "div.canteen_content", function() {
-				var o = $(this);	
+			.on("swiperight", "div.canteen_content", function(e) {
+				var o = $(this);
+				var start = e.swipestart.coords;
 				
-				if(o.index() > 1){
+				if(o.index() > 1 && start[0] > 0.1*GLOBAL.SCREEN.width){
 					$("#canteen_nav a").eq(o.index()-2).not(".ui-disabled").click();
 				}
 			 });
+
 
 		$( "#canteen_select" )
 			.on("change", function() {
@@ -135,7 +138,7 @@
 				today = 0;
 			else 
 				today--;
-			
+
 			for(var i = today; i < week.length; i++) {
 				deferreds[deferreds.length] = fillCanteenDay(o, id, week[i]);
 			}
@@ -156,8 +159,8 @@
 		function fillCanteenDay(o, id, date) {
 			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+id+"/"+createServerDateStamp(date))
 				    .done(function (data, status, jqXHR) {
-				    	if(!isEmpty(data.exception))
-				    		{ ajaxErrorHandler(data, status, jqXHR, canteenEmpty); return; }
+				    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date')
+				    		{ ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); return; }
 
 				    	var title, desc, addits;
 				    	var priceStud, priceEmp, priceExt;
@@ -229,7 +232,7 @@
 			   .fail(ajaxErrorHandler);
 		};
 
-		function canteenEmpty() {
+		function dayEmpty(date) {
 			var ul = 	'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
 							'<li data-cards-type="text">'+
 								'<div class="inset">'+
@@ -238,7 +241,7 @@
 							'</li>'+
 						'</ul>';
 			
-			$("#canteen_page div.canteen_content")
+			$("#canteen_page div.canteen_content").filter(":jqmData(day='"+getWeekDay(date).id+"')")
 				.empty()
 				.append(ul)
 				.trigger("create");
