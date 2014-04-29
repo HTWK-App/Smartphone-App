@@ -351,7 +351,7 @@
 							
 							if(!isEmpty(img)) img = '<div style="float: left; max-width: 100%; overflow: hidden;">'+img[0]+'</div>';
 							else img = "";
-				
+
 							if(!isEmpty(entry.content)) {
 								divs += '<strong>'+entry.title+'</strong>'+
 										'<p>'+img+content+'</p>'+
@@ -371,7 +371,12 @@
 						divs.filter("hr")
 							.last()
 							.remove();
-
+						var imgs = $('img');
+						for(i = 0; i < imgs.length ; i++){
+							var src = $(imgs[i]).attr('src');
+							$(imgs[i]).attr('src', addhttp(src));
+							console.log();
+						}
 						loadingOut();
 				  })
 				 .fail(ajaxErrorHandler);
@@ -398,6 +403,13 @@
 			function hideCard(element){
 				$("#"+element).hide();
 			}
+
+			function addhttp(url) {
+  				if (!/^(f|ht)tps?:\/\//i.test(url)) {
+      				url = "http://htwk-leipzig.de/" + url;
+   				}
+		   return url;
+}
 			
 		</script>
 	</body>
