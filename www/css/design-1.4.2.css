@@ -278,9 +278,9 @@ img.ui-li-icon {
 	text-transform: uppercase;
 }
 
-.ui-loader-textonly.ui-loader-verbose {
+/*.ui-loader-textonly.ui-loader-verbose {
 	margin-left: 0px;
-}
+}*/
 
 .ui-li-desc img {
 	max-width: 100%;
