@@ -150,8 +150,8 @@
 					GLOBAL.SCREEN.height = window.screen.height;
 					GLOBAL.SCREEN.width = window.screen.width;
 					$.event.special.swipe.scrollSupressionThreshold=Math.round(0.3*GLOBAL.SCREEN.width);
-					$.event.special.swipe.horizontalDistanceThreshold = 5; // Swipe horizontal displacement must be more than this.
-					$.event.special.swipe.durationThreshold = 5000;  // More time than this, and it isn't a swipe.
+					$.event.special.swipe.horizontalDistanceThreshold = 20; // Swipe horizontal displacement must be more than this.
+					$.event.special.swipe.durationThreshold = 200;  // More time than this, and it isn't a swipe.
 					$.event.special.swipe.verticalDistanceThreshold = 75; // Swipe vertical displacement must be less than this.
 					//$.event.special.swipe.durationThreshold=1000;
 					//$.event.special.swipe.horizontalDistanceThreshold=Math.round(0.2*GLOBAL.SCREEN.width);
