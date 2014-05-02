@@ -306,7 +306,7 @@
 
 						//auto adjust font-size for weather
 						var actemp = $("#actemp"); 
-						var width = actemp.width()/37;
+						var width = actemp.width()/40;
 						if(width > 7) width = 7;
 						actemp.css('font-size', width+"em" ); 
 
@@ -336,18 +336,25 @@
 						for(var k in data.responseData.feed.entries) {
 							entry = data.responseData.feed.entries[k];
 							
-							//var img = entry.content.match(/^(.*)<img ([a-zA-Z0-9\-]=("|')?(.*)("|')?)+ \/?>(.*)$/);
-							var img = entry.content.match(/<img .*\/?>/);
-							var imgEnd = entry.content.indexOf(">")+1;
-							var content = entry.content.slice(imgEnd, imgEnd+300)+"...";
+							var content;
+							var img = entry.content.match(/<img .*?\/?>/);
+							content = replaceWith(entry.content, '', /<img .*?\/?>/);
+							var links;
+							do{
+								links = content.match(/<a .*?<\/a>/);
+								if(!isEmpty(links)){
+									var link = links[0];
+									content = content.replace(link,$(link).text());
+								}
+							}while(!isEmpty(links));
 							
-							if(!isEmpty(img)) img = '<div style="float: left; max-width: 100%; overflow: hidden;">'+img[0]+'</div>';
+							if(!isEmpty(img)) img = '<div style="float: left; max-width: 300px; overflow: hidden; padding: 0 8px 8px 8px">'+img[0]+'</div>';
 							else img = "";
 
 							if(!isEmpty(entry.content)) {
 								divs += '<strong>'+entry.title+'</strong>'+
-										'<p>'+img+content+'</p>'+
-										'<a href="'+entry.link+'" class="external" style="clear:both;" data-role="button">Weiterlesen...</a>';
+										'<p id="newsContent">'+img+'<div>'+content.slice(0, 300)+'...</div></p>'+
+										'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button">Weiterlesen...</a>';
 							}
 							
 							divs += '<hr>';
@@ -360,9 +367,6 @@
 							.append(divs)
 							.trigger("create");
 						
-						divs.filter("hr")
-							.last()
-							.remove();
 						var imgs = $('img');
 						for(i = 0; i < imgs.length ; i++){
 							var src = $(imgs[i]).attr('src');
@@ -370,9 +374,23 @@
 							console.log();
 						}
 						loadingOut();
+						$('#index img').width('100%');
+						$('#index img').height('auto');
 				  })
 				 .fail(ajaxErrorHandler);
 			};
+
+			function replaceWith(string, toReplace, regExp){
+				do{
+					var reps = string.match(regExp);
+					if(!isEmpty(reps)){
+						var rep = reps[0];
+						string = string.replace(rep,toReplace);
+					}
+				}while(!isEmpty(reps));
+
+				return string;
+			}
 			
 			function fillPushNotifictionCard(title, message){
 				
