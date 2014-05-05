@@ -34,12 +34,17 @@ div[data-role="header"] a[data-role="button"] {
 	padding-bottom:8px;
 	
 }
-
+#mail_list > li > a > p.ui-li-aside{
+	right:1.0em !important;
+}
 
 div[data-role="footer"] .ui-btn-icon-right:after,div[data-role="footer"] .ui-btn-icon-top:after,div[data-role="footer"] .ui-btn-icon-left:after{
 	background-image:none;
-}
 
+}
+#mail_page div[data-role="footer"] a.ui-link{    
+	padding-top: 0.7em !important;
+}
 .ui-bar-b,.ui-body-b .ui-dialog-contain .ui-title {
 	border-bottom: 2px solid #6DCAEC;
 }

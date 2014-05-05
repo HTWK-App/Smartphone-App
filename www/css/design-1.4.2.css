@@ -920,6 +920,7 @@ progress  {
 	font-size: 24px;
 	padding: 0px;
 	margin: auto;
+	word-wrap: break-word;
 }
 .nativeDroidCards > li h2 {
 	font-size: 14px;
@@ -1633,4 +1634,11 @@ progress  {
 	-ms-transition: none !important;
 	-o-transition: none !important;
 	transition: none !important;
+}
+
+#info_exam_table .exam a:after {
+	right: 0.0000em;
+}
+#info_exam_table  a.exam{
+	white-space: normal !important;
 }
