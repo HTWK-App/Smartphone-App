@@ -20,7 +20,7 @@
         <script type="application/javascript" src="js/lib/device.js" defer></script>
         <script type="application/javascript" src="js/lib/PushNotification.js" defer></script>
         
-        <script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true" defer></script>
+        <script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true"></script>
         
         <script type="application/javascript" src="cordova.js"></script>
         
@@ -94,9 +94,9 @@
 						</li>
 						<li id="weatherCard" data-cards-type='weather'>
 						</li>
-						<li id="HTWKNews" data-cards-type='text'>
+						<li id="HTWKNews" data-cards-type='text' class='HtwkImage'>
 						</li>
-						<li id="HTWKEvents" data-cards-type='text'>
+						<li id="HTWKEvents" data-cards-type='text' class='HtwkImage'>
 						</li>
 						<li id="LVZNews" data-cards-type='text'>
 						</li>
@@ -257,7 +257,7 @@
 
 				var weathercard = $("#weatherCard");
 			
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+position.coords.latitude+','+position.coords.longitude+"&days=5")
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+position.coords.latitude.toPrecision(6)+','+position.coords.longitude.toPrecision(6)+"&days=5")
 					 .done(function(data, status, jqXHR) {
 						if(!isEmpty(data.exception))
 							{ ajaxErrorHandler(data, status, jqXHR); return; }
@@ -367,7 +367,7 @@
 							.append(divs)
 							.trigger("create");
 						
-						var imgs = $('img');
+						var imgs = $('.HtwkImage img');
 						for(i = 0; i < imgs.length ; i++){
 							var src = $(imgs[i]).attr('src');
 							$(imgs[i]).attr('src', addhttp(src));
