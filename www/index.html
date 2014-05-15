@@ -15,20 +15,16 @@
 	<!--<script type="application/javascript" src="js/lib/fastclick.min.js"></script>-->
 	<script type="application/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
         <script type="application/javascript" src="js/lib/jquery.mobile-1.4.2.min.js"></script>
-        <script type="application/javascript" src="js/lib/jquery.i18n-1.0.min.js" defer></script>
-        
-        <script type="application/javascript" src="js/lib/device.js" defer></script>
-        <script type="application/javascript" src="js/lib/PushNotification.js" defer></script>
-        
-        <script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true"></script>
-        
-        <script type="application/javascript" src="cordova.js"></script>
-        
-	<script type="application/javascript" src="js/config.js"></script>
+
+        <!--<script type="application/javascript" src="js/lib/jquery.i18n-1.0.min.js" defer></script>-->        
+        <!--<script type="application/javascript" src="js/lib/device.js" defer></script>-->
+        <!--<script type="application/javascript" src="js/lib/PushNotification.js" defer></script>-->
+	<!--<script type="application/javascript" src="js/pushnotification_support.js" defer></script>-->
+
+       	<script type="application/javascript" src="js/config.js"></script>
 	<script type="application/javascript" src="js/fn.js"></script>
-	<script type="application/javascript" src="js/gmaps.js" defer></script>
-	<script type="application/javascript" src="js/pushnotification_support.js" defer></script>
-	
+        <script type="application/javascript" src="cordova.js"></script>
+		
 		
 	<style>
 		.map-canvas{
@@ -98,7 +94,7 @@
 						</li>
 						<li id="HTWKEvents" data-cards-type='text' class='HtwkImage'>
 						</li>
-						<li id="LVZNews" data-cards-type='text'>
+						<li id="LVZNews" data-cards-type='text' id="lvz">
 						</li>
 					</ul>
 				</div>
@@ -371,11 +367,10 @@
 						for(i = 0; i < imgs.length ; i++){
 							var src = $(imgs[i]).attr('src');
 							$(imgs[i]).attr('src', addhttp(src));
-							console.log();
 						}
 						loadingOut();
-						$('#index img').width('100%');
-						$('#index img').height('auto');
+						$('img.HtwkImage img#lvz').width('100%');
+						$('img.HtwkImage img#lvz').height('auto');
 				  })
 				 .fail(ajaxErrorHandler);
 			};
@@ -422,5 +417,7 @@
 }
 			
 		</script>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true"></script>
+		<script type="application/javascript" src="js/gmaps.js" defer></script>
 	</body>
 </html>
