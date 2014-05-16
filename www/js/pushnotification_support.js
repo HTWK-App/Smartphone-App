@@ -16,6 +16,7 @@ var eventHandler = (function() {
 
 	return jspArgsObj;
 })();
+
 eventHandler.set(4001)(function newMailHandler(e) {
 	alert("neeeew maiiiillllssss");
 });

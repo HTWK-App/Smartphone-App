@@ -303,6 +303,8 @@ function loadParameters(){
 	if(help != undefined) CONFIG.MENSA.defaultCanteen = help;
 	help = localStorage.getItem("timetable");
 	if(help != undefined){ CONFIG.TIMETABLE = JSON.parse(help)};
+
+	delete loadParameters;
 };
 
 function saveParameters(){
