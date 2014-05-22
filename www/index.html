@@ -6,15 +6,16 @@
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         
+	<link rel="stylesheet" href="css/HTWK-App.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.custom.structure.min.css" />
+	<link rel="stylesheet" href="css/defaultThemeChanges.css" />
+	<link rel="stylesheet" href="css/jqm-icon-pack-fa.css" />
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
-        <link rel="stylesheet" href="css/jquerymobile-1.4.2.min.css" />
-        <link rel="stylesheet" href="css/design-1.4.2.css" />
-        <link rel="stylesheet" href="css/design.htwk-1.4.2.css"  id='jQMnDTheme' />
-        <link rel="stylesheet" href="css/design.color.htwk.css" id='jQMnDColor' />
         
 	<!--<script type="application/javascript" src="js/lib/fastclick.min.js"></script>-->
 	<script type="application/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
-        <script type="application/javascript" src="js/lib/jquery.mobile-1.4.2.min.js"></script>
+        <script type="application/javascript" src="js/lib/jquery.mobile.custom.1.4.2.min.js"></script>
 
         <!--<script type="application/javascript" src="js/lib/jquery.i18n-1.0.min.js" defer></script>-->        
         <!--<script type="application/javascript" src="js/lib/device.js" defer></script>-->
@@ -30,54 +31,47 @@
 		.map-canvas{
 			height:250px;
 		}
-		.blur { 
-			-webkit-filter: blur(2px);
-			-moz-filter: blur(2px);
-			-ms-filter: blur(2px);
-			-o-filter: blur(2px);
-			filter: blur(2px);
-		}
 	</style>
 	</head>
 	<body>
 		<div id="index" data-role="page" data-theme='b'>
 			<!--- HEADER --->
 			<div data-role="header" data-position="fixed" data-theme='b' class="header">
-				<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+				<a data-role="button" class="btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 				<h1>HTWK App</h1>
 			</div>
 			<!--- HEADER --->
 			
 			<!--- MENU --->
-			<div data-role="panel" data-theme="a" data-display="push" class="menu">
+			<div data-role="panel" data-theme="a" data-display="reveal" class="menu">
 				<ul data-role="listview">
 					<li data-role="list-divider" role="heading">Hauptmenü</li>
-					<li data-icon="fire"><a href="index.html">Startseite</a></li>
-					<li data-icon="fire"><a href="news.html">News</a></li>
-					<li data-icon="trophy"><a href="timetable.html">Stundenplan</a></li>
-					<li data-icon="trophy"><a href="canteen.html">Mensa</a></li>
-					<li data-icon="trophy"><a href="mail.html">Postfach</a></li>
+					<li data-icon="home"><a href="index.html">Startseite</a></li>
+					<li data-icon="paperclip"><a href="news.html">News</a></li>
+					<li data-icon="calendar"><a href="timetable.html">Stundenplan</a></li>
+					<li data-icon="cutlery"><a href="canteen.html">Mensa</a></li>
+					<li data-icon="envelope"><a href="mail.html">Postfach</a></li>
 					<li data-icon="trophy" class="menu_item_qis"><a href="qis.html">QIS</a></li>
 					<li data-icon="trophy"><a href="sport.html">Hochschulsport</a></li>
-					
 				</ul>
-				<!--<div data-role="collapsible"><h4>Info-Center</h4> -->
+				<p></p>
 				<ul data-role="listview">
 					<li data-role="list-divider" role="heading">Info-Center</li>
 					<li data-icon="trophy"><a href="info_general.html">Allgemein</a></li>
-					<li data-icon="trophy"><a href="info_staff.html">Mitarbeiter</a></li>
-					<li data-icon="trophy"><a href="info_buildings.html">Gebäudeplan</a></li>
+					<li data-icon="group"><a href="info_staff.html">Mitarbeiter</a></li>
+					<li data-icon="map-marker"><a href="info_buildings.html">Gebäudeplan</a></li>
 					<li data-icon="trophy"><a href="info_wlan.html">WLAN-Konfiguration</a></li>
 				</ul>
-				<!--</div> -->
+				<p></p>
 				<ul data-role="listview">
 					<li data-role="list-divider" role="heading">Tools</li>
-					<li data-icon="trophy"><a href="room_search.html" >Leeren Raum finden</a></li>
+					<li data-icon="map-marker"><a href="room_search.html" >Leeren Raum finden</a></li>
 					
 				</ul>
+				<p></p>
 				<ul data-role="listview">
 					<li data-role="list-divider" role="heading">Einstellungen</li>
-					<li data-icon="trophy"><a href="settings.html">HTWK-App</a></li>
+					<li data-icon="gear"><a href="settings.html">HTWK-App</a></li>
 				</ul>
 			</div>
 			<!--- MENU --->
