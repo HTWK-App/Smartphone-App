@@ -26,6 +26,24 @@
 .ui-listview>li {
 	border-bottom: 1px solid rgba(255,255,255,0.5);
 }*/
+.ui-header .ui-title, .ui-footer .ui-title{
+	margin-right: 10%;
+	margin-left: 10%;
+}
+
+ui-input-text input, .ui-input-search input{
+	color: white;
+	text-shadow: none;
+}
+
+#info_exam_table li a{
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.sport img{
+	margin: 15px 0 0 20px;
+}
 
 .nativeDroidCards > li {
 	border: 1px solid rgba(255,255,255,0.1);
