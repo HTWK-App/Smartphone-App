@@ -1,24 +1,15 @@
-﻿<div id="building_page" data-role="page" data-title="Gebäudeplan" data-theme='b' data-display="push">
-    <!--- HEADER --->
-    <div data-role="header" data-position="fixed" data-theme='b' class="header">
-    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
-    	<h1>HTWK App</h1>
-    </div>
-    <!--- HEADER --->
+﻿<div id="building_page" data-role="page" data-title="Gebäudeplan" data-theme='b' data-dom-cache="true">
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<h1>HTWK App</h1>
+	</div>
     
-	<div data-role="content">
+	<div role="main" class="ui-content">
 		<br/>
-		<ul id="buidling_content_list" data-role="listview" data-filter-placeholder="Suche Gebäude..." data-filter="true" data-inset="true">
+		<ul id="buidling_content_list" data-role="listview" data-filter-placeholder="Suche Gebäude..." data-filter="true">
 		</ul>
 	</div>
-	<style>
-		.map-canvas{
-			float: left; width: 70%; height: 100%;
-		}
-		.mapcontainer{
-			float: right; width:30%; height: 100%;
-		}
-	</style>
+
 	<script type="application/javascript" src="js/building.js"></script>
 	<script>
 		
@@ -29,11 +20,8 @@
 	    		.on("pagecreate", buildingInitBuildingsView)
 	    		.on("pageshow", function() {
 	    			if(!GLOBAL.INIT.builds) loadingIn();
-	    			/*$("#btn_refresh")
-						.off()
-						.on("click", buildingInitBuildingsView);*/
-				$("#buidling_content_list li").removeClass("ui-screen-hidden");
-				$("#buidling_content_list").listview("refresh");
+						$("#buidling_content_list li").removeClass("ui-screen-hidden");
+						$("#buidling_content_list").listview("refresh");
 	    		 })
 
 		/**

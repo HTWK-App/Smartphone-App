@@ -1,43 +1,37 @@
 ﻿<div id="timetable_page" data-role="page" data-title="Stundenplan" data-theme='b' data-dom-cache="true">
-	<!--- HEADER --->
-	<div data-role="header" data-position="fixed" data-theme='b' class="header">
-		<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
-		<a href="#timetableInfoPopup" data-role="button" data-icon="info" data-iconpos='right' data-rel="popup" data-position-to="window" data-transition="pop">&nbsp</a>
+		<a href="#timetableInfoPopup" data-rel="popup" data-position-to="window" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-info fa-lg"></i></a>
 	</div>
-	<!--- HEADER --->
-	<div data-position="fixed" data-role="footer" data-theme='b'> <!--data-tap-toggle="true" setzen falls gewünscht--> 
-		<div class="center">
-			<a data-role="button" href="#" id="extendTimetable">Kalender erweitern...</a>
+
+	<div role="main" class="ui-content">   
+		<h1 id="actualWeek" data-week="-1">Woche wird geladen...</h1>
+		<h1 id="actualDay" data-day=""></h1>
+		<hr/>
+		<ul id="dayCards" class="nativeDroidCards"></ul>
+	</div>
+
+	<div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+		<a id="extendTimetable" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow" style="margin-left: 10px;">Kalender erweitern</a>
+	</div>
+
+	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-content-theme="a" data-transition="pop" class="ui-corner-all">
+		<div id="timetableDialogHeader" data-role="header">
+			<h1>bla</h1>
+		</div>
+		<div id="timetableDialogContent" role="main" class="ui-content">
 		</div>
 	</div>
-	<div data-role="content">   
-		<div class="inset">
-			<h1 id="actualWeek" data-week="-1">Woche wird geladen...</h1>
-			<h1 id="actualDay" data-day=""></h1>
-			<hr/>
-			<ul id="dayCards" data-nativedroid-plugin='cards' class="nativeDroidCards">
-			</ul>
-		</div>
-	</div>
-	<div id="timetableDialog" data-role="popup" data-dismissible="false" data-theme="b" data-overlyaTheme="b" data-transition="pop">
-		<style>
-			h2, h3, h4, a, label, ul, li, input {color: white;}
-		</style>
-    		<div id="timetableDialogHeader" data-role="header" data-theme="b">
-   	 	</div>
-   	 	<div id="timetableDialogContent" data-role="content" data-theme='b' class="inset">
-   	 	</div>
-	</div>
-	<div id="timetableInfoPopup" data-role="popup" data-dismissible="true" data-theme="b" data-overlyaTheme="b" data-transition="pop">
-    		<div data-role="header" data-theme="b">
+
+	<div id="timetableInfoPopup" data-role="popup" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+		<div data-role="header">
 			<h2>Informationen</h2>
-   	 	</div>
-   	 	<div data-role="content" data-theme='b' class="inset">
+		</div>
+		<div role="main" class="ui-content">
 			<p>Leider bietet die App es bisher nicht, den von dir zusammgenstellten Stundenplan in den Systemkalender zu übernehmen. Du kannst das aber komfortable auf einer Website machen. Dort ist auch erklärt, wie man den Kalender fast überall einbindet.<br/>Du kommst über folgenden Button zur Website: </p>
-			<a href="http://www.htwk-stundenplan.de" class="external" data-role="button" data-icon="forward" data-mini="true" data-inline="true">Zur Website</a>
-			<hr/>
-			<a href="#" data-role="button" data-icon="back" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">Zurück</a>
+			<a href="http://www.htwk-stundenplan.de" class="ui-btn ui-btn-inline ui-mini ui-corner-all ui-shadow external">Zur Website</a>
+			<a href="#" data-rel="back" class="ui-btn ui-btn-inline ui-mini ui-corner-all ui-shadow">Zurück</a>
    	 	</div>
 	</div>
 
@@ -112,7 +106,7 @@
 			if(!isEmpty(btn_text)){
 				$("#timetableDialogContent").append('<a id="timetableDialogSave" href="#" data-role="button" data-icon="check" data-mini="true" data-rel="back" data-inline="true" class="ui-corner-all ui-shadow">'+btn_text+'</a>');
 			}
-			$.mobile.activePage.trigger("create");
+			$.mobile.activePage.trigger('popup').trigger("create");
 			$("#timetableDialog")
 				.popup().off()
 				.on("popupafteropen", function() {popupOpen = true;})
@@ -184,7 +178,6 @@
 
 					fillPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
 					$("#timetableDialogAbort").before(ul);
-					$("#timetableDialog").trigger("create");
 					$("#timetableDialog").popup();
 					
 					setTimeout(function(){open($("#timetableDialog"));}, 50);
@@ -421,7 +414,7 @@
 			aWeek.empty().append(''+week+'. Planungswoche');
 			aDay.empty().append(weekdays[day]);
 
-			$("#dayCards").empty().append('<li id="nothingToShow" data-cards-type="text"><h1>Keine Veranstaltungen!</h1></li>').trigger("create");
+			$("#dayCards").empty().append('<li id="nothingToShow"><h1>Keine Veranstaltungen!</h1></li>').trigger("create");
 
 			for(var k in CONFIG.TIMETABLE.faculty){
 				var faculty = CONFIG.TIMETABLE.faculty[k];
@@ -478,7 +471,7 @@
 		 */
 		function timetableAddDayCourse(course, name){
 			
-			var li ='<li data-cards-type="text" data-begin="'+course.begin.split(":")[0]+'">'+
+			var li ='<li data-begin="'+course.begin.split(":")[0]+'">'+
 					'<h1>'+name+'</h1><hr/>'+
 					'<p><strong>'+course.begin+'-'+course.end+'</strong><br/>'+
 					'<strong>Dozent:</strong> '+course.docentDetailed+'<br/>'+

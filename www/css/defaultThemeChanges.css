@@ -26,6 +26,18 @@
 .ui-listview>li {
 	border-bottom: 1px solid rgba(255,255,255,0.5);
 }*/
+
+#mail_inbox .ui-li-divider{
+	background-color: #04589b;
+}
+.map-canvas{
+	float: left; width: 70%; height: 100%;
+}
+
+.mapcontainer{
+	float: right; width:30%; height: 100%;
+}
+
 .ui-header .ui-title, .ui-footer .ui-title{
 	margin-right: 10%;
 	margin-left: 10%;
@@ -41,8 +53,8 @@ ui-input-text input, .ui-input-search input{
 	padding-right:10px;
 }
 
-.sport img{
-	margin: 15px 0 0 20px;
+.sport img, .staffpic{
+	margin: 8px 0 0 14px;
 }
 
 .nativeDroidCards > li {
