@@ -10,12 +10,12 @@
 var CONFIG = {
 		
 	SERVER: {
-		// LIVE
-		//base: "",
-		// DEMO
-		//base: "http://benjaminwestphal.de:9091/htwk/",
-		base: "http://gateway.westphal.im:5001/app/",
-		// LOCAL
+		// LIVE *****
+		base: "http://141.57.21.45:8080/",
+		//base: "https://141.57.21.45:8443/app/",
+		// DEMO *****
+		//base: "http://gateway.westphal.im:5001/app/",
+		// LOCAL *****
 		//base: "http://localhost:8080/app/",
 		staff: "info/staff/",
 		builds: "info/building",

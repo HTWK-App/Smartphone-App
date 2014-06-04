@@ -1,22 +1,20 @@
-<div id="room_page" data-role="page" data-title="Raum Suche" data-dom-cache="true" data-theme='b'>
-    <!--- HEADER --->
-    <div data-role="header" data-position="fixed" data-theme='b' class="header">
-    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
-    	<h1>HTWK App</h1>
-    </div>
-    <!--- HEADER --->
+<div id="room_page" data-role="page" data-title="Raum Suche" data-theme='b'>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<h1>HTWK App</h1>
+	</div>
     
-	<div data-role="content">
+	<div role="main" class="ui-content">
 		<br/>
 		<p>
 			<div data-role="fieldcontain">
-				<label for="room_building_select">Gebäude:</label>
-				<select id="room_building_select" name="room_building_select" data-mini="true">
+				<label for="building_select">Gebäude:</label>
+				<select id="building_select" name="building_select" data-mini="true">
 					<option selected="selected">Liste der nächsten Gebäude wird geladen...</option>
 				</select>
 			</div>
 			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br></h3>
-			<ul id="room_room_list" data-role="listview"></ul>
+			<ul id="room_room_list" class="nativeDroidCards"></ul>
 			<br>
 		</p>
 	</div>
@@ -27,35 +25,32 @@
 		 * Needs testing
 		 */
 		$( "#room_page" )
-			.on("pagecreate", roomStartRoomFind)
 			.on("pageshow", function () {
-				$("#btn_refresh")
-					.off()
-					.on("click", roomStartRoomFind);
-
-				setTimeout(roomTemporary, 50); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
-
+				startRoomFind();
 				GLOBAL.INIT.room = true;
 			 });
 
-		var roomRoomCount = 0;
+		$( "#building_select" )
+			.change(function() {
+				loadingIn();
+				fillRoomList($(this).val());
+			});
+
+		var roomCount = 0;
 
 		/**
 		 * Starts looking for empty rooms. Gets geolocation and runs on success locationFound, on fail locationError
 		 *
 		 */
-		function roomStartRoomFind() {
-
-			setTimeout(roomTemporary, 100); //TODO entferne beide zeilen, wenn Server im VPN ist und teste den Rest....sollte aber so in etwas gehenXD
-			return;
+		function startRoomFind() {
 
 			loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
-			roomRoomCount = roomRoomCount + 1;
+			roomCount = roomCount + 1;
 
-			if(roomRoomCount <= 30)
+			if(roomCount <= 30)
 				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
 			else
-				locationError();
+				roomLocationError();
 		}
 
 		/**
@@ -66,21 +61,17 @@
 		 */
 		function roomLocationFound(position){
 
-			if(position.coords.accuracy > 13) { // in m
-				roomStartRoomFind();
+			if(position.coords.accuracy > 50) { // in m
+				startRoomFind();
 			}else{
 				loadingOut(); loadingIn(); roomRoomCount = 0;
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
 					 .done(function(data, status, jqXHR) {
-						if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
+						if(!isEmpty(data.exception))
+							{ ajaxErrorHandler(data, status, jqXHR); return; }
 
-						console.log(data); // used for developement and testing purposes TODO Delete someday
-
-						roomFillBuildingsList(data);
-
-						$("#room_content")
-							.append('<p><iframe src="http://maps.google.de/maps?hl=de&q='+position.coords.latitude+','+position.coords.longitude+'&ie=UTF8&z=16&output=embed" width="90%" height="300" name="GoogleMaps"></iframe></p>');
+						fillBuildingsList(data);
 					 })
 					 .fail(ajaxErrorHandler);
 			}
@@ -101,23 +92,12 @@
 		}
 
 		/**
-		 * Temporary function to display that this feature is currenty disabled. TODO Delete someday
-		 *
-		 */
-		function roomTemporary(){
-			loadingIn("Aktuell besteht kein Zugriff auf den Server, da er nicht im Hochschulnetzwerk eingeloggt ist. Diese Funktion ist derzeit nicht verfügbar!",true);
-			setTimeout(loadingOut, 4000);
-			var o = $("body").pagecontainer("getActivePage");
-			o.find("div.menu").panel("open");
-		}
-
-		/**
 		 * Fills the List of Buildings, that are nearby. Fetches data for empty rooms of the selected building.
 		 *
 		 * @ param JSON-Object data
 		 *
 		 */
-		function roomFillBuildingsList(data) {
+		function fillBuildingsList(data) {
 
 			var tmp, name, id, opts;
 
@@ -134,19 +114,11 @@
 				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
 			}	
 			
-			$( "#room_building_select" )
+			$( "#building_select" )
 				.empty()
 				.append(opts)
-				.selectmenu("refresh");
-
-			//TODO not the right url yet
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'ss/13/1')
-				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR); return;}
-
-					roomFillRoomList(data, $( "#room_building_select" ).first.val()); //TODO bad request!
-				 })
-				 .fail(ajaxErrorHandler);
+				.selectmenu("refresh")
+				.change();
 		}
 
 		/**
@@ -156,24 +128,43 @@
 		 * @ param ... id ... ....
 		 *
 		 */
-		function roomFillRoomList(data, id){
+		function fillRoomList(id){
 
-			var room = "";
-			var lis = "";
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+CONFIG.TIMETABLE.semester+'/22'/*+GLOBAL.DATE.currentWeek*/)
+				.done(function(data, status, jqXHR) {
+					if(!isEmpty(data.exception))
+							{ ajaxErrorHandler(data, status, jqXHR); return; }
 
-			for(var k in data[id]){
-				room = data[id][k];
+					var lis = "";
+					var building = data[id];
+					var count = 0;
 
-				lis += 	'<li><h4>'+room.name+'</h4><p>Typ: '+room.type+', Größe: '+room.size+' Plätze</p></li>';
-			}
-			
-			$( "#room_room_list" )
-				.empty()
-				.append(lis)
-				.listview("refresh")
-				.trigger("updatelayout");
+					for(var k in building){
+						var room = building[k];
 
-			loadingOut();
+						lis +=	'<li>'+
+										'	<h3>'+room.name+'</h3>'+
+										'	<p>'+
+										'		<strong>Typ:</strong> '+room.type+', '+
+										'		<strong>Größe:</strong> '+room.size+' Plätze'+
+										'	</p>'+
+										'</li>';
+						count += 1;
+					}
+					if(count == 0){
+						lis += 	'<li>'+
+										'	<h3>Leider sind keine Räume frei!</h3>'+
+										'</li>';
+					}
+	
+					$( "#room_room_list" )
+						.empty()
+						.append(lis)
+						.trigger("updatelayout");
+
+					loadingOut();
+				 })
+				 .fail(ajaxErrorHandler);
 		}
 	</script>
 </div>

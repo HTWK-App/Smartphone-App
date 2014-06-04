@@ -1,17 +1,16 @@
 <div id="mail_page" data-dom-cache="true" data-title="Postfach" data-role="page" data-theme='b'>
-    <!--- HEADER --->
-	<div data-role="header" data-position="fixed" data-theme='b' class="header">
-    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
-    	<h1>HTWK App</h1>
-    </div>
-    <!--- HEADER --->
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<h1>HTWK App</h1>
+	</div>
     
-	<div data-role="content">
-		<div id="mail_inbox" data-role="content">
-			<ul id="mail_list" data-role="listview" data-inset="true"></ul>
-			<a data-role="button" id="mail_btn_more" data-icon="arrow-d">Mehr</a>
+	<div role="main" class="ui-content">
+		<div id="mail_inbox">
+			<br/>
+			<ul id="mail_list" data-role="listview"></ul><br/><br/>
+			<a id="mail_btn_more" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-arrow-d">Mehr</a>
 		</div>
-		<div id="mail_sendForm" data-role="content">
+		<div id="mail_sendForm">
 			<form>
 				<input type="email" data-clear-btn="false" name="mail_new_to" id="mail_new_to" value="" placeholder="Empfänger" />
 				<input type="text" name="mail_new_cc" id="mail_new_cc" value="" placeholder="Kopie an" />
@@ -19,24 +18,25 @@
 				<textarea name="mail_new_content" id="mail_new_content" placeholder="Inhalt"></textarea>
 			</form>
 		</div>
-		<div data-role="popup" id="mail_popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false">
-		    <div data-role="header" data-theme="a">
+
+		<div data-role="popup" id="mail_popupDialog" data-overlay-theme="b" data-theme="a" data-content-theme="a" data-dismissible="false">
+		    <div data-role="header">
 			    <h1>Wirklich senden?</h1>
 		    </div>
 		    <div role="main" class="ui-content">
-				<h3 class="ui-title">Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
+				<h3>Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
 				<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
-				<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow">Senden</a>
+				<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Senden</a>
 		    </div>
 		</div>
 	</div>
 	
-	<div id="mail_footer" data-role="footer" data-position="fixed" data-theme="b">
+	<div id="mail_footer" data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
 		<div data-role="navbar">
 			<ul>
-				<li><a id="btn_mail_abort" href="#" data-role="button" data-icon="back" data-mini="true">Abbrechen</a></li>
-				<li><a id="btn_mail_write" href="#" data-role="button" data-icon="forward" data-mini="true">Neue Mail</a></li>
-				<li><a id="btn_mail_send" href="#" data-role="button" data-icon="mail" data-mini="true">Senden</a></li>
+				<li><a id="btn_mail_abort" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-back">Abbrechen</a></li>
+				<li><a id="btn_mail_write" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-envelope">Neue Mail</a></li>
+				<li><a id="btn_mail_send" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-forward">Senden</a></li>
 			</ul>
 		</div>
 	</div>
@@ -288,24 +288,22 @@
 			msg = '<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">'+mail.message+'</pre></div>';
 			
 			div = $('<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="b">'+
-					'<!--- HEADER --->'+
-						'<div data-role="header" data-position="fixed" data-theme="b" class="header">'+
-							'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><span class="icon-angle-left"></span></a>'+
-							'<h1>HTWK App</h1>'+
-						'</div>'+
-					'<!--- HEADER --->'+
-					'<div data-role="content">'+
-						'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
-							'<li data-cards-type="text">'+
-        						'<p><strong>Von: </strong><span class="mail-from">'+from+'</span></br>'+
-        						'<strong>An: </strong>'+toList+'</br>'+
-        						'<strong>Betreff: </strong><span class="mail-subject">'+subj+'</span></br>'+
-        						'</p><hr>'+msg+
-        						'<hr><a href="#" class="btn_mail_answer" data-role="button" data-icon="forward">Antworten</a>'+
-        					'</li>'+
-    					'</ul>'+
-					'</div>'+
-				'</div>');
+							'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
+							'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
+							'		<h1>HTWK App</h1>'+
+							'	</div>'+
+							'	<div data-role="content">'+
+							'		<ul class="nativeDroidCards">'+
+							'			<li>'+
+  						'				<p><strong>Von: </strong><span class="mail-from">'+from+'</span></br>'+
+  						'				<strong>An: </strong>'+toList+'</br>'+
+  						'				<strong>Betreff: </strong><span class="mail-subject">'+subj+'</span></br>'+
+  						'				</p><hr>'+msg+
+  						'				<hr><a href="#" class="btn_mail_answer ui-btn ui-btn-b ui-corner-all ui-shadow">Antworten</a>'+
+  						'			</li>'+
+							'		</ul>'+
+							'	</div>'+
+							'</div>');
 			
 			div.find("a.btn_mail_answer").click(answerMail);
 			

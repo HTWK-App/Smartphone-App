@@ -1,0 +1,291 @@
+/*Custom changes to the default JQM Theme*/
+
+/************************** Style changes from default theme*/
+.ui-page-theme-b .ui-listview li{
+	border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.ui-overlay-b .ui-page-theme-b {
+	background-color: #020202;
+	background: rgb(35,71,160);
+	background: -moz-linear-gradient(top, rgb(35,71,160) 0%, rgb(132,167,255) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(35,71,160)), color-stop(100%,rgb(132,167,255)));
+	background: -webkit-linear-gradient(top, rgb(35,71,160) 0%,rgb(132,167,255) 100%);
+	background: -o-linear-gradient(top, rgb(35,71,160) 0%,rgb(132,167,255) 100%);
+	background: -ms-linear-gradient(top, rgb(35,71,160) 0%,rgb(132,167,255) 100%);
+	background: linear-gradient(to bottom, rgb(35,71,160) 0%,rgb(132,167,255) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020202', endColorstr='#84A7FF',GradientType=0 );
+}
+
+.ui-page-theme-b .ui-header .ui-title{
+	text-align: left;
+	padding-left: 50px;
+	margin-left: 0%;
+}
+
+.ui-page-theme-b .ui-footer .ui-title{
+	margin-right: 10%;
+	margin-left: 10%;
+}
+
+ui-input-text input, .ui-input-search input{
+	color: white;
+	text-shadow: none;
+}
+
+/************************** Timetable Dialog custom styling*/
+
+#timetableDialogHeader {
+	height: 45px;
+	margin-top: -20px;
+}
+
+#timetableDialogHeader h3{
+	padding-top: 10px;
+	padding-left: 10px;
+}
+
+#timetableSemGroupChoose {
+	padding: 20px 0 20px 0;
+}
+
+/************************** Mailbox custom styling*/
+
+#mail_inbox .ui-li-divider{
+	background-color: #52638F;
+}
+
+/************************** Map custom styling*/
+
+.map-canvas{
+	width: 100%; height: 80%;
+}
+
+.mapcontainer{
+	float: right; width:30%; height: 100%;
+}
+
+/************************** info_general custom styling*/
+
+#info_exam_table li a{
+	padding-left:10px;
+	padding-right:10px;
+}
+
+/************************** Sportpics custom styling*/
+
+.sport img, .staffpic{
+	margin: 8px 0 0 14px;
+}
+
+/************************** Card custom styling*/
+
+.nativeDroidCards > li {
+	border: 1px solid rgba(255,255,255,0.1);
+	box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+	background-color: rgba(255,255,255,0.1);
+}
+
+.nativeDroidCards table td,.nativeDroidCards a {
+	border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] .week li {
+	border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+@media all and (min-width: 768px){
+
+	.nativeDroidCards > li {
+		display: inline-block;
+		float: left;
+		margin: 1%;
+		width: 43%;
+	}
+	
+	.nativeDroidCards > li:nth-child(2n+1) {
+		clear: both;
+	}
+}
+
+.nativeDroidCards {
+	list-style: none;
+	padding: 12px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	perspective: 500;
+	-webkit-perspective: 500;
+}
+
+.cardAnimated .nativeDroidCards > li {
+	padding: 10px;
+	margin: 12px;
+	display: block;
+	opacity: 1;
+	top: 0px;
+	left: -100%;
+	position: relative;
+	-webkit-animation: slideFromLeft 1.5s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation: slideFromLeft 1.5s 1;
+	-moz-animation-fill-mode: forwards;
+	animation: slideFromLeft 1.5s 1;
+	animation-fill-mode: forwards;
+}
+
+.cardAnimated .nativeDroidCards > li:nth-child(even) {
+	-webkit-animation: slideFromRight 1.5s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation: slideFromRight 1.5s 1;
+	-moz-animation-fill-mode: forwards;
+	animation: slideFromRight 1.5s 1;
+	animation-fill-mode: forwards;
+}
+.nativeDroidCards > li {
+	padding: 10px;
+	margin: 12px;
+	display: block;
+	opacity: 1;
+	top: 0px;
+	position: relative;
+}
+
+.cardAnimated .nativeDroidCards > li:nth-child(even) {
+	-webkit-animation: slideFromRight 1.0s 1;
+	-webkit-animation-fill-mode: forwards;
+	-moz-animation: slideFromRight 1.0s 1;
+	-moz-animation-fill-mode: forwards;
+	animation: slideFromRight 1.0s 1;
+	animation-fill-mode: forwards;
+}
+.maildetails .nativeDroidCards li{
+	width: 97%;
+}
+
+
+.nativeDroidCards > li:nth-child(1) { -webkit-animation-delay: 0.5s; -moz-animation-delay: 0.5s;  -o-animation-delay: 0.5s; -ms-animation-delay: 0.5s; animation-delay: 0.5s;}
+.nativeDroidCards > li:nth-child(2) { -webkit-animation-delay: 1s;  -moz-animation-delay: 1s;  }
+.nativeDroidCards > li:nth-child(3) { -webkit-animation-delay: 1.5s;  -moz-animation-delay: 1.5s;  }
+.nativeDroidCards > li:nth-child(4) { -webkit-animation-delay: 2.0s;  -moz-animation-delay: 2.0s;  }
+.nativeDroidCards > li:nth-child(5) { -webkit-animation-delay: 2.5s;  -moz-animation-delay: 2.5s;  }
+.nativeDroidCards > li:nth-child(6) { -webkit-animation-delay: 3s;  -moz-animation-delay: 3s;  }
+.nativeDroidCards > li:nth-child(7) { -webkit-animation-delay: 3.5s;  -moz-animation-delay: 3.5s;  }
+.nativeDroidCards > li:nth-child(8) { -webkit-animation-delay: 4s;  -moz-animation-delay: 4s;  }
+.nativeDroidCards > li:nth-child(9) { -webkit-animation-delay: 4.5s;  -moz-animation-delay: 4.5s;  }
+.nativeDroidCards > li:nth-child(10) { -webkit-animation-delay: 5s;  -moz-animation-delay: 5s;  }
+.nativeDroidCards > li:nth-child(11) { -webkit-animation-delay: 5.5s;  -moz-animation-delay: 5.5s;  }
+.nativeDroidCards > li:nth-child(12) { -webkit-animation-delay: 6s;  -moz-animation-delay: 6s;  }
+.nativeDroidCards > li:nth-child(13) { -webkit-animation-delay: 6.5s;  -moz-animation-delay: 6.5s;  }
+.nativeDroidCards > li:nth-child(14) { -webkit-animation-delay: 7s;  -moz-animation-delay: 7.0s;  }
+.nativeDroidCards > li:nth-child(15) { -webkit-animation-delay: 7.5s;  -moz-animation-delay: 7.5s;  }
+
+.nativeDroidCards > li h1 {
+	font-size: 24px;
+	padding: 0px;
+	margin: auto;
+	word-wrap: break-word;
+}
+.nativeDroidCards > li h2 {
+	font-size: 14px;
+	padding: 0px;
+	margin: auto;
+}
+
+.nativeDroidCards > li[data-cards-type="sports"] h1 span {
+	display: block;
+	float: right;
+}
+.nativeDroidCards table {
+	margin: 7px 0px 7px 0px;
+	border-spacing:0;
+	border-collapse:collapse;
+	width: 100%;
+}
+
+.nativeDroidCards table td {
+	vertical-align: top;
+	margin: 0px;
+	padding: 3px;
+}
+
+.nativeDroidCards table tr > td:first-child {
+	text-align: right;
+}
+
+.nativeDroidCards a {
+	display: block;
+	padding: 7px 0px 7px 0px;
+	font-size: 18px;
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] ul li {
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] .detail li {
+	display: inline-block;
+}
+.nativeDroidCards > li[data-cards-type="weather"] .detail li:first-child {
+	width: 25%;
+}
+.nativeDroidCards > li[data-cards-type="weather"] .detail li:first-child span {
+	display: block;
+	width: auto;
+}
+.nativeDroidCards > li[data-cards-type="weather"] .detail li:first-child .sunny {
+	font-size: 60px;
+}
+.nativeDroidCards > li[data-cards-type="weather"] .detail li:nth-child(2) {
+	width: 70%;
+	font-size: 115px;
+	text-align: right;
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] .week li strong,.nativeDroidCards > li[data-cards-type="weather"] .week li span,.nativeDroidCards > li[data-cards-type="weather"] .week i {
+	display: block;
+	width: auto;
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] .week li {
+	width: 22%;
+	display: inline-block;
+}
+.nativeDroidCards > li[data-cards-type="weather"] .week li:last-child {
+	border-right: 0px solid rgba(0,0,0,0.05);
+}
+
+.nativeDroidCards > li[data-cards-type="weather"] .sunny {
+	color: #FFF000;
+}
+
+.nativeDroidCards ul[data-nativedroid-plugin="twitter"] li,.nativeDroidCards ul[data-nativedroid-plugin="twitter"] {
+	padding: 0px;
+	margin: 7px 0px 0px 0px;
+}
+
+.nativeDroidCards ul[data-nativedroid-plugin="twitter"] li img {
+	float: left;
+	margin: 7px;
+}
+
+.nativeDroidCards ul[data-nativedroid-plugin="twitter"] a,.nativeDroidCards ul[data-nativedroid-plugin="twitter"] p,.nativeDroidCards ul[data-nativedroid-plugin="twitter"] h2 {
+	font-size: 14px;
+	padding: 0px;
+	margin: 0px;
+	border-top: 0px;
+}
+
+.nativeDroidCards > li .map {
+	margin: 0;
+    padding: 0;
+	width: 100%;
+    height: 150px;
+}

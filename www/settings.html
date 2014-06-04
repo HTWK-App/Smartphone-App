@@ -1,95 +1,64 @@
-﻿<div id="settings_page" data-role="page" data-title="Einstellungen"
-	data-theme='b'>
-	<!--- HEADER --->
-	<div data-role="header" data-position="fixed" data-theme='b'
-		class="header">
-		<a data-role="button" data-iconpos='left' class="btn_menu"><span
-			class="icon-ellipsis-vertical"></span></a>
+﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme='b'>
+
+  <div data-role="header" data-position="fixed" data-theme='b' data-tap-toggle="false" class="header">
+		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
-	<!--- HEADER --->
 
-	<div data-role="content">
-		<div class='inset'>
-			<h1>Einstellungen</h1>
-			<br />
-			<h2>Login-Daten</h2>
-			<br />
-			<div class='inset'>
-				<label for="input_username"><strong>Nutzername:</strong></label> <input
-					type="text" name="input_username" id="input_username" value=""
-					placeholder="Nutzername" /> <label for="input_password"><strong>Passwort:</strong></label>
-				<input type="password" name="input_password" id="input_password"
-					value="" autocomplete="off" placeholder="******" /> <br> <a
-					id="settings_login_save" data-role="button" data-mini="true">Speichern</a>
-			</div>
-			<hr />
-			<!-- <h2>PushNotifications</h2>
-			<br />
-			<div class="inset">
-				<a id="pushNotifications" data-role="button" data-mini="true"></a>
-				<div id="app-status-div">
-					<div id="app-status"></div>
-					<ul id="app-status-ul" style="display: none;">
-						<li></li>
-					</ul>
-				</div>
-			</div>
-			<hr /> -->
-			<!--<h2>Sprache</h2>
-			<br/>
-			<div class='inset'>
-				<label for="default_language_select"><strong>Standardsprache:</strong></label>
-				<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
-			</div>
-			<hr/>-->
-			<h2>News</h2>
-			<br />
-			<div class='inset'>
-				<label for="default_news_select"><strong>Standard
-						Newsfeed:</strong></label> <select id="default_news_select"
-					name="default_news_select">
-					<option selected="selected">Liste der verfügbaren
-						News-Feeds wird geladen...</option>
-				</select>
-			</div>
-			<hr />
-			<h2>Stundenplan</h2>
-			<br />
-			<div class='inset'>
-				<a href="#popup_timetable_delete" data-role="button"
-					data-mini="true" data-rel="popup" data-position-to="window"
-					data-transition="pop">Stundenplan löschen...</a>
-			</div>
-			<hr />
-			<h2>Mensa</h2>
-			<br />
-			<div class='inset'>
-				<label for="default_canteen_select"><strong>Standard
-						Mensa:</strong></label> <select id="default_canteen_select"
-					name="default_canteen_select" data-mini="true">
-					<option selected="selected">Liste der verfügbaren Mensen
-						wird geladen...</option>
-				</select>
-			</div>
-			<br />
+	<div role="main" class="ui-content">
+		<h2>Login-Daten</h2>
+		<label for="input_username"><strong>Nutzername:</strong></label> 
+			<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername" /> 
+		<label for="input_password"><strong>Passwort:</strong> </label>
+			<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="Passwort" /> 
+		<br> 
+		<a id="settings_login_save" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Speichern</a>
+		<br />
+		<hr />
+		<!-- <h2>PushNotifications</h2>
+		<br />
+		<a id="pushNotifications" data-role="button" data-mini="true"></a>
+		<div id="app-status-div">
+			<div id="app-status"></div>
+			<ul id="app-status-ul" style="display: none;">
+				<li></li>
+			</ul>
 		</div>
+		<hr /> -->
+		<!--<h2>Sprache</h2>
+		<br/>
+		<label for="default_language_select"><strong>Standardsprache:</strong></label>
+		<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
+		<hr/>-->
+		<h2>News</h2>
+		<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
+		<select id="default_news_select" name="default_news_select">
+			<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+		</select>
+		<br />
+		<hr />
+		<h2>Stundenplan</h2>
+		<a href="#popup_timetable_delete" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Stundenplan löschen...</a>
+		<br />
+		<hr />
+		<h2>Mensa</h2>
+		<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
+		<select id="default_canteen_select" name="default_canteen_select">
+			<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+		</select>
+		<br />
 	</div>
-	<div id="popup_timetable_delete" data-role="popup" data-theme="b">
-		<div data-role="header" data-theme="b">
+
+	<div id="popup_timetable_delete" data-role="popup" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+		<div data-role="header">
 			<h3>Wirklich Löschen?</h3>
 		</div>
-		<div role="main" class="ui-content" data-theme="b">
-			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des
-				Stundenplans löschen?</h4>
+		<div role="main" class="ui-content">
+			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
 			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
-			<br> <a href="#" data-role="button" data-icon="back"
-				data-mini="true" data-rel="back" data-inline="true"
-				class="ui-corner-all ui-shadow">Abbrechen</a> <a
-				id="settings_timetable_delete" href="#" data-role="button"
-				data-icon="check" data-mini="true" data-rel="back"
-				data-inline="true" data-transition="flow"
-				class="ui-corner-all ui-shadow">Löschen</a>
+			<br> 
+			<a id="settings_timetable_delete" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Löschen</a>
+			<a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</a>
 		</div>
 	</div>
 
@@ -102,10 +71,6 @@
 			settingsGetNewsFeeds();
 			settingsGetCanteens();
 			settingsFillFields();
-		}).on("pageshow", function() {
-			$("#btn_refresh").hide();
-		}).on("pagehide", function() {
-			$("#btn_refresh").show();
 		});
 
 		/**
@@ -236,7 +201,9 @@
 			CONFIG.TIMETABLE.faculty = [];
 			CONFIG.TIMETABLE.temporary = [];
 			saveParameters();
-
+			$("#popup_timetable_delete").popup("close");
+			loadingIn("Ihr Stundenplan wurde gelöscht!", true);
+			setTimeout(loadingOut, 2000);
 		});
 
 		$("#default_canteen_select").on("change", function() {

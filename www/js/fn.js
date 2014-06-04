@@ -200,7 +200,7 @@ function loadingIn(msg, textonly) {
 	  textVisible: true,
 	  textonly: textonly,
 	  disabled: true,
-	  theme: "b"
+	  theme: "a"
 	});
 };
 

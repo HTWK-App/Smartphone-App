@@ -1,14 +1,13 @@
-<div id="sport_page" data-dom-cache="true" data-role="page" data-title="Sportangebote" data-dom-cache="true" data-theme='b'>
-    <!--- HEADER --->
-    <div data-role="header" data-position="fixed" data-theme='b' class="header">
-    	<a data-role="button" data-iconpos='left' class="btn_menu"><span class="icon-ellipsis-vertical"></span></a>
-    	<h1>HTWK App</h1>
-    </div>
-    <!--- HEADER --->
+<div id="sport_page" data-role="page" data-title="Sportangebote" data-dom-cache="true" data-theme='b'>
+
+	<div data-role="header" data-position="fixed" data-theme='b' data-tap-toggle="false" class="header">
+		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<h1>HTWK App</h1>
+	</div>
     
-	<div data-role="content">
+	<div role="main" class="ui-content">
 		<br/>
-		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportangebot..." data-filter="true" data-filter-reveal="true" data-inset="true">
+		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportangebot..." data-filter="true" data-filter-reveal="true">
 		</ul>	
 	</div>
 
@@ -17,9 +16,6 @@
 	    	.on("pagecreate", initSportsView)
 	    	.on("pageshow", function() {
 	    			if(!GLOBAL.INIT.sport) loadingIn();
-	    			/*$("#btn_refresh")
-					.off()
-					.on("click", initSportsView);*/
 	    	 });
 
 		/**
@@ -40,7 +36,7 @@
 							sport = data[k];
 							
 							lis += 	'<li data-sport='+sport.id+'><a href="#" class="sport">'+
-										'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+sport.id+'/pic" height="50" width="50"/>'+
+										'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+sport.id+'/pic" height="64" width="64"/>'+
 										'<h3>'+sport.title+'</h3>'+
 										'<p>'+sport.description+'</p>'+
 									'</a></li>';
@@ -95,33 +91,33 @@
 					}
 				
 	    			var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="b">'+
-            	    			'<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">'+
-            						'<a href="#" data-rel="back" data-role="button" data-transition="slide" data-direction="reverse"><span class="icon-angle-left"></span></a>'+
-            						'<h1>HTWK App</h1>'+
-            					'</div>'+
-	    						'<div data-role="content"><div class="inset"><br/>'+
-	    							'<h1>'+data.title+'</h1>'+
-	    							'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
-	    								'<li data-cards-type="text">'+
-	    									'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" />'+
-										'</li>'+
-										'<li data-cards-type="text">'+
-											'<h1>Beschreibung</h1><hr/>'+
-											'<p>'+data.description+'</p>'+
-										'</li>'+
-										'<li data-cards-type="text">'+
-											'<h1>Info</h1><hr/>'+
-												'<p>'+
-													'<b>Zeitspanne:</b><br/>'+data.time+'<br/>'+data.cycle+
-													'<br/><b>Geschlecht:</b><br/>'+data.gender+
-													'<br/><b>Auslastung des Kurses:</b></br> '+data.competitor+
-													'<br/><b>Ort:</b><br/>'+data.location+
-													'<br/><b>Betreuer/in:</b><br/>'+data.leader+
-													'<br/><a href="'+data.detailedLink+'">Weitere Informationen</a>'+
-												'</p>'+
-										'</li>'+
-										'<li data-cards-type="text">'+
-											'<h1>Hinweise</h1><hr/>';
+											'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
+											'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
+											'		<h1>HTWK App</h1>'+
+											'	</div>'+
+											'	<div role="main" class="ui-content">'+
+			  							'		<h1>'+data.title+'</h1>'+
+			  							'		<ul class="nativeDroidCards">'+
+			  							'			<li>'+
+			  							'				<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" />'+
+											'			</li>'+
+											'			<li>'+
+											'				<h1>Beschreibung</h1><hr/>'+
+											'				<p>'+data.description+'</p>'+
+											'			</li>'+
+											'			<li>'+
+											'				<h1>Info</h1><hr/>'+
+											'				<p>'+
+											'					<b>Zeitspanne:</b><br/>'+data.time+'<br/>'+data.cycle+
+											'					<br/><b>Geschlecht:</b><br/>'+data.gender+
+											'					<br/><b>Auslastung des Kurses:</b></br> '+data.competitor+
+											'					<br/><b>Ort:</b><br/>'+data.location+
+											'					<br/><b>Betreuer/in:</b><br/>'+data.leader+
+											'					<br/><a href="'+data.detailedLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external">Weitere Informationen</a>'+
+											'				</p>'+
+											'			</li>'+
+											'			<li>'+
+											'				<h1>Hinweise</h1><hr/>';
 				
     					if(!isEmpty(data.hints)){
     						div += '<ul>';
