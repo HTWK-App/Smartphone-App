@@ -99,7 +99,7 @@
 		 */
 		function fillPopup(heading, description, btn_text, func, btn_abr_text){
 			if(isEmpty(btn_abr_text)) btn_abr_text = "Abbrechen";
-			$("#timetableDialogHeader").empty().append('<h3 style="padding: 5% 0 0 10%;">'+heading+'</h3>'); //TODO renew design
+			$("#timetableDialogHeader").empty().append('<h3>'+heading+'</h3>');
 			$("#timetableDialogContent").empty().append('<p>'+description+'</p>');
 			$("#timetableDialogContent").append('<a id="timetableDialogAbort" href="#" data-role="button" data-icon="back" data-mini="true" data-inline="true" class="ui-corner-all ui-shadow">'+btn_abr_text+'</a>');
 
@@ -178,7 +178,7 @@
 
 					fillPopup("Einrichtung", "Bitte wählen Sie ihren Studiengang aus!");
 					$("#timetableDialogAbort").before(ul);
-					$("#timetableDialog").popup();
+					$("#timetableDialog").trigger("create").popup();
 					
 					setTimeout(function(){open($("#timetableDialog"));}, 50);
 					
@@ -209,7 +209,7 @@
 					if(!isEmpty(data.message)){ajaxErrorHandler(data, status, jqXHR, abortSetup); return;}
 
 					var empty = true;
-					var lis = '<ul data-role="listview">';
+					var lis = '<ul data-role="listview" id="timetableSemGroupChoose">';
 					
 					for(var k in data) {
 						for(var s in data[k].courses) {

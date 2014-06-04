@@ -1,5 +1,6 @@
 /*Custom changes to the default JQM Theme*/
 
+/************************** Style changes from default theme*/
 .ui-page-theme-b .ui-listview li{
 	border-top: 1px solid rgba(255,255,255,0.05);
 }
@@ -22,17 +23,6 @@
 	margin-left: 0%;
 }
 
-#mail_inbox .ui-li-divider{
-	background-color: #52638F;
-}
-.map-canvas{
-	width: 100%; height: 80%;
-}
-
-.mapcontainer{
-	float: right; width:30%; height: 100%;
-}
-
 .ui-page-theme-b .ui-footer .ui-title{
 	margin-right: 10%;
 	margin-left: 10%;
@@ -43,14 +33,52 @@ ui-input-text input, .ui-input-search input{
 	text-shadow: none;
 }
 
+/************************** Timetable Dialog custom styling*/
+
+#timetableDialogHeader {
+	height: 45px;
+	margin-top: -20px;
+}
+
+#timetableDialogHeader h3{
+	padding-top: 10px;
+	padding-left: 10px;
+}
+
+#timetableSemGroupChoose {
+	padding: 20px 0 20px 0;
+}
+
+/************************** Mailbox custom styling*/
+
+#mail_inbox .ui-li-divider{
+	background-color: #52638F;
+}
+
+/************************** Map custom styling*/
+
+.map-canvas{
+	width: 100%; height: 80%;
+}
+
+.mapcontainer{
+	float: right; width:30%; height: 100%;
+}
+
+/************************** info_general custom styling*/
+
 #info_exam_table li a{
 	padding-left:10px;
 	padding-right:10px;
 }
 
+/************************** Sportpics custom styling*/
+
 .sport img, .staffpic{
 	margin: 8px 0 0 14px;
 }
+
+/************************** Card custom styling*/
 
 .nativeDroidCards > li {
 	border: 1px solid rgba(255,255,255,0.1);
