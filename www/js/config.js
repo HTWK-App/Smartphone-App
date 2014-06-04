@@ -11,7 +11,7 @@ var CONFIG = {
 		
 	SERVER: {
 		// LIVE *****
-		base: "http://141.57.21.45:8080/app/",
+		base: "http://141.57.21.45:8080/",
 		//base: "https://141.57.21.45:8443/app/",
 		// DEMO *****
 		//base: "http://gateway.westphal.im:5001/app/",
