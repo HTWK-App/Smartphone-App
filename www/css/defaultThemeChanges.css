@@ -23,10 +23,10 @@
 }
 
 #mail_inbox .ui-li-divider{
-	background-color: #04589b;
+	background-color: #52638F;
 }
 .map-canvas{
-	float: left; width: 70%; height: 100%;
+	width: 100%; height: 80%;
 }
 
 .mapcontainer{

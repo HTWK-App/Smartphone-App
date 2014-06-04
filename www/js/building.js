@@ -36,18 +36,15 @@ function buildingLoadBuildingDetails(id) {
 								'				<strong>Abkürzung: </strong>'+data.id+'<br/>'+
 								'				<strong>Adresse:</strong><br/>'+data.address+'<br/>'+
 								'				<p><br/>'+desc+'</p>'+
+								'				<h5>'+
+								'					<strong>Letzte Änderung:</strong>'+createDateTimeStamp(new Date(data.lastChange))+
+								'				</h5>'+
 								'			</li>'+
 								'			<li id="building_'+id+'_map">'+
 								'				<div class="map-canvas"></div><div class="mapcontainer"></div>'+
-								'				<a class="external" href="http://maps.google.com/maps?daddr='+data.address+'"><i class="icon-screenshot"></i>Navigation </a>'+
+								'				<a class="external" href="http://maps.google.com/maps?daddr='+data.address+'"><i class="fa fa-crosshairs fa-lg"></i> Navigation</a>'+
 								'			</li>'+
 								'		</ul>'+
-								'		<br/>'+
-								'		<p>'+
-								'			<h5>'+
-								'				<strong>Letzte Änderung:</strong>'+createDateTimeStamp(new Date(data.lastChange))+
-								'			</h5>'+
-								'		</p>'+
 								'	</div>'+
 								'</div>';
 
