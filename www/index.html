@@ -232,7 +232,7 @@
 
 				var weathercard = $("#weatherCard");
 			
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+position.coords.latitude.toPrecision(6)+','+position.coords.longitude.toPrecision(6)+"&days=5")
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+position.coords.latitude.toPrecision(6)+','+position.coords.longitude.toPrecision(6)+"&days=5&customIcons=true")
 					 .done(function(data, status, jqXHR) {
 						if(!isEmpty(data.exception))
 							{ ajaxErrorHandler(data, status, jqXHR); return; }
@@ -255,7 +255,7 @@
 								temp = day.temp.day.toFixed(1);
 								div += '<ul class="detail">'+
 									'	<li>'+
-									'		<span><img src="'+day.weather[0].iconData+'" style="margin: -10px 0 -17px 0;"></span>'+
+									'		<span><img src="'+day.weather[0].iconData+'" width="100em" height="100em"></span>'+
 									'		<span>'+day.weather[0].descriptionDe+'</span>'+
 									'		<span class="icon-flag"> '+day.speed+' m/s</span>'+
 									'	</li>'+
@@ -268,7 +268,7 @@
 								}
 								div += '<li>'+
 									'	<span>'+weekday[date]+'</span>'+
-									'	<span><img src="'+day.weather[0].iconData+'" style="margin: -10px 0 -17px 0;"></span>'+
+									'	<span><img src="'+day.weather[0].iconData+'" width="50em" height="50em"></span>'+
 									'	<strong>'+temp[0]+'&deg;</strong>'+
 									'	<span>'+temp[1]+'&deg;</span>'+
 									'</li>';
