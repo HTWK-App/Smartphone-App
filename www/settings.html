@@ -15,16 +15,18 @@
 		<a id="settings_login_save" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Speichern</a>
 		<br />
 		<hr />
-		<!-- <h2>PushNotifications</h2>
+		<h2>PushNotifications</h2>
 		<br />
-		<a id="pushNotifications" data-role="button" data-mini="true"></a>
+		<label for="enable_pushNotifications"><strong>Enable:</strong>
+			<input type="checkbox" name="enable_pushNotifications" id="enable_pushNotifications"/> 
+		</label> 
 		<div id="app-status-div">
 			<div id="app-status"></div>
-			<ul id="app-status-ul" style="display: none;">
+			<ul id="app-status-ul" style="">
 				<li></li>
 			</ul>
 		</div>
-		<hr /> -->
+		<hr /> 
 		<!--<h2>Sprache</h2>
 		<br/>
 		<label for="default_language_select"><strong>Standardsprache:</strong></label>
@@ -211,27 +213,16 @@
 			saveParameters();
 		});
 
-// 		$("#pushNotifications").on("click", function() {
-// 			if (CONFIG.PUSH.registered) {
-// 				unregisterDevice();
-// 				// 				console.log("registered")
-// 			} else {
-// 				registerDevice();
-// 				// 				console.log("not registered")
-// 			}
-// 			validatePushNotificationDescription();
+		$("#enable_pushNotifications").on("change", function(){
+			var isChecked =  $('#enable_pushNotifications').is(':checked');
+			CONFIG.PUSH.enabled = isChecked;
+			alert(CONFIG.PUSH.enabled);
+			if (isChecked) {
+				registerDevice();
+  			} else {
+ 				unregisterDevice();
+ 			}
+		});
 
-// 		});
-// 		validatePushNotificationDescription();
-
-// 		function validatePushNotificationDescription() {
-// 			if (CONFIG.PUSH.registered) {
-// 				$("#pushNotifications").text("Unregister");
-// 				$("#app-status").text("Status: registered");
-// 			} else {
-// 				$("#pushNotifications").text("Register");
-// 				$("#app-status").text("Status: not registered");
-// 			}
-// 		}
 	</script>
 </div>

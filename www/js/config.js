@@ -48,6 +48,7 @@ var CONFIG = {
 	},
 	PUSH: {
 		senderId: "1058861665734",
+		enabled: false,
 		regid: "",
 		registered: false,
 		STATUS: {

@@ -28,30 +28,30 @@ function registerDevice() {
 	registerPushEvents();
 	$("#app-status-ul").append('<li>deviceready event received</li>');
 	
-	try {
-		pushNotification = window.plugins.pushNotification;
-		if (device.platform == 'android' || device.platform == 'Android') {
-			$("#app-status-ul").append('<li>registering android</li>');
-			pushNotification.register(successHandler, errorHandler, {
-				"senderID" : CONFIG.PUSH.senderId,
-				"ecb" : "onNotificationGCM"
-			}); // required!
-		} else {
-			$("#app-status-ul").append('<li>registering iOS</li>');
-			pushNotification.register(tokenHandler, errorHandler, {
-				"badge" : "true",
-				"sound" : "true",
-				"alert" : "true",
-				"ecb" : "onNotificationAPN"
-			}); // required!
-		}
-		CONFIG.PUSH.registered=true;
-//		validatePushNotificationDescription();
-	} catch (err) {
-		CONFIG.PUSH.registered=false;
-		txt = "There was an error on this page.\n\n";
-		txt += "Error description: " + err.message + "\n\n";
-		alert(txt);
+		try {
+			pushNotification = window.plugins.pushNotification;
+			if (device.platform == 'android' || device.platform == 'Android') {
+				$("#app-status-ul").append('<li>registering android</li>');
+				pushNotification.register(successHandler, errorHandler, {
+					"senderID" : CONFIG.PUSH.senderId,
+					"ecb" : "onNotificationGCM"
+				}); // required!
+			} else {
+				$("#app-status-ul").append('<li>registering iOS</li>');
+				pushNotification.register(tokenHandler, errorHandler, {
+					"badge" : "true",
+					"sound" : "true",
+					"alert" : "true",
+					"ecb" : "onNotificationAPN"
+				}); // required!
+			}
+			CONFIG.PUSH.registered=true;
+	//		validatePushNotificationDescription();
+		} catch (err) {
+			CONFIG.PUSH.registered=false;
+			txt = "There was an error on this page.\n\n";
+			txt += "Error description: " + err.message + "\n\n";
+			alert(txt);
 	}
 }
 
@@ -136,25 +136,8 @@ function onNotificationGCM(e) {
 	}
 }
 function unregisterDevice() {
-	pushNotification.unregister(successHandler, errorHandler);
 	
-	$.ajax({
-	    url: CONFIG.SERVER.base + CONFIG.SERVER.pushnotification
-		+ "?credentials=" + CONFIG.AUTH.credentials
-		+ "&salt=" + CONFIG.AUTH.salt + "&regid="
-		+ e.regid,
-	    type: 'DELETE',
-	    success: function(result) {
-	    	CONFIG.PUSH.regid = "";
-	    	CONFIG.PUSH.registered=false;
-	    }
-	});
-	console.log(CONFIG.SERVER.base + CONFIG.SERVER.pushnotification
-			+ "?credentials=" + CONFIG.AUTH.credentials
-			+ "&salt=" + CONFIG.AUTH.salt + "&regid="
-			+ e.regid);
-//	validatePushNotificationDescription();
-	$("#app-status-ul").clear().append('<li>unregistered successfully</li>');
+	pushNotification.unregister(successUnregisterHandler, errorHandler);
 	
 }
 function tokenHandler(result) {
@@ -162,6 +145,31 @@ function tokenHandler(result) {
 	// Your iOS push server needs to know the token before it can push to this
 	// device
 	// here is where you might want to send it the token for later use.
+}
+
+function successUnregisterHandler(result) {
+	
+	$.ajax({
+	    url: CONFIG.SERVER.base + CONFIG.SERVER.pushnotification+ "/delete"
+		+ "?credentials=" + CONFIG.AUTH.credentials
+		+ "&salt=" + CONFIG.AUTH.salt + "&regid="
+		+ CONFIG.PUSH.regid,
+	    type: 'GET',
+	    success: function(data) {
+	    	CONFIG.PUSH.regid = "";
+	    	CONFIG.PUSH.registered=false;
+	    },
+	    error: function(xhr, status, error) {
+  			var err = "(" + xhr.responseText + ")";
+  			alert(JSON.stringify(error));
+		},
+	    complete: function(){
+	    	unRegisterPushEvents();
+			$("#app-status-ul").append('<li>successfully unregistered device:' +result+'</li>');    	
+	    }
+
+	});
+	
 }
 
 function successHandler(result) {
@@ -174,12 +182,14 @@ function errorHandler(error) {
 
 function registerPushEvents(){
 	for(key in CONFIG.PUSH.STATUS){
-		console.log(key);
 		$.event.trigger({
 			type : key
 		});
 		$(document).on(key, eventHandler.get(key));
 	}
 }
-
-document.addEventListener('deviceready', registerDevice, true);
+function unRegisterPushEvents(){
+	for(key in CONFIG.PUSH.STATUS){
+		$(document).off(key);
+	}
+}
