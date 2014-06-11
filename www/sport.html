@@ -16,6 +16,7 @@
 	    	.on("pagecreate", initSportsView)
 	    	.on("pageshow", function() {
 	    			if(!GLOBAL.INIT.sport) loadingIn();
+	    			analytics.trackView('index');
 	    	 });
 
 		/**

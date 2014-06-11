@@ -62,6 +62,7 @@
 				else {
 	    			if(!GLOBAL.INIT.mail) loadingIn();	
 	    		}
+	    		analytics.trackView('mail');
 			 });
 
 		$("#btn_mail_write").on("click", function() { showMailSendForm(false);});

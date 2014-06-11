@@ -22,6 +22,7 @@
 	    			if(!GLOBAL.INIT.builds) loadingIn();
 						$("#buidling_content_list li").removeClass("ui-screen-hidden");
 						$("#buidling_content_list").listview("refresh");
+						analytics.trackView('buildings');
 	    		 })
 
 		/**
@@ -43,6 +44,7 @@
 					GLOBAL.INIT.builds = true;
 				})
 				.fail(ajaxErrorHandler);
+
 		}
 		
 		/**

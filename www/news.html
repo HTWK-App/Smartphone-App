@@ -38,6 +38,7 @@
 					.on("click", function() { 
 						$("#news_select").change(); 
 				 	});
+				 	analytics.trackView('news');
 			})
 			.on("pagehide", function () {
 				//$(".newsdetails").remove();

@@ -5,7 +5,7 @@
  *
  */
 function loadStaffDetails(id) {
-	
+	analytics.trackView('staff#'+id);
 	loadingIn();
 	
 	$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)

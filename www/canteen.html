@@ -1,10 +1,10 @@
 ﻿<div id="canteen_page" data-role="page" data-theme='b' data-dom-cache="true">
-	<!--- HEADER --->
+	<!--- HEADER -->
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
 		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
-	<!--- HEADER --->
+	<!--- HEADER -->
     
 	<div role="main" class="ui-content">
 		<div data-role="navbar">
@@ -50,6 +50,7 @@
 							.prop("checked", false)
 							.checkboxradio("refresh");
 					})*/
+					analytics.trackView('mensa');
 			 })
 			.on("click", "#canteen_nav a", function(e) {
 				$("#canteen_page")

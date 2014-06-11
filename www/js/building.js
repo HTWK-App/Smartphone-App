@@ -6,6 +6,7 @@
  */
 function buildingLoadBuildingDetails(id) {
 	
+	analytics.trackView('building#'+id);
 	loadingIn();
 	
 	$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)

@@ -28,6 +28,7 @@
 			.on("pageshow", function () {
 				startRoomFind();
 				GLOBAL.INIT.room = true;
+				analytics.trackView('room');
 			 });
 
 		$( "#building_select" )
