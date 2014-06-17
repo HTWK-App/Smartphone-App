@@ -17,7 +17,7 @@
 		<hr />
 		<h2>PushNotifications</h2>
 		<br />
-		<label for="enable_pushNotifications"><strong>Enable:</strong>
+		<label for="enable_pushNotifications"><strong> Enable:</strong>
 			<input type="checkbox" name="enable_pushNotifications" id="enable_pushNotifications"/> 
 		</label> 
 		<div id="app-status-div">
@@ -214,15 +214,22 @@
 		});
 
 		$("#enable_pushNotifications").on("change", function(){
+			checkPushStatus();
+		});
+
+		function checkPushStatus(){
 			var isChecked =  $('#enable_pushNotifications').is(':checked');
 			CONFIG.PUSH.enabled = isChecked;
-			alert(CONFIG.PUSH.enabled);
 			if (isChecked) {
 				registerDevice();
   			} else {
  				unregisterDevice();
  			}
-		});
-
+		}
+		if (CONFIG.PUSH.enabled) {
+			$('#enable_pushNotifications').prop('checked', true)
+		}else{
+			$('#enable_pushNotifications').prop('checked', false)
+		}
 	</script>
 </div>
