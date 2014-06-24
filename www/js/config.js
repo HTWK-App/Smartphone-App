@@ -1,20 +1,17 @@
 /**
  * Configuration File for general Settings and global Constants or Fields.
- * 
+ *
  * @author Hubertus Willuhn
  * @version 1.0
- * 
+ *
  * UTF-8
  */
 
 var CONFIG = {
-		
+
 	SERVER: {
 		// LIVE *****
-		base: "https://141.57.21.45:8443/",
-		//base: "https://141.57.21.45:8443/app/",
-		// DEMO *****
-		//base: "http://gateway.westphal.im:5001/app/",
+		base: "http://141.57.21.45:8080/",
 		// LOCAL *****
 		//base: "http://localhost:8080/app/",
 		staff: "info/staff/",
@@ -111,9 +108,9 @@ var CONFIG = {
 		defaultCanteen: 118
 	},
 	AJAX: {
-		scriptCharset: "utf-8", 
+		scriptCharset: "utf-8",
 		contentType: "application/json; charset=utf-8",
-		headers: { 
+		headers: {
 			"Accept" : "application/json; charset=utf-8",
 			"Content-Type": "application/json; charset=utf-8"
 		}
