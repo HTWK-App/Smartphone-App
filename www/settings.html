@@ -16,16 +16,8 @@
 		<br />
 		<hr />
 		<h2>PushNotifications</h2>
-		<br />
-		<label for="enable_pushNotifications"><strong> Enable:</strong>
-			<input type="checkbox" name="enable_pushNotifications" id="enable_pushNotifications"/> 
-		</label> 
-		<div id="app-status-div">
-			<div id="app-status"></div>
-			<ul id="app-status-ul" style="">
-				<li></li>
-			</ul>
-		</div>
+		<a id="pushnotifications" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Pushnotifications einschalten</a>
+		<br/>
 		<hr /> 
 		<!--<h2>Sprache</h2>
 		<br/>
@@ -70,6 +62,7 @@
 		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
 		 */
 		$("#settings_page").on("pagecreate", function() {
+			updatePushButton();
 			settingsGetNewsFeeds();
 			settingsGetCanteens();
 			settingsFillFields();
@@ -177,6 +170,7 @@
 		 saveParameters();
 		 });
 		 */
+		 
 		$("#settings_login_save")
 				.on(
 						"click",
@@ -213,23 +207,24 @@
 			saveParameters();
 		});
 
-		$("#enable_pushNotifications").on("change", function(){
-			checkPushStatus();
-		});
-
-		function checkPushStatus(){
-			var isChecked =  $('#enable_pushNotifications').is(':checked');
-			CONFIG.PUSH.enabled = isChecked;
-			if (isChecked) {
+		$("#pushnotifications").on("click", function(){
+			if(!CONFIG.PUSH.enabled){
+				CONFIG.PUSH.enabled = true;
 				registerDevice();
   			} else {
+				CONFIG.PUSH.enabled = false;
  				unregisterDevice();
  			}
-		}
-		if (CONFIG.PUSH.enabled) {
-			$('#enable_pushNotifications').prop('checked', true)
-		}else{
-			$('#enable_pushNotifications').prop('checked', false)
-		}
+			updatePushButton();
+		});
+
+		function updatePushButton(){
+			if(CONFIG.PUSH.enabled){
+				$("#pushnotifications").text("Pushnotifications ausschalten");
+			} else {
+				$("#pushnotifications").text("Pushnotifications einschalten");
+			}
+		};
+		
 	</script>
 </div>
