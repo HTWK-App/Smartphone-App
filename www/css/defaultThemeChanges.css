@@ -69,7 +69,7 @@ ui-input-text input, .ui-input-search input{
 /************************** Map custom styling*/
 
 .map-canvas{
-	height:250px;
+	height: 250px;
 	width: 100%; 
 	height: 80%;
 }
