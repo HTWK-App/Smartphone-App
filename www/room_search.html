@@ -133,7 +133,7 @@
 		 */
 		function fillRoomList(id){
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+CONFIG.TIMETABLE.semester+'/22'/*+GLOBAL.DATE.currentWeek*/)
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+CONFIG.TIMETABLE.semester+'/'+GLOBAL.DATE.currentPlanWeek)
 				.done(function(data, status, jqXHR) {
 					if(!isEmpty(data.exception))
 							{ ajaxErrorHandler(data, status, jqXHR); return; }
