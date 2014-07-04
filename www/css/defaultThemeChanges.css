@@ -60,6 +60,11 @@ ui-input-text input, .ui-input-search input{
 	padding: 20px 0 20px 0;
 }
 
+#timetable_page #actualDay{
+	display:inline; !important;
+	margin-right: 10px;
+}
+
 /************************** Mailbox custom styling*/
 
 #mail_inbox .ui-li-divider{

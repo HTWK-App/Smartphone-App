@@ -8,6 +8,8 @@
 	<div role="main" class="ui-content">   
 		<h1 id="actualWeek" data-week="-1">Woche wird geladen...</h1>
 		<h1 id="actualDay" data-day=""></h1>
+		<a id="prevDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-l ui-corner-all ui-shadow ui-btn-inline"></a>
+		<a id="nextDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-r ui-corner-all ui-shadow ui-btn-inline"></a>
 		<hr/>
 		<ul id="dayCards" class="nativeDroidCards"></ul>
 	</div>
@@ -54,32 +56,39 @@
 					analytics.trackView('timetable');
 				}
 			 })
-			.on("swipeleft", function() { //next day
-				var aDay = $("#actualDay");
-				var aWeek = $("#actualWeek");
-				var day = parseInt(aDay.attr("data-day"))+1;
-				var week = parseInt(aWeek.attr("data-week"));
-				if(day > 7){
-					day = 1;
-					week += 1;
-					aWeek.attr("data-week", week);
-				}
-				aDay.attr("data-day", day);
-				timetableGetDayData();
-			 })
-			.on("swiperight", function() { //previous day
-				var aDay = $("#actualDay");
-				var aWeek = $("#actualWeek");
-				var day = parseInt(aDay.attr("data-day"))-1;
-				var week = parseInt(aWeek.attr("data-week"));
-				if(day < 1){
-					day = 7;
-					week -= 1;
-					aWeek.attr("data-week", week);
-				}
-				aDay.attr("data-day", day);
-				timetableGetDayData();
-			 });
+			.on("swipeleft", nextDay)
+			.on("swiperight", prevDay);
+			
+		$('#nextDay').on("click", nextDay);
+		$('#prevDay').on("click", prevDay);
+			 
+		function nextDay(){
+			var aDay = $("#actualDay");
+			var aWeek = $("#actualWeek");
+			var day = parseInt(aDay.attr("data-day"))+1;
+			var week = parseInt(aWeek.attr("data-week"));
+			if(day > 7){
+				day = 1;
+				week += 1;
+				aWeek.attr("data-week", week);
+			}
+			aDay.attr("data-day", day);
+			timetableGetDayData();
+		};
+		
+		function prevDay(){
+			var aDay = $("#actualDay");
+			var aWeek = $("#actualWeek");
+			var day = parseInt(aDay.attr("data-day"))-1;
+			var week = parseInt(aWeek.attr("data-week"));
+			if(day < 1){
+				day = 7;
+				week -= 1;
+				aWeek.attr("data-week", week);
+			}
+			aDay.attr("data-day", day);
+			timetableGetDayData();
+		};
 			
 		$("#extendTimetable")
 			.on("click", showConfigDialog);
@@ -128,7 +137,7 @@
 		function abortSetup(e) {
 			$("#timetableDialog").popup("close")
 			CONFIG.TIMETABLE.temporary= [];
-			if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData();
+			if(CONFIG.TIMETABLE.faculty.length != 0) initTimetableView();
 		};
 
 		/**
