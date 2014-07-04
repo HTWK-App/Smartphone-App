@@ -28,7 +28,9 @@
 			.on("pageshow", function () {
 				startRoomFind();
 				GLOBAL.INIT.room = true;
-				analytics.trackView('room');
+				if(WURFL.is_mobile){
+					analytics.trackView('room');
+				}
 			 });
 
 		$( "#building_select" )

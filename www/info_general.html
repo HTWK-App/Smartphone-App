@@ -77,7 +77,9 @@
 				if(!GLOBAL.INIT.info)
 					loadingIn();
 			 })
-			analytics.trackView('general');
+			if(WURFL.is_mobile){
+				analytics.trackView('general');
+			}
 			/*.on("pagehide", function() {
 				$("#btn_refresh").show();
 			 });*/

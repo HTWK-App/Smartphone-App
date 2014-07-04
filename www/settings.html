@@ -73,7 +73,9 @@
 		 *
 		 */
 		function settingsGetNewsFeeds() {
-			analytics.trackView('settings');
+			if(WURFL.is_mobile){
+				analytics.trackView('settings');
+			}
 			loadingIn();
 
 			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news).done(

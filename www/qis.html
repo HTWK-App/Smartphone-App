@@ -23,7 +23,9 @@
 				} else {
 					if(!GLOBAL.INIT.qis) loadingIn();	
 				}
-				analytics.trackView('qis');
+				if(WURFL.is_mobile){
+					analytics.trackView('qis');
+				}
 			});
 
 		/**

@@ -153,7 +153,8 @@ var GLOBAL = {
 			5: { id: "Fri" , name: "Freitag"},
 			6: { id: "Sat" , name: "Samstag"}
 		},
-		currentWeek: null
+		currentWeek: null, //Array with weekdays
+		currentPlanWeek: 0
 	},
 	NEWS: {
 		titles: {

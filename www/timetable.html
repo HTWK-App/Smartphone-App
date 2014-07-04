@@ -50,7 +50,9 @@
 				} else if($("#actualWeek").attr("data-week") != -1){
 					timetableGetDayData();
 				}
-				analytics.trackView('timetable');
+				if(WURFL.is_mobile){
+					analytics.trackView('timetable');
+				}
 			 })
 			.on("swipeleft", function() { //next day
 				var aDay = $("#actualDay");

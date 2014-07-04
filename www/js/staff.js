@@ -5,7 +5,9 @@
  *
  */
 function loadStaffDetails(id) {
-	analytics.trackView('staff#'+id);
+	if(WURFL.is_mobile){
+		analytics.trackView('staff#'+id);
+	}
 	loadingIn();
 	
 	$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)

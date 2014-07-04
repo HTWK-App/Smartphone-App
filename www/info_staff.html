@@ -14,7 +14,9 @@
 	    		.on("pagecreate", staffInitStaffView)
 	    		.on("pageshow", function() {
 	    			if(!GLOBAL.INIT.staff) loadingIn();
-	    			analytics.trackView('staff');
+	    			if(WURFL.is_mobile){
+		    			analytics.trackView('staff');
+		    		0
 	    		 });
 
 		/**
