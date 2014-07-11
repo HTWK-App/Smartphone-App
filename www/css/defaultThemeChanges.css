@@ -33,9 +33,9 @@ ui-input-text input, .ui-input-search input{
 	text-shadow: none;
 }
 
-.ui-panel.ui-panel-open {
+/*.ui-panel.ui-panel-open {
 	position:fixed;
-}
+}*/
 
 .ui-panel-inner {
 	position: absolute;
@@ -43,8 +43,20 @@ ui-input-text input, .ui-input-search input{
 	left: 0;
 	right: 0;
 	bottom: 0px;
-	overflow: scroll;
+	overflow: auto;
 	-webkit-overflow-scrolling: touch;
+}
+
+#overlayer {
+	position: fixed;
+	z-index:1000;
+	top: 0px;
+	left: 0px;
+	height:100%;
+	width:100%;
+	background-color: #000000;
+	opacity: 0.4;
+	display: none;
 }
 /*
 .ui-panel {

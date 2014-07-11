@@ -17,7 +17,7 @@
 		<script type="application/javascript" src="js/lib/jquery.mobile.custom.1.4.2.min.js"></script>
 
 		<script type="application/javascript" src="js/compressed.min.js"></script>
-		<!--
+		<!-- Compressed
 		<script type="application/javascript" src="js/config.js"></script>
 		<script type="application/javascript" src="js/fn.js"></script>
 		<script type="application/javascript" src="js/gmaps.js"></script>
@@ -38,32 +38,34 @@
 		
 	</head>
 	<body>
+	
+		<!--- MENU -->
+		<div data-role="panel" id="panelMenu" data-theme="a" data-display="overlay"  data-position="left" class="menu">
+			<ul data-role="listview">
+				<li data-role="list-divider" role="heading">Hauptmenü</li>
+					<li data-icon="home"><a href="index.html">Startseite</a></li>
+					<li data-icon="paperclip"><a href="news.html">News</a></li>
+					<li data-icon="calendar"><a href="timetable.html">Stundenplan</a></li>
+					<li data-icon="cutlery"><a href="canteen.html">Mensa</a></li>
+					<li data-icon="envelope"><a href="mail.html">Postfach</a></li>
+					<li data-icon="certificate" class="menu_item_qis"><a href="qis.html">QIS</a></li>
+					<li data-icon="dribbble"><a href="sport.html">Hochschulsport</a></li>
+				<li data-role="list-divider" role="heading">Info-Center</li>
+					<li data-icon="fire"><a href="info_general.html">Allgemein</a></li>
+					<li data-icon="group"><a href="info_staff.html">Mitarbeiter</a></li>
+					<li data-icon="map-marker"><a href="info_buildings.html">Gebäudeplan</a></li>
+					<li data-icon="rss"><a href="info_wlan.html">WLAN-Konfiguration</a></li>
+				<li data-role="list-divider" role="heading">Tools</li>
+					<li data-icon="map-marker"><a href="room_search.html" >Leeren Raum finden</a></li>
+				<li data-role="list-divider" role="heading">Einstellungen</li>
+					<li data-icon="gear"><a href="settings.html">HTWK-App</a></li>
+			</ul>
+		</div>
+		<!--- MENU -->
+		
+		<div id="overlayer"></div>
 
 		<div id="index" data-role="page" data-theme='b'>
-
-			<!--- MENU -->
-			<div data-role="panel" data-theme="a" data-display="overlay"  data-position="left"  data-swipe-close="true" class="menu">
-				<ul data-role="listview">
-					<li data-role="list-divider" role="heading">Hauptmenü</li>
-						<li data-icon="home"><a href="index.html">Startseite</a></li>
-						<li data-icon="paperclip"><a href="news.html">News</a></li>
-						<li data-icon="calendar"><a href="timetable.html">Stundenplan</a></li>
-						<li data-icon="cutlery"><a href="canteen.html">Mensa</a></li>
-						<li data-icon="envelope"><a href="mail.html">Postfach</a></li>
-						<li data-icon="certificate" class="menu_item_qis"><a href="qis.html">QIS</a></li>
-						<li data-icon="dribbble"><a href="sport.html">Hochschulsport</a></li>
-					<li data-role="list-divider" role="heading">Info-Center</li>
-						<li data-icon="fire"><a href="info_general.html">Allgemein</a></li>
-						<li data-icon="group"><a href="info_staff.html">Mitarbeiter</a></li>
-						<li data-icon="map-marker"><a href="info_buildings.html">Gebäudeplan</a></li>
-						<li data-icon="rss"><a href="info_wlan.html">WLAN-Konfiguration</a></li>
-					<li data-role="list-divider" role="heading">Tools</li>
-						<li data-icon="map-marker"><a href="room_search.html" >Leeren Raum finden</a></li>
-					<li data-role="list-divider" role="heading">Einstellungen</li>
-						<li data-icon="gear"><a href="settings.html">HTWK-App</a></li>
-				</ul>
-			</div>
-			<!--- MENU -->
 
 			<!--- HEADER -->
 			<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
@@ -119,7 +121,9 @@
 		
 			// GENERAL Setup
 			$( document )
-				.ready(function() {
+				.ready(function() {	
+					$("#panelMenu").enhanceWithin().panel();
+					
 					$.mobile.defaultPageTransition   = "fade";
 					$.mobile.defaultDialogTransition = "fade";
 					$.mobile.buttonMarkup.hoverDelay = 0;
@@ -139,7 +143,7 @@
 					loadParameters();
 				
 					if(!CONFIG.GENERAL.student) {
-						$("div.menu li.menu_item_qis").hide();
+						$("#panelMenu li.menu_item_qis").hide();
 					}
 
 					GLOBAL.DATE.currentWeek = getWeek(new Date());
@@ -150,16 +154,6 @@
 						analytics.trackView('index');
 					}
 				})
-				// Copy Menu to new Pages
-				.on("pagebeforecreate", "div:jqmData(role='page')", function() {
-					var m = $("#index div.menu").eq(0).clone();
-					var o = $(this);
-					
-					if(o.find("div.menu").length==0 && isEmpty(o.jqmData("subpage"))) {	
-						o.prepend(m.panel());
-					}
-				})
-			
 				// Header Update on Page Switch
 				.on("pageshow", "div:jqmData(role='page')", function() {
 					var o = $("body").pagecontainer("getActivePage");
@@ -173,26 +167,37 @@
 				.on("click", "a.external", openInExternalBrowser)
 				// Button Menu
 				.on("click", "a.btn_menu", function(e) {
-					var o = $("body").pagecontainer("getActivePage");
-					o.find("div.menu").panel("toggle");
+					$("body").find("#panelMenu").panel("toggle");
 				})
 				// Swipe Event Menu
 				.on("swiperight", function(e) {
 					var start = e.swipestart.coords;
 					var stop = e.swipestop.coords;
-					//alert(e.swipestart.coords+" "+e.swipestop.coords);
 					if(start[0] <= 0.1*GLOBAL.SCREEN.width){
-						var o = $("body").pagecontainer("getActivePage");
-						o.find("div.menu").panel("open");
+						$("body").find("#panelMenu").panel("open");
 					}
 				});
-
+				
+				// Deactivate Website behind the Panel
+				$("#panelMenu").panel({beforeopen: function( event, ui ) {
+					var o = $("body");
+					o.find(".ui-page").css("position","fixed").css("overflow-y","hidden");
+					o.find(".ui-panel-dismiss").css("position","fixed").css("overflow-y","hidden");
+					o.find("#overlayer").show();
+				}})
+				.panel({close: function( event, ui ) {
+					var o = $("body");
+					o.find(".ui-page").css("position","relative").css("overflow-y","visible");
+					o.find(".ui-panel-dismiss").css("position","relative").css("overflow-y","visible");
+					o.find("#overlayer").hide();
+				}});
+				
 			// SignIn Dialog
 			$( "#signInDialog_Btn_Abort" )
 				.on("click", function () {
 					$( "#signInDialog" ).popup("close");
-					var o = $("body").pagecontainer("getActivePage");
-					o.find("div.menu").panel("open");
+					var o = $("body");
+					o.find("#panelMenu").panel("open");
 				});
 
 		// ## Index Page #############################################################
