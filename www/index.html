@@ -231,10 +231,13 @@
 			 *
 			 */
 			function fillCards(){
-				getWeatherLocation();
-				fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig");
-				fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
-				fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
+				var deferreds = [];
+				$.when(
+					getWeatherLocation(),
+					fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig"),
+					fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen"),
+					fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten")
+				).then(loadingOut);
 			};
 
 			/**
@@ -255,8 +258,6 @@
 			 * @param GeoData-Object positon ... Geo Position Object, See W3C documentation
 			 */
 			function fillWeatherCard(position){
-				
-				loadingIn();
 
 				var weathercard = $("#weatherCard");
 			
@@ -313,7 +314,6 @@
 						if(width > 7) width = 7;
 						actemp.css('font-size', width+"em" ); 
 
-						loadingOut();
 						GLOBAL.INIT.index = true;
 					})
 					.fail(ajaxErrorHandler);
@@ -327,7 +327,6 @@
 			 * @ param String heading ... the heading of the card
 			 */
 			function fillCard(feed, card, heading) {
-				loadingIn();
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+'/get?feed='+feed+'&limit=2')
 				 .done(function(data, status, jqXHR) {
@@ -375,9 +374,8 @@
 							var src = $(imgs[i]).attr('src');
 							$(imgs[i]).attr('src', addhttp(src));
 						}
-						loadingOut();
-						$('img.HtwkImage img').width('100%');
-						$('img.HtwkImage img').height('auto');
+						var img = $('.HtwkImage img');
+						img.width('100%').height('auto').css("padding-right","10px");
 				  })
 				 .fail(ajaxErrorHandler);
 			};
