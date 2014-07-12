@@ -75,10 +75,9 @@
 			<!--- HEADER -->
 			
 			<div role="main" class="ui-content">   
-				<h1>Willkommen ...</h1>
-				<ul data-nativedroid-plugin='cards' class="nativeDroidCards">
+				<ul class="nativeDroidCards">
 					<li id="PushNotification" data-cards-type='text' style="display: none;"></li>
-					<li id="weatherCard" data-cards-type='weather'></li>
+					<li id="mensaCard" data-cards-type='text'></li>
 					<li id="HTWKNews" data-cards-type='text' class='HtwkImage'></li>
 					<li id="HTWKEvents" data-cards-type='text' class='HtwkImage'></li>
 					<li id="LVZNews" data-cards-type='text' id="lvz"></li>
@@ -122,6 +121,9 @@
 			// GENERAL Setup
 			$( document )
 				.ready(function() {	
+					loadParameters();
+					fillMensaCard();
+
 					$("#panelMenu").enhanceWithin().panel();
 					
 					$.mobile.defaultPageTransition   = "fade";
@@ -139,8 +141,7 @@
 					//$.event.special.swipe.durationThreshold=1000;
 					//$.event.special.swipe.horizontalDistanceThreshold=Math.round(0.2*GLOBAL.SCREEN.width);
 					//$.event.special.swipe.verticalDistanceThreshold=Math.round(GLOBAL.SCREEN.height);
-				
-					loadParameters();
+
 				
 					if(!CONFIG.GENERAL.student) {
 						$("#panelMenu li.menu_item_qis").hide();
@@ -233,7 +234,7 @@
 			function fillCards(){
 				var deferreds = [];
 				$.when(
-					getWeatherLocation(),
+					fillMensaCard(),
 					fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig"),
 					fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen"),
 					fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten")
@@ -241,82 +242,41 @@
 			};
 
 			/**
-			 * Gets the user location and calls on succes: fillWeatherCard, on fail: onGeoGetFail
-			 *
-			 */
-			function getWeatherLocation(){
-				navigator.geolocation.getCurrentPosition(fillWeatherCard, weatherLocationError, { maximumAge: 7000, timeout: 30000});
-			};
-
-			function weatherLocationError(){
-				$("#weatherCard").empty().append("<p>Ihre Position konnte leider nicht bestimmt werden</p>");
-			};
-
-			/**
 			 * Fills the weather card, with the weather for the specified location
 			 *
 			 * @param GeoData-Object positon ... Geo Position Object, See W3C documentation
 			 */
-			function fillWeatherCard(position){
+			function fillMensaCard(){
 
-				var weathercard = $("#weatherCard");
+				var men = $("#mensaCard");
+				console.log(CONFIG.MENSA.defaultCanteen);
 			
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.weather+position.coords.latitude.toPrecision(6)+','+position.coords.longitude.toPrecision(6)+"&days=5&customIcons=true")
-					 .done(function(data, status, jqXHR) {
-						if(!isEmpty(data.exception))
-							{ ajaxErrorHandler(data, status, jqXHR); return; }
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+CONFIG.MENSA.defaultCanteen+'/20140714')
+				    .done(function (data, status, jqXHR) {
+				    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date')
+				    		{ ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); return; }
 
-						var div = "";
-						var count = 0;
-						var weekday = new Array(7); weekday[0] = "So"; weekday[1] = "Mo"; weekday[2] = "Di"; weekday[3] = "Mi"; weekday[4] = "Do"; weekday[5] = "Fr"; weekday[6] = "Sa";
+							var meals = '<h1>Mensaangebot des Tages</h1><hr/><img src="images/food.jpg" style="width: 100%;">';
 
-						for(var k in data){
-							var day = data[k];
-							var date = new Date(day.dt*1000);
-							date = date.getDay();
-							var temp;
+				    	if(isEmpty(data.dayContent)) {
+				    		meals += '<p>Leider sind keine Angebote verfügbar :-(</p>';	
+				    	} else {
+				    		for(var k in data.dayContent) {
+				    			meal = data.dayContent[k];
+						
+				    			meals += !isEmpty(meal.ingredients) ? '<p>'+meal.ingredients.join(", ")+'</p>':"";
+				    		}
+				    	}
 
-							if(k == 0){
-								div += '<h1>'+day.name+'</h1><h2>'+day.country+'</h2>';
-							}
+					meals += '<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b ">Details</a>';
+						
+					men
+					 .empty()
+					 .append(meals)
+					 .trigger("create");
 
-							if(count == 1 && k != 0){
-								temp = day.temp.day.toFixed(1);
-								div += '<ul class="detail">'+
-									'	<li>'+
-									'		<span><img src="'+day.weather[0].iconData+'" width="100em" height="100em"></span>'+
-									'		<span>'+day.weather[0].descriptionDe+'</span>'+
-									'		<span class="icon-flag"> '+day.speed+' m/s</span>'+
-									'	</li>'+
-									'	<li id="actemp">'+temp+'&deg;</li>'+
-									'</ul>';
-							}else if(k != 0){
-								temp = [day.temp.max.toFixed(1),day.temp.min.toFixed(1)];
-								if(count == 2){
-									div+= '<ul class="week">'
-								}
-								div += '<li>'+
-									'	<span>'+weekday[date]+'</span>'+
-									'	<span><img src="'+day.weather[0].iconData+'" width="50em" height="50em"></span>'+
-									'	<strong>'+temp[0]+'&deg;</strong>'+
-									'	<span>'+temp[1]+'&deg;</span>'+
-									'</li>';
-							}
-							count += 1;
-						}
-						div += '</ul>';
-
-						weathercard.empty().append(div).trigger("create");
-
-						//auto adjust font-size for weather
-						var actemp = $("#actemp"); 
-						var width = actemp.width()/40;
-						if(width > 7) width = 7;
-						actemp.css('font-size', width+"em" ); 
-
-						GLOBAL.INIT.index = true;
-					})
-					.fail(ajaxErrorHandler);
+				})
+			   .fail(ajaxErrorHandler);
 			};
 
 			/**

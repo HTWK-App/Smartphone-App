@@ -42,14 +42,6 @@
 			.on("pagecreate", initCanteenView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.mensa) loadingIn();
-    				/*$("#btn_refresh")
-					.off()
-					.on("click", function() {
-						$("#canteen_select").change();
-						$("#canteen_veggie_mode")
-							.prop("checked", false)
-							.checkboxradio("refresh");
-					})*/
 					analytics.trackView('mensa');
 			 })
 			.on("click", "#canteen_nav a", function(e) {
@@ -200,7 +192,6 @@
 						
 				    			title = meal.title;
 				    			
-				    			// TODO make Update like Issue #39
 				    			priceStud = parseFloat(meal.price[0]).toFixed(2).replace(/\./, ",");
 				    			priceEmp = parseFloat(meal.price[1]).toFixed(2).replace(/\./, ",");
 				    			priceExt = parseFloat(meal.price[2]).toFixed(2).replace(/\./, ",");
