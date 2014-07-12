@@ -90,8 +90,7 @@
 			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut", true);
 			setTimeout(loadingOut, 4000);
 			roomRoomCount = 0;
-			var o = $("body").pagecontainer("getActivePage");
-			o.find("div.menu").panel("open");
+			$("body").find("div.menu").panel("open");
 		}
 
 		/**
