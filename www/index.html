@@ -251,7 +251,7 @@
 				var men = $("#mensaCard");
 				console.log(CONFIG.MENSA.defaultCanteen);
 			
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+CONFIG.MENSA.defaultCanteen+'/20140714')
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+CONFIG.MENSA.defaultCanteen)
 				    .done(function (data, status, jqXHR) {
 				    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date')
 				    		{ ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); return; }
@@ -259,7 +259,7 @@
 							var meals = '<h1>Mensaangebot des Tages</h1><hr/><img src="images/food.jpg" style="width: 100%;">';
 
 				    	if(isEmpty(data.dayContent)) {
-				    		meals += '<p>Leider sind keine Angebote verfügbar :-(</p>';	
+				    		meals += '<p>Heute gibt es leider keine Angebote :-(</p>';	
 				    	} else {
 				    		for(var k in data.dayContent) {
 				    			meal = data.dayContent[k];
