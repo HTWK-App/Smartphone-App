@@ -1,6 +1,7 @@
 <div id="room_page" data-role="page" data-title="Raum Suche" data-theme='b'>
+
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
-		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
     
@@ -13,9 +14,9 @@
 					<option selected="selected">Liste der nächsten Gebäude wird geladen...</option>
 				</select>
 			</div>
-			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br></h3>
+			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br/></h3>
 			<ul id="room_room_list" class="nativeDroidCards"></ul>
-			<br>
+			<br/>
 		</p>
 	</div>
 
@@ -90,7 +91,7 @@
 			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut", true);
 			setTimeout(loadingOut, 4000);
 			roomRoomCount = 0;
-			$("body").find("div.menu").panel("open");
+			$("#panelMenu").panel("open");
 		}
 
 		/**
@@ -110,7 +111,7 @@
 				tmp = "";
 				name = data[k].fullName;
 
-				if(k == 0)
+				if(k === 0)
 					tmp = 'selected="selected"';
 
 				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
@@ -153,7 +154,7 @@
 										'</li>';
 						count += 1;
 					}
-					if(count == 0){
+					if(count === 0){
 						lis += 	'<li>'+
 										'	<h3>Leider sind keine Räume frei!</h3>'+
 										'</li>';

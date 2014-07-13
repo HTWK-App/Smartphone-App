@@ -1,6 +1,7 @@
 ﻿<div id="timetable_page" data-role="page" data-title="Stundenplan" data-theme='b' data-dom-cache="true">
+
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
-		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 		<a href="#timetableInfoPopup" data-rel="popup" data-position-to="window" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-info fa-lg"></i></a>
 	</div>
@@ -47,7 +48,7 @@
 			.on("pagecreate", initTimetableView)
 			.on("pageshow", function() {
 				if(!GLOBAL.INIT.timetable) loadingIn();
-				if(CONFIG.TIMETABLE.faculty.length == 0) {
+				if(CONFIG.TIMETABLE.faculty.length === 0) {
 					showConfigDialog();
 				} else if($("#actualWeek").attr("data-week") != -1){
 					timetableGetDayData();
@@ -74,7 +75,7 @@
 			}
 			aDay.attr("data-day", day);
 			timetableGetDayData();
-		};
+		}
 		
 		function prevDay(){
 			var aDay = $("#actualDay");
@@ -88,7 +89,7 @@
 			}
 			aDay.attr("data-day", day);
 			timetableGetDayData();
-		};
+		}
 			
 		$("#extendTimetable")
 			.on("click", showConfigDialog);
@@ -134,11 +135,11 @@
 		 * 
 		 * @param Event e ... Click-Event of Link
 		 */
-		function abortSetup(e) {
-			$("#timetableDialog").popup("close")
+		function abortSetup() {
+			$("#timetableDialog").popup("close");
 			CONFIG.TIMETABLE.temporary= [];
-			if(CONFIG.TIMETABLE.faculty.length != 0) initTimetableView();
-		};
+			if(CONFIG.TIMETABLE.faculty.length !== 0) initTimetableView();
+		}
 
 		/**
 		 * Opens the given Popup whenever another Popup is closed
@@ -146,7 +147,7 @@
 		 * @param JQueryMobile Popub popUp ... Popup to open
 		 */
 		function open(popUp){
-			if(popupOpen == true){
+			if(popupOpen === true){
 				setTimeout(function(){open(popUp);}, 50);
 				return;
 			}
@@ -166,7 +167,7 @@
 		 * 
 		 * @param Optional Event e ... Click-Event of Link
 		 */
-		function showConfigDialog(e) {	
+		function showConfigDialog() {	
 			loadingIn();
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"/cal")
 			 .done(function (data, status, jqXHR) {
@@ -199,7 +200,7 @@
 				.fail(ajaxErrorHandler);
 			})
 			.fail(ajaxErrorHandler);
-		};
+		}
 
 		/**
 		 * Called by Configuration Dialog. At this point, a faculty was chosen.
@@ -209,7 +210,6 @@
 		function facultyChosen(e) {
 			var li = $(e.target).parent("li");
 			var id = li.jqmData("course");
-			var fac = li.jqmData("faculty");
 			
 			loadingIn();
 			CONFIG.TIMETABLE.temporary.push({"id": id, "groups": []});
@@ -244,12 +244,12 @@
 					$("#timetableDialog").trigger("create");
 					$("#timetableDialog").popup();
 					
-					if(empty == true) {noContent("Es existieren keine Matrikel bzgl. Ihres Studiengangs!"); return;}
+					if(empty === true) {noContent("Es existieren keine Matrikel bzgl. Ihres Studiengangs!"); return;}
 					
 					setTimeout(function(){open($("#timetableDialog"));}, 50);
 				})
 				.fail(ajaxErrorHandler);
-		};
+		}
 
 		/**
 		 * Called by Configuration Dialog. At this point, a course was chosen.
@@ -280,7 +280,7 @@
 					
 					check += '</fieldset></form>';
 
-					if(empty == true) {noContent("Es existieren keine Fächer bzgl. Ihres Matrikels!"); return;}
+					if(empty === true) {noContent("Es existieren keine Fächer bzgl. Ihres Matrikels!"); return;}
 					
 					check = $(check); 
 					fillPopup("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Ok", setCourses);
@@ -304,14 +304,14 @@
 			for(var k = 0; k < boxes.length; k++){
 				var box = boxes.eq(k);
 				if(box.prop("checked")){
-					CONFIG.TIMETABLE.temporary[0].groups[0].courses[box.attr("data-hash")] = box.attr("name")
+					CONFIG.TIMETABLE.temporary[0].groups[0].courses[box.attr("data-hash")] = box.attr("name");
 				}
 			}
 			$("#timetableDialog").popup("close");
 			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
 			var ins = '<form>';
-			for(var k in courses){
-				ins += '<input type="text" name="text-'+k+'" id="text-'+k+'" value="'+courses[k]+'">';
+			for(var i in courses){
+				ins += '<input type="text" name="text-'+i+'" id="text-'+i+'" value="'+courses[i]+'">';
 			}
 			ins += '</form>';
 			ins = $(ins);
@@ -334,9 +334,9 @@
 			var boxes = element.siblings("form");
 			var courses = CONFIG.TIMETABLE.temporary[0].groups[0].courses;
 
-			for(var k in courses){
-				var box = boxes.find('#text-'+k);
-				courses[k] = box.val();
+			for(var i in courses){
+				var box = boxes.find('#text-'+i);
+				courses[i] = box.val();
 			}
 
 			$("#timetableDialog").popup("close");
@@ -355,13 +355,13 @@
 							pushedc = true;
 						}
 					}
-					if(pushedc == false) { //Nothing was pushed
+					if(pushedc === false) { //Nothing was pushed
 						CONFIG.TIMETABLE.faculty[k].groups.push(CONFIG.TIMETABLE.temporary[0].groups[0]);//Add group
 						pushedg = true;
 					}
 				}
 			}
-			if(pushedc == false && pushedg == false){//Nothing was pushed
+			if(pushedc === false && pushedg === false){//Nothing was pushed
 				CONFIG.TIMETABLE.faculty.push(CONFIG.TIMETABLE.temporary[0]);//Add faculty
 			}
 			CONFIG.TIMETABLE.temporary = [];
@@ -387,7 +387,7 @@
 			timetableFill();
 			
 			GLOBAL.INIT.timetable = true;
-		};
+		}
 		
 		/**
 		 * Fetches the calendar data, sets the actual week und then fills the timetable for the actual day
@@ -405,7 +405,7 @@
 					} else {
 						$("#actualWeek").attr("data-week", data.current);
 				 		
-				 		if(CONFIG.TIMETABLE.faculty.length != 0) timetableGetDayData();
+				 		if(CONFIG.TIMETABLE.faculty.length !== 0) timetableGetDayData();
 					}
 			})
 			.fail(ajaxErrorHandler);
@@ -460,13 +460,13 @@
 					for(var m in data.dayContent){
 						dayCourse = data.dayContent[m];
 						if(!isEmpty(group.courses[dayCourse.suid])){
-							li += timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid])
+							li += timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid]);
 							added = true;
 						}
 					}	
 				}
 			}
-			if(added == true && $("#nothingToShow").length != 0){
+			if(added === true && $("#nothingToShow").length !== 0){
 				$("#dayCards").empty();
 			}
 

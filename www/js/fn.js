@@ -15,7 +15,7 @@
  */
 function capitalize(str) {
 	return str.charAt(0).toUpperCase() + str.slice(1);
-};
+}
 
 /**
  * Test if val is empty (for all Types).
@@ -30,7 +30,7 @@ function isEmpty(val) {
 			val === null || 
 			val === undefined || 
 			(val instanceof Array && val.length === 0));
-};
+}
 
 /**
  * Creates a DateStamp for Server Requests, Format: YYYYMMDD.
@@ -50,7 +50,7 @@ function createServerDateStamp(date) {
 	if(mm<10) mm="0"+mm;
 	
 	return yyyy+""+mm+""+dd;
-};
+}
 
 /**
  * Creates a DateStamp for general Purposes, Format: Weekday, dd.mm.yyyy.
@@ -70,7 +70,7 @@ function createDateStamp(date) {
 	if(mm<10) mm="0"+mm;
 	
 	return GLOBAL.DATE.weekdays[date.getDay()].name+', '+dd+'.'+mm+'.'+yyyy;
-};
+}
 
 /**
  * Creates a DateStamp.
@@ -84,7 +84,7 @@ function createDateStamp(date) {
  */
 function formatDate(date, format) {
 	return createServerDateStamp(date).replace(GLOBAL.DATE.formats.regexp, format);
-};
+}
 
 /**
  * Creates a DateTimeStamp, Format: dd.mm.yyyy hh:mm:ss.
@@ -110,7 +110,7 @@ function createDateTimeStamp(date) {
 	if(ss<10) ss="0"+ss;
 	
 	return (dd+"."+mm+"."+yyyy+" "+hh+":"+mi+":"+ss);	
-};
+}
 
 /**
  * Computes the Dates of the Week (per Day).
@@ -123,7 +123,7 @@ function getWeek(date) {
 	var week = new Array(5);
 	
 	// Today is a Sunday?
-	if (date.getDay() == 0 )
+	if (date.getDay() === 0 )
 	{
 		date.setDate(date.getDate() + 1);
 	}
@@ -143,7 +143,7 @@ function getWeek(date) {
 	}
 
 	return week;
-};
+}
 
 /**
  * Returns the Weekday defined by the given Date,
@@ -156,7 +156,7 @@ function getWeek(date) {
  * @return Weekday Object
  */
 function getWeekDay(date) {
-	if (date.getDay() == 0 || date.getDay() == 6)
+	if (date.getDay() === 0 || date.getDay() == 6)
 	{
 		return GLOBAL.DATE.weekdays[1];
 	}
@@ -164,7 +164,7 @@ function getWeekDay(date) {
 	{
 		return GLOBAL.DATE.weekdays[date.getDay()];
 	}
-};
+}
 
 /**
  * Escaping HTML Special Chars like & or <>.
@@ -179,7 +179,7 @@ function escape(str) {
 			  .replace(/>/g, "&gt;")
 			  .replace(/"/g, "&quot;")
 			  .replace(/'/g, "&#039;");
-};
+}
 
 /**
  * Show Loading-Spinner.
@@ -202,14 +202,14 @@ function loadingIn(msg, textonly) {
 	  disabled: true,
 	  theme: "a"
 	});
-};
+}
 
 /**
  * Hide Loading-Spinner.
  */
 function loadingOut() {
 	$.mobile.loading("hide");
-};
+}
 
 function openSignInDialog(success) {	
 	$( "#signInDialog_Btn_Save" )
@@ -227,7 +227,7 @@ function openSignInDialog(success) {
 	$( "#signInDialog" )
 		.css("display", "block")
 		.popup("open", { positionTo: "window", transition: "pop" });
-};
+}
 
 /**
  * Save Username and Password.
@@ -276,7 +276,7 @@ function saveUsernamePassword(username, password, done, fail) {
 				if($.isFunction(fail) && !CONFIG.AUTH.correct) fail.call(this);
 		  });
 	  });
-};
+}
 
 /**
  * Open Links in Devices native Browser.
@@ -286,26 +286,26 @@ function saveUsernamePassword(username, password, done, fail) {
 function openInExternalBrowser(e) {
 	window.open($(e.target).attr("href"), "_system", "location=yes");
 	e.preventDefault(); 
-};
+}
 
 function loadParameters(){
 	var help = localStorage.getItem("username");
-	if(help != undefined) CONFIG.AUTH.username = help;
+	if(help !== undefined) CONFIG.AUTH.username = help;
 	help = localStorage.getItem("credentials");
-	if(help != undefined) CONFIG.AUTH.credentials = help;
+	if(help !== undefined) CONFIG.AUTH.credentials = help;
 	help = localStorage.getItem("salt");
-	if(help != undefined) CONFIG.AUTH.salt = help;
+	if(help !== undefined) CONFIG.AUTH.salt = help;
 	help = localStorage.getItem("language");
-	if(help != undefined) CONFIG.LANGUAGE.set = help;
+	if(help !== undefined) CONFIG.LANGUAGE.set = help;
 	help = localStorage.getItem("defaultFeed");
-	if(help != undefined) CONFIG.NEWS.defaultFeed = help;
+	if(help !== undefined) CONFIG.NEWS.defaultFeed = help;
 	help = localStorage.getItem("defaultCanteen");
-	if(help != undefined) CONFIG.MENSA.defaultCanteen = help;
+	if(help !== undefined) CONFIG.MENSA.defaultCanteen = help;
 	help = localStorage.getItem("timetable");
-	if(help != undefined){ CONFIG.TIMETABLE = JSON.parse(help)};
+	if(help !== undefined) CONFIG.TIMETABLE = JSON.parse(help);
 
 	delete loadParameters;
-};
+}
 
 function saveParameters(){
 	localStorage.setItem("username", CONFIG.AUTH.username);
@@ -315,7 +315,7 @@ function saveParameters(){
 	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
 	localStorage.setItem("timetable", JSON.stringify(CONFIG.TIMETABLE));
-};
+}
 
 function ajaxErrorHandler(data, status, jqXHR, callback){
 	loadingOut();
@@ -325,4 +325,4 @@ function ajaxErrorHandler(data, status, jqXHR, callback){
 	setTimeout(loadingOut, 4000);
 	if($.isFunction(callback))
 		callback.call(this);
-};
+}

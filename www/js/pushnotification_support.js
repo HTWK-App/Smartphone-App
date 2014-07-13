@@ -55,7 +55,7 @@ function registerDevice() {
 		//		validatePushNotificationDescription();
 	} catch (err) {
 		CONFIG.PUSH.registered = false;
-		txt = "There was an error on this page.\n\n";
+		var txt = "There was an error on this page.\n\n";
 		txt += "Error description: " + err.message + "\n\n";
 		alert(txt);
 	}
@@ -178,7 +178,7 @@ function errorHandler(error) {
 }
 
 function registerPushEvents() {
-	for (key in CONFIG.PUSH.STATUS) {
+	for ( var key in CONFIG.PUSH.STATUS) {
 		$.event.trigger({
 			type: key
 		});
@@ -187,7 +187,7 @@ function registerPushEvents() {
 }
 
 function unRegisterPushEvents() {
-	for (key in CONFIG.PUSH.STATUS) {
+	for ( var key in CONFIG.PUSH.STATUS) {
 		$(document).off(key);
 	}
 }		

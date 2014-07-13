@@ -25,7 +25,7 @@
 		<script type="application/javascript" src="js/pushnotification_support.js" defer></script>
 		-->
 		<script type="application/javascript" src="cordova.js"></script>
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true"></script>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js?v=3.exp&sensor=true"></script> <!--TODO Download Script-->
 		
 		<script type='text/javascript' src="js/lib/wurfl.min.js"></script>
 		<script type="application/javascript" src="analytics.js"></script>
@@ -40,9 +40,9 @@
 	<body>
 	
 		<!--- MENU -->
-		<div data-role="panel" id="panelMenu" data-theme="a" data-display="overlay"  data-position="left" class="menu">
+		<div data-role="panel" id="panelMenu" data-theme="a" data-display="overlay"  data-position="left">
 			<ul data-role="listview">
-				<li data-role="list-divider" role="heading">Hauptmenü</li>
+				<li data-role="list-divider">Hauptmenü</li>
 					<li data-icon="home"><a href="index.html">Startseite</a></li>
 					<li data-icon="paperclip"><a href="news.html">News</a></li>
 					<li data-icon="calendar"><a href="timetable.html">Stundenplan</a></li>
@@ -50,14 +50,14 @@
 					<li data-icon="envelope"><a href="mail.html">Postfach</a></li>
 					<li data-icon="certificate" class="menu_item_qis"><a href="qis.html">QIS</a></li>
 					<li data-icon="dribbble"><a href="sport.html">Hochschulsport</a></li>
-				<li data-role="list-divider" role="heading">Info-Center</li>
+				<li data-role="list-divider">Info-Center</li>
 					<li data-icon="fire"><a href="info_general.html">Allgemein</a></li>
 					<li data-icon="group"><a href="info_staff.html">Mitarbeiter</a></li>
 					<li data-icon="map-marker"><a href="info_buildings.html">Gebäudeplan</a></li>
 					<li data-icon="rss"><a href="info_wlan.html">WLAN-Konfiguration</a></li>
-				<li data-role="list-divider" role="heading">Tools</li>
+				<li data-role="list-divider">Tools</li>
 					<li data-icon="map-marker"><a href="room_search.html" >Leeren Raum finden</a></li>
-				<li data-role="list-divider" role="heading">Einstellungen</li>
+				<li data-role="list-divider">Einstellungen</li>
 					<li data-icon="gear"><a href="settings.html">HTWK-App</a></li>
 			</ul>
 		</div>
@@ -69,7 +69,7 @@
 
 			<!--- HEADER -->
 			<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
-				<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+				<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-bars fa-lg"></i></a>
 				<h1>HTWK App</h1>
 			</div>
 			<!--- HEADER -->
@@ -80,7 +80,7 @@
 					<li id="mensaCard" data-cards-type='text'></li>
 					<li id="HTWKNews" data-cards-type='text' class='HtwkImage'></li>
 					<li id="HTWKEvents" data-cards-type='text' class='HtwkImage'></li>
-					<li id="LVZNews" data-cards-type='text' id="lvz"></li>
+					<li id="LVZNews" data-cards-type='text'></li>
 				</ul>
 			</div>
 
@@ -108,12 +108,8 @@
 		</div>
 		<!-- ## SIGNIN DIALOG ## -->
 
-		<!---------------------------------------------------------------------------------------------------->
+		<!--##############################################################################################-->
 		<script>
-
-			/*TODO
-			 * Placing of images at fillCard (by card LVZ) isn't the best for Smartphones
-			 */
 
 			// AJAX Setup
 			$.ajaxSetup(CONFIG.AJAX);
@@ -121,8 +117,9 @@
 			// GENERAL Setup
 			$( document )
 				.ready(function() {	
+
 					loadParameters();
-					fillMensaCard();
+					fillMensaCard(); //Bad Practise --> Fill MensaCard with Mensa-ID Stored in Parameters
 
 					$("#panelMenu").enhanceWithin().panel();
 					
@@ -132,7 +129,7 @@
 					$.mobile.changePage.defaults.allowSamePageTransition = true;
 
 					// swipe Event
-					GLOBAL.SCREEN.height = window.screen.height;
+					/*GLOBAL.SCREEN.height = window.screen.height;
 					GLOBAL.SCREEN.width = window.screen.width;
 					$.event.special.swipe.scrollSupressionThreshold=Math.round(0.3*GLOBAL.SCREEN.width);
 					$.event.special.swipe.horizontalDistanceThreshold = 20; // Swipe horizontal displacement must be more than this.
@@ -140,15 +137,10 @@
 					$.event.special.swipe.verticalDistanceThreshold = 75; // Swipe vertical displacement must be less than this.
 					//$.event.special.swipe.durationThreshold=1000;
 					//$.event.special.swipe.horizontalDistanceThreshold=Math.round(0.2*GLOBAL.SCREEN.width);
-					//$.event.special.swipe.verticalDistanceThreshold=Math.round(GLOBAL.SCREEN.height);
-
-				
-					if(!CONFIG.GENERAL.student) {
-						$("#panelMenu li.menu_item_qis").hide();
-					}
+					//$.event.special.swipe.verticalDistanceThreshold=Math.round(GLOBAL.SCREEN.height);*/
 
 					GLOBAL.DATE.currentWeek = getWeek(new Date());
-					$("#signInDialog").trigger("create").popup();
+					$("#signInDialog").trigger("create").enhanceWithin().popup();
 
 					if(WURFL.is_mobile){
 						analytics.startTrackerWithId('UA-49336195-2');
@@ -159,34 +151,28 @@
 				.on("pageshow", "div:jqmData(role='page')", function() {
 					var o = $("body").pagecontainer("getActivePage");
 		    	var title = o.jqmData("title");
-		    	//var subpage = !isEmpty(o.jqmData("subpage"));
-		    	var h = o.find("div.header");
 
-		    	h.find("h1").text(title);
+		    	o.find("div.header h1").text(title);
 				})
 				// External Link Handling
 				.on("click", "a.external", openInExternalBrowser)
-				// Button Menu
-				.on("click", "a.btn_menu", function(e) {
-					$("body").find("#panelMenu").panel("toggle");
-				})
 				// Swipe Event Menu
 				.on("swiperight", function(e) {
 					var start = e.swipestart.coords;
-					var stop = e.swipestop.coords;
+					//var stop = e.swipestop.coords;
 					if(start[0] <= 0.1*GLOBAL.SCREEN.width){
-						$("body").find("#panelMenu").panel("open");
+						$("#panelMenu").panel("open");
 					}
 				});
 				
 				// Deactivate Website behind the Panel
-				$("#panelMenu").panel({beforeopen: function( event, ui ) {
+				$("#panelMenu").panel({beforeopen: function() {
 					var o = $("body");
 					o.find(".ui-page").css("position","fixed").css("overflow-y","hidden");
 					o.find(".ui-panel-dismiss").css("position","fixed").css("overflow-y","hidden");
 					o.find("#overlayer").show();
 				}})
-				.panel({close: function( event, ui ) {
+				.panel({close: function() {
 					var o = $("body");
 					o.find(".ui-page").css("position","relative").css("overflow-y","visible");
 					o.find(".ui-panel-dismiss").css("position","relative").css("overflow-y","visible");
@@ -197,18 +183,20 @@
 			$( "#signInDialog_Btn_Abort" )
 				.on("click", function () {
 					$( "#signInDialog" ).popup("close");
-					var o = $("body");
-					o.find("#panelMenu").panel("open");
+					$("#panelMenu").panel("open");
 				});
 
 		// ## Index Page #############################################################
 			var indexLastReload = 0;
+
 			$("#index")
 				.on("pagecreate", function() {})
 				.on("pageshow", function () {
 					var time = new Date().getTime();
 					if(indexLastReload < (time - 900000)){ //15 minuits
-						if(!GLOBAL.INIT.index) loadingIn();
+						if(!GLOBAL.INIT.index){ 
+							loadingIn();
+						}
 						getCurrentPlanWeek();
 						fillCards();
 						indexLastReload = time;
@@ -219,42 +207,41 @@
 				
 					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable + "cal")
 					 .done(function(data, status, jqXHR) {
-						if(!isEmpty(data.exception))
-							{ ajaxErrorHandler(data, status, jqXHR); return; }
+
+						if(!isEmpty(data.exception)){ 
+							ajaxErrorHandler(data, status, jqXHR); 
+							return; 
+						}
 							
 						GLOBAL.DATE.currentPlanWeek = data.current;
 						})
 					 .fail(ajaxErrorHandler);
-				};
+				}
 
 			/**
 			 * Fills all corresponding cards (named as arguments) with content
 			 *
 			 */
 			function fillCards(){
-				var deferreds = [];
 				$.when(
 					fillMensaCard(),
 					fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig"),
 					fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen"),
 					fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten")
 				).then(loadingOut);
-			};
+			}
 
 			/**
-			 * Fills the weather card, with the weather for the specified location
-			 *
-			 * @param GeoData-Object positon ... Geo Position Object, See W3C documentation
+			 * Fills the mensa card
 			 */
 			function fillMensaCard(){
-
-				var men = $("#mensaCard");
-				console.log(CONFIG.MENSA.defaultCanteen);
 			
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+CONFIG.MENSA.defaultCanteen)
 				    .done(function (data, status, jqXHR) {
-				    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date')
-				    		{ ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); return; }
+				    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date'){
+								ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); 
+								return; 
+							}
 
 							var meals = '<h1>Mensaangebot des Tages</h1><hr/><img src="images/food.jpg" style="width: 100%;">';
 
@@ -262,7 +249,7 @@
 				    		meals += '<p>Heute gibt es leider keine Angebote :-(</p>';	
 				    	} else {
 				    		for(var k in data.dayContent) {
-				    			meal = data.dayContent[k];
+				    			var meal = data.dayContent[k];
 						
 				    			meals += !isEmpty(meal.ingredients) ? '<p>'+meal.ingredients.join(", ")+'</p>':"";
 				    		}
@@ -270,14 +257,13 @@
 
 					meals += '<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b ">Details</a>';
 						
-					men
+					$("#mensaCard")
 					 .empty()
 					 .append(meals)
 					 .trigger("create");
-
 				})
 			   .fail(ajaxErrorHandler);
-			};
+			}
 
 			/**
 			 * Fills a card, given by parameter card, with one of the specified news feeds
@@ -290,18 +276,20 @@
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+'/get?feed='+feed+'&limit=2')
 				 .done(function(data, status, jqXHR) {
-						if(!isEmpty(data.exception))
-							{ ajaxErrorHandler(data, status, jqXHR); return; }
+				 
+						if(!isEmpty(data.exception)){
+							ajaxErrorHandler(data, status, jqXHR); 
+							return;
+						}
 
 						var divs = "<h1>"+heading+"</h1><hr>";
 						
 						for(var k in data.responseData.feed.entries) {
-							entry = data.responseData.feed.entries[k];
+							var entry = data.responseData.feed.entries[k];
 							
-							var content;
+							var content, links;
 							var img = entry.content.match(/<img .*?\/?>/);
 							content = replaceWith(entry.content, '', /<img .*?\/?>/);
-							var links;
 							do{
 								links = content.match(/<a .*?<\/a>/);
 								if(!isEmpty(links)){
@@ -310,8 +298,9 @@
 								}
 							}while(!isEmpty(links));
 							
-							if(!isEmpty(img)) img = '<div style="float: left; max-width: 300px; overflow: hidden; padding: 0 8px 8px 8px">'+img[0]+'</div>';
-							else img = "";
+							if(!isEmpty(img)){
+								img = '<div style="float: left; max-width: 300px; overflow: hidden; padding: 0 8px 8px 8px">'+img[0]+'</div>';
+							} else { img = "";}
 
 							if(!isEmpty(entry.content)) {
 								divs += '<strong>'+entry.title+'</strong>'+
@@ -330,19 +319,21 @@
 							.trigger("create");
 						
 						var imgs = $('.HtwkImage img');
-						for(i = 0; i < imgs.length ; i++){
-							var src = $(imgs[i]).attr('src');
-							$(imgs[i]).attr('src', addhttp(src));
+						imgs.width('100%').height('auto').css("padding-right","10px");
+						for(var i = 0; i < imgs.length ; i++){
+							var img2 = $(imgs[i]);
+							img2.attr('src', addhttp(img2.attr('src')));
 						}
-						var img = $('.HtwkImage img');
-						img.width('100%').height('auto').css("padding-right","10px");
 				  })
 				 .fail(ajaxErrorHandler);
-			};
+			}
 
 			function replaceWith(string, toReplace, regExp){
+			
+				var reps;
+				
 				do{
-					var reps = string.match(regExp);
+					reps = string.match(regExp);
 					if(!isEmpty(reps)){
 						var rep = reps[0];
 						string = string.replace(rep,toReplace);

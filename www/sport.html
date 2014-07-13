@@ -1,7 +1,7 @@
 <div id="sport_page" data-role="page" data-title="Sportangebote" data-dom-cache="true" data-theme='b'>
 
 	<div data-role="header" data-position="fixed" data-theme='b' data-tap-toggle="false" class="header">
-		<a href="#" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
     
@@ -12,14 +12,14 @@
 	</div>
 
 	<script>
-	    $( "#sport_page" )
-	    	.on("pagecreate", initSportsView)
-	    	.on("pageshow", function() {
-	    			if(!GLOBAL.INIT.sport) loadingIn();
-	    			if(WURFL.is_mobile){
-		    			analytics.trackView('index');
-		    		}
-	    	 });
+    $( "#sport_page" )
+    	.on("pagecreate", initSportsView)
+    	.on("pageshow", function() {
+    			if(!GLOBAL.INIT.sport) loadingIn();
+    			if(WURFL.is_mobile){
+	    			analytics.trackView('index');
+	    		}
+    	 });
 
 		/**
 		 * Fetches the list of all sport courses from Server and fills the list widget.
@@ -63,7 +63,7 @@
 					GLOBAL.INIT.sport = true;
 				})
 			   .fail(ajaxErrorHandler);
-		};
+		}
 
     	/**
 		 * Fetches the specfied sport from the server and creates a new page. At least, it changes onto this page.
@@ -152,6 +152,6 @@
 	    			loadingOut();
 			 	})
 				.fail(ajaxErrorHandler);
-		};
+		}
 	</script>
 </div>

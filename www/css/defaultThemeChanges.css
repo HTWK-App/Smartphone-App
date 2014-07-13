@@ -17,7 +17,7 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020202', endColorstr='#84A7FF',GradientType=0 );
 }
 
-.ui-page-theme-b .ui-header .ui-title{
+.ui-page-theme-b .ui-header .ui-title {
 	text-align: left;
 	padding-left: 50px;
 	margin-left: 0%;
@@ -87,7 +87,7 @@ ui-input-text input, .ui-input-search input{
 }
 
 #timetable_page #actualDay{
-	display:inline; !important;
+	display:inline;
 	margin-right: 10px;
 }
 

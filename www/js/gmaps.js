@@ -9,7 +9,7 @@ var GMAPS = {
 		navigator.geolocation.getCurrentPosition(GMAPS.onGeoGetSuccess, GMAPS.onGeoGetFail, {timeout:30000, maximumAge: 7000, enableHighAccuracy: true});
 	},
 
-	onGeoGetFail : function(e){
+	onGeoGetFail : function(){
 		GMAPS.mapcontainer.find(".map-canvas").parent().empty().append("<p>Eine Karte kann nicht angezeigt werden, da die Ortsbestimmung fehgeschlagen ist.</p>");
 	},
 
@@ -28,7 +28,7 @@ var GMAPS = {
 			keyboardShortcuts : false,
 			scrollwheel : false,
 			mapTypeId: google.maps.MapTypeId.WALKING
-		}
+		};
 		var map = new google.maps.Map(GMAPS.mapcontainer.find(".map-canvas")[0], mapOptions);
 		var directionsDisplay = new google.maps.DirectionsRenderer({map : map});
 		var start = new google.maps.LatLng(position[0], position[1]);
@@ -46,4 +46,4 @@ var GMAPS = {
 			}
 		});
 	}
-}
+};
