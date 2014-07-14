@@ -290,19 +290,19 @@ function openInExternalBrowser(e) {
 
 function loadParameters(){
 	var help = localStorage.getItem("username");
-	if(help !== undefined) CONFIG.AUTH.username = help;
+	if(!isEmpty(help)) CONFIG.AUTH.username = help;
 	help = localStorage.getItem("credentials");
-	if(help !== undefined) CONFIG.AUTH.credentials = help;
+	if(!isEmpty(help)) CONFIG.AUTH.credentials = help;
 	help = localStorage.getItem("salt");
-	if(help !== undefined) CONFIG.AUTH.salt = help;
+	if(!isEmpty(help)) CONFIG.AUTH.salt = help;
 	help = localStorage.getItem("language");
-	if(help !== undefined) CONFIG.LANGUAGE.set = help;
+	if(!isEmpty(help)) CONFIG.LANGUAGE.set = help;
 	help = localStorage.getItem("defaultFeed");
-	if(help !== undefined) CONFIG.NEWS.defaultFeed = help;
+	if(!isEmpty(help)) CONFIG.NEWS.defaultFeed = help;
 	help = localStorage.getItem("defaultCanteen");
-	if(help !== undefined) CONFIG.MENSA.defaultCanteen = help;
+	if(!isEmpty(help)) CONFIG.MENSA.defaultCanteen = help;
 	help = localStorage.getItem("timetable");
-	if(help !== undefined) CONFIG.TIMETABLE = JSON.parse(help);
+	if(!isEmpty(help)) CONFIG.TIMETABLE = JSON.parse(help);
 
 	delete loadParameters;
 }
