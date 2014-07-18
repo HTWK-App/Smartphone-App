@@ -161,7 +161,14 @@
 			
 			divs = $(divs);
 			
-			divs.find("div.ui-content").find("a").addClass("external").end();
+			var as = divs.find("div.ui-content").find("a");
+			if(!isEmpty(as)){
+				as.addClass("external").end();
+				for(var i = 0; i < as.length ; i++){
+					var a = $(as[i]);
+					a.attr('href', addhttp(a.attr('href')));
+				}
+			}
 			divs.find("img").css("max-width", "100%").css("height", "auto");
 			
 			if(remove === true) {
