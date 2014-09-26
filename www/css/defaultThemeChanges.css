@@ -129,16 +129,17 @@
 	border-top: 1px solid rgba(255,255,255,0.05);
 }
 
-.ui-page-theme-b .nativeDroidCards li .ui-btn, .ui-page-theme-b .nativeDroidCards li .ui-btn.ui-btn-b {
+.ui-page-theme-b .nativeDroidCards li > .ui-btn, .ui-page-theme-b .nativeDroidCards li > .ui-btn.ui-btn-b,
+.ui-page-theme-b .nativeDroidCards li p > .ui-btn, .ui-page-theme-b .nativeDroidCards li p > .ui-btn.ui-btn-b {
 	background-color: #ffffff;
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
 	border-top: 1px double #555555;
-	border-bottom: 1px double #555555;
+	/*border-bottom: 1px double #555555;*/
 	text-align: left;
 	color: #24a3d2;
-	padding: 10px 0 10px 10px ;
+	padding: 10px 0 0 10px ;
 	font-weight: bold;
 }
 

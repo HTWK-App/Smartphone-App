@@ -6,41 +6,38 @@
 	</div>
 
 	<div role="main" class="ui-content">
-		<h2>Login-Daten</h2>
-		<label for="input_username"><strong>Nutzername:</strong></label> 
-			<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername" /> 
-		<label for="input_password"><strong>Passwort:</strong> </label>
-			<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="Passwort" /> 
-		<br> 
-		<a id="settings_login_save" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Speichern</a>
-		<br />
-		<hr />
-		<h2>PushNotifications</h2>
-		<a id="pushnotifications" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Pushnotifications einschalten</a>
-		<br/>
-		<hr /> 
-		<!--<h2>Sprache</h2>
-		<br/>
-		<label for="default_language_select"><strong>Standardsprache:</strong></label>
-		<select id="default_language_select" data-native-menu="true" name="default_language_select"></select>
-		<hr/>-->
-		<h2>News</h2>
-		<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
-		<select id="default_news_select" name="default_news_select">
-			<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-		</select>
-		<br />
-		<hr />
-		<h2>Stundenplan</h2>
-		<a href="#popup_timetable_delete" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Stundenplan löschen...</a>
-		<br />
-		<hr />
-		<h2>Mensa</h2>
-		<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
-		<select id="default_canteen_select" name="default_canteen_select">
-			<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
-		</select>
-		<br />
+		<ul class="nativeDroidCards">
+			<li>
+				<h1>Login-Daten</h1><hr/>
+				<label for="input_username"><strong>Nutzername:</strong></label> 
+					<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername" /> 
+				<label for="input_password"><strong>Passwort:</strong> </label>
+					<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="Passwort" /> 
+				<a id="settings_login_save" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Speichern</a>
+			</li>
+			<li>
+				<h1>PushNotifications</h1>
+				<a id="pushnotifications" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Pushnotifications einschalten</a>
+			</li>
+			<li>
+				<h1>News</h1><hr/>
+				<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
+				<select id="default_news_select" name="default_news_select">
+					<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+				</select>
+			</li>
+			<li>
+				<h1>Stundenplan</h1>
+				<a href="#popup_timetable_delete" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Stundenplan löschen...</a>
+			</li>
+			<li>
+				<h1>Mensa</h1><hr/>
+				<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
+				<select id="default_canteen_select" name="default_canteen_select">
+					<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+				</select>
+			</li>
+		</ul>
 	</div>
 
 	<div id="popup_timetable_delete" data-role="popup" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
