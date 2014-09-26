@@ -9,7 +9,8 @@
 		<link rel="stylesheet" href="css/HTWK-App.min.css" />
 		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
 		<link rel="stylesheet" href="css/jquery.mobile.custom.structure.min.css" />
-		<link rel="stylesheet" href="css/defaultThemeChanges.min.css" />
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/defaultThemeChanges.css" />
 
 		<script type="application/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
 		<script type="application/javascript" src="js/lib/jquery.mobile.custom.1.4.4.min.js"></script>
@@ -38,19 +39,18 @@
 					<li data-icon="home"><a href="main.html">Startseite</a></li>
 					<li data-icon="paperclip"><a href="news.html">News</a></li>
 					<li data-icon="calendar"><a href="timetable.html">Stundenplan</a></li>
-					<li data-icon="cutlery"><a href="canteen.html">Mensa</a></li>
+					<li data-icon="cutlery"><a href="canteen.html">Mensa-Angebot</a></li>
 					<li data-icon="envelope"><a href="mail.html">Postfach</a></li>
 					<li data-icon="certificate" class="menu_item_qis"><a href="qis.html">QIS</a></li>
-					<li data-icon="dribbble"><a href="sport.html">Hochschulsport</a></li>
 				<li data-role="list-divider">Info-Center</li>
-					<li data-icon="fire"><a href="info_general.html">Allgemein</a></li>
+					<li data-icon="fire"><a href="info_general.html">Allgemeine Infos</a></li>
 					<li data-icon="group"><a href="info_staff.html">Mitarbeiter</a></li>
 					<li data-icon="map-marker"><a href="info_buildings.html">Gebäudeplan</a></li>
+					<li data-icon="dribbble"><a href="sport.html">Sportangebote</a></li>
 					<li data-icon="rss"><a href="info_wlan.html">WLAN-Konfiguration</a></li>
 				<li data-role="list-divider">Tools</li>
 					<li data-icon="map-marker"><a href="room_search.html" >Leeren Raum finden</a></li>
-				<li data-role="list-divider">Einstellungen</li>
-					<li data-icon="gear"><a href="settings.html">HTWK-App</a></li>
+					<li data-icon="gear"><a href="settings.html">Einstellungen</a></li>
 			</ul>
 		</div>
 		<!--- MENU -->
@@ -293,7 +293,7 @@
 										'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button">Weiterlesen...</a>';
 							}
 							
-							divs += '<hr>';
+							divs += '';
 						}
 						
 						divs = $(divs);
