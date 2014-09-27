@@ -65,6 +65,10 @@
 	display: none;
 }
 
+#canteen_nav {
+	margin-bottom: 12px;
+}
+
 /************************** Timetable Dialog custom styling*/
 
 #timetableDialogHeader {
@@ -72,7 +76,7 @@
 	margin-top: -20px;
 }
 
-#timetableDialogHeader h3{
+#timetableDialogHeader h3 {
 	padding-top: 10px;
 	padding-left: 10px;
 }
@@ -81,9 +85,13 @@
 	padding: 20px 0 20px 0;
 }
 
-#timetable_page #actualDay{
+#timetable_page #actualDay {
 	display:inline;
 	margin-right: 10px;
+}
+
+#timetableInfoPopup h2 {
+	padding-left: 20px;
 }
 
 /************************** Mailbox custom styling*/
@@ -139,7 +147,7 @@
 	/*border-bottom: 1px double #555555;*/
 	text-align: left;
 	color: #24a3d2;
-	padding: 10px 0 0 10px ;
+	padding: 10px 0 0 0 ;
 	font-weight: bold;
 }
 
@@ -148,8 +156,9 @@
 	.nativeDroidCards > li {
 		display: inline-block;
 		float: left;
-		margin: 1%;
-		width: 43%;
+		margin-bottom: 0.9%;
+		margin-right: 0.9%;
+		width: 46%;
 	}
 	
 	.nativeDroidCards > li:nth-child(2n+1) {
@@ -159,7 +168,8 @@
 
 .nativeDroidCards > li {
 	padding: 10px;
-	margin: 12px;
+	/*margin-right: 12px;
+	margin-bottom: 12px;*/
 	display: block;
 	opacity: 1;
 	top: 0px;

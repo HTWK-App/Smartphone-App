@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
 		<link rel="stylesheet" href="css/jquery.mobile.custom.structure.min.css" />
 		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="css/defaultThemeChanges.css" />
+		<link rel="stylesheet" href="css/defaultThemeChanges.min.css" />
 
 		<script type="application/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
 		<script type="application/javascript" src="js/lib/jquery.mobile.custom.1.4.4.min.js"></script>
@@ -240,7 +240,7 @@
 				    		}
 				    	}
 
-					meals += '<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b ">Details</a>';
+					meals += '<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b "><i class="fa fa-cutlery fa-lg fa-fw"></i> Details</a>';
 						
 					$("#mensaCard")
 					 .empty()
@@ -290,7 +290,7 @@
 							if(!isEmpty(entry.content)) {
 								divs += '<strong>'+entry.title+'</strong>'+
 										'<p id="newsContent">'+img+'<div>'+content.slice(0, 300)+'...</div></p>'+
-										'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button">Weiterlesen...</a>';
+										'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a>';
 							}
 							
 							divs += '<hr/>';

@@ -44,7 +44,7 @@ function buildingLoadBuildingDetails(id) {
 								'			</li>'+
 								'			<li id="building_'+id+'_map">'+
 								'				<div class="map-canvas"></div><div class="mapcontainer"></div>'+
-								'				<a class="external" href="http://maps.google.com/maps?daddr='+data.address+'"><i class="fa fa-crosshairs fa-lg"></i> Navigation</a>'+
+								'				<a class="external ui-btn ui-btn-b" href="http://maps.google.com/maps?daddr='+data.address+'"><i class="fa fa-crosshairs fa-lg"></i> Navigation</a>'+
 								'			</li>'+
 								'		</ul>'+
 								'	</div>'+

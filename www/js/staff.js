@@ -37,14 +37,14 @@ function loadStaffDetails(id) {
 								'			</li>'+
 								'			<li>'+
 								'				<h1>Kontakt</h1><hr/>'+
-								'				<strong>E-Mail:</strong> <a href="mailto:'+data.email+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow">'+data.email+'</a><br/>'+
-								'				<strong>Telefon:</strong> <a href="tel:'+data.telephone+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow">'+data.telephone+'</a><br/>'+
-								'				<strong>Fax:</strong><br/><strong>'+data.telefax+'</strong>'+
+								'				<strong>E-Mail:</strong> <a href="mailto:'+data.email+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow"><i class="fa fa-envelope fa-fw fa-lg"></i> '+data.email+'</a><br/>'+
+								'				<strong>Telefon:</strong> <a href="tel:'+data.telephone+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow"><i class="fa fa-mobile fa-fw fa-lg"></i> '+data.telephone+'</a><br/>'+
+								'				<strong>Fax:</strong><br/><strong><i class="fa fa-fax fa-fw fa-lg"></i> '+data.telefax+'</strong>'+
 								'			</li>'+
 								'			<li>'+
 								'				<h1>Links</h1><hr/>'+
-								'				<a href="'+data.detailLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external">Details zur Person</a>'+
-								'				<a href="'+data.vcardLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external">V-Card</a>'+
+								'				<a href="'+data.detailLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external"><i class="fa fa-user fa-fw fa-lg"></i> Details zur Person</a>'+
+								'				<a href="'+data.vcardLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external"><i class="fa fa-ticket fa-fw fa-lg"></i> V-Card</a>'+
 								'			</li>'+
 								'		</ul>'+
 								'	</div>'+
