@@ -6,6 +6,8 @@ This repository contains the code for the smart phone application of the Leipzig
 * [Apache Cordova (3.5.0)](http://cordova.apache.org/)
 * [JQueryMobile](http://jquerymobile.com/) Custom Build (1.4.4) (see www/js/lib/customJQM.README)
 * [Jquery](http://jquery.com/) (2.1.1)
+* [FontAwesome](http://fortawesome.github.io/Font-Awesome/) (4.2.0)
+* (WURFL.js) [http://wurfl.io/]
 
 Installation guide to Cordova: [Guide](http://cordova.apache.org/docs/en/3.5.0/guide_cli_index.md.html#The%20Command-Line%20Interface)
 
