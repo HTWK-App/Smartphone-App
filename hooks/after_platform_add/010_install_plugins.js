@@ -7,7 +7,10 @@ var pluginlist = [
     "org.apache.cordova.geolocation",
     "org.apache.cordova.inappbrowser",
     "org.apache.cordova.device",
-    "org.apache.cordova.plugins.PushNotification"
+    "org.apache.cordova.splashscreen",
+    "org.apache.cordova.plugins.PushNotification",
+    "https://github.com/phonegap-build/PushPlugin.git",
+    "https://github.com/danwilson/google-analytics-plugin.git"
 ];
 
 // no need to configure below
