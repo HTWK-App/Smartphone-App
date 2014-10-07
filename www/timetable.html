@@ -3,7 +3,7 @@
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
-		<a href="#timetableInfoPopup" data-rel="popup" data-position-to="window" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-info fa-lg"></i></a>
+		<a href="#timetableInfoPopup" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-info fa-lg"></i></a>
 	</div>
 
 	<div role="main" class="ui-content">   
@@ -27,15 +27,17 @@
 		</div>
 	</div>
 
-	<div id="timetableInfoPopup" data-role="popup" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
-		<div data-role="header">
-			<h2>Informationen</h2>
+	<div id="timetableInfoPopup" data-role="popup" data-theme="a" data-overlay-theme="a" class="ui-corner-all">
+		<div data-role="header" data-theme='a'>
+			<h1>Informationen</h1>
 		</div>
 		<div role="main" class="ui-content">
-			<p>Leider bietet die App es bisher nicht, den von dir zusammgenstellten Stundenplan in den Systemkalender zu übernehmen. Du kannst das aber komfortable auf einer Website machen. Dort ist auch erklärt, wie man den Kalender fast überall einbindet.<br/>Du kommst über folgenden Button zur Website: </p>
-			<a href="http://www.htwk-stundenplan.de" class="ui-btn ui-btn-inline ui-mini ui-corner-all ui-shadow external">Zur Website</a>
+			<p>Leider bietet die App es bisher nicht, den von dir zusammgenstellten Stundenplan in den Systemkalender zu übernehmen. Du kannst das aber komfortabel auf einer Website machen. Dort ist auch erklärt, wie man den Kalender fast überall einbindet.<br/>Du kommst über folgende Adresse zur Website:
+				<br/><br/>http://www.htwk-stundenplan.de/<br/><br/>
+				Leider musst du den Link noch manuell in den Browser kopieren. An einer Lösung wird gearbeitet.
+			</p>
 			<a href="#" data-rel="back" class="ui-btn ui-btn-inline ui-mini ui-corner-all ui-shadow">Zurück</a>
-   	 	</div>
+		</div>
 	</div>
 
 	<script>		
