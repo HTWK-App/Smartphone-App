@@ -49,6 +49,35 @@ body, input, select, textarea, button, .ui-btn {
 	margin-left: 10%;
 }
 
+.ui-footer .ui-select .ui-btn,
+.ui-footer .ui-select .ui-btn:active,
+.ui-footer .ui-select .ui-btn:hover,
+.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
+html .ui-footer .ui-btn.ui-btn-active {
+	background-color: #057de1;
+	border-color: #057de1;
+	color: white;
+	border: none;
+	box-shadow: none;
+}
+
+.ui-page-theme-b .ui-footer .ui-btn,
+.ui-page-theme-b .ui-footer .ui-btn:active,
+.ui-page-theme-b .ui-footer .ui-btn:hover,
+html .ui-footer .ui-btn,
+.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
+html .ui-footer .ui-btn.ui-btn-active {
+	background-color: #057de1;
+	border-color: #057de1;
+	color: white;
+	border: none;
+	box-shadow: none;
+}
+
+.ui-page-theme-b .ui-footer .ui-checkbox .ui-btn-active {
+	background-color: #158df1;
+}
+
 /************************** Panel styling */
 
 .ui-panel-inner {
@@ -100,7 +129,7 @@ body, input, select, textarea, button, .ui-btn {
 	margin-right: 10px;
 }
 
-#timetableInfoPopup h2 {
+#timetableInfoPopup h1 {
 	padding-left: 20px;
 }
 
@@ -200,6 +229,18 @@ body, input, select, textarea, button, .ui-btn {
 	margin: 0px 0px 0px 0px;
 	perspective: 500;
 	-webkit-perspective: 500;
+}
+
+.nativeDroidCards {
+	list-style: none;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	perspective: 500;
+	-webkit-perspective: 500;
+}
+
+#qis_page .ui-collapsible-content, #qis_page .ui-body-b {
+	background-color: #e5e5e5;
 }
 
 .maildetails .nativeDroidCards li,
