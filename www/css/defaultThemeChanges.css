@@ -78,6 +78,10 @@ html .ui-footer .ui-btn.ui-btn-active {
 	background-color: #158df1;
 }
 
+.ui-footer .ui-field-contain {
+	padding: 0.4em 0;
+}
+
 /************************** Panel styling */
 
 .ui-panel-inner {
