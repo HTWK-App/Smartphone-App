@@ -9,8 +9,10 @@
 	<div role="main" class="ui-content">   
 		<h1 id="actualWeek" data-week="-1">Woche wird geladen...</h1>
 		<h1 id="actualDay" data-day=""></h1>
-		<a id="prevDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-l ui-corner-all ui-shadow ui-btn-inline"></a>
-		<a id="nextDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-r ui-corner-all ui-shadow ui-btn-inline"></a>
+		<span  style="float: right;">
+			<a id="prevDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-l ui-corner-all ui-shadow ui-btn-inline"></a>
+			<a id="nextDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-r ui-corner-all ui-shadow ui-btn-inline"></a>
+		</span>
 		<hr/>
 		<ul id="dayCards" class="nativeDroidCards"></ul>
 	</div>
@@ -27,8 +29,8 @@
 		</div>
 	</div>
 
-	<div id="timetableInfoPopup" data-role="popup" data-theme="a" data-overlay-theme="a" class="ui-corner-all">
-		<div data-role="header" data-theme='a'>
+	<div id="timetableInfoPopup" data-role="popup" data-theme="a" data-content-theme="a" data-overlay-theme="a" class="ui-corner-all">
+		<div data-role="header">
 			<h1>Informationen</h1>
 		</div>
 		<div role="main" class="ui-content">
@@ -42,9 +44,7 @@
 
 	<script>		
 	/*TODO
-	 * timetableInfoPopup Button "zur website" doesn't open
 	 * Add function do delete timetable, when semester has changed (+ inform/request user)
-	 * sort timetable list
 	*/
 		$( "#timetable_page" )
 			.on("pagecreate", initTimetableView)
