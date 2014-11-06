@@ -21,12 +21,10 @@
 	</div>
 
 	<script>
-		/*TODO
-		 * Not finished yet! see todos
-		 * Needs testing
-		 */
+
 		$( "#room_page" )
 			.on("pageshow", function () {
+				loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
 				startRoomFind();
 				GLOBAL.INIT.room = true;
 				if(WURFL.is_mobile){
@@ -41,6 +39,7 @@
 			});
 
 		var roomCount = 0;
+		var badLocation = [false,0,false]; // yes/no, accuracy, locationError
 
 		/**
 		 * Starts looking for empty rooms. Gets geolocation and runs on success locationFound, on fail locationError
@@ -48,13 +47,8 @@
 		 */
 		function startRoomFind() {
 
-			loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
-			roomCount = roomCount + 1;
-
-			if(roomCount <= 30)
-				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
-			else
-				roomLocationError();
+			roomCount = roomCount + 1;			
+			navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
 		}
 
 		/**
@@ -65,10 +59,14 @@
 		 */
 		function roomLocationFound(position){
 
-			if(position.coords.accuracy > 50) { // in m
+			if(roomCount <= 30 && position.coords.accuracy > 30) { // in m
 				startRoomFind();
 			}else{
-				loadingOut(); loadingIn(); roomRoomCount = 0;
+				if(roomCount > 30){
+					badLocation[0] = true;
+					badLocation[1] = position.coords.accuracy;
+				}
+				loadingOut(); loadingIn(); roomCount = 0;
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
 					 .done(function(data, status, jqXHR) {
@@ -86,12 +84,15 @@
 		 *
 		 */
 		function roomLocationError(){
+			loadingOut(); loadingIn(); roomCount = 0; badLocation[2] = true;
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location=51.3131989,12.374164')
+			 .done(function(data, status, jqXHR) {
+				if(!isEmpty(data.exception))
+					{ ajaxErrorHandler(data, status, jqXHR); return; }
 
-			loadingOut();
-			loadingIn("Ihre Position konnte nicht genau genug bestimmt werden! Bitte gehen Sie an einen Ort mit besserem Empfang oder versuchen Sie es erneut", true);
-			setTimeout(loadingOut, 4000);
-			roomRoomCount = 0;
-			$("#panelMenu").panel("open");
+				fillBuildingsList(data);
+			 })
+			 .fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -125,14 +126,12 @@
 		}
 
 		/**
-		 * Fills the List of empty rooms for the selected building. TODO not yet right implemented
+		 * Fills the List of empty rooms for the selected building.
 		 *
-		 * @ param JSON-Object data
 		 * @ param ... id ... ....
 		 *
 		 */
 		function fillRoomList(id){
-
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+CONFIG.TIMETABLE.semester+'/'+GLOBAL.DATE.currentPlanWeek)
 				.done(function(data, status, jqXHR) {
 					if(!isEmpty(data.exception))
@@ -166,6 +165,15 @@
 						.trigger("updatelayout");
 
 					loadingOut();
+					if(badLocation[0] === true){
+						loadingIn("Ihre Position konnte nur auf "+badLocation[1]+"m genau bestimmt werden. Bitte haben Sie Verständnis für etwaige Ungenauigkeiten.", true);
+						setTimeout(loadingOut, 5000);
+						badLocation[0] = false;
+					} else if(badLocation[2] === true){
+						loadingIn("Ihre Position konnte NICHT bestimmt werden. Es wird vom Standort der HTWK ausgegangen.", true);
+						setTimeout(loadingOut, 4000);
+						badLocation[2] = false;
+					}
 				 })
 				 .fail(ajaxErrorHandler);
 		}
