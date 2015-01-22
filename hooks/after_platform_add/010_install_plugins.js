@@ -9,8 +9,8 @@ var pluginlist = [
     "org.apache.cordova.device",
     "org.apache.cordova.splashscreen",
     "org.apache.cordova.plugins.PushNotification",
-    "https://github.com/phonegap-build/PushPlugin.git",
-    "https://github.com/danwilson/google-analytics-plugin.git"
+    "com.danielcwilson.plugins.googleanalytics",
+    "com.clone.phonegap.plugins.pushplugin"
 ];
 
 // no need to configure below

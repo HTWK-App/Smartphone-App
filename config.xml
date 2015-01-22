@@ -4,13 +4,11 @@
     <description>
         This is an App for Students and Professors of the University of Applied Sciences Leipzig.
     </description>
-    <author email="rmeissn@imn.htwk-leipzig.de" href="">
+    <author email="rmeissn@imn.htwk-leipzig.de" href="https://rmeissn.github.io/">
         HTWK-App Team
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <preference name="fullscreen" value="false" />
-    <preference name="webviewbounce" value="true" />
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="3000" />
 </widget>
