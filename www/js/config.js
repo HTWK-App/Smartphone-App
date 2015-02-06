@@ -11,7 +11,8 @@ var CONFIG = {
 
 	SERVER: {
 		// LIVE *****
-		base: "http://141.57.21.45:8080/",
+		//base: "http://141.57.21.45:8080/",
+		base: "https://141.57.21.45:8443/",
 		// LOCAL *****
 		//base: "http://localhost:8080/app/",
 		staff: "info/staff/",
