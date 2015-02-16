@@ -255,7 +255,7 @@
 				    		for(var k in data.dayContent) {
 				    			var meal = data.dayContent[k];
 						
-				    			meals += !isEmpty(meal.ingredients) ? '<p>'+meal.ingredients.join(", ")+'</p>':"";
+				    			meals += !isEmpty(meal.ingredients) ? '<p>'+meal.ingredients.join(", ").replace(/\[\d*\]/gi,"")+'</p>':"";
 				    		}
 				    	}
 
