@@ -11,7 +11,7 @@ var CONFIG = {
 
 	SERVER: {
 		// LIVE *****
-		//base: "http://141.57.21.45:8080/",
+		//base: "http://htwk-app.imn.htwk-leipzig.de:8080/",
 		base: "https://htwk-app.imn.htwk-leipzig.de:8443/",
 		// LOCAL *****
 		//base: "http://localhost:8080/app/",
