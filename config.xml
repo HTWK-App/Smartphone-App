@@ -12,10 +12,10 @@
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="3000" />
     <platform name="android">
-        <splash src="icons_splashs/splash_960x640.png" density="ldpi"/>
-        <splash src="icons_splashs/splash_960x640.png" density="mdpi"/>
-        <splash src="icons_splashs/splash_1136x640.png" density="hdpi"/>
-        <splash src="icons_splashs/splash_1136x640.png" density="xhdpi"/>
+        <splash src="icons_splashs/splash_960x640.png" density="port-ldpi"/>
+        <splash src="icons_splashs/splash_960x640.png" density="port-mdpi"/>
+        <splash src="icons_splashs/splash_640x1136.png" density="port-hdpi"/>
+        <splash src="icons_splashs/splash_640x1136.png" density="port-xhdpi"/>
     </platform>
 
 </widget>
