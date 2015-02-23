@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.HTWK-App.App" version="0.11.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.HTWK-App.App" version="0.12.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>HTWK-App</name>
     <description>
         This is an App for Students and Professors of the University of Applied Sciences Leipzig.
@@ -11,4 +11,11 @@
     <access origin="*" />
     <preference name="SplashScreen" value="splash" />
     <preference name="SplashScreenDelay" value="3000" />
+    <platform name="android">
+        <splash src="icons_splashs/splash_960x640.png" density="port-ldpi"/>
+        <splash src="icons_splashs/splash_960x640.png" density="port-mdpi"/>
+        <splash src="icons_splashs/splash_640x1136.png" density="port-hdpi"/>
+        <splash src="icons_splashs/splash_640x1136.png" density="port-xhdpi"/>
+    </platform>
+
 </widget>
