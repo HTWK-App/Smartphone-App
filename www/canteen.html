@@ -174,7 +174,7 @@
 				    		for(var k in data.dayContent) {
 				    			meal = data.dayContent[k];
 						
-				    			desc = !isEmpty(meal.ingredients)?meal.ingredients.join(", "):"Keine Beschreibung verfügbar!";
+				    			desc = !isEmpty(meal.ingredients)?meal.ingredients.join(", ").replace(/\[\d*\]/gi,""):"Keine Beschreibung verfügbar!";
 						
 				    			addits = "";
 				    			
