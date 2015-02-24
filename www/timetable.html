@@ -460,7 +460,7 @@
 				for(var s in faculty.groups){
 					var group = faculty.groups[s];
 					for(var m in data.dayContent){
-						dayCourse = data.dayContent[m];
+						var dayCourse = data.dayContent[m];
 						if(!isEmpty(group.courses[dayCourse.suid])){
 							li += timetableAddDayCourse(dayCourse,group.courses[dayCourse.suid]);
 							added = true;
