@@ -1,6 +1,8 @@
 Smartphone-App
 ==============
 
+This branch contains some early attempts for the App. It'll be not further developed and will not receive any support!
+
 This repo holds the code for the Smartphone Application of the HTWK Leipzig, that is created with the following frameworks:
 
 * Apache Cordova (3.4.0)
