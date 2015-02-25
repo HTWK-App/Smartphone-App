@@ -12,9 +12,3 @@ This repository contains the code for the smart phone application of the Leipzig
 Installation guide to Cordova: [Guide](http://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface)
 
 Platforms are excluded from this repo. If you want to compile the project in case of a specific platform, first install the platform SDK and then add the desired platform to the project by executing 'cordova platform add xxx'.
-
-Available branches:
-* master-old --> Old developement branch. Not used anymore.
-* master --> Actual developement branch.
-* presentation --> custom build to be shown on http://htwk-app.github.io
-* pushnotification --> Added ability to get push notifications
