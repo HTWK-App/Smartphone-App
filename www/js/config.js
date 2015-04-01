@@ -40,6 +40,7 @@ var CONFIG = {
 		password: "",
 		credentials: "",
 		salt: "",
+		email: "",
 		checking: false,
 		correct: false
 	},

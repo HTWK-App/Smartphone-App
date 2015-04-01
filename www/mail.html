@@ -19,8 +19,8 @@
 			</form>
 		</div>
 
-		<div data-role="popup" id="mail_popupDialog" data-overlay-theme="b" data-theme="a" data-content-theme="a" data-dismissible="false">
-		    <div data-role="header">
+		<div data-role="popup" id="mail_popupDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+		    <div data-role="header" data-theme="a">
 			    <h1>Wirklich senden?</h1>
 		    </div>
 		    <div role="main" class="ui-content">
@@ -30,6 +30,23 @@
 		    </div>
 		</div>
 	</div>
+	
+	<div id="emailDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+	    <div data-role="header" data-theme="a">
+	   		<h2>E-Mail Adresse</h2>
+	   	</div>
+	   	<form>
+        <div style="padding:10px 20px;">
+		 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie ihre E-Mail Adresse angeben! Ausschließlich eine HTWK E-Mail Adresse nach dem Muster: Max.Muster@htwk-leipzig.de wird funktionieren.</h4>
+		 	 		
+		 	 		<label for="emailDialogEmail" class="ui-hidden-accessible"><strong>E-Mail:</strong></label>
+		 	 		<input type="text" name="email" id="emailDialogEmail" value="" placeholder="Max.Muster@htwk-leipzig.de" data-theme="a">
+
+		 	 		<button id="emailDialog_Btn_Save" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Anmelden</button>
+					<button id="emailDialog_Btn_Abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
+   	 		</div>
+			</form>
+		</div>
 	
 	<div id="mail_footer" data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
 		<div data-role="navbar">
@@ -57,7 +74,7 @@
 					.off()
 					.on("click", initMailView);*/
 				if(isEmpty(CONFIG.AUTH.credentials)) {
-	    			openSignInDialog(initMailView);
+	    			openSignInDialog(emailDialogPopup);
 	    		}
 				else {
 	    			if(!GLOBAL.INIT.mail) loadingIn();	
@@ -66,6 +83,14 @@
 		    		analytics.trackView('mail');
 		    	}
 			 });
+			 
+		function emailDialogPopup() {
+			setTimeout(
+				function(){if(isEmpty(CONFIG.AUTH.email)) {
+					$("#emailDialog").popup("open", { positionTo: "window", transition: "pop" });
+				}}
+				, 5000);
+		}
 
 		$("#btn_mail_write").on("click", function() { showMailSendForm(false);});
 		$("#btn_mail_abort").on("click", showMailInBox);
@@ -76,12 +101,23 @@
 
 		$("#btn_mail_send").on("click", function() {
 			if(!isEmpty($("#mail_new_to").val()) && !isEmpty($("#mail_new_content").val())) {
-				$("#mail_popupDialog").popup("open", { positionTo: "window", transition: "pop" });
+				$("#mail_popupDialog").popup("open");
 			}
 			else {
 				loadingIn("Sie haben keinen Empfänger oder keinen Inhalt eingegeben!", true);
 				setTimeout(loadingOut, 3000);
 			}
+		});
+		
+		$("#emailDialog_Btn_Save").on("click", function() {
+			CONFIG.AUTH.email = $("#emailDialogEmail").val()
+			saveParameters();
+			$( "#emailDialog" ).popup("close");
+			initMailView();
+		});
+		$("#emailDialog_Btn_Abort").on("click", function() {
+			$( "#emailDialog" ).popup("close");
+			$("#panelMenu").panel("open");
 		});
 
 		$("#btn_mail_really").on("click", function() {
@@ -100,8 +136,9 @@
 														  "&salt="+CONFIG.AUTH.salt+ 
 														  "&to="+to+"&cc="+cc+ 
 														  "&subject="+subject+"&message="+content+
-														  "&from=hrz@htwk-leipzig.de")
+														  "&from="+CONFIG.AUTH.email)
 			 .done(function(data, status, jqXHR) {
+			 
 					loadingOut();
 					if(!isEmpty(data.exception)) {
 						loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);

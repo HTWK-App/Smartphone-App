@@ -218,9 +218,9 @@ function openSignInDialog(success) {
 			saveUsernamePassword($("#signInDialogUsername").val(),
 								 $("#signInDialogPassword").val(),
 								 function() {
+									$( "#signInDialog" ).popup("close");	
 									if($.isFunction(e.data.callback))
 										e.data.callback.call(this);
-									$( "#signInDialog" ).popup("close");	
 								 });
 		 });
 
@@ -295,6 +295,8 @@ function loadParameters(){
 	if(!isEmpty(help)) CONFIG.AUTH.credentials = help;
 	help = localStorage.getItem("salt");
 	if(!isEmpty(help)) CONFIG.AUTH.salt = help;
+	help = localStorage.getItem("email");
+	if(!isEmpty(help)) CONFIG.AUTH.email = help;
 	help = localStorage.getItem("language");
 	if(!isEmpty(help)) CONFIG.LANGUAGE.set = help;
 	help = localStorage.getItem("defaultFeed");
@@ -311,6 +313,7 @@ function saveParameters(){
 	localStorage.setItem("username", CONFIG.AUTH.username);
 	localStorage.setItem("credentials", CONFIG.AUTH.credentials);
 	localStorage.setItem("salt", CONFIG.AUTH.salt);
+	localStorage.setItem("email", CONFIG.AUTH.email);
 	localStorage.setItem("language", CONFIG.LANGUAGE.set);
 	localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
 	localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
