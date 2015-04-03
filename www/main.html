@@ -65,6 +65,7 @@
 						<h1>Wir suchen dich!</h1><hr/>
 						<p>Auch du kannst uns auf vielfältige Weise bei der App unterstützen. Wenn du interessiert bist:</p>
 						<a href="about.html" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a>
+						<hr/>
 					</li>
 					<li id="HTWKNews" data-cards-type='text' class='HtwkImage'></li>
 					<li id="HTWKEvents" data-cards-type='text' class='HtwkImage'></li>
@@ -79,20 +80,16 @@
 	    <div data-role="header" data-theme="a">
 	   		<h2>Authentifizierung</h2>
 	   	</div>
-	   	<form>
-        <div style="padding:10px 20px;">
-		 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
-		 	 		
-		 	 		<label for="signInDialogUsername" class="ui-hidden-accessible"><strong>Nutzername:</strong></label>
-		 	 		<input type="text" name="username" id="signInDialogUsername" value="" placeholder="Nutzername" data-theme="a">
-		 	 		
-		 	 		<label for="signInDialogPassword" class="ui-hidden-accessible"><strong>Passwort:</strong></label>
-		 	 		<input type="password" name="password" id="signInDialogPassword" value="" autocomplete="off" placeholder="Passwort" data-theme="a">
-
-		 	 		<button id="signInDialog_Btn_Save" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Anmelden</button>
-					<button id="signInDialog_Btn_Abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
-   	 		</div>
-			</form>
+      <div style="padding:10px 20px;">
+	 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
+	 	 		
+	 	 		<form id="signInDialog_form">
+		 	 		<input type="text" id="signInDialog_username" value="" placeholder="Nutzername" autofocus required>
+		 	 		<input type="password" id="signInDialog_password" value="" placeholder="Passwort" autocomplete="off" required>
+		 	 		<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Anmelden</button>
+		 	 		<button id="signInDialog_abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
+	 	 		</form>
+ 	 		</div>
 		</div>
 		<!-- ## SIGNIN DIALOG ## -->
 		
@@ -185,8 +182,7 @@
 				}});
 				
 			// SignIn Dialog
-			$( "#signInDialog_Btn_Abort" )
-				.on("click", function () {
+			$( "#signInDialog_abort" ).on("click", function () {
 					$( "#signInDialog" ).popup("close");
 					$("#panelMenu").panel("open");
 				});
@@ -256,7 +252,7 @@
 				    		}
 				    	}
 
-					meals += '<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b "><i class="fa fa-cutlery fa-lg fa-fw"></i> Details</a>';
+					meals += '<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b "><i class="fa fa-cutlery fa-lg fa-fw"></i> Details</a><hr/>';
 						
 					$("#mensaCard")
 					 .empty()

@@ -2,6 +2,7 @@
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
+		<a id="btn_refresh" href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-refresh fa-lg"></i></a>
 	</div>
     
 	<div role="main" class="ui-content">
@@ -21,12 +22,12 @@
 
 		<div data-role="popup" id="mail_popupDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
 		    <div data-role="header" data-theme="a">
-			    <h1>Wirklich senden?</h1>
+			    <h2>Wirklich senden?</h2>
 		    </div>
-		    <div role="main" class="ui-content">
-				<h3>Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
-				<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
-				<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Senden</a>
+		    <div style="padding:10px 20px;">
+					<h3>Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
+					<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
+					<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Senden</a>
 		    </div>
 		</div>
 	</div>
@@ -35,17 +36,15 @@
 	    <div data-role="header" data-theme="a">
 	   		<h2>E-Mail Adresse</h2>
 	   	</div>
-	   	<form>
-        <div style="padding:10px 20px;">
-		 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie ihre E-Mail Adresse angeben! Ausschließlich eine HTWK E-Mail Adresse nach dem Muster: Max.Muster@htwk-leipzig.de wird funktionieren.</h4>
-		 	 		
-		 	 		<label for="emailDialogEmail" class="ui-hidden-accessible"><strong>E-Mail:</strong></label>
-		 	 		<input type="text" name="email" id="emailDialogEmail" value="" placeholder="Max.Muster@htwk-leipzig.de" data-theme="a">
-
-		 	 		<button id="emailDialog_Btn_Save" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Anmelden</button>
-					<button id="emailDialog_Btn_Abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
-   	 		</div>
-			</form>
+      <div style="padding:10px 20px;">
+	 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie ihre E-Mail Adresse angeben! Ausschließlich eine HTWK E-Mail Adresse nach dem Muster: Max.Muster@htwk-leipzig.de wird funktionieren.</h4>
+	 	 		
+	 	 		<form id="emailDialog_form">
+		 	 		<input type="email" id="emailDialog_inputEmail" placeholder="max.muster@htwk-leipzig.de" value="" required>
+					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Speichern</button>
+					<button id="emailDialog_abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
+				</form>
+ 	 		</div>
 		</div>
 	
 	<div id="mail_footer" data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
@@ -61,63 +60,41 @@
 	<script>
 		$( "#mail_page" )
 			.on("pagecreate", function() {
-				$("#mail_sendForm")
-					.hide();
-				$("#btn_mail_abort")
-					.hide();				
-				$("#btn_mail_send")
-					.hide();
-				initMailView(false);
+				$("#mail_popupDialog").trigger("create").enhanceWithin().popup();
+				$("#emailDialog").trigger("create").enhanceWithin().popup();
 			})
 			.on("pageshow", function() {
-				/*$("#btn_refresh")
-					.off()
-					.on("click", initMailView);*/
-				if(isEmpty(CONFIG.AUTH.credentials)) {
-	    			openSignInDialog(emailDialogPopup);
-	    		}
-				else {
-	    			if(!GLOBAL.INIT.mail) loadingIn();	
-	    		}
-	    		if(WURFL.is_mobile){
-		    		analytics.trackView('mail');
-		    	}
+				$("#mail_sendForm").hide();
+				$("#btn_mail_abort").hide();				
+				$("#btn_mail_send").hide();
+				$("#btn_refresh").off().on("click", function() {if(!isEmpty(CONFIG.AUTH.email)) initMailView(false); else emailDialogPopup();});
+				
+				if( isEmpty(CONFIG.AUTH.credentials))
+	    		openSignInDialog(function(){setTimeout(emailDialogPopup, 3000);});
+	    	else { 
+	    		if(isEmpty(CONFIG.AUTH.email))
+		    		emailDialogPopup();
+	    		else
+						initMailView(false);
+	    	}
+	    	
+	    	if(WURFL.is_mobile)
+		    	analytics.trackView('mail');
 			 });
-			 
-		function emailDialogPopup() {
-			setTimeout(
-				function(){if(isEmpty(CONFIG.AUTH.email)) {
-					$("#emailDialog").popup("open", { positionTo: "window", transition: "pop" });
-				}}
-				, 5000);
-		}
 
-		$("#btn_mail_write").on("click", function() { showMailSendForm(false);});
+		$("#btn_mail_write").on("click", function() { if(!isEmpty(CONFIG.AUTH.email)) showMailSendForm(false); else emailDialogPopup();});
+		
 		$("#btn_mail_abort").on("click", showMailInBox);
 		
-		$("#mail_btn_more").click(function () {
-			initMailView(true);
-		});
+		$("#mail_btn_more").click(function () { if(!isEmpty(CONFIG.AUTH.email)) initMailView(true); else emailDialogPopup();});
 
 		$("#btn_mail_send").on("click", function() {
-			if(!isEmpty($("#mail_new_to").val()) && !isEmpty($("#mail_new_content").val())) {
+			if(!isEmpty($("#mail_new_to").val()) && !isEmpty($("#mail_new_content").val()))
 				$("#mail_popupDialog").popup("open");
-			}
 			else {
 				loadingIn("Sie haben keinen Empfänger oder keinen Inhalt eingegeben!", true);
 				setTimeout(loadingOut, 3000);
 			}
-		});
-		
-		$("#emailDialog_Btn_Save").on("click", function() {
-			CONFIG.AUTH.email = $("#emailDialogEmail").val()
-			saveParameters();
-			$( "#emailDialog" ).popup("close");
-			initMailView();
-		});
-		$("#emailDialog_Btn_Abort").on("click", function() {
-			$( "#emailDialog" ).popup("close");
-			$("#panelMenu").panel("open");
 		});
 
 		$("#btn_mail_really").on("click", function() {
@@ -126,30 +103,46 @@
 			var subject = $("#mail_new_subject").val();
 			var content = $("#mail_new_content").val();
 			
-			cc = isEmpty(cc)?"":cc.match(GLOBAL.MAIL.filter).toString();
+			cc = isEmpty(cc) ? "" : cc.match(GLOBAL.MAIL.filter).toString();
 			
 			$("#mail_popupDialog").popup("close");
 			
 			loadingIn("Ihre Mail wird versendet ...");
-			
-			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+"?credentials="+CONFIG.AUTH.credentials+
-														  "&salt="+CONFIG.AUTH.salt+ 
-														  "&to="+to+"&cc="+cc+ 
-														  "&subject="+subject+"&message="+content+
-														  "&from="+CONFIG.AUTH.email)
+			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+
+				"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+ 
+				"&to="+to+"&cc="+cc+ 
+				"&subject="+subject+"&message="+content+
+				"&from="+CONFIG.AUTH.email)
 			 .done(function(data, status, jqXHR) {
 			 
 					loadingOut();
-					if(!isEmpty(data.exception)) {
+					if(!isEmpty(data.exception))
 						loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);
-					}
-					else {
+					else
 						loadingIn("Ihre Mail wurde erfolgreich versendet!", true);
-					}
+						
 					setTimeout(loadingOut, 3000);
 					showMailInBox();
 				})
 			.fail(ajaxErrorHandler);
+		});
+		//*************************************************
+		function emailDialogPopup() {
+			if(isEmpty(CONFIG.AUTH.email))
+				$("#emailDialog").popup("open", { positionTo: "window", transition: "pop" });
+		}
+		
+		$("#emailDialog_form").submit(function (event){
+			event.preventDefault();
+			CONFIG.AUTH.email = $("#emailDialog_inputEmail").val();
+			saveParameters();
+			$( "#emailDialog" ).popup("close");
+			initMailView(false);
+		});
+		
+		$("#emailDialog_abort").on("click", function() {
+			$( "#emailDialog" ).popup("close");
+			$( "#panelMenu" ).panel("open");
 		});
 
 		/**
@@ -159,11 +152,8 @@
 		 */
 		function answerMail(e) {
 			var tmp = $(e.target).parent();
-			var from = tmp.find("span.mail-from")
-						  .text()
-						  .match(GLOBAL.MAIL.filter);
-			var subj = tmp.find("span.mail-subject")
-						  .text();
+			var from = tmp.find("span.mail-from").text().match(GLOBAL.MAIL.filter);
+			var subj = tmp.find("span.mail-subject").text();
 			
 			$("#mail_new_to").val(from);
 			$("#mail_new_subject").val("Re: "+subj);
@@ -179,7 +169,7 @@
 			$("#mail_sendForm").hide();
 			$("#mail_inbox").show();
 			
-			//$("#btn_refresh").show();
+			$("#btn_refresh").show();
 			$("#btn_mail_abort").hide();
 			$("#btn_mail_write").show();
 			$("#btn_mail_send").hide();
@@ -199,7 +189,7 @@
 			$("#mail_inbox").hide();
 			$("#mail_sendForm").show();
 			
-			//$("#btn_refresh").hide();
+			$("#btn_refresh").hide();
 			$("#btn_mail_abort").show();
 			$("#btn_mail_write").hide();
 			$("#btn_mail_send").show();
@@ -219,25 +209,25 @@
 				offset = $('#mail_list li').length;
 			}
 			
-			if(!isEmpty(CONFIG.AUTH.credentials))
-			{
+			if(!isEmpty(CONFIG.AUTH.credentials)) {
 				loadingIn();
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg, {credentials: CONFIG.AUTH.credentials, 
-																   salt: CONFIG.AUTH.salt, 
-																   offset: offset})
-				 .done(function(data, status, jqXHR) {
-						if(isEmpty(data.exception)) {
-						 	fillMailList(data, remove);
-							loadingOut();
-							GLOBAL.INIT.mail = true;
-						} 
-						else {
-							loadingOut();
-							loadingIn("Es konnten keine Mails abgerufen werden!", true);
-							setTimeout(loadingOut, 3000);
-						}
-				  })
-				 .fail(ajaxErrorHandler);
+				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg, {
+					credentials: CONFIG.AUTH.credentials, 
+					salt: CONFIG.AUTH.salt, 
+					offset: offset}
+				)
+				.done(function(data, status, jqXHR) {
+					if(isEmpty(data.exception)) {
+					 	fillMailList(data, remove);
+						loadingOut();
+						GLOBAL.INIT.mail = true;
+					} else {
+						loadingOut();
+						loadingIn("Es konnten keine Mails abgerufen werden!", true);
+						setTimeout(loadingOut, 3000);
+					}
+				})
+				.fail(ajaxErrorHandler);
 			}
 		};
 		
@@ -252,8 +242,7 @@
 			if(!isEmpty(data)) {
 				if(remove) {
 					list.empty();
-					body.find("div.maildetails")
-						.remove();
+					body.find("div.maildetails").remove();
 				}
 				
 				for(var k in data) {
@@ -278,8 +267,7 @@
 					.end()
 					.trigger("create");
 				
-				body.append(divs)
-					.trigger("create");
+				body.append(divs).trigger("create");
 			}
 		};
 
@@ -295,15 +283,14 @@
 			var li = "";
 			var time = mail.sendDate.getHours()+":"+mail.sendDate.getMinutes();
 			
-			if(sdate.getTime()!=mail.sendDate.getTime()) {
+			if(sdate.getTime()!=mail.sendDate.getTime())
 				li += '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count">'+createDateStamp(mail.sendDate)+'</li>';
-			}
 			
-			li += 	'<li><a href="#mail_'+mail.id+'" class="ui-btn ui-btn-icon-right ui-icon-carat-r">'+
-					'<h2>'+mail.subject+'</h2>'+
-					'<p><strong>'+escape(mail.from)+'</strong></p>'+
-					'<p class="ui-li-aside"><strong>'+time+'</strong></p>'+
-					'</a></li>';
+			li += '<li><a href="#mail_'+mail.id+'" class="ui-btn ui-btn-icon-right ui-icon-carat-r">'+
+						'	<h2>'+mail.subject+'</h2>'+
+						'	<p><strong>'+escape(mail.from)+'</strong></p>'+
+						'	<p class="ui-li-aside"><strong>'+time+'</strong></p>'+
+						'</a></li>';
 			
 			return li;
 		};
@@ -325,7 +312,7 @@
 			toList = toList.replace(/[;:]/g, "").split(",").toString();
 			toList = escape(toList);
 			
-			msg = '<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">'+mail.message+'</pre></div>';
+			msg = 	'<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">'+mail.message+'</pre></div>';
 			
 			div = $('<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="b">'+
 							'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+

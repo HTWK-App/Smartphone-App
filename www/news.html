@@ -38,9 +38,8 @@
 					.on("click", function() { 
 						$("#news_select").change(); 
 				 	});
-				 	if(WURFL.is_mobile){
+				 	if(WURFL.is_mobile)
 					 	analytics.trackView('news');
-					 }
 			});
 		
 		$( "#news_select" )
@@ -59,8 +58,7 @@
 		function initNewsView() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
 			 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+					if(!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return; }
 
 					var tmp, name, id, opts = "";
 					
@@ -68,7 +66,6 @@
 						id = data[k].id;
 						tmp = id.split(".");
 						name = capitalize(tmp[1])+(tmp.length==3?" "+tmp[2]:"");
-						
 						opts += '<option value="'+id+'">'+GLOBAL.NEWS.titles[id]+'</option>';
 					}
 					
@@ -105,8 +102,7 @@
 			
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
 			 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+					if(!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return; }
 
 				 	createNewsEntries(data.responseData.feed.entries, remove);
 			  })
@@ -136,10 +132,10 @@
 					link = ++c + '"';
 	
 				lis += 	'<li><a href="#news_'+link+' data-transition="slide">'+
-							'<h3>'+news.title+'</h3>'+
-							'<p>'+news.contentSnippet+'</p>'+
-							'<p><small>'+date+'</small></p>'+
-						'</a></li>';
+								'	<h3>'+news.title+'</h3>'+
+								'	<p>'+news.contentSnippet+'</p>'+
+								'	<p><small>'+date+'</small></p>'+
+								'</a></li>';
 
 				divs += '<div id="news_'+link+' data-role="page" data-theme="b" data-title="News" data-subpage="true" class="newsdetails">'+
 								'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
@@ -181,7 +177,7 @@
 				.trigger("updatelayout");
 			
 			$("body").append(divs)
-				 	 .trigger("create");
+				.trigger("create");
 			
 			loadingOut();
 		}

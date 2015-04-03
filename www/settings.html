@@ -9,11 +9,20 @@
 		<ul class="nativeDroidCards">
 			<li>
 				<h1>Login-Daten</h1><hr/>
-				<label for="input_username"><strong>Nutzername:</strong></label> 
-					<input type="text" name="input_username" id="input_username" value="" placeholder="Nutzername" /> 
-				<label for="input_password"><strong>Passwort:</strong> </label>
-					<input type="password" name="input_password" id="input_password" value="" autocomplete="off" placeholder="Passwort" /> 
-				<a id="settings_login_save" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</a>
+				<form id="settings_loginForm">
+					<label for="settings_input_username"><strong>Nutzername:</strong></label>
+						<input type="text" name="settings_input_username" id="settings_input_username" value="" placeholder="Nutzername" required>
+					<label for="settings_input_password"><strong>Passwort:</strong> </label>
+						<input type="password" name="settings_input_password" id="settings_input_password" value="" autocomplete="off" placeholder="Passwort" required>
+					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
+				</form>
+			</li>
+			<li>
+				<h1>E-Mail</h1>
+				<form id="settings_emailForm">
+			 	 		<input type="email" id="settings_input_email" value="" placeholder="max.muster@htwk-leipzig.de" required>
+					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
+				</form>
 			</li>
 			<li>
 				<h1>PushNotifications</h1>
@@ -58,11 +67,18 @@
 		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
 		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
 		 */
-		$("#settings_page").on("pagecreate", function() {
+		 
+		$("#settings_page")
+		.on("pagecreate", function() {
 			updatePushButton();
 			settingsGetNewsFeeds();
 			settingsGetCanteens();
 			settingsFillFields();
+		})
+		.on("pageshow", function () {
+			loadingIn();
+		 	if(WURFL.is_mobile)
+			 	analytics.trackView('news');
 		});
 
 		/**
@@ -70,37 +86,34 @@
 		 *
 		 */
 		function settingsGetNewsFeeds() {
-			if(WURFL.is_mobile){
-				analytics.trackView('settings');
-			}
-			loadingIn();
 
-			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news).done(
-					function(data, status, jqXHR) {
-						if (!isEmpty(data.exception)) {
-							ajaxErrorHandler(data, status, jqXHR);
-							return;
-						}
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news)
+			.done( function(data, status, jqXHR) {
+				if (!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return;}
 
-						var tmp, name, id, opts;
-						opts = "";
+				var tmp, name, id;
+				var opts = "";
 
-						for ( var k in data) {
-							id = data[k].id;
-							tmp = id.split(".");
-							name = capitalize(tmp[1])	+ (tmp.length == 3 ? " " + tmp[2] : "");
+				for ( var k in data) {
+					id = data[k].id;
+					tmp = id.split(".");
+					name = capitalize(tmp[1])	+ (tmp.length == 3 ? " " + tmp[2] : "");
 
-							if (id == CONFIG.NEWS.defaultFeed)
-								tmp = 'selected="selected"';
-							else
-								tmp = "";
-							opts += '<option value="'+id+'" '+tmp+'>' + GLOBAL.NEWS.titles[id] + '</option>';
-						}
+					if (id == CONFIG.NEWS.defaultFeed)
+						tmp = 'selected="selected"';
+					else
+						tmp = "";
+					opts += '<option value="'+id+'" '+tmp+'>' + GLOBAL.NEWS.titles[id] + '</option>';
+				}
 
-						$("#default_news_select").empty().append(opts)
-								.selectmenu("refresh");
-						loadingOut();
-					}).fail(ajaxErrorHandler);
+				$("#default_news_select")
+					.empty()
+					.append(opts)
+					.selectmenu("refresh");
+					
+				loadingOut();
+			})
+			.fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -109,30 +122,28 @@
 		 */
 		function settingsGetCanteens() {
 
-			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa).done(
-					function(data, status, jqXHR) {
-						if (!isEmpty(data.exception)) {
-							ajaxErrorHandler(data, status, jqXHR);
-							return;
-						}
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa)
+			.done( function(data, status, jqXHR) {
+				if (!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return;}
 
-						var opts = "";
+				var opts = "";
 
-						for ( var k in data.location) {
-							opts += '<option value="' + k + '" ';
+				for ( var k in data.location) {
+					opts += '<option value="' + k + '" ';
 
-							if (k == CONFIG.MENSA.defaultCanteen)
-								opts += 'selected="selected"';
+					if (k == CONFIG.MENSA.defaultCanteen)
+						opts += 'selected="selected"';
 
-							opts += '>' + data.location[k] + '</option>';
-						}
+					opts += '>' + data.location[k] + '</option>';
+				}
 
-						$("#default_canteen_select")
-							.empty()
-							.append(opts)
-							.selectmenu("refresh");
-							
-					}).fail(ajaxErrorHandler);
+				$("#default_canteen_select")
+					.empty()
+					.append(opts)
+					.selectmenu("refresh");
+					
+			})
+			.fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -143,50 +154,26 @@
 
 			var opts = "";
 
-			if (CONFIG.AUTH.username !== undefined && CONFIG.AUTH.username !== "") {
-				$("#input_username").attr("placeholder", CONFIG.AUTH.username)
-						.val(CONFIG.AUTH.username);
-			}
-			/*
-			for(var k in CONFIG.LANGUAGE.availableShort){
-				opts += '<option value="'+CONFIG.LANGUAGE.availableShort[k]+'" ';
-
-				if(CONFIG.LANGUAGE.availableShort[k] == CONFIG.LANGUAGE.set)
-					opts += 'selected="selected"';
-
-				opts += '>'+CONFIG.LANGUAGE.availableLong[k]+'</option>';
-			}
-
-			$( "#default_language_select" )
-				.empty()
-				.append(opts)
-				.selectmenu("refresh");
-			 */
+			if (!isEmpty(CONFIG.AUTH.username))
+				$("#settings_input_username").val(CONFIG.AUTH.username);
+				
+			if (!isEmpty(CONFIG.AUTH.email))
+				$("#settings_input_email").val(CONFIG.AUTH.email);
 		}
-		/*
-		 $( "#default_language_select")
-		 .change(function() {
-		 CONFIG.LANGUAGE.set = $(this).val();
-		 saveParameters();
-		 });
-		 */
 		 
-		$("#settings_login_save")
-				.on(
-						"click",
-						function() {
-							var pass = $("#input_password").val();
-							var user = $("#input_username").val();
-
-							if (pass === "" || user === "") {
-								loadingIn(
-										"Tragen Sie bitte Ihren Nutzernamen und ihr Passwort ein!",
-										true);
-								setTimeout(loadingOut, 2500);
-							} else {
-								saveUsernamePassword(user, pass);
-							}
-						});
+		$("#settings_loginForm").submit(function (event){
+			event.preventDefault();
+			saveUsernamePassword($("#settings_input_username").val(), $("#settings_input_password").val());
+		});
+			
+		$("#settings_emailForm").submit(function (event){
+			event.preventDefault();
+			
+			CONFIG.AUTH.email = $("#settings_input_email").val();
+			saveParameters();
+			loadingIn("Ihre neue E-Mail Adresse wurde gespeichert!", true);
+			setTimeout(loadingOut, 2000);
+		});
 
 		$("#default_news_select").change(function() {
 			CONFIG.NEWS.defaultFeed = $(this).val();
@@ -211,7 +198,7 @@
 			if(!CONFIG.PUSH.enabled){
 				CONFIG.PUSH.enabled = true;
 				registerDevice();
-  			} else {
+  		} else {
 				CONFIG.PUSH.enabled = false;
  				unregisterDevice();
  			}
@@ -219,12 +206,10 @@
 		});
 
 		function updatePushButton(){
-			if(CONFIG.PUSH.enabled){
+			if(CONFIG.PUSH.enabled)
 				$("#pushnotifications").text("Pushnotifications ausschalten");
-			} else {
+			else
 				$("#pushnotifications").text("Pushnotifications einschalten");
-			}
 		}
-		
 	</script>
 </div>

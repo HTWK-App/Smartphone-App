@@ -212,17 +212,14 @@ function loadingOut() {
 }
 
 function openSignInDialog(success) {	
-	$( "#signInDialog_Btn_Save" )
-		.off()
-		.on("click", {callback:success}, function (e) {
-			saveUsernamePassword($("#signInDialogUsername").val(),
-								 $("#signInDialogPassword").val(),
-								 function() {
-									$( "#signInDialog" ).popup("close");	
-									if($.isFunction(e.data.callback))
-										e.data.callback.call(this);
-								 });
-		 });
+	$( "#signInDialog_form" ).off()
+	.submit( function (event){
+		event.preventDefault();
+		saveUsernamePassword($("#signInDialog_username").val(), $("#signInDialog_password").val(), function (){
+			$( "#signInDialog" ).popup("close");
+			if($.isFunction(success)) success.call(this);
+		});
+	});
 
 	$( "#signInDialog" )
 		.css("display", "block")
@@ -265,9 +262,7 @@ function saveUsernamePassword(username, password, done, fail) {
 				else {
 					CONFIG.AUTH.correct = true;
 					CONFIG.AUTH.checking = false;
-					localStorage.setItem("username", CONFIG.AUTH.username);
-					localStorage.setItem("credentials", CONFIG.AUTH.credentials);
-					localStorage.setItem("salt", CONFIG.AUTH.salt);
+					saveParameters();
 					loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true);
 				}
 				setTimeout(loadingOut, 3000);
