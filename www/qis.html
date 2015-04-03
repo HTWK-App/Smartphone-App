@@ -18,14 +18,14 @@
 					.off()
 					.on("click", initQISView);
 
-				if(isEmpty(CONFIG.AUTH.credentials)) {
+				if(isEmpty(CONFIG.AUTH.credentials))
 					openSignInDialog(initQISView);
-				} else {
+				else {
 					if(!GLOBAL.INIT.qis) loadingIn();	
 				}
-				if(WURFL.is_mobile){
+				
+				if(WURFL.is_mobile)
 					analytics.trackView('qis');
-				}
 			});
 
 		/**
@@ -37,8 +37,7 @@
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.qis, {credentials: CONFIG.AUTH.credentials, salt: CONFIG.AUTH.salt})
 					.done(function(data, status, jqXHR) {
-						if(!isEmpty(data.exception))
-							{ ajaxErrorHandler(data, status, jqXHR); return; }
+						if(!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return; }
 
 						fillQIS(data);
 

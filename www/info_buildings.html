@@ -17,9 +17,8 @@
   			if(!GLOBAL.INIT.builds) loadingIn();
 				$("#buidling_content_list li").removeClass("ui-screen-hidden");
 				$("#buidling_content_list").listview("refresh");
-				if(WURFL.is_mobile){
+				if(WURFL.is_mobile)
 					analytics.trackView('buildings');
-				}
   		 });
 
 		/**
@@ -32,8 +31,7 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
 				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+					if(!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return; }
 
 					buildingFillBuildingsList(data);
 
@@ -41,7 +39,6 @@
 					GLOBAL.INIT.builds = true;
 				})
 				.fail(ajaxErrorHandler);
-
 		}
 		
 		/**
@@ -52,21 +49,18 @@
 		 */
 		function buildingFillBuildingsList(data) {
 
-			var building, lis = "", desc = "";
+			var lis = "";
+			var desc = "";
 			
 			for(var k in data){
-				building = data[k];
+				var building = data[k];
+				desc = building.description[0];
 				
-				for(var d in building.description){
-					if(!isEmpty(building.description[d]))
-						desc += building.description[d];
-				}
-				
-				lis += 	'<li data-bid='+building.id+'><a href="#" class="building">'+
-							'<h3>'+building.fullName+'</h3>'+
-							'<p>'+desc+'</p>'+
-							'<p>'+building.address+'</p>'+
-						'</a></li>';
+				lis +='<li data-bid='+building.id+'><a href="#" class="building">'+
+							'	<h3>'+building.fullName+'</h3>'+
+							'	<p>'+desc+'</p>'+
+							'	<p>'+building.address+'</p>'+
+							'</a></li>';
 			}
 				
 			$( "#buidling_content_list" )
