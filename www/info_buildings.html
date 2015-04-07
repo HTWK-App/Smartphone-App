@@ -31,10 +31,8 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
 				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return; }
 
 					buildingFillBuildingsList(data);
-
 					loadingOut();
 					GLOBAL.INIT.builds = true;
 				})
@@ -50,11 +48,11 @@
 		function buildingFillBuildingsList(data) {
 
 			var lis = "";
-			var desc = "";
+			var desc;
 			
 			for(var k in data){
 				var building = data[k];
-				desc = building.description[0];
+				desc = isEmpty(building.description[0]) ? "" : building.description[0];
 				
 				lis +='<li data-bid='+building.id+'><a href="#" class="building">'+
 							'	<h3>'+building.fullName+'</h3>'+

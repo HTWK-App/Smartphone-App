@@ -12,15 +12,11 @@ function buildingLoadBuildingDetails(id) {
 	
 	$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)
 		.done(function(data, status, jqXHR) {
-			if(!isEmpty(data.exception))
-				{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 			var desc = "";
 		
-			for(var d in data.description){
-				if(!isEmpty(data.description[d]))
-					desc += data.description[d] + "</br>";
-			}
+			if(!isEmpty(data.description[0]))
+				desc += data.description[0] + "</br>";
 		
 			var div = '<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebäude" data-destination="'+data.latLng.replace(/ /, '')+'">'+
 								'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
