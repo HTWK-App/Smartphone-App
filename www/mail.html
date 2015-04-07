@@ -11,12 +11,12 @@
 			<ul id="mail_list" data-role="listview"></ul><br/><br/>
 			<a id="mail_btn_more" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-arrow-d">Mehr</a>
 		</div>
-		<div id="mail_sendForm">
-			<form>
-				<input type="email" data-clear-btn="false" name="mail_new_to" id="mail_new_to" value="" placeholder="Empfänger" />
-				<input type="text" name="mail_new_cc" id="mail_new_cc" value="" placeholder="Kopie an" />
-				<input type="text" name="mail_new_subject" id="mail_new_subject" value="" placeholder="Betreff" />
-				<textarea name="mail_new_content" id="mail_new_content" placeholder="Inhalt"></textarea>
+		<div>
+			<form id="mail_sendForm">
+				<input type="email" data-clear-btn="false" id="mail_new_to" value="" placeholder="Empfänger" required>
+				<input type="text" id="mail_new_cc" value="" placeholder="Kopie an" >
+				<input type="text" id="mail_new_subject" value="" placeholder="Betreff" required>
+				<textarea id="mail_new_content" placeholder="Ihr Text ..." required></textarea>
 			</form>
 		</div>
 
@@ -52,7 +52,7 @@
 			<ul>
 				<li><a id="btn_mail_abort" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-back">Abbrechen</a></li>
 				<li><a id="btn_mail_write" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-envelope">Neue Mail</a></li>
-				<li><a id="btn_mail_send" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-forward">Senden</a></li>
+				<li><button id="btn_mail_send" type="submit" form="mail_sendForm" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-forward">Senden</button></li>
 			</ul>
 		</div>
 	</div>
@@ -62,20 +62,22 @@
 			.on("pagecreate", function() {
 				$("#mail_popupDialog").trigger("create").enhanceWithin().popup();
 				$("#emailDialog").trigger("create").enhanceWithin().popup();
-			})
-			.on("pageshow", function() {
 				$("#mail_sendForm").hide();
 				$("#btn_mail_abort").hide();				
 				$("#btn_mail_send").hide();
 				$("#btn_refresh").off().on("click", function() {if(!isEmpty(CONFIG.AUTH.email)) initMailView(false); else emailDialogPopup();});
+			})
+			.on("pageshow", function() {
 				
 				if( isEmpty(CONFIG.AUTH.credentials))
 	    		openSignInDialog(function(){setTimeout(emailDialogPopup, 3000);});
 	    	else { 
 	    		if(isEmpty(CONFIG.AUTH.email))
 		    		emailDialogPopup();
-	    		else
-						initMailView(false);
+	    		else {
+	    			if(GLOBAL.INIT.mail === false)
+							initMailView(false);
+					}
 	    	}
 	    	
 	    	if(WURFL.is_mobile)
@@ -88,13 +90,9 @@
 		
 		$("#mail_btn_more").click(function () { if(!isEmpty(CONFIG.AUTH.email)) initMailView(true); else emailDialogPopup();});
 
-		$("#btn_mail_send").on("click", function() {
-			if(!isEmpty($("#mail_new_to").val()) && !isEmpty($("#mail_new_content").val()))
-				$("#mail_popupDialog").popup("open");
-			else {
-				loadingIn("Sie haben keinen Empfänger oder keinen Inhalt eingegeben!", true);
-				setTimeout(loadingOut, 3000);
-			}
+		$("#mail_sendForm").submit(function() {
+			event.preventDefault();
+			$("#mail_popupDialog").popup("open");
 		});
 
 		$("#btn_mail_really").on("click", function() {
