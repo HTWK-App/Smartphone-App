@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<title>HTWK App</title>
-		
-		<meta charset="UTF-8" />
-		<meta name="format-detection" content="telephone=no" />
-		<meta name="msapplication-tap-highlight" content="no" />
-		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+		<meta charset="UTF-8">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="msapplication-tap-highlight" content="no">
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
         
 		<link rel="stylesheet" type="text/css" href="css/HTWK-App.min.css">
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.icons.min.css">
@@ -19,7 +19,7 @@
 		<style> .map-canvas{ height: 250px; } </style>
 		
 	</head>
-	<script type="application/javascript" src="js/NewRelic.js"></script>
+	<script type="application/javascript" src="js/lib/NewRelic.js"></script>
 	<body>
 	
 		<!--- MENU -->
@@ -59,7 +59,6 @@
 			
 			<div role="main" class="ui-content">   
 				<ul class="nativeDroidCards">
-					<li id="PushNotification" data-cards-type='text' style="display: none;"></li>
 					<li id="mensaCard" data-cards-type='text'></li>
 					<li>
 						<h1>Wir suchen dich!</h1><hr/>
@@ -102,9 +101,7 @@
 		<script type="application/javascript" src="js/building.js"></script>
 		<script type="application/javascript" src="js/staff.js"></script>
 		<script type="application/javascript" src="js/gmaps.js"></script>
-		<script type="application/javascript" src="js/lib/PushNotification.js"></script>
 		<script type="application/javascript" src="js/lib/wurfl.js"></script>-->
-		<script type="application/javascript" src="js/pushnotification_support.min.js" defer></script>
 		<script type="application/javascript" src="//maps.google.com/maps/api/js?v=3.exp&sensor=true"></script> <!--TODO Download Script-->
 		
 		<script type="application/javascript" src="cordova.js"></script>
@@ -339,32 +336,6 @@
 				}while(!isEmpty(reps));
 
 				return string;
-			}
-			
-			function fillPushNotifictionCard(title, message, site){
-				
-				var div = "<h1>ServerInfo</h1><hr>";
-				div+= '<strong>'+title+'</strong>';
-				div+='<p>'+message+'</p>';
-				div+='<a href="#" style="clear:both;" data-role="button" onclick="hideCard(\'PushNotification\', \''+site+'\');">Okay...</a>';
-				$("#PushNotification")
-				.empty()
-				.append(div)
-				.trigger("create").show();
-				scrollToElement("PushNotification", -50);
-			}
-			
-			function scrollToElement(element, offset) {
-			    var myDivPos =offset + $("#"+element).offset().top;
-			    $.mobile.silentScroll( myDivPos );
-			}
-			
-			function hideCard(element, site){
-				$("#"+element).hide();
-				/*$.mobile.pageContainer.pagecontainer('change', site + ".html", {
-					transition: 'slide',
-					reload: true
-				});*/
 			}
 
 			function addhttp(url) {

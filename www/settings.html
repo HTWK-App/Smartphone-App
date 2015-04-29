@@ -25,10 +25,6 @@
 				</form>
 			</li>
 			<li>
-				<h1>PushNotifications</h1>
-				<a id="pushnotifications" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Pushnotifications einschalten</a>
-			</li>
-			<li>
 				<h1>News</h1><hr/>
 				<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
 				<select id="default_news_select" name="default_news_select">
@@ -70,7 +66,6 @@
 		 
 		$("#settings_page")
 		.on("pagecreate", function() {
-			updatePushButton();
 			settingsGetNewsFeeds();
 			settingsGetCanteens();
 			settingsFillFields();
@@ -78,7 +73,7 @@
 		.on("pageshow", function () {
 			loadingIn();
 		 	if(WURFL.is_mobile)
-			 	analytics.trackView('news');
+			 	analytics.trackView('settings');
 		});
 
 		/**
@@ -193,23 +188,5 @@
 			CONFIG.MENSA.defaultCanteen = $(this).val();
 			saveParameters();
 		});
-
-		$("#pushnotifications").on("click", function(){
-			if(!CONFIG.PUSH.enabled){
-				CONFIG.PUSH.enabled = true;
-				registerDevice();
-  		} else {
-				CONFIG.PUSH.enabled = false;
- 				unregisterDevice();
- 			}
-			updatePushButton();
-		});
-
-		function updatePushButton(){
-			if(CONFIG.PUSH.enabled)
-				$("#pushnotifications").text("Pushnotifications ausschalten");
-			else
-				$("#pushnotifications").text("Pushnotifications einschalten");
-		}
 	</script>
 </div>
