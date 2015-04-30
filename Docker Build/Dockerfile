@@ -27,7 +27,7 @@ RUN echo "y" | /home/cordova/android-sdk-linux/tools/android update sdk -u --all
 RUN cd /home/cordova/ && git clone https://github.com/HTWK-App/Smartphone-App.git
 WORKDIR /home/cordova/Smartphone-App
 
-ADD asset/script/build.sh /home/cordova/build.sh 
+ADD build.sh /home/cordova/build.sh
 
 RUN chmod +x /home/cordova/build.sh
 CMD /home/cordova/build.sh

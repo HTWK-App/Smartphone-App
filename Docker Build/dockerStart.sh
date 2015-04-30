@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo docker run -it --rm -v `pwd`:/home/cordova/APK/ cordova/htwk-app
+sudo docker run -it --rm  -v /tmp/:/home/cordova/APK/ cordova/htwk-app

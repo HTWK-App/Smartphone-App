@@ -12,4 +12,4 @@ cordova platform add android
 
 cordova build android --release
 
-cp /home/cordova/Smartphone-App/platforms/android/ant-build/MainActivity-release-unsigned.apk /home/cordova/APK/HTWKApp-release-unsigned.apk
+cp /home/cordova/Smartphone-App/platforms/android/build/outputs/apk/android-release-unsigned.apk /home/cordova/APK/HTWKApp-release-unsigned.apk
