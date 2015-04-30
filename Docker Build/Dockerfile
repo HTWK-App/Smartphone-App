@@ -1,11 +1,21 @@
 FROM ubuntu:14.04.2
 MAINTAINER Roy Meissner <rmeissn@gmail.com>
 
-# Install everything that is needed
+# Prevent some error messages
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get update && apt-get -y upgrade
+
+# ---------------- #
+#   Installation   #
+# ---------------- #
+
 RUN apt-get -y install openjdk-7-jdk
 RUN apt-get -y install git wget npm ant lib32stdc++6 lib32z1
-RUN apt-get clean
+
+# ----------------- #
+#   Configuration   #
+# ----------------- #
 
 # Fix NodeJS and install cordova
 RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g cordova@5.0.0
@@ -30,4 +40,16 @@ WORKDIR /home/cordova/Smartphone-App
 ADD build.sh /home/cordova/build.sh
 
 RUN chmod +x /home/cordova/build.sh
+
+# ----------- #
+#   Cleanup   #
+# ----------- #
+
+RUN apt-get autoremove -y wget && apt-get -y clean && \
+		rm -rf /var/lib/apt/lists/*
+		
+# -------- #
+#   Run!   #
+# -------- #
+
 CMD /home/cordova/build.sh
