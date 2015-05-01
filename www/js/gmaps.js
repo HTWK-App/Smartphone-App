@@ -21,7 +21,8 @@ var GMAPS = {
 			draggable : false,
 			keyboardShortcuts : false,
 			scrollwheel : false,
-			center: dest
+			center: dest,
+			zoom: 16
 		};
 		var map = new google.maps.Map(GMAPS.mapcontainer.find(".map-canvas")[0], mapOptions);
 		var marker = new google.maps.Marker({
