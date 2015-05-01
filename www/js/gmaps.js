@@ -5,16 +5,30 @@ var GMAPS = {
 	initGmap : function(dest, cont){
 		GMAPS.destination = dest;
 		GMAPS.mapcontainer = cont;
-
-		navigator.geolocation.getCurrentPosition(GMAPS.onGeoGetSuccess, GMAPS.onGeoGetFail, {timeout:30000, maximumAge: 7000, enableHighAccuracy: true});
+		var options = {timeout:30000, maximumAge: 7000, enableHighAccuracy: true};
+		
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(GMAPS.onGeoGetSuccess, GMAPS.onGeoGetFail, options);
+		} else {
+			GMAPS.onGeoGetFail();
+		}
 	},
 
-	onGeoGetFail : function(){
-		GMAPS.mapcontainer.find(".map-canvas").parent().empty().append("<p>Eine Karte kann nicht angezeigt werden, da die Ortsbestimmung fehgeschlagen ist.</p>");
+	onGeoGetFail : function(error){
+		var mapOptions = {
+			zoom: 7,
+			disableDefaultUI : true,
+			draggable : false,
+			keyboardShortcuts : false,
+			scrollwheel : false
+		};
+		var map = new google.maps.Map(GMAPS.mapcontainer.find(".map-canvas")[0], mapOptions);
+		var dest = new google.maps.LatLng(GMAPS.destination[0], GMAPS.destination[1]);
+		map.setCenter(dest);
+		//GMAPS.mapcontainer.find(".map-canvas").parent().empty().append("<p>Eine Karte kann nicht angezeigt werden, da die Ortsbestimmung fehgeschlagen ist.</p>");
 	},
 
 	onGeoGetSuccess : function(pos){
-
 		GMAPS.calcRoute([parseFloat(pos.coords.latitude), parseFloat(pos.coords.longitude)]);	
 	},
 
