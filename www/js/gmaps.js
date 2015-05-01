@@ -15,16 +15,19 @@ var GMAPS = {
 	},
 
 	onGeoGetFail : function(error){
+		var dest = new google.maps.LatLng(GMAPS.destination[0], GMAPS.destination[1]);
 		var mapOptions = {
-			zoom: 7,
 			disableDefaultUI : true,
 			draggable : false,
 			keyboardShortcuts : false,
-			scrollwheel : false
+			scrollwheel : false,
+			center: dest
 		};
 		var map = new google.maps.Map(GMAPS.mapcontainer.find(".map-canvas")[0], mapOptions);
-		var dest = new google.maps.LatLng(GMAPS.destination[0], GMAPS.destination[1]);
-		map.setCenter(dest);
+		var marker = new google.maps.Marker({
+				position: dest,
+		    map: map
+		});
 		//GMAPS.mapcontainer.find(".map-canvas").parent().empty().append("<p>Eine Karte kann nicht angezeigt werden, da die Ortsbestimmung fehgeschlagen ist.</p>");
 	},
 
