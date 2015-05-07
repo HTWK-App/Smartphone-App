@@ -111,19 +111,26 @@
 				"&to="+to+"&cc="+cc+ 
 				"&subject="+subject+"&message="+content+
 				"&from="+CONFIG.AUTH.email)
-			 .done(function(data, status, jqXHR) {
-			 
-					loadingOut();
-					if(!isEmpty(data.exception))
-						loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);
-					else
-						loadingIn("Ihre Mail wurde erfolgreich versendet!", true);
-						
-					setTimeout(loadingOut, 3000);
-					showMailInBox();
-				})
-			.fail(ajaxErrorHandler);
+			 .done(function(data, status, jqXHR) {emailWorkaround(data, false);})
+			.fail(function(jqxhr, textStatus, error){ //Hack, because the Server doesn't respond with an empty JSON object --> Can't check for exceptions on Server-Side, have to assume that everything is alright
+				console.log(jqxhr.status);
+				if(jqxhr.status == 200)
+					emailWorkaround(jqxhr, true);
+				else
+					ajaxErrorHandler();
+				});
 		});
+		
+		function emailWorkaround(data, jump){
+			loadingOut();
+			if(jump || isEmpty(data.exception))
+				loadingIn("Ihre Mail wurde erfolgreich versendet!", true);
+			else
+				loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);
+				
+			setTimeout(loadingOut, 3000);
+			showMailInBox();
+		}
 		//*************************************************
 		function emailDialogPopup() {
 			if(isEmpty(CONFIG.AUTH.email))
