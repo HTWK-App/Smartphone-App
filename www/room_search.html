@@ -47,8 +47,11 @@
 		 */
 		function startRoomFind() {
 
-			roomCount = roomCount + 1;			
-			navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+			roomCount = roomCount + 1;
+			if (navigator.geolocation)
+				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+			else
+				roomLocationError();
 		}
 
 		/**
@@ -66,7 +69,7 @@
 					badLocation[0] = true;
 					badLocation[1] = position.coords.accuracy;
 				}
-				loadingOut(); loadingIn(); roomCount = 0;
+				roomCount = 0;
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
 					 .done(function(data, status, jqXHR) {
@@ -84,7 +87,7 @@
 		 *
 		 */
 		function roomLocationError(){
-			loadingOut(); loadingIn(); roomCount = 0; badLocation[2] = true;
+			roomCount = 0; badLocation[2] = true;
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location=51.3131989,12.374164')
 			 .done(function(data, status, jqXHR) {
 				if(!isEmpty(data.exception))
