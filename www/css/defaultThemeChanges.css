@@ -1,6 +1,9 @@
 /* Custom changes to the default JQM theme */
 
 /************************** General style changes*/
+.ui-panel .fa-fw {
+	margin-right: 20px;
+}
 .ui-content {
 	padding: 7px;
 }
@@ -31,14 +34,15 @@ body, input, select, textarea, button, .ui-btn {
 
 .ui-page-theme-b .ui-header,
 .ui-page-theme-b .ui-header a,
-.ui-page-theme-b .ui-header a:active,
+.ui-page-theme-b .ui-header .ui-btn.ui-btn-active,
 .ui-page-theme-b .ui-header a:hover,
 .ui-page-theme-b .ui-header a:focus,
 .ui-page-theme-b .ui-footer,
 .ui-page-theme-b .ui-footer .ui-btn,
-.ui-page-theme-b .ui-footer .ui-btn:active,
-.ui-page-theme-b .ui-footer .ui-btn:hover {
-	background-color: #4285f4;/*#057de1;*/
+.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
+.ui-page-theme-b .ui-footer .ui-btn:hover,
+.ui-page-theme-b .ui-footer .ui-btn:focus {
+	background-color: #4285f4;
 	border-color: #4285f4;
 	color: white;
 	box-shadow: none;
@@ -94,6 +98,7 @@ body, input, select, textarea, button, .ui-btn {
 
 #canteen_nav {
 	margin-bottom: 12px;
+	border: none;
 }
 
 /************************** Timetable Dialog styling */
