@@ -1,6 +1,6 @@
-<div id="qis_page" data-role="page" data-title="QIS" data-dom-cache="true" data-theme='b'>
+<div id="qis_page" data-role="page" data-title="QIS" data-dom-cache="true" data-theme="b">
 
-  <div data-role="header" data-position="fixed" data-theme='b' data-tap-toggle="false" class="header">
+  <div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 		<a id="btn_refresh" href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-refresh fa-lg"></i></a>
@@ -21,9 +21,9 @@
 				if(isEmpty(CONFIG.AUTH.credentials))
 					openSignInDialog(initQISView);
 				else {
-					if(!GLOBAL.INIT.qis) loadingIn();	
+					if(!GLOBAL.INIT.qis) loadingIn();
 				}
-				
+
 				if(WURFL.is_mobile)
 					analytics.trackView('qis');
 			});
@@ -46,7 +46,7 @@
 					.fail(ajaxErrorHandler);
 			}
 		}
-		
+
 		/**
 		 * Fill QIS Collapsible Widget.
 		 *
@@ -55,19 +55,19 @@
 		function fillQIS(data) {
 			var sem, module;
 			var divs = "";
-			
+
 			if(!isEmpty(data)) {
 				for(var k in data) {
 					sem = data[k];
-					
+
 					divs += '<div id="sem'+sem.id+'" data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right">'+
 									'	<h4>'+sem.description+'</h4>';
-					
+
 					if(!isEmpty(sem.modules)) {
 						divs += '<ul class="nativeDroidCards">';
 	    					for(var l in sem.modules) {
 	    						module = sem.modules[l];
-	    						
+
 	    						divs += '<li >'+
 													'	<h1>'+module.title+'</h1><hr>'+
 													'	<p>'+
@@ -84,10 +84,10 @@
 										'	</li>'+
 										'</ul>';
 					}
-					
+
 					divs += '</ul></div>';
 				}
-				
+
 				$( "#qis_list" )
 					.empty()
 					.append(divs)

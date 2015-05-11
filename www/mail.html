@@ -1,10 +1,10 @@
-<div id="mail_page" data-dom-cache="true" data-title="Postfach" data-role="page" data-theme='b'>
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+<div id="mail_page" data-dom-cache="true" data-title="Postfach" data-role="page" data-theme="b">
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 		<a id="btn_refresh" href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-refresh fa-lg"></i></a>
 	</div>
-    
+
 	<div role="main" class="ui-content">
 		<div id="mail_inbox">
 			<br/>
@@ -20,7 +20,7 @@
 			</form>
 		</div>
 
-		<div data-role="popup" id="mail_popupDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+		<div data-role="popup" id="mail_popupDialog" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
 		    <div data-role="header" data-theme="a">
 			    <h2>Wirklich senden?</h2>
 		    </div>
@@ -31,14 +31,14 @@
 		    </div>
 		</div>
 	</div>
-	
+
 	<div id="emailDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
 	    <div data-role="header" data-theme="a">
 	   		<h2>E-Mail Adresse</h2>
 	   	</div>
       <div style="padding:10px 20px;">
 	 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie ihre E-Mail Adresse angeben! Ausschließlich eine HTWK E-Mail Adresse nach dem Muster:<br><br>Mitarbeiter: max.muster@htwk-leipzig.de<br>Studenten: max.muster@stud.htwk-leipzig.de<br><br>wird funktionieren.</h4>
-	 	 		
+
 	 	 		<form id="emailDialog_form">
 		 	 		<input type="email" id="emailDialog_inputEmail" placeholder="max.muster@stud.htwk-leipzig.de" value="" autofocus required>
 					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Speichern</button>
@@ -46,7 +46,7 @@
 				</form>
  	 		</div>
 		</div>
-	
+
 	<div id="mail_footer" data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
 		<div data-role="navbar">
 			<ul>
@@ -56,22 +56,22 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<script>
 		$( "#mail_page" )
 			.on("pagecreate", function() {
 				$("#mail_popupDialog").trigger("create").enhanceWithin().popup();
 				$("#emailDialog").trigger("create").enhanceWithin().popup();
 				$("#mail_sendForm").hide();
-				$("#btn_mail_abort").hide();				
+				$("#btn_mail_abort").hide();
 				$("#btn_mail_send").hide();
 				$("#btn_refresh").off().on("click", function() {if(!isEmpty(CONFIG.AUTH.email)) initMailView(false); else emailDialogPopup();});
 			})
 			.on("pageshow", function() {
-				
+
 				if( isEmpty(CONFIG.AUTH.credentials))
 	    		openSignInDialog(function(){setTimeout(emailDialogPopup, 3000);});
-	    	else { 
+	    	else {
 	    		if(isEmpty(CONFIG.AUTH.email))
 		    		emailDialogPopup();
 	    		else {
@@ -79,15 +79,15 @@
 							initMailView(false);
 					}
 	    	}
-	    	
+
 	    	if(WURFL.is_mobile)
 		    	analytics.trackView('mail');
 			 });
 
 		$("#btn_mail_write").on("click", function() { if(!isEmpty(CONFIG.AUTH.email)) showMailSendForm(false); else emailDialogPopup();});
-		
+
 		$("#btn_mail_abort").on("click", showMailInBox);
-		
+
 		$("#mail_btn_more").click(function () { if(!isEmpty(CONFIG.AUTH.email)) initMailView(true); else emailDialogPopup();});
 
 		$("#mail_sendForm").submit(function() {
@@ -100,15 +100,15 @@
 			var cc = $("#mail_new_cc").val();
 			var subject = $("#mail_new_subject").val();
 			var content = $("#mail_new_content").val();
-			
+
 			cc = isEmpty(cc) ? "" : cc.match(GLOBAL.MAIL.filter).toString();
-			
+
 			$("#mail_popupDialog").popup("close");
-			
+
 			loadingIn("Ihre Mail wird versendet ...");
 			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+
-				"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+ 
-				"&to="+to+"&cc="+cc+ 
+				"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+
+				"&to="+to+"&cc="+cc+
 				"&subject="+subject+"&message="+content+
 				"&from="+CONFIG.AUTH.email)
 			 .done(function(data, status, jqXHR) {emailWorkaround(data, false);})
@@ -120,14 +120,14 @@
 					ajaxErrorHandler();
 				});
 		});
-		
+
 		function emailWorkaround(data, jump){
 			loadingOut();
 			if(jump || isEmpty(data.exception))
 				loadingIn("Ihre Mail wurde erfolgreich versendet!", true);
 			else
 				loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);
-				
+
 			setTimeout(loadingOut, 3000);
 			showMailInBox();
 		}
@@ -136,7 +136,7 @@
 			if(isEmpty(CONFIG.AUTH.email))
 				$("#emailDialog").popup("open", { positionTo: "window", transition: "pop" });
 		}
-		
+
 		$("#emailDialog_form").submit(function (event){
 			event.preventDefault();
 			CONFIG.AUTH.email = $("#emailDialog_inputEmail").val();
@@ -144,7 +144,7 @@
 			$( "#emailDialog" ).popup("close");
 			initMailView(false);
 		});
-		
+
 		$("#emailDialog_abort").on("click", function() {
 			$( "#emailDialog" ).popup("close");
 			$( "#panelMenu" ).panel("open");
@@ -152,17 +152,17 @@
 
 		/**
 		 * Handler for Answering Mails, called by Answer-Button.
-		 * 
+		 *
 		 * @param Event-Object e ... Click-Event
 		 */
 		function answerMail(e) {
 			var tmp = $(e.target).parent();
 			var from = tmp.find("span.mail-from").text().match(GLOBAL.MAIL.filter);
 			var subj = tmp.find("span.mail-subject").text();
-			
+
 			$("#mail_new_to").val(from);
 			$("#mail_new_subject").val("Re: "+subj);
-			
+
 			history.back();
 			showMailSendForm(true);
 		};
@@ -170,10 +170,10 @@
 		/**
 		 * Display Mail Inbox.
 		 */
-		function showMailInBox() {	
+		function showMailInBox() {
 			$("#mail_sendForm").hide();
 			$("#mail_inbox").show();
-			
+
 			$("#btn_refresh").show();
 			$("#btn_mail_abort").hide();
 			$("#btn_mail_write").show();
@@ -190,10 +190,10 @@
 			$("#mail_new_cc").val("");
 			if(!answer) $("#mail_new_subject").val("");
 			$("#mail_new_content").val("");
-			
+
 			$("#mail_inbox").hide();
 			$("#mail_sendForm").show();
-			
+
 			$("#btn_refresh").hide();
 			$("#btn_mail_abort").show();
 			$("#btn_mail_write").hide();
@@ -202,23 +202,23 @@
 
 		/**
 		 * Loading the Mails.
-		 * 
+		 *
 		 * @param Boolean more ... indicates whether additional Mails should be loaded
 		 */
 		function initMailView(more) {
 			var offset = 0;
 			var remove = true;
-			
-			if(more == true) { 
+
+			if(more == true) {
 				remove = false;
 				offset = $('#mail_list li a').length;
 			}
-			
+
 			if(!isEmpty(CONFIG.AUTH.credentials)) {
 				loadingIn();
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg, {
-					credentials: CONFIG.AUTH.credentials, 
-					salt: CONFIG.AUTH.salt, 
+					credentials: CONFIG.AUTH.credentials,
+					salt: CONFIG.AUTH.salt,
 					offset: offset}
 				)
 				.done(function(data, status, jqXHR) {
@@ -235,21 +235,21 @@
 				.fail(ajaxErrorHandler);
 			}
 		};
-		
+
 		function fillMailList(data, remove) {
 			var mail, sdate = new Date(0);
 			var lis = "";
 			var divs = $();
-			
+
 			var body = $("body");
 			var list = $("#mail_list");
-			
+
 			if(!isEmpty(data)) {
 				if(remove) {
 					list.empty();
 					body.find("div.maildetails").remove();
 				}
-				
+
 				for(var k in data) {
 					mail = data[k];
 
@@ -257,13 +257,13 @@
 					// CEST is Summer UTC +2h -> for reference see http://www.timeanddate.com/library/abbreviations/timezones/eu/cest.html
 					// CET is Winter UTC +1h -> for reference see http://www.timeanddate.com/library/abbreviations/timezones/eu/cet.html
 					mail.sendDate = new Date(mail.sendDate.replace(/CEST/, "+0200").replace(/CET/, "+0100"));
-					
+
 					lis += createMailEntry(mail, sdate);
 					divs = divs.add(createMailDetails(mail));
-					
+
 					sdate = mail.sendDate;
 				}
-				
+
 				list.append(lis)
 					.find("li")
 					.removeClass("ui-last-child")
@@ -271,38 +271,38 @@
 					.last().addClass("ui-last-child").end()
 					.end()
 					.trigger("create");
-				
+
 				body.append(divs).trigger("create");
 			}
 		};
 
 		/**
 		 * Creating Mail-List Entry for given Mail.
-		 * 
+		 *
 		 * @param Object mail ... Mail Data
 		 * @param Date sdate ... Sending Date of last processed Mail
-		 * 
+		 *
 		 * @return String
 		 */
 		function createMailEntry(mail, sdate) {
 			var li = "";
 			var time = mail.sendDate.getHours()+":"+mail.sendDate.getMinutes();
-			
+
 			if(sdate.getTime()!=mail.sendDate.getTime())
 				li += '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count">'+createDateStamp(mail.sendDate)+'</li>';
-			
+
 			li += '<li><a href="#mail_'+mail.id+'" class="ui-btn ui-btn-icon-right ui-icon-carat-r">'+
 						'	<h2>'+mail.subject+'</h2>'+
 						'	<p><strong>'+escape(mail.from)+'</strong></p>'+
 						'	<p class="ui-li-aside"><strong>'+time+'</strong></p>'+
 						'</a></li>';
-			
+
 			return li;
 		};
-		
+
 		/**
 		 * Creating Mail-Details for given Mail.
-		 * 
+		 *
 		 * @param Object mail ... Mail Data
 		 */
 		function createMailDetails(mail) {
@@ -310,15 +310,15 @@
 			var div, msg;
 
 			from = escape(mail.from);
-			
+
 			subj = escape(mail.subject);
-			
+
 			toList = mail.toList?mail.toList.toString():"";
 			toList = toList.replace(/[;:]/g, "").split(",").toString();
 			toList = escape(toList);
-			
+
 			msg = 	'<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">'+mail.message+'</pre></div>';
-			
+
 			div = $('<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="b">'+
 							'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
 							'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
@@ -336,9 +336,9 @@
 							'		</ul>'+
 							'	</div>'+
 							'</div>');
-			
+
 			div.find("a.btn_mail_answer").click(answerMail);
-			
+
 			return div;
 		};
 	</script>

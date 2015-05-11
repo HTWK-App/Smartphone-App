@@ -1,13 +1,13 @@
-<div id="sport_page" data-role="page" data-title="Sportangebote" data-dom-cache="true" data-theme='b'>
+<div id="sport_page" data-role="page" data-title="Sportangebote" data-dom-cache="true" data-theme="b">
 
-	<div data-role="header" data-position="fixed" data-theme='b' data-tap-toggle="false" class="header">
+	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
-    
+
 	<div role="main" class="ui-content">
 		<ul id="sport_content_list" data-role="listview" data-filter-placeholder="Suche Sportangebot..." data-filter="true" >
-		</ul>	
+		</ul>
 	</div>
 
 	<script>
@@ -32,18 +32,18 @@
 						{ ajaxErrorHandler(data, status, jqXHR); return; }
 
 				 	var sport, lis = "";
-					
-					if(!isEmpty(data)){				
+
+					if(!isEmpty(data)){
 						for(var k in data){
 							sport = data[k];
-							
+
 							lis += 	'<li data-sport='+sport.id+'><a href="#" class="sport">'+
 										'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+sport.id+'/pic" height="64" width="64"/>'+
 										'<h3>'+sport.title+'</h3>'+
 										'<p>'+sport.description+'</p>'+
 									'</a></li>';
 						}
-						
+
 						$( "#sport_content_list" )
 							.off()
 							.empty()
@@ -52,12 +52,12 @@
 							.trigger("create")
 							.listview("refresh")
 							.trigger("updatelayout");
-						
+
 						$( "body" )
 							.find("div.sportdetails")
 							.remove();
 					}
-				
+
 					loadingOut();
 					GLOBAL.INIT.sport = true;
 				})
@@ -71,7 +71,7 @@
     	 */
 		function loadSportDetails(e) {
 			var id = $(e.target).parents("li").first().data("sport");
-			
+
 			// already cached?
 			if($("#sport_"+id).length > 0) {
 				$.mobile.initializePage();
@@ -80,7 +80,7 @@
 			}
 
 			loadingIn();
-			
+
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport+"/"+id)
 				.done(function(data, status, jqXHR) {
 					if(!isEmpty(data.exception))
@@ -91,7 +91,7 @@
 						setTimeout(loadingOut, 3000);
 						return;
 					}
-				
+
 	    			var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="b">'+
 											'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
 											'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
@@ -119,17 +119,17 @@
 											'			</li>'+
 											'			<li>'+
 											'				<h1>Hinweise</h1><hr/>';
-				
+
     					if(!isEmpty(data.hints)){
     						div += '<ul>';
-    					
+
     						for(var k in data.hints){
     							div += '<li>'+data.hints[k]+'</li>';
     						}
-    					
+
     						div += '</ul>';
     					}
-					
+
 	    				div += 		'</li>'+
 								'</ul>'+
 								'</div>'+
@@ -138,15 +138,15 @@
 
 					div = $(div);
 					div.find("div[data-role='content'] a").addClass("external");
-				
+
 	    			$( "body" )
 						.append(div)
 						.trigger("create");
 				div.on("pagehide",function(){$(this).remove();});
-				
+
 	    			$.mobile.initializePage();
 	    			$.mobile.changePage("#sport_"+id);
-				
+
 	    			loadingOut();
 			 	})
 				.fail(ajaxErrorHandler);
