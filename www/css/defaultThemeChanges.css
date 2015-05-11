@@ -32,11 +32,12 @@ body, input, select, textarea, button, .ui-btn {
 
 /************************** Header/Footer styling */
 
-.ui-page-theme-b .ui-header,
+.ui-page-theme-b .ui-bar-b,
 .ui-page-theme-b .ui-header a,
 .ui-page-theme-b .ui-header .ui-btn.ui-btn-active,
 .ui-page-theme-b .ui-header a:hover,
 .ui-page-theme-b .ui-header a:focus,
+a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 .ui-page-theme-b .ui-footer,
 .ui-page-theme-b .ui-footer .ui-btn,
 .ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
