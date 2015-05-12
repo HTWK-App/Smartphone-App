@@ -319,8 +319,8 @@ function ajaxErrorHandler(data, status, jqXHR, callback){
 	loadingOut();
 	var text = "Leider ist ein Fehler aufgetreten. Versuchen Sie es später erneut!";
 	loadingIn(text,true);
-	$( "#menu" ).panel( "open");
 	setTimeout(loadingOut, 4000);
+	setTimeout(function(){ $( "#panelMenu" ).panel( "open");}, 4500);
 	if($.isFunction(callback))
 		callback.call(this);
 }

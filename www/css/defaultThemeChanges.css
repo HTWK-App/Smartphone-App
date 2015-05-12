@@ -1,6 +1,9 @@
 /* Custom changes to the default JQM theme */
 
 /************************** General style changes*/
+.ui-panel .fa-fw {
+	margin-right: 20px;
+}
 .ui-content {
 	padding: 7px;
 }
@@ -27,55 +30,40 @@ body, input, select, textarea, button, .ui-btn {
 	text-shadow: none;
 }
 
-/************************** Header styling */
+/************************** Header/Footer styling */
 
-.ui-page-theme-b .ui-header a, 
+.ui-page-theme-b .ui-bar-b,
+.ui-page-theme-b .ui-header a,
 .ui-page-theme-b .ui-header .ui-btn.ui-btn-active,
-.ui-page-theme-b .ui-header a:hover {
-	background-color: #057de1;
-	border-color: #057de1;
+.ui-page-theme-b .ui-header a:hover,
+.ui-page-theme-b .ui-header a:focus,
+a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
+.ui-page-theme-b .ui-footer,
+.ui-page-theme-b .ui-footer .ui-btn,
+.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
+.ui-page-theme-b .ui-footer .ui-btn:hover,
+.ui-page-theme-b .ui-footer .ui-btn:focus {
+	background-color: #4285f4;
+	border-color: #4285f4;
+	color: white;
+	box-shadow: none;
+	border: none;
 }
 
 .ui-page-theme-b .ui-header .ui-title {
 	text-align: left;
 	padding-left: 50px;
-	margin-left: 0%;
+	margin-left: 0;
 }
-
-/************************** Footer styling */
 
 .ui-page-theme-b .ui-footer .ui-title {
 	margin-right: 10%;
 	margin-left: 10%;
 }
 
-.ui-footer .ui-select .ui-btn,
-.ui-footer .ui-select .ui-btn:active,
-.ui-footer .ui-select .ui-btn:hover,
-.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
-html .ui-footer .ui-btn.ui-btn-active {
-	background-color: #057de1;
-	border-color: #057de1;
+.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active{
+	background-color: #3174e3;
 	color: white;
-	border: none;
-	box-shadow: none;
-}
-
-.ui-page-theme-b .ui-footer .ui-btn,
-.ui-page-theme-b .ui-footer .ui-btn:active,
-.ui-page-theme-b .ui-footer .ui-btn:hover,
-html .ui-footer .ui-btn,
-.ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
-html .ui-footer .ui-btn.ui-btn-active {
-	background-color: #057de1;
-	border-color: #057de1;
-	color: white;
-	border: none;
-	box-shadow: none;
-}
-
-.ui-page-theme-b .ui-footer .ui-checkbox .ui-btn-active {
-	background-color: #158df1;
 }
 
 .ui-footer .ui-field-contain {
@@ -90,7 +78,7 @@ html .ui-footer .ui-btn.ui-btn-active {
 	top: 1px;
 	left: 0;
 	right: 0;
-	bottom: 0px;
+	bottom: 0;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
 }
@@ -98,8 +86,8 @@ html .ui-footer .ui-btn.ui-btn-active {
 #overlayer {
 	position: fixed;
 	z-index: 1000;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	height: 100%;
 	width: 100%;
 	background-color: #000000;
@@ -111,6 +99,7 @@ html .ui-footer .ui-btn.ui-btn-active {
 
 #canteen_nav {
 	margin-bottom: 12px;
+	border: none;
 }
 
 /************************** Timetable Dialog styling */
@@ -142,7 +131,7 @@ html .ui-footer .ui-btn.ui-btn-active {
 
 .map-canvas {
 	height: 250px;
-	width: 100%; 
+	width: 100%;
 	height: 80%;
 }
 
@@ -176,7 +165,7 @@ html .ui-footer .ui-btn.ui-btn-active {
 
 .nativeDroidCards > li {
 	border: 1px solid rgba(255,255,255,0.1);
-	box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 	background-color: #ffffff;
 }
 
@@ -184,9 +173,13 @@ html .ui-footer .ui-btn.ui-btn-active {
 
 .ui-page-theme-b .nativeDroidCards li > .ui-btn,
 .ui-page-theme-b .nativeDroidCards li > .ui-btn.ui-btn-b,
+.ui-page-theme-b .nativeDroidCards li > .ui-btn:hover,
 .ui-page-theme-b .nativeDroidCards li p > .ui-btn,
-.ui-page-theme-b .nativeDroidCards li p > .ui-btn.ui-btn-b {
-	color: #24a3d2;
+.ui-page-theme-b .nativeDroidCards li p > .ui-btn.ui-btn-b,
+.ui-page-theme-b .nativeDroidCards li p > .ui-btn:hover,
+.ui-page-theme-b .nativeDroidCards li form button,
+.ui-page-theme-b .nativeDroidCards li form button:hover {
+	color: #4285f4;
 	background-color: #ffffff;
 	border: none;
 	border-radius: 0;
@@ -207,14 +200,14 @@ html .ui-footer .ui-btn.ui-btn-active {
 		margin-right: 0.9%;
 		width: 46%;
 	}
-	
+
 	.nativeDroidCards > li:nth-child(2n+1) {
 		clear: both;
 	}
 }
 
 .nativeDroidCards > li {
-	top: 0px;
+	top: 0;
 	position: relative;
 	display: block;
 	padding: 10px;
@@ -230,16 +223,8 @@ html .ui-footer .ui-btn.ui-btn-active {
 
 .nativeDroidCards {
 	list-style: none;
-	padding: 0px 0px 0px 0px;
-	margin: 0px 0px 0px 0px;
-	perspective: 500;
-	-webkit-perspective: 500;
-}
-
-.nativeDroidCards {
-	list-style: none;
-	padding: 0px 0px 0px 0px;
-	margin: 0px 0px 0px 0px;
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
 	perspective: 500;
 	-webkit-perspective: 500;
 }
@@ -255,14 +240,14 @@ html .ui-footer .ui-btn.ui-btn-active {
 
 .nativeDroidCards > li h1 {
 	font-size: 18px;
-	padding: 0px;
+	padding: 0;
 	margin: auto;
 	word-wrap: break-word;
 }
 
 .nativeDroidCards > li h2 {
 	font-size: 10px;
-	padding: 0px;
+	padding: 0;
 	margin: auto;
 	word-wrap: break-word;
 }

@@ -1,10 +1,10 @@
-﻿<div id="building_page" data-role="page" data-title="Gebäudeplan" data-theme='b' data-dom-cache="true">
+﻿<div id="building_page" data-role="page" data-title="Gebäudeplan" data-theme="b" data-dom-cache="true">
 
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
-    
+
 	<div role="main" class="ui-content">
 		<ul id="buidling_content_list" data-role="listview" data-filter-placeholder="Suche Gebäude..." data-filter="true">
 		</ul>
@@ -38,7 +38,7 @@
 				})
 				.fail(ajaxErrorHandler);
 		}
-		
+
 		/**
 		 * Fills the building list widget.
 		 *
@@ -49,18 +49,18 @@
 
 			var lis = "";
 			var desc;
-			
+
 			for(var k in data){
 				var building = data[k];
 				desc = isEmpty(building.description[0]) ? "" : building.description[0];
-				
+
 				lis +='<li data-bid='+building.id+'><a href="#" class="building">'+
 							'	<h3>'+building.fullName+'</h3>'+
 							'	<p>'+desc+'</p>'+
 							'	<p>'+building.address+'</p>'+
 							'</a></li>';
 			}
-				
+
 			$( "#buidling_content_list" )
 				.off()
 				.empty()
@@ -68,7 +68,7 @@
 				.on("click", "a.building", function (){buildingLoadBuildingDetails($(this).parents("li").first().data("bid"));})
 				.listview("refresh")
 				.trigger("updatelayout");
-			
+
 			$( "body" )
 				.find("div.buildingdetails")
 				.remove();

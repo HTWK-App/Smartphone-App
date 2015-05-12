@@ -1,6 +1,6 @@
-﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme='b'>
+﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme="b">
 
-  <div data-role="header" data-position="fixed" data-theme='b' data-tap-toggle="false" class="header">
+  <div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
@@ -23,10 +23,6 @@
 			 	 		<input type="email" id="settings_input_email" value="" placeholder="max.muster@stud.htwk-leipzig.de" required>
 					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
 				</form>
-			</li>
-			<li>
-				<h1>PushNotifications</h1>
-				<a id="pushnotifications" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Pushnotifications einschalten</a>
 			</li>
 			<li>
 				<h1>News</h1><hr/>
@@ -56,7 +52,7 @@
 		<div role="main" class="ui-content">
 			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
 			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
-			<br> 
+			<br>
 			<a id="settings_timetable_delete" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Löschen</a>
 			<a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</a>
 		</div>
@@ -67,10 +63,9 @@
 		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
 		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
 		 */
-		 
+
 		$("#settings_page")
 		.on("pagecreate", function() {
-			updatePushButton();
 			settingsGetNewsFeeds();
 			settingsGetCanteens();
 			settingsFillFields();
@@ -78,7 +73,7 @@
 		.on("pageshow", function () {
 			loadingIn();
 		 	if(WURFL.is_mobile)
-			 	analytics.trackView('news');
+			 	analytics.trackView('settings');
 		});
 
 		/**
@@ -110,7 +105,7 @@
 					.empty()
 					.append(opts)
 					.selectmenu("refresh");
-					
+
 				loadingOut();
 			})
 			.fail(ajaxErrorHandler);
@@ -141,7 +136,7 @@
 					.empty()
 					.append(opts)
 					.selectmenu("refresh");
-					
+
 			})
 			.fail(ajaxErrorHandler);
 		}
@@ -156,19 +151,19 @@
 
 			if (!isEmpty(CONFIG.AUTH.username))
 				$("#settings_input_username").val(CONFIG.AUTH.username);
-				
+
 			if (!isEmpty(CONFIG.AUTH.email))
 				$("#settings_input_email").val(CONFIG.AUTH.email);
 		}
-		 
+
 		$("#settings_loginForm").submit(function (event){
 			event.preventDefault();
 			saveUsernamePassword($("#settings_input_username").val(), $("#settings_input_password").val());
 		});
-			
+
 		$("#settings_emailForm").submit(function (event){
 			event.preventDefault();
-			
+
 			CONFIG.AUTH.email = $("#settings_input_email").val();
 			saveParameters();
 			loadingIn("Ihre neue E-Mail Adresse wurde gespeichert!", true);
@@ -193,23 +188,5 @@
 			CONFIG.MENSA.defaultCanteen = $(this).val();
 			saveParameters();
 		});
-
-		$("#pushnotifications").on("click", function(){
-			if(!CONFIG.PUSH.enabled){
-				CONFIG.PUSH.enabled = true;
-				registerDevice();
-  		} else {
-				CONFIG.PUSH.enabled = false;
- 				unregisterDevice();
- 			}
-			updatePushButton();
-		});
-
-		function updatePushButton(){
-			if(CONFIG.PUSH.enabled)
-				$("#pushnotifications").text("Pushnotifications ausschalten");
-			else
-				$("#pushnotifications").text("Pushnotifications einschalten");
-		}
 	</script>
 </div>

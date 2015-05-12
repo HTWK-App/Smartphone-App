@@ -1,10 +1,10 @@
-<div id="room_page" data-role="page" data-title="Raumsuche" data-theme='b'>
+<div id="room_page" data-role="page" data-title="Raumsuche" data-theme="b">
 
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme='b' class="header">
+	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
 		<h1>HTWK App</h1>
 	</div>
-    
+
 	<div role="main" class="ui-content">
 		<br/>
 		<p>
@@ -38,8 +38,7 @@
 				fillRoomList($(this).val());
 			});
 
-		var roomCount = 0;
-		var badLocation = [false,0,false]; // yes/no, accuracy, locationError
+		var badLocation = false;
 
 		/**
 		 * Starts looking for empty rooms. Gets geolocation and runs on success locationFound, on fail locationError
@@ -47,8 +46,10 @@
 		 */
 		function startRoomFind() {
 
-			roomCount = roomCount + 1;			
-			navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 7000, timeout: 30000, enableHighAccuracy: true });
+			if (navigator.geolocation)
+				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 10000, timeout: 7000, enableHighAccuracy: true }); //in milliseconds
+			else
+				roomLocationError();
 		}
 
 		/**
@@ -58,15 +59,6 @@
 		 *
 		 */
 		function roomLocationFound(position){
-
-			if(roomCount <= 30 && position.coords.accuracy > 30) { // in m
-				startRoomFind();
-			}else{
-				if(roomCount > 30){
-					badLocation[0] = true;
-					badLocation[1] = position.coords.accuracy;
-				}
-				loadingOut(); loadingIn(); roomCount = 0;
 
 				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
 					 .done(function(data, status, jqXHR) {
@@ -84,7 +76,7 @@
 		 *
 		 */
 		function roomLocationError(){
-			loadingOut(); loadingIn(); roomCount = 0; badLocation[2] = true;
+			badLocation = true;
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location=51.3131989,12.374164')
 			 .done(function(data, status, jqXHR) {
 				if(!isEmpty(data.exception))
@@ -106,7 +98,7 @@
 			var tmp, name, id, opts;
 
 			opts = "";
-			
+
 			for(var k in data){
 				id = data[k].id;
 				tmp = "";
@@ -115,9 +107,9 @@
 				if(k === 0)
 					tmp = 'selected="selected"';
 
-				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>'; 
-			}	
-			
+				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>';
+			}
+
 			$( "#building_select" )
 				.empty()
 				.append(opts)
@@ -158,21 +150,17 @@
 										'	<h3>Leider sind keine Räume frei!</h3>'+
 										'</li>';
 					}
-	
+
 					$( "#room_room_list" )
 						.empty()
 						.append(lis)
 						.trigger("updatelayout");
 
 					loadingOut();
-					if(badLocation[0] === true){
-						loadingIn("Ihre Position konnte nur auf "+badLocation[1]+"m genau bestimmt werden. Bitte haben Sie Verständnis für etwaige Ungenauigkeiten.", true);
-						setTimeout(loadingOut, 5000);
-						badLocation[0] = false;
-					} else if(badLocation[2] === true){
+					if(badLocation === true){
 						loadingIn("Ihre Position konnte NICHT bestimmt werden. Es wird vom Standort der HTWK ausgegangen.", true);
 						setTimeout(loadingOut, 4000);
-						badLocation[2] = false;
+						badLocation = false;
 					}
 				 })
 				 .fail(ajaxErrorHandler);
