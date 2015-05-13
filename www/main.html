@@ -102,6 +102,7 @@
 		<script type="application/javascript" src="js/gmaps.js"></script>
 		<script type="application/javascript" src="js/lib/wurfl.js"></script>-->
 		<script type="application/javascript" src="//maps.google.com/maps/api/js?v=3.exp&sensor=true"></script> <!--TODO Download Script-->
+		<script type="application/javascript" src="js/PushSupport.js"></script>
 
 		<script type="application/javascript" src="cordova.js"></script>
 
@@ -112,7 +113,6 @@
 			$.ajaxSetup(CONFIG.AJAX);
 
 			var pushNotification;
-
 			// GENERAL Setup
 			$( document )
 				.ready(function() {
@@ -124,29 +124,17 @@
 					$.mobile.buttonMarkup.hoverDelay = 0;
 					$.mobile.changePage.defaults.allowSamePageTransition = true;
 
-					// swipe Event
-					/*GLOBAL.SCREEN.height = window.screen.height;
-					GLOBAL.SCREEN.width = window.screen.width;
-					$.event.special.swipe.scrollSupressionThreshold=Math.round(0.3*GLOBAL.SCREEN.width);
-					$.event.special.swipe.horizontalDistanceThreshold = 20; // Swipe horizontal displacement must be more than this.
-					$.event.special.swipe.durationThreshold = 200;  // More time than this, and it isn't a swipe.
-					$.event.special.swipe.verticalDistanceThreshold = 75; // Swipe vertical displacement must be less than this.
-					//$.event.special.swipe.durationThreshold=1000;
-					//$.event.special.swipe.horizontalDistanceThreshold=Math.round(0.2*GLOBAL.SCREEN.width);
-					//$.event.special.swipe.verticalDistanceThreshold=Math.round(GLOBAL.SCREEN.height);*/
-
 					GLOBAL.DATE.currentWeek = getWeek(new Date());
 					$("#signInDialog").trigger("create").enhanceWithin().popup();
-
+				})
+				.on("deviceready", function() {
 					if(WURFL.is_mobile){
+						navigator.splashscreen.hide();
 						analytics.startTrackerWithId('UA-49336195-2');
 						analytics.trackView('index');
 					}
-				})
-				.on("deviceready", function() {
-					if(WURFL.is_mobile)
-						navigator.splashscreen.hide();
-						pushNotification = window.plugins.pushNotification;
+					pushNotification = window.plugins.pushNotification;
+					registerPush();
 				})
 				// Header Update on Page Switch
 				.on("pageshow", "div:jqmData(role='page')", function() {
