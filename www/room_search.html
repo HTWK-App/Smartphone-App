@@ -60,15 +60,14 @@
 		 */
 		function roomLocationFound(position){
 
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
-					 .done(function(data, status, jqXHR) {
-						if(!isEmpty(data.exception))
-							{ ajaxErrorHandler(data, status, jqXHR); return; }
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location='+position.coords.latitude+','+position.coords.longitude)
+			 .done(function(data, status, jqXHR) {
+				if(!isEmpty(data.exception))
+					{ ajaxErrorHandler(data, status, jqXHR); return; }
 
-						fillBuildingsList(data);
-					 })
-					 .fail(ajaxErrorHandler);
-			}
+				fillBuildingsList(data);
+			 })
+			 .fail(ajaxErrorHandler);
 		}
 
 		/**
