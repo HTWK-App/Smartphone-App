@@ -34,7 +34,7 @@ RUN cd /home/cordova/ && \
 
 RUN echo "y" | /home/cordova/android-sdk-linux/tools/android update sdk -u --all --filter platform-tools,android-22,build-tools-22.0.1
 
-RUN cd /home/cordova/ && git clone https://github.com/HTWK-App/Smartphone-App.git
+RUN cd /home/cordova/ && mkdir Smartphone-App
 WORKDIR /home/cordova/Smartphone-App
 
 ADD build.sh /home/cordova/build.sh
@@ -47,7 +47,7 @@ RUN chmod +x /home/cordova/build.sh
 
 RUN apt-get autoremove -y wget && apt-get -y clean && \
 		rm -rf /var/lib/apt/lists/*
-		
+
 # -------- #
 #   Run!   #
 # -------- #

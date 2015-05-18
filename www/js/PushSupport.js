@@ -1,101 +1,92 @@
+// This Code is Android/Amazon-FireOS ONLY!!!
+
 function registerPush(){
-	try {
+	if(CONFIG.PUSH.registered === false && CONFIG.PUSH.enabled === true){
 		if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
 			pushNotification.register(
 				pushSuccessHandler,
 				pushErrorHandler,
-				{ "senderID":"1058861665734",
-					"ecb":"onNotification"
-				});
-		} else {
-			pushNotification.register(
-				pushSuccessHandler,
-				pushErrorHandler,
-				{	"badge":"true",
-	        "sound":"true",
-	        "alert":"true",
-					"ecb":"onNotification"
+				{ "senderID": CONFIG.PUSH.senderId,
+					"ecb":"onNotificationGCM"
 				});
 		}
-	} catch(err) { alert(err.message); }
+	}
 }
 
-function pushSuccessHandler (result) {
-	alert('result = ' + result);
-	//Push REGID to server
-}
+// result contains a description text returned from the plugin call
+function pushSuccessHandler (result) {}
 
 // result contains any error description text returned from the plugin call
 function pushErrorHandler (error) {
-	alert('error = ' + error);
+	// Fail silently --> User can't do anything
 }
 
 // Android and Amazon Fire OS
-function onNotification(e) {
+function onNotificationGCM(e) {
 
 	switch( e.event ){
+
 		case 'registered':
 			if ( e.regid.length > 0 ){
-				// Your GCM push server needs to know the regID before it can push to this device
-				// here is where you might want to send it the regID for later use.
-				console.log("regID = " + e.regid);
-				deviceRegistered(e.regid);
+				$.ajax({
+					method: "PUT",
+					data: JSON.stringify({regid: e.regid}),
+					url: CONFIG.SERVER.base + CONFIG.SERVER.pushnotification + "regid/" + e.regid,
+					})
+				 .done(function(data, textstatus, jqXHR) {
+						CONFIG.PUSH.regid = e.regid;
+						CONFIG.PUSH.registered = true;
+					})
+					.fail(function(jqxhr, textstatus, error) {
+						//jqxhr.status: 409 - Regid is already made available to the server
+						// Fail silently --> User can't do anything
+					});
 			}
 			break;
 
 		case 'message':
-			// if this flag is set, this notification happened while we were in the foreground.
-			// you might want to play a sound to get the user's attention, throw up a dialog, etc.
-			if ( e.foreground )	{
-				console.log("Foreground Push");
 
-			}	else {  // otherwise we were launched because the user touched a notification in the notification tray.
+			if ( e.foreground )	{
+				// notification happened while we were in the foreground. Push will be 	processed immediatly
+				alert("Foreground-Push: " + JSON.stringify(e.payload.message));
+			}	else {  // otherwise we were launched because the user touched a notification in the notification tray. Push will be 	processed when the App starts, inside the proper method
 				if ( e.coldstart ){
-					console.log("Coldstart Push");
+					alert("Coldstart-Push"); //Notification in Notification Area
 				} else {
-					console.log("Background Push");
+					alert("Background-Push"); //Notification in Notification Area
 				}
 			}
 
-			//$("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
-			//Only works for GCM
-			//$("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
+			//MSG: e.payload.message
+			//Only works for GCM --> MESSAGE -> MSGCNT: e.payload.msgcnt
 			break;
 
 		case 'error':
-			console.log("Error: " + e.msg);
+			//alert("PushError: " + e.msg);
 			break;
 
 		default:
-			console.log('An unknown event was received');
+			//alert('An unknown event was received');
 			break;
 	}
 }
 
-function deviceRegistered(regid) {
-    channel = regid.substr(regid.length - 8).toLowerCase();
-
-    console.log(channel);
-
-    /*pubnub.publish({
-        channel: channel,
-        message: {
-            regid: regid
-        }
-    });
-
-    pubnub.subscribe({
-        channel: channel,
-        callback: function(m) {
-            console.log(m);
-            t.classList.remove('gears');
-            if(m.setting) {
-                t.textContent = m.setting + '°';
-            }
-        }
-    });*/
+function unregisterPush(){
+	pushNotification.unregister(pushSuccessUnregisterHandler, pushErrorHandler);
 }
 
-function unregisterPush(){
-	pushNotification.unregister(pushSuccessHandler, pushErrorHandler, options);
+function pushSuccessUnregisterHandler(result){
+	$.ajax({
+		method: 'DELETE',
+		data: JSON.stringify({regid: CONFIG.PUSH.regid}),
+		url: CONFIG.SERVER.base + CONFIG.SERVER.pushnotification + "regid/" + CONFIG.PUSH.regid,
+		})
+		.done(function(msg) {
+			CONFIG.PUSH.regid = "";
+			CONFIG.PUSH.registered = false;
+			//callback to inform user over success or error
+		})
+		.fail(function(jqxhr, textstatus, error) {
+			//callback to inform user over success or error
+		});
 }

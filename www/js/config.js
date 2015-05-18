@@ -28,7 +28,7 @@ var CONFIG = {
 		mailg: "mailbox/get",
 		mailn: "mailbox/new",
 		mails: "mailbox/send",
-		pushnotification: "auth/push"
+		pushnotification: "push/"
 	},
 	LANGUAGE: {
 		availableShort: ["de_DE","en_EN"],
@@ -46,7 +46,7 @@ var CONFIG = {
 	},
 	PUSH: {
 		senderId: "1058861665734",
-		enabled: false,
+		enabled: true,
 		regid: "",
 		registered: false,
 		STATUS: {

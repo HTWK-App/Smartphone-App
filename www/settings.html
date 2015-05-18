@@ -42,6 +42,10 @@
 					<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
 				</select>
 			</li>
+      <li id="settings-_pushCard">
+				<h1>Push-Notifications</h1><hr/>
+        <button id="settings_push" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-times-circle fa-fw fa-lg"></i> Abmelden</button>
+			</li>
 		</ul>
 	</div>
 
@@ -66,6 +70,12 @@
 
 		$("#settings_page")
 		.on("pagecreate", function() {
+      if(WURFL.is_mobile){
+        if(CONFIG.PUSH.registered === false)
+          $("#settings_push").empty().append('<i class="fa fa-check-circle fa-fw fa-lg"></i> Anmelden');
+      } else {
+       $("#settings-_pushCard").remove();
+      }
 			settingsGetNewsFeeds();
 			settingsGetCanteens();
 			settingsFillFields();
@@ -187,6 +197,19 @@
 		$("#default_canteen_select").on("change", function() {
 			CONFIG.MENSA.defaultCanteen = $(this).val();
 			saveParameters();
+		});
+
+    //TODO save CONFIG.PUSH in localstorage
+    $("#settings_push").on("click", function() {
+      if(CONFIG.PUSH.registered === true){
+        CONFIG.PUSH.enabled = false;
+        unregisterPush();
+        $("#settings_push").empty().append('<i class="fa fa-check-circle fa-fw fa-lg"></i> Anmelden');
+      } else {
+        CONFIG.PUSH.enabled = true;
+        registerPush();
+        $("#settings_push").empty().append('<i class="fa fa-times-circle fa-fw fa-lg"></i> Abmelden');
+      }
 		});
 	</script>
 </div>

@@ -6,10 +6,10 @@ export PATH=$PATH:/home/cordova/android-sdk-linux/tools:/home/cordova/android-sd
 
 cd /home/cordova/Smartphone-App/
 
-git pull
+#git pull
 
 cordova platform add android
 
-cordova build android --release
+cordova build android
 
-cp /home/cordova/Smartphone-App/platforms/android/build/outputs/apk/android-release-unsigned.apk /home/cordova/APK/HTWKApp-release-unsigned.apk
+#cp /home/cordova/Smartphone-App/platforms/android/build/outputs/apk/android-release-unsigned.apk /home/cordova/APK/HTWKApp-release-unsigned.apk
