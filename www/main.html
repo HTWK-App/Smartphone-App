@@ -170,7 +170,14 @@
 					var o = $("body");
 					o.find(".ui-page").css("position","fixed").css("overflow-y","hidden");
 					o.find(".ui-panel-dismiss").css("position","fixed").css("overflow-y","hidden");
-					o.find("#overlayer").show();
+					var overlayer = o.find("#overlayer");
+					var newOverlayer = overlayer.clone().removeClass().show();
+					overlayer.remove();
+					o.append(newOverlayer);
+					o.find("#overlayer").addClass("overlayer-in");
+				}})
+				.panel({beforeclose: function() {
+					$("body").find("#overlayer").removeClass("overlayer-in").addClass("overlayer-out");
 				}})
 				.panel({close: function() {
 					var o = $("body");

@@ -32,6 +32,10 @@ body, input, select, textarea, button, .ui-btn {
 
 /************************** Header/Footer styling */
 
+.ui-page-theme-b .ui-bar-b {
+	box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}
+
 .ui-page-theme-b .ui-bar-b,
 .ui-page-theme-b .ui-header a,
 .ui-page-theme-b .ui-header .ui-btn.ui-btn-active,
@@ -46,7 +50,6 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	background-color: #4285f4;
 	border-color: #4285f4;
 	color: white;
-	box-shadow: none;
 	border: none;
 }
 
@@ -73,17 +76,32 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 
 /************************** Panel styling */
 
+.ui-panel {
+	box-shadow: 0 0 4px rgba(0,0,0,.14), 4px 0 8px rgba(0,0,0,.28);
+}
+
 .ui-panel-inner {
 	position: absolute;
-	top: 1px;
+	overflow: auto;
+	display: block;
+	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	overflow: auto;
 	-webkit-overflow-scrolling: touch;
 }
 
-#overlayer {
+@keyframes overlayer-in {
+  from   {opacity: 0;}
+  to {opacity: 0.3;}
+}
+
+@keyframes overlayer-out {
+  from   {opacity: 0.3;}
+  to {opacity: 0;}
+}
+
+.overlayer-in {
 	position: fixed;
 	z-index: 1000;
 	top: 0;
@@ -91,8 +109,22 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	height: 100%;
 	width: 100%;
 	background-color: #000000;
-	opacity: 0.4;
-	display: none;
+	opacity: 0.3;
+	animation-name: overlayer-in;
+	animation-duration: 0.6s;
+}
+
+.overlayer-out {
+	position: fixed;
+	z-index: 4;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #000000;
+	opacity: 0.3;
+	animation-name: overlayer-out;
+	animation-duration: 0.6s;
 }
 
 /************************** Canteen styling */
@@ -196,7 +228,7 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	.nativeDroidCards > li {
 		display: inline-block;
 		float: left;
-		margin-bottom: 0.9%;
+		margin-top: 0.9%;
 		margin-right: 0.9%;
 		width: 46%;
 	}
