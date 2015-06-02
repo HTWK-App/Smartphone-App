@@ -1,16 +1,16 @@
 /**
  * General Function Libary for small, "Every Day"-Work.
- * 
+ *
  * @author Hubertus Willuhn
- * 
+ *
  * UTF-8
  */
 
 /**
  * Capitalize first Letter in String.
- * 
+ *
  * @param String str
- * 
+ *
  * @return String
  */
 function capitalize(str) {
@@ -19,67 +19,67 @@ function capitalize(str) {
 
 /**
  * Test if val is empty (for all Types).
- * 
+ *
  * @param mixed val
- * 
+ *
  * @return Boolean
  */
 function isEmpty(val) {
-	return (val === "" || 
-			val === {} || 
-			val === null || 
-			val === undefined || 
+	return (val === "" ||
+			val === {} ||
+			val === null ||
+			val === undefined ||
 			(val instanceof Array && val.length === 0));
 }
 
 /**
  * Creates a DateStamp for Server Requests, Format: YYYYMMDD.
- * 
+ *
  * @param Date date
- * 
+ *
  * @return String
  */
 function createServerDateStamp(date) {
 	if(isEmpty(date)) date = new Date();
-	
+
 	var dd = date.getDate();
 	var mm = date.getMonth()+1; //January is 0!
 	var yyyy = date.getFullYear();
-	
+
 	if(dd<10) dd="0"+dd;
 	if(mm<10) mm="0"+mm;
-	
+
 	return yyyy+""+mm+""+dd;
 }
 
 /**
  * Creates a DateStamp for general Purposes, Format: Weekday, dd.mm.yyyy.
- * 
+ *
  * @param Date date
- * 
+ *
  * @return String
  */
 function createDateStamp(date) {
 	if(isEmpty(date)) date = new Date();
-	
+
 	var dd = date.getDate();
 	var mm = date.getMonth()+1; //January is 0!
 	var yyyy = date.getFullYear();
-	
+
 	if(dd<10) dd="0"+dd;
 	if(mm<10) mm="0"+mm;
-	
+
 	return GLOBAL.DATE.weekdays[date.getDay()].name+', '+dd+'.'+mm+'.'+yyyy;
 }
 
 /**
  * Creates a DateStamp.
- * 
+ *
  * @param Date date
  * @param String format
- * 
+ *
  * @see GLOBAL.DATE.formats
- * 
+ *
  * @return String, formatted DateStamp
  */
 function formatDate(date, format) {
@@ -88,40 +88,40 @@ function formatDate(date, format) {
 
 /**
  * Creates a DateTimeStamp, Format: dd.mm.yyyy hh:mm:ss.
- * 
+ *
  * @param Date date
- * 
+ *
  * @return String
  */
 function createDateTimeStamp(date) {
 	if(isEmpty(date)) date = new Date();
-	
+
 	var dd = date.getDate();
 	var mm = date.getMonth()+1; //January is 0!
-	var yyyy = date.getFullYear(); 
+	var yyyy = date.getFullYear();
 	var hh = date.getHours();
 	var mi = date.getMinutes();
 	var ss = date.getSeconds();
-	
+
 	if(dd<10) dd="0"+dd;
 	if(mm<10) mm="0"+mm;
 	if(hh<10) hh="0"+hh;
 	if(mi<10) mi="0"+mi;
 	if(ss<10) ss="0"+ss;
-	
-	return (dd+"."+mm+"."+yyyy+" "+hh+":"+mi+":"+ss);	
+
+	return (dd+"."+mm+"."+yyyy+" "+hh+":"+mi+":"+ss);
 }
 
 /**
  * Computes the Dates of the Week (per Day).
- * 
+ *
  * @param Date date
- * 
+ *
  * @return Array[Date]
  */
 function getWeek(date) {
 	var week = new Array(5);
-	
+
 	// Today is a Sunday?
 	if (date.getDay() === 0 )
 	{
@@ -132,10 +132,10 @@ function getWeek(date) {
 	{
 		date.setDate(date.getDate() + 2);
 	}
-	
+
 	// Reset to Monday
 	date.setDate(date.getDate()-date.getDay()+1);
-	
+
 	week[0] = new Date(date);
 
 	for (var i = 1; i < 5; i++) {
@@ -148,11 +148,11 @@ function getWeek(date) {
 /**
  * Returns the Weekday defined by the given Date,
  * this Function is used by Services that needs Monday to Friday only!
- * 
+ *
  * @param Date date
- * 
+ *
  * @see GLOBAL.DATE.weekdays
- * 
+ *
  * @return Weekday Object
  */
 function getWeekDay(date) {
@@ -168,9 +168,9 @@ function getWeekDay(date) {
 
 /**
  * Escaping HTML Special Chars like & or <>.
- * 
+ *
  * @param String str
- * 
+ *
  * @return escaped String
  */
 function escape(str) {
@@ -183,7 +183,7 @@ function escape(str) {
 
 /**
  * Show Loading-Spinner.
- * 
+ *
  * @param String msg
  * @param Boolean textonly ... indicates whether Spinner will be shown or not
  */
@@ -191,10 +191,10 @@ function loadingIn(msg, textonly) {
 	if(isEmpty(textonly)) {
 		textonly = false;
 	}
-	if(isEmpty(msg)) { 
+	if(isEmpty(msg)) {
 		msg = "Daten werden abgerufen";
 	}
-	
+
 	$.mobile.loading("show", {
 	  text: msg,
 	  textVisible: true,
@@ -211,7 +211,7 @@ function loadingOut() {
 	$.mobile.loading("hide");
 }
 
-function openSignInDialog(success) {	
+function openSignInDialog(success) {
 	$( "#signInDialog_form" ).off()
 	.submit( function (event){
 		event.preventDefault();
@@ -228,7 +228,7 @@ function openSignInDialog(success) {
 
 /**
  * Save Username and Password.
- * 
+ *
  * @param String username
  * @param String password
  * @param Function done ... Success Callback
@@ -236,18 +236,18 @@ function openSignInDialog(success) {
  */
 function saveUsernamePassword(username, password, done, fail) {
 	loadingIn("Ihre Einstellungen werden gespeichert...");
-	
+
 	CONFIG.AUTH.username = username;
 	CONFIG.AUTH.checking = true;
-	
+
 	$.post(CONFIG.SERVER.base+CONFIG.SERVER.auth+"?username="+username+"&password="+password)
 	 .done(function(data, status, jqXHR) {
 		CONFIG.AUTH.credentials = data.encryptedCredentials;
 		CONFIG.AUTH.salt = data.salt;
-		
+
 		loadingOut();
 		loadingIn("Es wird geprüft, ob ihre Daten korrekt sind...");
-		
+
 		$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg+"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+"&offset=1")
 		 .done(function(data, status, jqXHR) {
 			 	loadingOut();
@@ -266,7 +266,7 @@ function saveUsernamePassword(username, password, done, fail) {
 					loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true);
 				}
 				setTimeout(loadingOut, 3000);
-				
+
 				if($.isFunction(done) && CONFIG.AUTH.correct) done.call(this);
 				if($.isFunction(fail) && !CONFIG.AUTH.correct) fail.call(this);
 		  });
@@ -275,12 +275,12 @@ function saveUsernamePassword(username, password, done, fail) {
 
 /**
  * Open Links in Devices native Browser.
- * 
+ *
  * @param Event e ... Click-Event of Link
  */
 function openInExternalBrowser(e) {
 	window.open($(e.target).attr("href"), "_system", "location=yes");
-	e.preventDefault(); 
+	e.preventDefault();
 }
 
 function loadParameters(){
@@ -300,8 +300,6 @@ function loadParameters(){
 	if(!isEmpty(help)) CONFIG.MENSA.defaultCanteen = help;
 	help = localStorage.getItem("timetable");
 	if(!isEmpty(help)) CONFIG.TIMETABLE = JSON.parse(help);
-
-	delete loadParameters;
 }
 
 function saveParameters(){
@@ -323,4 +321,11 @@ function ajaxErrorHandler(data, status, jqXHR, callback){
 	setTimeout(function(){ $( "#panelMenu" ).panel( "open");}, 4500);
 	if($.isFunction(callback))
 		callback.call(this);
+}
+
+function defaultErrorHandling(data){
+	if(!isEmpty(data.exception)){
+		ajaxErrorHandler(data, status, jqXHR);
+		return;
+	}
 }
