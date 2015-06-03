@@ -121,12 +121,12 @@
 <!--##############################################################################################-->
 <script type="application/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
 <script type="application/javascript" src="js/lib/jquery.mobile.custom.min.js"></script>
-<script type="application/javascript" src="js/compressed.min.js"></script>
-<!--<script type="application/javascript" src="js/config.js"></script>
+<!--<script type="application/javascript" src="js/compressed.min.js"></script>-->
+<script type="application/javascript" src="js/config.js"></script>
 <script type="application/javascript" src="js/fn.js"></script>
 <script type="application/javascript" src="js/building.js"></script>
 <script type="application/javascript" src="js/staff.js"></script>
-<script type="application/javascript" src="js/gmaps.js"></script>-->
+<script type="application/javascript" src="js/gmaps.js"></script>
 <script type="application/javascript">
 
 	// AJAX Setup
@@ -198,7 +198,7 @@
 		.on("pageshow", function () {
 			var time = new Date().getTime();
 
-			if(indexLastReload < (time - 900000)){ //15 minuits
+			if(indexLastReload < (time - 900000)){ //15 minuits 
 				loadingIn();
 				getCurrentPlanWeek();
 				fillCards();
@@ -206,16 +206,16 @@
 			}
 		});
 
-		function getCurrentPlanWeek(){
+	function getCurrentPlanWeek(){
 
-			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.timetable + "cal")
-			 .done(function(data, status, jqXHR) {
+		$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.timetable + "cal")
+		 .done(function(data, status, jqXHR) {
 
-				defaultErrorHandling(data);
-				GLOBAL.DATE.currentPlanWeek = data.current;
-			 })
-			 .fail(ajaxErrorHandler);
-		}
+			defaultErrorHandling(data, status, jqXHR);
+			GLOBAL.DATE.currentPlanWeek = data.current;
+		 })
+		 .fail(ajaxErrorHandler);
+	}
 
 	/**
 	 * Fills all corresponding cards (named as arguments) with content
@@ -240,15 +240,15 @@
 				ajaxErrorHandler(data, status, jqXHR); return;
 			}
 
-			var meals = '';
-
-    	if(isEmpty(data.dayContent)) {
-    		meals += "<p>Heute gibt es leider keine Angebote :-(</p>";
-    	} else {
-    		for(meal of data.dayContent) {
-    			meals += !isEmpty(meal.ingredients) ? "<p>"+meal.ingredients.join(", ").replace(/\[\d*\]/gi,"")+"</p>" : "";
-    		}
-    	}
+			var meals;
+			if(isEmpty(data.dayContent)){
+				meals = "<p>Heute gibt es leider keine Angebote :-(</p>";
+			} else {
+				meals = data.dayContent.map(function(meal){
+					var line = isEmpty(meal.ingredients) ? "" : "<p>"+meal.ingredients.join(", ").replace(/\[\d*\]/gi,"")+"</p>";
+					return line;
+				});
+			}
 
 			$("#mensaCard").find("p").remove(); //remove for reload after 15 Minuits
 			$("#mensaCard").find("img").after(meals);
@@ -268,28 +268,29 @@
 		$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news + '/get?feed=' + feed + '&limit=2')
 		 .done(function(data, status, jqXHR) {
 
-			defaultErrorHandling(data);
+			defaultErrorHandling(data, status, jqXHR);
 
 			var divs = "<h1>"+heading+"</h1><hr>";
 
-			for(entry of data.responseData.feed.entries) {
-				if(!isEmpty(entry.content)) {
+			divs += data.responseData.feed.entries.map(function(entry){
+				if(isEmpty(entry.content)) {
+					return "";
+				} else {
 					var imgs = entry.content.match(/<img .*?\/?>/); //Get all images
 					var img;
-
 					if(!isEmpty(imgs)){
 						img = imgs[0].match(/src=".*?\/?"/)[0]; //Extract src property
 						img = img.substring(5,img.length-1).replace("http","https"); //extract URL as String
 						img = '<img class="card-image" src="//wit.wurfl.io/'+addhttp(img)+'">';
-					} else {img = ""}
-
+					}
 					var content = entry.content.replace(/(<([^>]+)>)/ig,"").slice(0, 300); //Remove all HTML tags, Cut to 300 Signs
 
-					divs += '<strong>'+entry.title+'</strong>'+
-									'<div>'+img+'<p>'+content+'...</p></div>'+
-									'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a><hr>';
+					content = '<strong>'+entry.title+'</strong>'+
+										'<div>'+img+'<p>'+content+'...</p></div>'+
+										'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a><hr>';
+					return content;
 				}
-			}
+			}).join("");
 
 			$("#"+card)
 				.empty() //empty for reload after 15 Minuits

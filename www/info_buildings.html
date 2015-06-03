@@ -15,8 +15,9 @@
   		.on("pagecreate", buildingInitBuildingsView)
   		.on("pageshow", function() {
   			if(!GLOBAL.INIT.builds) loadingIn();
-				$("#buidling_content_list li").removeClass("ui-screen-hidden");
-				$("#buidling_content_list").listview("refresh");
+				var list = $("#buidling_content_list");
+				list.find("li").removeClass("ui-screen-hidden");
+				list.listview("refresh");
 				if(WURFL.is_mobile)
 					analytics.trackView('buildings');
   		 });
@@ -30,7 +31,7 @@
 			loadingIn();
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
-				.done(function(data, status, jqXHR) {
+				.done(function(data, status, jqXHR) { //No Default-Error Handling needed!
 
 					buildingFillBuildingsList(data);
 					loadingOut();
@@ -47,19 +48,15 @@
 		 */
 		function buildingFillBuildingsList(data) {
 
-			var lis = "";
-			var desc;
-
-			for(var k in data){
-				var building = data[k];
-				desc = isEmpty(building.description[0]) ? "" : building.description[0];
-
-				lis +='<li data-bid='+building.id+'><a href="#" class="building">'+
-							'	<h3>'+building.fullName+'</h3>'+
-							'	<p>'+desc+'</p>'+
-							'	<p>'+building.address+'</p>'+
-							'</a></li>';
-			}
+			var lis = data.map(function(building){
+				var desc = isEmpty(building.description[0]) ? "" : building.description[0];
+				var li ='<li data-bid='+building.id+'><a href="#" class="building">'+
+								'	<h3>'+building.fullName+'</h3>'+
+								'	<p>'+desc.slice(0,300)+'</p>'+
+								'	<p>'+building.address+'</p>'+
+								'</a></li>';
+				return li;
+			}).join("");
 
 			$( "#buidling_content_list" )
 				.off()

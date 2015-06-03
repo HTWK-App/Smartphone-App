@@ -69,9 +69,8 @@
 			.on("pageshow", function () {
 				if(!GLOBAL.INIT.info)
 					loadingIn();
-				if(WURFL.is_mobile){
+				if(WURFL.is_mobile)
 					analytics.trackView('general');
-				}
 			});
 
 		$( "#info_exam_table" )
@@ -82,8 +81,7 @@
 		$("#scroll_table")
 			.on("click", "a", function(e){
 			e.preventDefault();
-			$('html, body')
-				.animate({
+			$("html, body").animate({
 					scrollTop: $($(e.target).attr("href")).offset().top-60
 				});
 			});
@@ -96,37 +94,22 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.timetable+"cal")
 				.done(function (data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+          defaultErrorHandling(data, status, jqXHR);
 
-					var semester = data.semester;
-
-					$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.academical+semester)
+					$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.academical + data.semester)
 						.done(function (data, status, jqXHR) {
-							if(!isEmpty(data.exception))
-								{ ajaxErrorHandler(data, status, jqXHR); return; }
+              defaultErrorHandling(data, status, jqXHR);
 
 							var div = "";
-							var runs = 0;
-							var length = 0;
 
-							for(var i in data){
-								length = length+1;
-							}
-
-							for(var k in data){
+							for( k in data){
 								var textarray = data[k];
 								div += '<h1>'+k+'</h1><hr/>';
-
-								for( var s in textarray){
-									var line = textarray[s];
-
-									line = line.split(":");
-									div += "<strong>"+line[0]+":</strong><br/>"+line[1]+"<br>";
-								}
-
-								runs = runs + 1;
-								div += '<br/>';
+                div += textarray.map(function(line){
+                  line = line.split(":");
+									var div = "<strong>"+line[0]+":</strong><br/>"+line[1]+"<br>";
+                  return div;
+                }).join("") + "<br/>";
 							}
 
 							$("#info_academical")

@@ -323,7 +323,7 @@ function ajaxErrorHandler(data, status, jqXHR, callback){
 		callback.call(this);
 }
 
-function defaultErrorHandling(data){
+function defaultErrorHandling(data, status, jqXHR){
 	if(!isEmpty(data.exception)){
 		ajaxErrorHandler(data, status, jqXHR);
 		return;

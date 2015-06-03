@@ -14,10 +14,10 @@
 		$( "#staff_page" )
   		.on("pagecreate", staffInitStaffView)
   		.on("pageshow", function() {
-  			if(!GLOBAL.INIT.staff) loadingIn();
-  			if(WURFL.is_mobile){
+  			if(!GLOBAL.INIT.staff)
+					loadingIn();
+  			if(WURFL.is_mobile)
     			analytics.trackView('staff');
-    		}
   		 });
 
 		/**
@@ -30,11 +30,9 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff)
 				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+					defaultErrorHandling(data, status, jqXHR);
 
 					staffFillStaffList(data);
-
 					loadingOut();
 					loadingIn("Geben Sie bitte einen Suchbegriff ein. Danach sehen sie die gewünschten Mitarbeiter!",true);
 					setTimeout(loadingOut, 3000);
@@ -51,25 +49,21 @@
 		 */
 		function staffFillStaffList(data) {
 
-			var emp, name;
-			var lis = "";
-
-			for(var k in data){
-				emp = data[k];
-				name = emp.name.split(", ");
-
-				lis += '<li class="ui-screen-hidden" data-cuid="'+emp.cuid+'">'+
-						'<a href="#" class="staff">'+
-						'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+emp.cuid+'/thumb" height="64" width="64" class="staffpic">'+
-							name[1]+' '+name[0]+', '+emp.degree+
-							'<p>'+emp.faculty+'</p>'+
-						'</a></li>';
-			}
+			var list = data.map(function(employee){
+				var name = employee.name.split(", ");
+				var li = '<li class="ui-screen-hidden" data-cuid="'+employee.cuid+'">'+
+									'<a href="#" class="staff">'+
+									'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+employee.cuid+'/thumb" height="64" width="64" class="staffpic">'+
+										name[1]+' '+name[0]+', '+employee.degree+
+										'<p>'+employee.faculty+'</p>'+
+									'</a></li>';
+				return li;
+			}).join("");
 
 			$( "#staff_content_list" )
 				.off()
 				.empty()
-				.append(lis)
+				.append(list)
 				.on("click", "a.staff", function (){
 					loadStaffDetails($(this).parents("li").first().data("cuid"));
 				})

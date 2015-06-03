@@ -5,15 +5,13 @@
  *
  */
 function loadStaffDetails(id) {
-	if(WURFL.is_mobile){
+	if(WURFL.is_mobile)
 		analytics.trackView('staff#'+id);
-	}
 	loadingIn();
-	
-	$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff+id)
+
+	$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.staff + id)
 		.done(function(data, status, jqXHR) {
-			if(!isEmpty(data.exception))
-				{ ajaxErrorHandler(data, status, jqXHR); return; }
+			defaultErrorHandling(data, status, jqXHR);
 
 			var name = data.name.split(", ");
 			var div = '<div id="staff_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Mitarbeiter & Professoren" class="staffdetails">'+
@@ -49,16 +47,16 @@ function loadStaffDetails(id) {
 								'		</ul>'+
 								'	</div>'+
 								'</div>';
-		
+
 			div = $(div).on("pagehide", function (){$(this).remove();});
 
 			$( "body" )
 				.append(div)
 				.trigger("create");
-		
+
 			$.mobile.initializePage();
 			$.mobile.changePage("#staff_"+id);
-		
+
 			loadingOut();
 		})
 		.fail(ajaxErrorHandler);

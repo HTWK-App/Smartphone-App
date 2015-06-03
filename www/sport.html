@@ -14,10 +14,10 @@
     $( "#sport_page" )
     	.on("pagecreate", initSportsView)
     	.on("pageshow", function() {
-    			if(!GLOBAL.INIT.sport) loadingIn();
-    			if(WURFL.is_mobile){
+    			if(!GLOBAL.INIT.sport)
+						loadingIn();
+    			if(WURFL.is_mobile)
 	    			analytics.trackView('index');
-	    		}
     	 });
 
 		/**
@@ -28,21 +28,17 @@
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport)
 				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
-
-				 	var sport, lis = "";
+					defaultErrorHandling(data, status, jqXHR);
 
 					if(!isEmpty(data)){
-						for(var k in data){
-							sport = data[k];
-
-							lis += 	'<li data-sport='+sport.id+'><a href="#" class="sport">'+
-										'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+sport.id+'/pic" height="64" width="64"/>'+
-										'<h3>'+sport.title+'</h3>'+
-										'<p>'+sport.description+'</p>'+
-									'</a></li>';
-						}
+						var lis = data.map(function(sport){
+							var li ='<li data-sport='+sport.id+'><a href="#" class="sport">'+
+											'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+sport.id+'/pic" height="64" width="64"/>'+
+											'<h3>'+sport.title+'</h3>'+
+											'<p>'+sport.description+'</p>'+
+											'</a></li>';
+							return li;
+						}).join("");
 
 						$( "#sport_content_list" )
 							.off()
@@ -72,82 +68,66 @@
 		function loadSportDetails(e) {
 			var id = $(e.target).parents("li").first().data("sport");
 
-			// already cached?
-			if($("#sport_"+id).length > 0) {
-				$.mobile.initializePage();
-				$.mobile.changePage("#sport_"+id);
-				return true;
-			}
-
 			loadingIn();
 
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.sport+"/"+id)
-				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+				.done(function(sport, status, jqXHR) {
+					defaultErrorHandling(sport, status, jqXHR);
 
-				 	if(isEmpty(data.id)) { // simple Fix for empty Response, TODO better?
+				 	if(isEmpty(sport.id)) { // simple Fix for empty Response, TODO better?
 						loadingIn("Es ist ein Fehler aufgetreten!",true);
 						setTimeout(loadingOut, 3000);
 						return;
 					}
 
-	    			var div = '<div id="sport_'+data.id+'" data-role="page" data-title="'+data.title+'" data-subpage="true" class="sportdetails" data-theme="b">'+
-											'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
-											'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
-											'		<h1>HTWK App</h1>'+
-											'	</div>'+
-											'	<div role="main" class="ui-content">'+
-			  							'		<ul class="nativeDroidCards">'+
-			  							'			<li>'+
-			  							'				<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+data.id+'/pic" />'+
-											'			</li>'+
-											'			<li>'+
-											'				<h1>Beschreibung</h1><hr/>'+
-											'				<p>'+data.description+'</p>'+
-											'			</li>'+
-											'			<li>'+
-											'				<h1>Info</h1><hr/>'+
-											'				<p>'+
-											'					<b>Zeitspanne:</b><br/>'+data.time+'<br/>'+data.cycle+
-											'					<br/><b>Geschlecht:</b><br/>'+data.gender+
-											'					<br/><b>Auslastung des Kurses:</b></br> '+data.competitor+
-											'					<br/><b>Ort:</b><br/>'+data.location+
-											'					<br/><b>Betreuer/in:</b><br/>'+data.leader+
-											'					<br/><a href="'+data.detailedLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weitere Informationen</a>'+
-											'				</p>'+
-											'			</li>'+
-											'			<li>'+
-											'				<h1>Hinweise</h1><hr/>';
+	    		var div = '<div id="sport_'+sport.id+'" data-role="page" data-title="'+sport.title+'" data-subpage="true" class="sportdetails" data-theme="b">'+
+										'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
+										'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
+										'		<h1>HTWK App</h1>'+
+										'	</div>'+
+										'	<div role="main" class="ui-content">'+
+		  							'		<ul class="nativeDroidCards">'+
+		  							'			<li>'+
+		  							'				<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.sport+'/'+sport.id+'/pic" />'+
+										'			</li>'+
+										'			<li>'+
+										'				<h1>Beschreibung</h1><hr/>'+
+										'				<p>'+sport.description+'</p>'+
+										'			</li>'+
+										'			<li>'+
+										'				<h1>Info</h1><hr/>'+
+										'				<p>'+
+										'					<b>Zeitspanne:</b><br/>'+sport.time+'<br/>'+sport.cycle+
+										'					<br/><b>Geschlecht:</b><br/>'+sport.gender+
+										'					<br/><b>Auslastung des Kurses:</b></br> '+sport.competitor+
+										'					<br/><b>Ort:</b><br/>'+sport.location+
+										'					<br/><b>Betreuer/in:</b><br/>'+sport.leader+
+										'					<br/><a href="'+sport.detailedLink+'" class="ui-btn ui-btn-b ui-corner-all ui-mini ui-shadow external"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weitere Informationen</a>'+
+										'				</p>'+
+										'			</li>'+
+										'			<li>'+
+										'				<h1>Hinweise</h1><hr/>';
 
-    					if(!isEmpty(data.hints)){
-    						div += '<ul>';
+    			if(!isEmpty(sport.hints)){
+	    			div += '<ul>' + sport.hints.map(function(hint){
+							return '<li>'+hint+'</li>';
+						}).join("") + '</ul>';
+    			}
 
-    						for(var k in data.hints){
-    							div += '<li>'+data.hints[k]+'</li>';
-    						}
-
-    						div += '</ul>';
-    					}
-
-	    				div += 		'</li>'+
-								'</ul>'+
-								'</div>'+
-								'</div>'+
-								'</div>';
+	    		div += '</li></ul></div></div></div>';
 
 					div = $(div);
 					div.find("div[data-role='content'] a").addClass("external");
 
-	    			$( "body" )
+	    		$( "body" )
 						.append(div)
 						.trigger("create");
-				div.on("pagehide",function(){$(this).remove();});
+					div.on("pagehide",function(){$(this).remove();});
 
-	    			$.mobile.initializePage();
-	    			$.mobile.changePage("#sport_"+id);
+	    		$.mobile.initializePage();
+	    		$.mobile.changePage("#sport_"+id);
 
-	    			loadingOut();
+	    		loadingOut();
 			 	})
 				.fail(ajaxErrorHandler);
 		}

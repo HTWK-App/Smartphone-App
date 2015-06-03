@@ -84,22 +84,16 @@
 
 			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news)
 			.done( function(data, status, jqXHR) {
-				if (!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return;}
+        defaultErrorHandling(data, status, jqXHR);
 
-				var tmp, name, id;
-				var opts = "";
+        var opts = data.map(function(feed){
+          var id = feed.id;
+          var tmp = id.split(".");
+					var name = capitalize(tmp[1])	+ (tmp.length == 3 ? " " + tmp[2] : "");
 
-				for ( var k in data) {
-					id = data[k].id;
-					tmp = id.split(".");
-					name = capitalize(tmp[1])	+ (tmp.length == 3 ? " " + tmp[2] : "");
-
-					if (id == CONFIG.NEWS.defaultFeed)
-						tmp = 'selected="selected"';
-					else
-						tmp = "";
-					opts += '<option value="'+id+'" '+tmp+'>' + GLOBAL.NEWS.titles[id] + '</option>';
-				}
+					tmp = (id == CONFIG.NEWS.defaultFeed) ? 'selected="selected"' : "";
+					return '<option value="'+id+'" '+tmp+'>' + GLOBAL.NEWS.titles[id] + '</option>';
+        }).join("");
 
 				$("#default_news_select")
 					.empty()
@@ -119,7 +113,7 @@
 
 			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa)
 			.done( function(data, status, jqXHR) {
-				if (!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return;}
+        defaultErrorHandling(data, status, jqXHR);
 
 				var opts = "";
 

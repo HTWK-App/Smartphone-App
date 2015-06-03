@@ -35,12 +35,11 @@
 			if(!isEmpty(CONFIG.AUTH.credentials)) {
 				loadingIn();
 
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.qis, {credentials: CONFIG.AUTH.credentials, salt: CONFIG.AUTH.salt})
+				$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.qis, {credentials: CONFIG.AUTH.credentials, salt: CONFIG.AUTH.salt})
 					.done(function(data, status, jqXHR) {
-						if(!isEmpty(data.exception)) { ajaxErrorHandler(data, status, jqXHR); return; }
+            defaultErrorHandling(data, status, jqXHR);
 
 						fillQIS(data);
-
 						GLOBAL.INIT.qis = true;
 					})
 					.fail(ajaxErrorHandler);
@@ -53,46 +52,36 @@
 		 * @param JSON data
 		 */
 		function fillQIS(data) {
-			var sem, module;
-			var divs = "";
 
-			if(!isEmpty(data)) {
-				for(var k in data) {
-					sem = data[k];
+      var divs = data.map(function(semester){
 
-					divs += '<div id="sem'+sem.id+'" data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right">'+
-									'	<h4>'+sem.description+'</h4>';
+        var div = '<div id="sem'+semester.id+'" data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right">'+
+                  '	<h4>'+semester.description+'</h4>';
+        if(isEmpty(semester.modules)) {
+          div +='<ul class="nativeDroidCards"><li>'+
+								'	<h1>Keine Informationen verfügbar!</h1>'+
+								'</li></ul></div>';
+        } else {
+					div += '<ul class="nativeDroidCards">';
+          div += semester.modules.map(function(module){
 
-					if(!isEmpty(sem.modules)) {
-						divs += '<ul class="nativeDroidCards">';
-	    					for(var l in sem.modules) {
-	    						module = sem.modules[l];
-
-	    						divs += '<li >'+
-													'	<h1>'+module.title+'</h1><hr>'+
-													'	<p>'+
-													'		'+module.description+
-													'		<br/><br/><b>ECTS-Punkte: </b>'+module.ects+
-													'		<br/><b>Note: </b>'+module.mark+
-													'	</p>'+
-													'</li>';
-	    					}
-					} else {
-						divs += '<ul class="nativeDroidCards">'+
-										'	<li>'+
-										'		<h2>Keine Informationen verfügbar!</h2>'+
-										'	</li>'+
-										'</ul>';
-					}
-
-					divs += '</ul></div>';
+            var div = '<li><h1>'+module.title+'</h1><hr>'+
+										'	<p>'+
+										'		'+module.description+
+										'		<br/><br/><b>ECTS-Punkte: </b>'+module.ects+
+										'		<br/><b>Note: </b>'+module.mark+
+										'	</p></li>';
+            return div;
+          }).join("");
+          div += '</ul></div>';
 				}
+        return div;
+      }).join("");
 
-				$( "#qis_list" )
-					.empty()
-					.append(divs)
-					.collapsibleset("refresh");
-			}
+			$( "#qis_list" )
+				.empty()
+				.append(divs)
+				.collapsibleset("refresh");
 
 			loadingOut();
 		}

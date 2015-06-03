@@ -9,15 +9,12 @@ function buildingLoadBuildingDetails(id) {
 		analytics.trackView('building#'+id);
 	}
 	loadingIn();
-	
+
 	$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+"/"+id)
 		.done(function(data, status, jqXHR) {
 
-			var desc = "";
-		
-			if(!isEmpty(data.description[0]))
-				desc += data.description[0] + "</br>";
-		
+			var desc = isEmpty(data.description[0]) ? "" : data.description[0] + "</br>";
+
 			var div = '<div id="building_'+id+'" data-role="page" data-theme="b" data-subpage="true" data-title="Gebäude" data-destination="'+data.latLng.replace(/ /, '')+'">'+
 								'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
 								'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
@@ -47,7 +44,7 @@ function buildingLoadBuildingDetails(id) {
 								'</div>';
 
 			div = $(div);
-		
+
 			$( "body" )
 				.append(div)
 				.trigger("create");
@@ -60,10 +57,10 @@ function buildingLoadBuildingDetails(id) {
 			.on("pagehide", function(){
 				$(this).remove();
 			});
-		
+
 			$.mobile.initializePage();
 			$.mobile.changePage("#building_"+id);
-		
+
 			loadingOut();
 		})
 		.fail(ajaxErrorHandler);
