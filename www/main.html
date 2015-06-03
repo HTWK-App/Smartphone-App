@@ -13,7 +13,7 @@
 		<link rel="stylesheet" type="text/css" href="css/HTWK-App.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.icons.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.custom.structure.min.css" defer>
-		<link rel="stylesheet" type="text/css" href="css/defaultThemeChanges.min.css" defer>
+		<link rel="stylesheet" type="text/css" href="css/defaultThemeChanges.css" defer>
 		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto" defer>
 
@@ -121,12 +121,12 @@
 <!--##############################################################################################-->
 <script type="application/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
 <script type="application/javascript" src="js/lib/jquery.mobile.custom.min.js"></script>
-<!--<script type="application/javascript" src="js/compressed.min.js"></script>-->
-<script type="application/javascript" src="js/config.js"></script>
+<script type="application/javascript" src="js/compressed.min.js"></script>
+<!--<script type="application/javascript" src="js/config.js"></script>
 <script type="application/javascript" src="js/fn.js"></script>
 <script type="application/javascript" src="js/building.js"></script>
 <script type="application/javascript" src="js/staff.js"></script>
-<script type="application/javascript" src="js/gmaps.js"></script>
+<script type="application/javascript" src="js/gmaps.js"></script>-->
 <script type="application/javascript">
 
 	// AJAX Setup
@@ -198,7 +198,7 @@
 		.on("pageshow", function () {
 			var time = new Date().getTime();
 
-			if(indexLastReload < (time - 900000)){ //15 minuits 
+			if(indexLastReload < (time - 900000)){ //15 minuits
 				loadingIn();
 				getCurrentPlanWeek();
 				fillCards();

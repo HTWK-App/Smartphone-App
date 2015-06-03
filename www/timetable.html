@@ -130,10 +130,14 @@
 		 * @param Event e ... Click-Event of Link
 		 */
 		function abortSetup() {
-			$.mobile.changePage("#timetable_page");
 			$("#timetable_config").remove();
 			CONFIG.TIMETABLE.temporary= [];
-			if(CONFIG.TIMETABLE.faculty.length !== 0) initTimetableView();
+			if(CONFIG.TIMETABLE.faculty.length !== 0){
+				$.mobile.changePage("#timetable_page");
+				initTimetableView();
+			}else{
+				$.mobile.changePage("#index");
+			}
 		}
 
 		function noContent(text){
@@ -193,9 +197,9 @@
 		 */
 		function facultyChosen(e) {
 			var id = $(e.target).parent("li").jqmData("course");
+			CONFIG.TIMETABLE.temporary.push({"id": id, "groups": []});
 
 			loadingIn();
-			CONFIG.TIMETABLE.temporary.push({"id": id, "groups": []});
 
 			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.timetable + CONFIG.TIMETABLE.semester)
 		 	 .done(function (data, status, jqXHR) {
