@@ -24,7 +24,6 @@
     <plugin name="com.danielcwilson.plugins.googleanalytics" version="0.6.1" />
 
     <access origin="*" />
-    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
