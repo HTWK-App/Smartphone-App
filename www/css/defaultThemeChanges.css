@@ -164,6 +164,24 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	border-width: 1px;
 }
 
+#actualWeek {
+	margin-bottom: 0;
+}
+
+#actualDay {
+	display: inline-block;
+	overflow: hidden;
+	margin: 0 auto 0 auto;
+}
+#timetable_page .ui-content > span{
+	display: inline-block;
+	float: right;
+}
+
+#extendTimetable {
+	margin-left: 10px;
+}
+
 /************************** Sport/Staff pics styling */
 
 .sport img, .staffpic {
@@ -176,6 +194,23 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	border: 1px solid rgba(255,255,255,0.1);
 	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 	background-color: #ffffff;
+}
+
+.card-image{
+	float: left;
+	min-width: 300px;
+	max-width: 300px;
+	min-height: 150px;
+	max-height: 300px;
+	overflow: hidden;
+	padding: 0 10px 8px 8px
+}
+
+@media (max-width: 420px) {
+	.card-image{
+		min-width: 95%;
+		max-width: 95%;
+	}
 }
 
 /* Button styling */

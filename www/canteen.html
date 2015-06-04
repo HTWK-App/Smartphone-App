@@ -124,19 +124,15 @@
 		 */
 		function fillCanteen(id, week) {
 			var today = new Date().getDay();
-			var o = $("#canteen_page div.canteen_content");
 			var deferreds = [];
 
 			loadingIn();
 
 			// Saturday or Sunday ?
-			if(today == 6 || today === 0)
-				today = 0;
-			else
-				today--;
+			today = (today == 6 || today == 0) ? 0 : --today;
 
-			for(var i = today; i < week.length; i++) {
-				deferreds[deferreds.length] = fillCanteenDay(o, id, week[i]);
+			for(var i = today; i < week.length; i++){
+				deferreds[deferreds.length] = fillCanteenDay(id, week[i]);
 			}
 
 			$.when.apply($, deferreds)
@@ -152,89 +148,73 @@
 		 *
 		 * @return jQuery-Deferred
 		 */
-		function fillCanteenDay(o, id, date) {
+		function fillCanteenDay(id, date) {
 			return $.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa+"/"+id+"/"+createServerDateStamp(date))
-				    .done(function (data, status, jqXHR) {
-				    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date')
-				    		{ ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); return; }
+	    .done(function (data, status, jqXHR) {
+	    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date')
+	    		{ ajaxErrorHandler(data, status, jqXHR, dayEmpty(date)); return;}
 
-				    	var title, desc, addits;
-				    	var priceStud, priceEmp, priceExt;
-				    	var meal, meals = '<ul data-nativedroid-plugin="cards" class="nativeDroidCards">';
-				    	var veggie = false;
+	    	var meals = '<ul data-nativedroid-plugin="cards" class="nativeDroidCards">';
 
-				    	if(isEmpty(data.dayContent)) {
-				    		meals +=  	'<li data-cards-type="text">'+
-				    						'<div class="inset">'+
-				    							'<p>Leider sind keine Angebote verfügbar :-(</p>'+
-				    						'</div>'+
-				    					'</li>'+
-				    				 '</ul>';
-				    	} else {
-				    		for(var k in data.dayContent) {
-				    			meal = data.dayContent[k];
+	    	if(isEmpty(data.dayContent)) {
+	    		meals +='<li data-cards-type="text">'+
+	    						'	<div class="inset">'+
+	    						'		<p>Leider sind keine Angebote verfügbar :-(</p>'+
+	    						'	</div>'+
+	    						'</li></ul>';
+	    	} else {
+					meals += data.dayContent.map(function(meal){
 
-				    			desc = !isEmpty(meal.ingredients)?meal.ingredients.join(", ").replace(/\[\d*\]/gi,""):"Keine Beschreibung verfügbar!";
+						var description = isEmpty(meal.ingredients) ? "Keine Beschreibung verfügbar!" : meal.ingredients.join(", ").replace(/\[\d*\]/gi,"");
+						var additives = "";
 
-				    			addits = "";
+						if(!isEmpty(meal.addititves)) {
+	    				for( j in meal.addititves) {
+	    					if(j != 58 && j != 50) // Exclude "Veggie" and "Vegan"
+									additives += meal.addititves[j] + "</br>";
+	    				}
+	    			}
+						var veggie = ""
+						if(isEmpty(meal.addititves[58]) && isEmpty(meal.addititves[50])) //If not veggie and not vegan
+							veggie = 'class="non_veggie"';
+						var priceStud = parseFloat(meal.price[0]).toFixed(2).replace(/\./, ",");
+	    			var priceEmp = parseFloat(meal.price[1]).toFixed(2).replace(/\./, ",");
+	    			var priceExt = parseFloat(meal.price[2]).toFixed(2).replace(/\./, ",");
 
-				    			if(!isEmpty(meal.addititves)) {
-				    				for(var j in meal.addititves) {
-				    					// exclude Descrition for "Veggie"-Mode
-				    					if(j!=58 && j!=50)
-				    						addits += meal.addititves[j] + "</br>";
-				    				}
-				    			}
+						var li =	'<li data-cards-type="text" '+veggie+'>'+
+												'<div class="inset">'+
+													'<h1>'+meal.title+'</h1><hr/>'+
+													'<p>'+description+'<br/><br/>'+
+														'<small>Zusätzliche Inhaltsstoffe:</br>'+additives+'</small><br/>'+
+													'</p><p>'+
+														'<b>Studenten: </b>'+priceStud+' &euro;<br/>'+
+														'<b>Mitarbeiter: </b>'+priceEmp+' &euro;<br/>'+
+														'<b>Externe: </b>'+priceExt+' &euro;'+
+													'</p>'+
+												'</div>'+
+											'</li>';
+						return li;
+					}).join("") + '</ul>';
+	    	}
 
-				    			if(isEmpty(addits))
-				    				addits = "Keine weiteren Inhaltsstoffe.";
+				$("#canteen_page div.canteen_content").filter(":jqmData(day='"+getWeekDay(date).id+"')")
+				 .empty()
+				 .append(meals)
+				 .trigger("create");
 
-				    			// make veggie flag
-				    			veggie = !isEmpty(meal.addititves[58]) || !isEmpty(meal.addititves[50]);
-
-				    			title = meal.title;
-
-				    			priceStud = parseFloat(meal.price[0]).toFixed(2).replace(/\./, ",");
-				    			priceEmp = parseFloat(meal.price[1]).toFixed(2).replace(/\./, ",");
-				    			priceExt = parseFloat(meal.price[2]).toFixed(2).replace(/\./, ",");
-
-				    			meals += '<li data-cards-type="text" '+(veggie?'':'class="non_veggie"')+'>'+
-											'<div class="inset">'+
-												'<h1>'+title+'</h1><hr/>'+
-												'<p>'+
-													desc+'<br/><br/>'+
-													'<small>Zusätzliche Inhaltsstoffe:</br>'+addits+'</small><br/>'+
-												'</p>'+
-												'<p>'+
-													'<b>Studenten: </b>'+priceStud+' &euro;<br/>'+
-													'<b>Mitarbeiter: </b>'+priceEmp+' &euro;<br/>'+
-													'<b>Externe: </b>'+priceExt+' &euro;'+
-												'</p>'+
-											'</div>'+
-										'</li>';
-				    		}
-
-				    		meals += '</ul>';
-				    	}
-
-					o.filter(":jqmData(day='"+getWeekDay(date).id+"')")
-					 .empty()
-					 .append(meals)
-					 .trigger("create");
-
-					loadingOut();
-				})
-			   .fail(ajaxErrorHandler);
+				loadingOut();
+			 })
+  		 .fail(ajaxErrorHandler);
 		}
 
 		function dayEmpty(date) {
-			var ul = 	'<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
-							'<li data-cards-type="text">'+
-								'<div class="inset">'+
-									'<p>Leider sind keine Angebote verfügbar :-(</p>'+
-								'</div>'+
-							'</li>'+
-						'</ul>';
+			var ul ='<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+							'	<li data-cards-type="text">'+
+							'		<div class="inset">'+
+							'			<p>Leider sind keine Angebote verfügbar :-(</p>'+
+							'		</div>'+
+							'	</li>'+
+							'</ul>';
 
 			$("#canteen_page div.canteen_content").filter(":jqmData(day='"+getWeekDay(date).id+"')")
 				.empty()
@@ -248,25 +228,24 @@
 		function fillCanteenSelect() {
 			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mensa)
 			 .done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-						{ ajaxErrorHandler(data, status, jqXHR); return; }
+				defaultErrorHandling(data, status, jqXHR);
 
-			 		var opts = "";
+				var opts = "";
 
-			 		for(var k in data.location) {
-			 			opts += '<option value="'+k+'" ';
+				for( id in data.location) {
+					opts += '<option value="'+id+'" ';
 
-			 			if(k == CONFIG.MENSA.defaultCanteen)
-			 				opts += 'selected="selected"';
+					if(id == CONFIG.MENSA.defaultCanteen)
+						opts += 'selected="selected"';
 
-			 			opts += '>'+data.location[k]+'</option>';
-			 		}
+					opts += '>'+data.location[id]+'</option>';
+				}
 
-			 		$( "#canteen_select" )
-						.empty()
-			 			.append(opts)
-			 			.selectmenu("refresh");
-				})
+				$( "#canteen_select" )
+				 .empty()
+				 .append(opts)
+				 .selectmenu("refresh");
+			 })
 			.fail(ajaxErrorHandler);
 		}
 	</script>

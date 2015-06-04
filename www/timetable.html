@@ -9,7 +9,7 @@
 	<div role="main" class="ui-content">
 		<h1 id="actualWeek" data-week="-1">Woche wird geladen...</h1>
 		<h1 id="actualDay" data-day=""></h1>
-		<span  style="float: right;">
+		<span>
 			<a id="prevDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-l ui-corner-all ui-shadow ui-btn-inline"></a>
 			<a id="nextDay" href="#" class="ui-btn ui-btn-icon-notext ui-icon-carat-r ui-corner-all ui-shadow ui-btn-inline"></a>
 		</span>
@@ -18,7 +18,7 @@
 	</div>
 
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
-		<a id="extendTimetable" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow" style="margin-left: 10px;">Kalender erweitern</a>
+		<a id="extendTimetable" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow">Kalender erweitern</a>
 	</div>
 
 	<div id="timetableInfoPopup" data-role="popup" data-theme="a" data-content-theme="a" data-overlay-theme="a" class="ui-corner-all">
@@ -206,7 +206,7 @@
 					defaultErrorHandling(data, status, jqXHR);
 
 					var empty = true;
-					var lis = '<ul data-role="listview" id="timetableSemGroupChoose">'+
+					var lis = '<ul data-role="listview" data-inset="true" id="timetableSemGroupChoose">'+
 										data.map(function(faculty){
 											return faculty.courses.map(function(course){
 												if(course.id === id) {
@@ -224,7 +224,7 @@
 
 					fillConfigPage("Einrichtung", "Bitte wählen Sie ihren Kurs aus!");
 					$("#timetableConfigDesc").after(lis);
-					$("#timetable_config").trigger("create");
+					$("#timetable_config").find(".ui-content").trigger("create");
 					loadingOut();
 			 })
 			 .fail(ajaxErrorHandler);
@@ -260,7 +260,7 @@
 
 					fillConfigPage("Einrichtung", "Bitte kreuzen Sie alle Kurse an, die Sie in ihrem Stundenplan möchten!","Weiter", setCourses);
 					$("#timetableConfigDesc").after(check);
-					$("#timetable_config").trigger("create");
+					$("#timetable_config").find(".ui-content").trigger("create");
 					loadingOut();
 			 })
 			 .fail(ajaxErrorHandler);
@@ -291,7 +291,7 @@
 
 			fillConfigPage("Einrichtung", "Benennen Sie bitte alle Kurse so um, wie es Ihnen am besten gefällt","Weiter", renameCourses);
 			$("#timetableConfigDesc").after(ins);
-			$("#timetable_config").trigger("create");
+			$("#timetable_config").find(".ui-content").trigger("create");
 		}
 
 		/**
@@ -335,7 +335,7 @@
 			saveParameters();
 
 			fillConfigPage("Einrichtung", "Wollen Sie weitere Kurse hinzufügen?","Ja", showConfigPage, "Nein");
-			$("#timetable_config").trigger("create");
+			$("#timetable_config").find(".ui-content").trigger("create");
 		}
 
 		/*********************************************************************************************************************
