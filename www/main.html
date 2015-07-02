@@ -263,8 +263,8 @@
 					var img;
 					if(!isEmpty(imgs)){
 						img = imgs[0].match(/src=".*?\/?"/)[0]; //Extract src property
-						img = img.substring(5,img.length-1).replace("http","https"); //extract URL as String
-						img = '<img class="card-image" src="//wit.wurfl.io/'+addhttp(img)+'">';
+						img = img.substring(5,img.length-1).replace("http","https").split(",")[0]; //extract URL as String
+						img = '<img class="card-image" src="//wit.wurfl.io/' + addhttp(img) + '">';
 					}
 					var content = entry.content.replace(/(<([^>]+)>)/ig,"").slice(0, 300); //Remove all HTML tags, Cut to 300 Signs
 
