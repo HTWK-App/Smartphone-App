@@ -1,5 +1,9 @@
 Smartphone-App
 ==============
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://github.com/HTWK-App/Smartphone-App/blob/master/LICENSE)
+[![Language](https://img.shields.io/badge/language-HTML+JS+CSS-blue.svg)]()
+[![Framework](https://img.shields.io/badge/framework-JqueryMobile-blue.svg)](https://jquerymobile.com/)
+[![Lines of Code](https://img.shields.io/badge/loc-~3270-lightgrey.svg)]()
 
 This repository contains the code for the smart phone application of the Leipzig University of Applied Sciences. The application is created with the following frameworks:
 
