@@ -112,6 +112,8 @@
 <script type="application/javascript" src="js/gmaps.js"></script>-->
 <script type="application/javascript">
 
+	var analytics;
+
 	// AJAX Setup
 	$.ajaxSetup(CONFIG.AJAX);
 
@@ -128,16 +130,17 @@
 			$("#panelMenu").enhanceWithin().panel();
 			$("#signInDialog").trigger("create").enhanceWithin().popup();
 
-			$.getScript( "https://wurfl.io/wurfl.js", function() { // Has to be loaded async but before this code
-				if(WURFL.is_mobile){
-					analytics.startTrackerWithId('UA-49336195-2');
-					analytics.trackView('index');
-				}
-			});
 			$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=addhttp"); // There has to be a callback, that is not required to do something
 		})
 		.on("deviceready", function() {
 			navigator.splashscreen.hide();
+			$.getScript( "https://wurfl.io/wurfl.js", function() { // Has to be loaded async but before this code
+					if(WURFL.is_mobile){
+						analytics = window.analytics;
+						analytics.startTrackerWithId('UA-49336195-2');
+						analytics.trackView('index');
+					}
+			});
 		})
 		// Header Update on Page Switch
 		.on("pageshow", "div:jqmData(role='page')", function() {
