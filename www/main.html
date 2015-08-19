@@ -43,7 +43,7 @@
 					<li><a href="sport.html"><i class="fa fa-fw fa-dribbble"></i>Sportangebote</a></li>
 					<li><a href="info_wlan.html"><i class="fa fa-fw fa-wifi"></i>WLAN-Konfiguration</a></li>
 				<li data-role="list-divider">Tools</li>
-					<li><a href="room_search.html" ><i class="fa fa-fw fa-map-marker"></i>Leeren Raum finden</a></li>
+					<li><a href="room_search.html" ><i class="fa fa-fw fa-map-signs"></i>Leeren Raum finden</a></li>
 					<li><a href="settings.html"><i class="fa fa-fw fa-cogs"></i>Einstellungen</a></li>
 					<li><a href="about.html"><i class="fa fa-fw fa-info"></i>Über die App</a></li>
 			</ul>
@@ -264,7 +264,7 @@
 					if(!isEmpty(imgs)){
 						img = imgs[0].match(/src=".*?\/?"/)[0]; //Extract src property
 						img = img.substring(5,img.length-1).replace("http","https").split(",")[0]; //extract URL as String
-						img = '<img class="card-image" src="//wit.wurfl.io/' + addhttp(img) + '">';
+						img = '<img class="card-image" src="https://wit.wurfl.io/' + addhttp(img) + '">';
 					}
 					var content = entry.content.replace(/(<([^>]+)>)/ig,"").slice(0, 300); //Remove all HTML tags, Cut to 300 Signs
 

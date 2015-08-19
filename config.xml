@@ -9,19 +9,11 @@
     </author>
     <content src="index.html" />
 
-    <preference name="stay-in-webview"            value="false" />          <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
-    <preference name="ios-statusbarstyle"         value="black-opaque" />   <!-- ios: black-translucent will appear black because the PhoneGap webview doesn't go beneath the status bar -->
-    <preference name="detect-data-types"          value="true" />           <!-- ios: controls whether data types (such as phone no. and dates) are automatically turned into links by the system -->
-    <preference name="show-splash-screen-spinner" value="true" />           <!-- ios: if set to false, the spinner won't appear on the splash screen during app loading -->
-    <preference name="auto-hide-splash-screen"    value="true" />           <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
-    <preference name="android-minSdkVersion"      value="15" />              <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
-    <preference name="SplashScreen" value="splash_640x1136.png" />
-    <preference name="SplashScreenDelay" value="3000" />
-
-    <plugin name="cordova-plugin-geolocation" version="1" />
-    <plugin name="cordova-plugin-splashscreen" version="2" />
-    <plugin name="cordova-plugin-whitelist" version="1" />
-    <plugin name="com.danielcwilson.plugins.googleanalytics" version="0.6.1" />
+    <plugin name="cordova-plugin-geolocation" version="1.0.1" />
+    <plugin name="cordova-plugin-splashscreen" version="2.1.0" />
+    <plugin name="cordova-plugin-whitelist" version="1.0.0" />
+    <plugin name="cordova-plugin-statusbar" version="1.0.1" />
+    <plugin name="cordova-plugin-google-analytics" version="0.7.1" />
 
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -33,12 +25,23 @@
 
     <icon src="icons_splashs/icon_192x192_corner.png" />
 
+    <preference name="stay-in-webview"            value="false" />          <!-- ios: external links should open in the default browser, 'true' would use the webview the app lives in -->
+    <preference name="ios-statusbarstyle"         value="black-opaque" />   <!-- ios: black-translucent will appear black because the PhoneGap webview doesn't go beneath the status bar -->
+    <preference name="detect-data-types"          value="true" />           <!-- ios: controls whether data types (such as phone no. and dates) are automatically turned into links by the system -->
+    <preference name="show-splash-screen-spinner" value="true" />           <!-- ios: if set to false, the spinner won't appear on the splash screen during app loading -->
+    <preference name="auto-hide-splash-screen"    value="true" />           <!-- ios: if set to false, the splash screen must be hidden using a JavaScript API -->
+    <preference name="android-minSdkVersion"      value="15" />              <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+
+    <preference name="StatusBarBackgroundColor" value="#2265c4" />
+
     <platform name="android">
         <allow-intent href="market:*" />
-        <splash src="icons_splashs/splash_960x640.png" density="port-ldpi"/>
-        <splash src="icons_splashs/splash_960x640.png" density="port-mdpi"/>
-        <splash src="icons_splashs/splash_640x1136.png" density="port-hdpi"/>
-        <splash src="icons_splashs/splash_640x1136.png" density="port-xhdpi"/>
+        <splash src="icons_splashs/splash_640x1136.png" density="hdpi"/>
+        <splash src="icons_splashs/splash_960x640.png" density="ldpi"/>
+        <splash src="icons_splashs/splash_960x640.png" density="mdpi"/>
+        <splash src="icons_splashs/splash_640x1136.png" density="xhdpi"/>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
