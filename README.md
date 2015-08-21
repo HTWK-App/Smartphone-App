@@ -13,14 +13,9 @@ See the Wiki at [Build the App](https://github.com/HTWK-App/Smartphone-App/wiki/
 
 ## Codestructure ##
 
-Under `Docker Build/` you will find related files to build the App for Android with Docker.
-
-Under `icons_splashs/` you will find Icons and Splashscreens in different resolutions (file names are used inside of `config.xml`. So don't change them!)
-
-Under `www/` you will find the App itself. See [Codestructure](https://github.com/HTWK-App/Smartphone-App/wiki/Codestructure).
+See the Wiki at [Codestructure](https://github.com/HTWK-App/Smartphone-App/wiki/Codestructure).
 
 ## Frameworks ##
-
 
 The application was created with the following frameworks:
 
