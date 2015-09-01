@@ -105,6 +105,7 @@
 <script type="application/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
 <script type="application/javascript" src="js/lib/jquery.mobile.custom.min.js"></script>
 <script type="application/javascript" src="js/compressed.min.js"></script>
+<script type="application/javascript" src="js/lib/wurfl.js"></script>
 <!--<script type="application/javascript" src="js/config.js"></script>
 <script type="application/javascript" src="js/fn.js"></script>
 <script type="application/javascript" src="js/building.js"></script>
@@ -134,13 +135,11 @@
 		})
 		.on("deviceready", function() {
 			navigator.splashscreen.hide();
-			$.getScript( "https://wurfl.io/wurfl.js", function() { // Has to be loaded async but before this code
-					if(WURFL.is_mobile){
-						analytics = window.analytics;
-						analytics.startTrackerWithId('UA-49336195-2');
-						analytics.trackView('index');
-					}
-			});
+			if(WURFL.is_mobile){
+				analytics = window.analytics;
+				analytics.startTrackerWithId('UA-49336195-2');
+				analytics.trackView('index');
+			}
 		})
 		// Header Update on Page Switch
 		.on("pageshow", "div:jqmData(role='page')", function() {

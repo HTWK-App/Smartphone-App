@@ -76,7 +76,7 @@
 		 */
 		function roomLocationError(){
 			badLocation = true;
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+'location?location=51.3131989,12.374164')
+			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+'s/distances?location=51.3131989,12.374164')
 			 .done(function(data, status, jqXHR) {
 				if(!isEmpty(data.exception))
 					{ ajaxErrorHandler(data, status, jqXHR); return; }
