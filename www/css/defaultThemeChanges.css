@@ -47,16 +47,20 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 .ui-page-theme-b .ui-footer .ui-btn.ui-btn-active,
 .ui-page-theme-b .ui-footer .ui-btn:hover,
 .ui-page-theme-b .ui-footer .ui-btn:focus {
-	background-color: #4285f4;
-	border-color: #4285f4;
+	background-color: #2196f3;
+	border-color: #2196f3;
 	color: white;
 	border: none;
+	padding: 16px;
 }
 
 .ui-page-theme-b .ui-header .ui-title {
 	text-align: left;
-	padding-left: 50px;
+	padding-left: 72px;
+	padding-top: 4px;
+	padding-bottom: 20px;
 	margin-left: 0;
+	height: 36px; /*56px; = android design spec*/
 }
 
 .ui-page-theme-b .ui-footer .ui-title {
@@ -223,7 +227,8 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 .ui-page-theme-b .nativeDroidCards li p > .ui-btn:hover,
 .ui-page-theme-b .nativeDroidCards li form button,
 .ui-page-theme-b .nativeDroidCards li form button:hover {
-	color: #4285f4;
+	color: #2196f3
+;
 	background-color: #ffffff;
 	border: none;
 	border-radius: 0;
