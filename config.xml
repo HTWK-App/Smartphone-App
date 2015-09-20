@@ -34,7 +34,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
 
-    <preference name="StatusBarBackgroundColor" value="#2265c4" />
+    <preference name="StatusBarBackgroundColor" value="#2196f3" />
 
     <platform name="android">
         <allow-intent href="market:*" />
