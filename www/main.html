@@ -120,6 +120,13 @@
 
 	// GENERAL Setup
 	$( document )
+		.on("pageinit", "[data-role='page']", function() {
+			var page = "#" + $(this).attr("id");
+			// Swipe right to open panel
+			$(document).on("swiperight", page, function() {
+				$("#panelMenu").panel("open");
+			});
+		})
 		.ready(function() {
 
 			$.mobile.defaultPageTransition   = "fade";
