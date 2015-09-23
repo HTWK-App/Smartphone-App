@@ -14,25 +14,26 @@
 					<option selected="selected">Liste der nächsten Gebäude wird geladen...</option>
 				</select>
 			</div>
-			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:<br/></h3>
+			<h3>Leere Seminarräume, aufbauend auf ihrer aktuellen Position, sind:
+				<br/>
+			</h3>
 			<ul id="room_room_list" class="nativeDroidCards"></ul>
 			<br/>
 		</p>
 	</div>
 
 	<script>
-
-		$( "#room_page" )
-			.on("pageshow", function () {
+		$("#room_page")
+			.on("pageshow", function() {
 				loadingIn("Ihre aktuelle Position wird bestimmt. Bitte haben Sie einen Moment Geduld!");
 				startRoomFind();
 				GLOBAL.INIT.room = true;
-				if(WURFL.is_mobile){
+				if (WURFL.is_mobile) {
 					analytics.trackView('room');
 				}
-			 });
+			});
 
-		$( "#building_select" )
+		$("#building_select")
 			.change(function() {
 				loadingIn();
 				fillRoomList($(this).val());
@@ -47,7 +48,11 @@
 		function startRoomFind() {
 
 			if (navigator.geolocation)
-				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, { maximumAge: 10000, timeout: 7000, enableHighAccuracy: true }); //in milliseconds
+				navigator.geolocation.getCurrentPosition(roomLocationFound, roomLocationError, {
+					maximumAge: 10000,
+					timeout: 7000,
+					enableHighAccuracy: true
+				}); //in milliseconds
 			else
 				roomLocationError();
 		}
@@ -58,32 +63,36 @@
 		 * @param HTML5_position_object position ... Contains position data. See http://www.w3schools.com/html/html5_geolocation.asp
 		 *
 		 */
-		function roomLocationFound(position){
+		function roomLocationFound(position) {
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+'s/distances?location='+position.coords.latitude+','+position.coords.longitude)
-			 .done(function(data, status, jqXHR) {
-				if(!isEmpty(data.exception))
-					{ ajaxErrorHandler(data, status, jqXHR); return; }
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.builds + 's/distances?location=' + position.coords.latitude + ',' + position.coords.longitude)
+				.done(function(data, status, jqXHR) {
+					if (!isEmpty(data.exception)) {
+						ajaxErrorHandler(data, status, jqXHR);
+						return;
+					}
 
-				fillBuildingsList(data);
-			 })
-			 .fail(ajaxErrorHandler);
+					fillBuildingsList(data);
+				})
+				.fail(ajaxErrorHandler);
 		}
 
 		/**
 		 * Called when it failed to locate the device.
 		 *
 		 */
-		function roomLocationError(){
+		function roomLocationError() {
 			badLocation = true;
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds+'s/distances?location=51.3131989,12.374164')
-			 .done(function(data, status, jqXHR) {
-				if(!isEmpty(data.exception))
-					{ ajaxErrorHandler(data, status, jqXHR); return; }
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.builds + 's/distances?location=51.3131989,12.374164')
+				.done(function(data, status, jqXHR) {
+					if (!isEmpty(data.exception)) {
+						ajaxErrorHandler(data, status, jqXHR);
+						return;
+					}
 
-				fillBuildingsList(data);
-			 })
-			 .fail(ajaxErrorHandler);
+					fillBuildingsList(data);
+				})
+				.fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -99,18 +108,18 @@
 			opts = "";
 			console.log(data)
 
-			for(var k in data){
+			for (var k in data) {
 				id = data[k].id;
 				tmp = "";
 				name = data[k].fullName;
 
-				if(k === 0)
+				if (k === 0)
 					tmp = 'selected="selected"';
 
-				opts += '<option value="'+id+'" '+tmp+'>'+name+'</option>';
+				opts += '<option value="' + id + '" ' + tmp + '>' + name + '</option>';
 			}
 
-			$( "#building_select" )
+			$("#building_select")
 				.empty()
 				.append(opts)
 				.selectmenu("refresh")
@@ -123,55 +132,66 @@
 		 * @ param ... id ... ....
 		 *
 		 */
-		function fillRoomList(id){
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.room+CONFIG.TIMETABLE.semester+'/'+GLOBAL.DATE.currentPlanWeek)
+		function fillRoomList(id) {
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.room + CONFIG.TIMETABLE.semester + '/' + GLOBAL.DATE.currentPlanWeek)
 				.done(function(data, status, jqXHR) {
-					if(!isEmpty(data.exception))
-							{ ajaxErrorHandler(data, status, jqXHR); return; }
+					if (!isEmpty(data.exception)) {
+						ajaxErrorHandler(data, status, jqXHR);
+						return;
+					}
 
 					var lis = "";
 					var building = data[id];
 					var count = 0;
 
-					for(var k in building){
+					for (var k in building) {
 						var room = building[k];
 
-						lis +=	'<li>'+
-										'	<h3>'+room.name+'</h3>'+
-										'	<p>'+
-										'		<strong>Typ:</strong> '+room.type+', '+
-										'		<strong>Größe:</strong> '+room.size+' Plätze'+
-										'	</p>'+
-										'</li>';
+						lis += '<li>' +
+							'	<h3>' + room.name + '</h3>' +
+							'	<p>' +
+							'		<strong>Typ:</strong> ' + room.type + ', ' +
+							'		<strong>Größe:</strong> ' + room.size + ' Plätze' +
+							'	</p>' +
+							'</li>';
 						count += 1;
 					}
-					if(count === 0){
+					if (count === 0) {
 						var text = "";
-						switch(id) {
-							case "SH": text = 'Sportbegeistert? In der Sporthalle dürfte eigentlich immer etwas frei sein. Denk aber an die Öffnungszeiten!'; break;
-							case "HB": text = "Die Bibliothek hat irgendwo immer einen Platz frei. Denk aber an die Öffnungszeiten!"; break;
-							case "Mensa": text = "Hunger? In der Mensa findest du immer eine Sitzgelegenheit. Denk aber an die Öffnungszeiten!"; break;
-							case "Sportplatz": text = "Wo treibst du dich denn rum? Auf dem Sportplatz gibt es doch gar keine Räume...."; break;
-							default: text = "Entschuldige, ich habe gerade keine Informationen für dich. Du musst wohl selbst auf die Suche gehen...";
+						switch (id) {
+							case "SH":
+								text = 'Sportbegeistert? In der Sporthalle dürfte eigentlich immer etwas frei sein. Denk aber an die Öffnungszeiten!';
+								break;
+							case "HB":
+								text = "Die Bibliothek hat irgendwo immer einen Platz frei. Denk aber an die Öffnungszeiten!";
+								break;
+							case "Mensa":
+								text = "Hunger? In der Mensa findest du immer eine Sitzgelegenheit. Denk aber an die Öffnungszeiten!";
+								break;
+							case "Sportplatz":
+								text = "Wo treibst du dich denn rum? Auf dem Sportplatz gibt es doch gar keine Räume....";
+								break;
+							default:
+								text = "Entschuldige, ich habe gerade keine Informationen für dich. Du musst wohl selbst auf die Suche gehen...";
 						}
-						lis += 	'<li>'+
-										'	<h3>'+text+'</h3>'+
-										'</li>';
+						lis += '<li>' +
+							'	<h3>' + text + '</h3>' +
+							'</li>';
 					}
 
-					$( "#room_room_list" )
+					$("#room_room_list")
 						.empty()
 						.append(lis)
 						.trigger("updatelayout");
 
 					loadingOut();
-					if(badLocation === true){
+					if (badLocation === true) {
 						loadingIn("Ihre Position konnte NICHT bestimmt werden. Es wird vom Standort der HTWK ausgegangen.", true);
 						setTimeout(loadingOut, 4000);
 						badLocation = false;
 					}
-				 })
-				 .fail(ajaxErrorHandler);
+				})
+				.fail(ajaxErrorHandler);
 		}
 	</script>
 </div>

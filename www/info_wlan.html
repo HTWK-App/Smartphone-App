@@ -1,31 +1,46 @@
-﻿<div data-role="page" data-title="WLAN-Konfiguration" data-theme="b">
+<div data-role="page" data-title="WLAN-Konfiguration" data-theme="b">
 
   <div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">
-		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
-		<h1>HTWK App</h1>
-	</div>
+    <a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+    <h1>HTWK App</h1>
+  </div>
 
-	<div role="main" class="ui-content">
-		<ul class="nativeDroidCards">
-			<li>
-				<strong>Netzwerkname(SSID):</strong><br/>eduroam<br/>
-				<strong>Sicherheit:</strong><br/>WPA2-Enterprise<br/>
-				<strong>Authentifizierung:</strong><br/>EAP-TTLS<br/>
-				<strong>Verschlüsselung:</strong><br/>AES<br/>
-				<strong>Innere Authentifizierung:</strong><br/>PAP<br/>
-				<strong>äußere Identität:</strong><br/>anonymous@htwk-leipzig.de<br/>
-				<strong>innere Identität:</strong><br/>HRZ-Dienst-Login@htwk-leipzig.de<br/>
-				<strong>Passwort:</strong><br/>HRZ-Dienste-Passwort
-			</li>
-			<li>
-				Wenn du eine Anleitung für dein Beitriebssystem, egal ob Android, Mac OS X oder Windows, brauchst, kannst du dir diese auf der folgenden Website ansehen:
-				<a href="http://www.htwk-leipzig.de/de/rzpages/services/wlan/wlan-eduroam/" style="clear: both;" data-role="button" class="external"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Zur Anleitung</a>
-			</li>
-		</ul>
-	</div>
+  <div role="main" class="ui-content">
+    <ul class="nativeDroidCards">
+      <li>
+        <strong>Netzwerkname(SSID):</strong>
+        <br/>eduroam
+        <br/>
+        <strong>Sicherheit:</strong>
+        <br/>WPA2-Enterprise
+        <br/>
+        <strong>Authentifizierung:</strong>
+        <br/>EAP-TTLS
+        <br/>
+        <strong>Verschlüsselung:</strong>
+        <br/>AES
+        <br/>
+        <strong>Innere Authentifizierung:</strong>
+        <br/>PAP
+        <br/>
+        <strong>äußere Identität:</strong>
+        <br/>anonymous@htwk-leipzig.de
+        <br/>
+        <strong>innere Identität:</strong>
+        <br/>HRZ-Dienst-Login@htwk-leipzig.de
+        <br/>
+        <strong>Passwort:</strong>
+        <br/>HRZ-Dienste-Passwort
+      </li>
+      <li>
+        Wenn du eine Anleitung für dein Beitriebssystem, egal ob Android, Mac OS X oder Windows, brauchst, kannst du dir diese auf der folgenden Website ansehen:
+        <a href="http://www.htwk-leipzig.de/de/rzpages/services/wlan/wlan-eduroam/" style="clear: both;" data-role="button" class="external"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Zur Anleitung</a>
+      </li>
+    </ul>
+  </div>
 
-	<script>
-		if(WURFL.is_mobile)
-			analytics.trackView('wlan');
-	</script>
+  <script>
+    if (WURFL.is_mobile)
+      analytics.trackView('wlan');
+  </script>
 </div>

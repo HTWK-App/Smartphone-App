@@ -2,12 +2,14 @@
 // nodejs server.js
 
 // Defines
-const PORT=8080;
-const DIR='./www';
+const PORT = 8080;
+const DIR = './www';
 
 // Create server
 var server = require('pushstate-server');
 
 // Start server
-server.start({ port: PORT, directory: DIR })
-
+server.start({
+  port: PORT,
+  directory: DIR
+})

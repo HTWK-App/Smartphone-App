@@ -1,4 +1,4 @@
-﻿<div id="building_page" data-role="page" data-title="Gebäudeplan" data-theme="b" data-dom-cache="true">
+<div id="building_page" data-role="page" data-title="Gebäudeplan" data-theme="b" data-dom-cache="true">
 
 	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
 		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
@@ -11,16 +11,16 @@
 	</div>
 
 	<script>
-  	$( "#building_page" )
-  		.on("pagecreate", buildingInitBuildingsView)
-  		.on("pageshow", function() {
-  			if(!GLOBAL.INIT.builds) loadingIn();
+		$("#building_page")
+			.on("pagecreate", buildingInitBuildingsView)
+			.on("pageshow", function() {
+				if (!GLOBAL.INIT.builds) loadingIn();
 				var list = $("#buidling_content_list");
 				list.find("li").removeClass("ui-screen-hidden");
 				list.listview("refresh");
-				if(WURFL.is_mobile)
+				if (WURFL.is_mobile)
 					analytics.trackView('buildings');
-  		 });
+			});
 
 		/**
 		 * Fetches buildings from the Server. Will call buildingFillBuildingsList
@@ -30,7 +30,7 @@
 
 			loadingIn();
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.builds)
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.builds)
 				.done(function(data, status, jqXHR) { //No Default-Error Handling needed!
 
 					buildingFillBuildingsList(data);
@@ -48,25 +48,27 @@
 		 */
 		function buildingFillBuildingsList(data) {
 
-			var lis = data.map(function(building){
+			var lis = data.map(function(building) {
 				var desc = isEmpty(building.description[0]) ? "" : building.description[0];
-				var li ='<li data-bid='+building.id+'><a href="#" class="building">'+
-								'	<h3>'+building.fullName+'</h3>'+
-								'	<p>'+desc.slice(0,300)+'</p>'+
-								'	<p>'+building.address+'</p>'+
-								'</a></li>';
+				var li = '<li data-bid=' + building.id + '><a href="#" class="building">' +
+					'	<h3>' + building.fullName + '</h3>' +
+					'	<p>' + desc.slice(0, 300) + '</p>' +
+					'	<p>' + building.address + '</p>' +
+					'</a></li>';
 				return li;
 			}).join("");
 
-			$( "#buidling_content_list" )
+			$("#buidling_content_list")
 				.off()
 				.empty()
 				.append(lis)
-				.on("click", "a.building", function (){buildingLoadBuildingDetails($(this).parents("li").first().data("bid"));})
+				.on("click", "a.building", function() {
+					buildingLoadBuildingDetails($(this).parents("li").first().data("bid"));
+				})
 				.listview("refresh")
 				.trigger("updatelayout");
 
-			$( "body" )
+			$("body")
 				.find("div.buildingdetails")
 				.remove();
 		}

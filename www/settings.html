@@ -1,186 +1,197 @@
-﻿<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme="b">
+<div id="settings_page" data-role="page" data-title="Einstellungen" data-theme="b">
 
   <div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">
-		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
-		<h1>HTWK App</h1>
-	</div>
+    <a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+    <h1>HTWK App</h1>
+  </div>
 
-	<div role="main" class="ui-content">
-		<ul class="nativeDroidCards">
-			<li>
-				<h1>Login-Daten</h1><hr/>
-				<form id="settings_loginForm">
-					<label for="settings_input_username"><strong>Nutzername:</strong></label>
-						<input type="text" name="settings_input_username" id="settings_input_username" value="" placeholder="Nutzername" required>
-					<label for="settings_input_password"><strong>Passwort:</strong> </label>
-						<input type="password" name="settings_input_password" id="settings_input_password" value="" autocomplete="off" placeholder="Passwort" required>
-					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
-				</form>
-			</li>
-			<li>
-				<h1>E-Mail</h1>
-				<form id="settings_emailForm">
-			 	 		<input type="email" id="settings_input_email" value="" placeholder="max.muster@stud.htwk-leipzig.de" required>
-					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
-				</form>
-			</li>
-			<li>
-				<h1>News</h1><hr/>
-				<label for="default_news_select"><strong>Standard Newsfeed:</strong></label>
-				<select id="default_news_select" name="default_news_select">
-					<option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
-				</select>
-			</li>
-			<li>
-				<h1>Stundenplan</h1>
-				<a href="#popup_timetable_delete" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-trash fa-fw fa-lg"></i> Stundenplan löschen...</a>
-			</li>
-			<li>
-				<h1>Mensa</h1><hr/>
-				<label for="default_canteen_select"><strong>Standard Mensa:</strong></label>
-				<select id="default_canteen_select" name="default_canteen_select">
-					<option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
-				</select>
-			</li>
-		</ul>
-	</div>
+  <div role="main" class="ui-content">
+    <ul class="nativeDroidCards">
+      <li>
+        <h1>Login-Daten</h1>
+        <hr/>
+        <form id="settings_loginForm">
+          <label for="settings_input_username">
+            <strong>Nutzername:</strong>
+          </label>
+          <input type="text" name="settings_input_username" id="settings_input_username" value="" placeholder="Nutzername" required>
+          <label for="settings_input_password">
+            <strong>Passwort:</strong>
+          </label>
+          <input type="password" name="settings_input_password" id="settings_input_password" value="" autocomplete="off" placeholder="Passwort" required>
+          <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
+        </form>
+      </li>
+      <li>
+        <h1>E-Mail</h1>
+        <form id="settings_emailForm">
+          <input type="email" id="settings_input_email" value="" placeholder="max.muster@stud.htwk-leipzig.de" required>
+          <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-download fa-fw fa-lg"></i> Speichern</button>
+        </form>
+      </li>
+      <li>
+        <h1>News</h1>
+        <hr/>
+        <label for="default_news_select">
+          <strong>Standard Newsfeed:</strong>
+        </label>
+        <select id="default_news_select" name="default_news_select">
+          <option selected="selected">Liste der verfügbaren News-Feeds wird geladen...</option>
+        </select>
+      </li>
+      <li>
+        <h1>Stundenplan</h1>
+        <a href="#popup_timetable_delete" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><i class="fa fa-trash fa-fw fa-lg"></i> Stundenplan löschen...</a>
+      </li>
+      <li>
+        <h1>Mensa</h1>
+        <hr/>
+        <label for="default_canteen_select">
+          <strong>Standard Mensa:</strong>
+        </label>
+        <select id="default_canteen_select" name="default_canteen_select">
+          <option selected="selected">Liste der verfügbaren Mensen wird geladen...</option>
+        </select>
+      </li>
+    </ul>
+  </div>
 
-	<div id="popup_timetable_delete" data-role="popup" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
-		<div data-role="header">
-			<h3>Wirklich Löschen?</h3>
-		</div>
-		<div role="main" class="ui-content">
-			<h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
-			<p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
-			<br>
-			<a id="settings_timetable_delete" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Löschen</a>
-			<a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</a>
-		</div>
-	</div>
+  <div id="popup_timetable_delete" data-role="popup" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+    <div data-role="header">
+      <h3>Wirklich Löschen?</h3>
+    </div>
+    <div role="main" class="ui-content">
+      <h4>Wollen Sie wirklich ihre gemachten Einstellung bezüglich des Stundenplans löschen?</h4>
+      <p>Diese Aktion kann nicht rückgängig gemacht werden!</p>
+      <br>
+      <a id="settings_timetable_delete" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Löschen</a>
+      <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</a>
+    </div>
+  </div>
 
-	<script>
-		/*TODO
-		 * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
-		 * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
-		 */
+  <script>
+    /*TODO
+     * There are two requests send to the server --> loadingOut has to be called, when both of them are finished.
+     * Functions GetNewsFeeds and GetCanteens are the same functions, used in Mensa and News. --> Refactoring, so that it is not copy and pasted
+     */
 
-		$("#settings_page")
-		.on("pagecreate", function() {
-			settingsGetNewsFeeds();
-			settingsGetCanteens();
-			settingsFillFields();
-		})
-		.on("pageshow", function () {
-			loadingIn();
-		 	if(WURFL.is_mobile)
-			 	analytics.trackView('settings');
-		});
+    $("#settings_page")
+      .on("pagecreate", function() {
+        settingsGetNewsFeeds();
+        settingsGetCanteens();
+        settingsFillFields();
+      })
+      .on("pageshow", function() {
+        loadingIn();
+        if (WURFL.is_mobile)
+          analytics.trackView('settings');
+      });
 
-		/**
-		 * Get all Newsfeeds from the Server and fill them into the select widget. Default Feed will be selected.
-		 *
-		 */
-		function settingsGetNewsFeeds() {
+    /**
+     * Get all Newsfeeds from the Server and fill them into the select widget. Default Feed will be selected.
+     *
+     */
+    function settingsGetNewsFeeds() {
 
-			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news)
-			.done( function(data, status, jqXHR) {
-        defaultErrorHandling(data, status, jqXHR);
+      $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news)
+        .done(function(data, status, jqXHR) {
+          defaultErrorHandling(data, status, jqXHR);
 
-        var opts = data.map(function(feed){
-          var id = feed.id;
-          var tmp = id.split(".");
-					var name = capitalize(tmp[1])	+ (tmp.length == 3 ? " " + tmp[2] : "");
+          var opts = data.map(function(feed) {
+            var id = feed.id;
+            var tmp = id.split(".");
+            var name = capitalize(tmp[1]) + (tmp.length == 3 ? " " + tmp[2] : "");
 
-					tmp = (id == CONFIG.NEWS.defaultFeed) ? 'selected="selected"' : "";
-					return '<option value="'+id+'" '+tmp+'>' + GLOBAL.NEWS.titles[id] + '</option>';
-        }).join("");
+            tmp = (id == CONFIG.NEWS.defaultFeed) ? 'selected="selected"' : "";
+            return '<option value="' + id + '" ' + tmp + '>' + GLOBAL.NEWS.titles[id] + '</option>';
+          }).join("");
 
-				$("#default_news_select")
-					.empty()
-					.append(opts)
-					.selectmenu("refresh");
+          $("#default_news_select")
+            .empty()
+            .append(opts)
+            .selectmenu("refresh");
 
-				loadingOut();
-			})
-			.fail(ajaxErrorHandler);
-		}
+          loadingOut();
+        })
+        .fail(ajaxErrorHandler);
+    }
 
-		/**
-		 * Get all Canteens from the Server and fill them into the select widget. Default Canteen will be selected.
-		 *
-		 */
-		function settingsGetCanteens() {
+    /**
+     * Get all Canteens from the Server and fill them into the select widget. Default Canteen will be selected.
+     *
+     */
+    function settingsGetCanteens() {
 
-			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa)
-			.done( function(data, status, jqXHR) {
-        defaultErrorHandling(data, status, jqXHR);
+      $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa)
+        .done(function(data, status, jqXHR) {
+          defaultErrorHandling(data, status, jqXHR);
 
-				var opts = "";
+          var opts = "";
 
-				for ( var k in data.location) {
-					opts += '<option value="' + k + '" ';
+          for (var k in data.location) {
+            opts += '<option value="' + k + '" ';
 
-					if (k == CONFIG.MENSA.defaultCanteen)
-						opts += 'selected="selected"';
+            if (k == CONFIG.MENSA.defaultCanteen)
+              opts += 'selected="selected"';
 
-					opts += '>' + data.location[k] + '</option>';
-				}
+            opts += '>' + data.location[k] + '</option>';
+          }
 
-				$("#default_canteen_select")
-					.empty()
-					.append(opts)
-					.selectmenu("refresh");
+          $("#default_canteen_select")
+            .empty()
+            .append(opts)
+            .selectmenu("refresh");
 
-			})
-			.fail(ajaxErrorHandler);
-		}
+        })
+        .fail(ajaxErrorHandler);
+    }
 
-		/**
-		 * Fill existing widgets with data, if present. To be filled: Username textbox, Language select
-		 *
-		 */
-		function settingsFillFields() {
+    /**
+     * Fill existing widgets with data, if present. To be filled: Username textbox, Language select
+     *
+     */
+    function settingsFillFields() {
 
-			var opts = "";
+      var opts = "";
 
-			if (!isEmpty(CONFIG.AUTH.username))
-				$("#settings_input_username").val(CONFIG.AUTH.username);
+      if (!isEmpty(CONFIG.AUTH.username))
+        $("#settings_input_username").val(CONFIG.AUTH.username);
 
-			if (!isEmpty(CONFIG.AUTH.email))
-				$("#settings_input_email").val(CONFIG.AUTH.email);
-		}
+      if (!isEmpty(CONFIG.AUTH.email))
+        $("#settings_input_email").val(CONFIG.AUTH.email);
+    }
 
-		$("#settings_loginForm").submit(function (event){
-			event.preventDefault();
-			saveUsernamePassword($("#settings_input_username").val(), $("#settings_input_password").val());
-		});
+    $("#settings_loginForm").submit(function(event) {
+      event.preventDefault();
+      saveUsernamePassword($("#settings_input_username").val(), $("#settings_input_password").val());
+    });
 
-		$("#settings_emailForm").submit(function (event){
-			event.preventDefault();
+    $("#settings_emailForm").submit(function(event) {
+      event.preventDefault();
 
-			CONFIG.AUTH.email = $("#settings_input_email").val();
-			saveParameters();
-			loadingIn("Ihre neue E-Mail Adresse wurde gespeichert!", true);
-			setTimeout(loadingOut, 2000);
-		});
+      CONFIG.AUTH.email = $("#settings_input_email").val();
+      saveParameters();
+      loadingIn("Ihre neue E-Mail Adresse wurde gespeichert!", true);
+      setTimeout(loadingOut, 2000);
+    });
 
-		$("#default_news_select").change(function() {
-			CONFIG.NEWS.defaultFeed = $(this).val();
-			saveParameters();
-		});
+    $("#default_news_select").change(function() {
+      CONFIG.NEWS.defaultFeed = $(this).val();
+      saveParameters();
+    });
 
-		$("#settings_timetable_delete").on("click", function() {
-			CONFIG.TIMETABLE.faculty = [];
-			CONFIG.TIMETABLE.temporary = [];
-			saveParameters();
-			$("#popup_timetable_delete").popup("close");
-			loadingIn("Ihr Stundenplan wurde gelöscht!", true);
-			setTimeout(loadingOut, 2000);
-		});
+    $("#settings_timetable_delete").on("click", function() {
+      CONFIG.TIMETABLE.faculty = [];
+      CONFIG.TIMETABLE.temporary = [];
+      saveParameters();
+      $("#popup_timetable_delete").popup("close");
+      loadingIn("Ihr Stundenplan wurde gelöscht!", true);
+      setTimeout(loadingOut, 2000);
+    });
 
-		$("#default_canteen_select").on("change", function() {
-			CONFIG.MENSA.defaultCanteen = $(this).val();
-			saveParameters();
-		});
-	</script>
+    $("#default_canteen_select").on("change", function() {
+      CONFIG.MENSA.defaultCanteen = $(this).val();
+      saveParameters();
+    });
+  </script>
 </div>

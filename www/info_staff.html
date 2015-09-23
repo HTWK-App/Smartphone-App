@@ -10,15 +10,14 @@
 	</div>
 
 	<script>
-
-		$( "#staff_page" )
-  		.on("pagecreate", staffInitStaffView)
-  		.on("pageshow", function() {
-  			if(!GLOBAL.INIT.staff)
+		$("#staff_page")
+			.on("pagecreate", staffInitStaffView)
+			.on("pageshow", function() {
+				if (!GLOBAL.INIT.staff)
 					loadingIn();
-  			if(WURFL.is_mobile)
-    			analytics.trackView('staff');
-  		 });
+				if (WURFL.is_mobile)
+					analytics.trackView('staff');
+			});
 
 		/**
 		 * Fetches staff from the Server. Will call staffFillStaffList
@@ -28,13 +27,13 @@
 
 			loadingIn();
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.staff)
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.staff)
 				.done(function(data, status, jqXHR) {
 					defaultErrorHandling(data, status, jqXHR);
 
 					staffFillStaffList(data);
 					loadingOut();
-					loadingIn("Geben Sie bitte einen Suchbegriff ein. Danach sehen sie die gewünschten Mitarbeiter!",true);
+					loadingIn("Geben Sie bitte einen Suchbegriff ein. Danach sehen sie die gewünschten Mitarbeiter!", true);
 					setTimeout(loadingOut, 3000);
 					GLOBAL.INIT.staff = true;
 				})
@@ -49,22 +48,22 @@
 		 */
 		function staffFillStaffList(data) {
 
-			var list = data.map(function(employee){
+			var list = data.map(function(employee) {
 				var name = employee.name.split(", ");
-				var li = '<li class="ui-screen-hidden" data-cuid="'+employee.cuid+'">'+
-									'<a href="#" class="staff">'+
-									'<img src="'+CONFIG.SERVER.base+CONFIG.SERVER.staff+employee.cuid+'/thumb" height="64" width="64" class="staffpic">'+
-										name[1]+' '+name[0]+', '+employee.degree+
-										'<p>'+employee.faculty+'</p>'+
-									'</a></li>';
+				var li = '<li class="ui-screen-hidden" data-cuid="' + employee.cuid + '">' +
+					'<a href="#" class="staff">' +
+					'<img src="' + CONFIG.SERVER.base + CONFIG.SERVER.staff + employee.cuid + '/thumb" height="64" width="64" class="staffpic">' +
+					name[1] + ' ' + name[0] + ', ' + employee.degree +
+					'<p>' + employee.faculty + '</p>' +
+					'</a></li>';
 				return li;
 			}).join("");
 
-			$( "#staff_content_list" )
+			$("#staff_content_list")
 				.off()
 				.empty()
 				.append(list)
-				.on("click", "a.staff", function (){
+				.on("click", "a.staff", function() {
 					loadStaffDetails($(this).parents("li").first().data("cuid"));
 				})
 				.listview("refresh")

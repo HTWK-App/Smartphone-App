@@ -1,104 +1,114 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>HTWK App</title>
-		<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
-		<meta charset="UTF-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="format-detection" content="telephone=no">
-		<meta name="msapplication-tap-highlight" content="no">
-		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
-		<link rel="icon" type="image/png" href="images/favicon.png">
 
-		<link rel="stylesheet" type="text/css" href="css/HTWK-App.min.css" defer>
-		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.icons.min.css" defer>
-		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.custom.structure.min.css" defer>
-		<link rel="stylesheet" type="text/css" href="css/defaultThemeChanges.min.css" defer>
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" defer>
-		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto" defer>
+<head>
+	<title>HTWK App</title>
+	<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+	<link rel="icon" type="image/png" href="images/favicon.png">
 
-		<script type="application/javascript" src="cordova.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="css/HTWK-App.min.css" defer>
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile.icons.min.css" defer>
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile.custom.structure.min.css" defer>
+	<link rel="stylesheet" type="text/css" href="css/defaultThemeChanges.min.css" defer>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" defer>
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto" defer>
 
-		<style> .map-canvas{ height: 250px; } </style>
+	<script type="application/javascript" src="cordova.js" defer></script>
 
-	</head>
-	<body>
+	<style>
+		.map-canvas {
+			height: 250px;
+		}
+	</style>
 
-		<!--- MENU -->
-		<div data-role="panel" id="panelMenu" data-theme="a" data-display="overlay"  data-position="left">
-			<ul data-role="listview">
-				<li data-role="list-divider">Hauptmenü</li>
-					<li><a href="main.html"><i class="fa fa-fw fa-home"></i>Startseite</a></li>
-					<li><a href="news.html"><i class="fa fa-fw fa-newspaper-o"></i>News</a></li>
-					<li><a href="timetable.html"><i class="fa fa-fw fa-calendar"></i>Stundenplan</a></li>
-					<li><a href="canteen.html"><i class="fa fa-fw fa-cutlery"></i>Mensa-Angebot</a></li>
-					<li><a href="mail.html"><i class="fa fa-fw fa-envelope"></i>Postfach</a></li>
-					<li><a href="qis.html"><i class="fa fa-fw fa-graduation-cap"></i>QIS</a></li>
-					<li><a href="library.html"><i class="fa fa-fw fa-book"></i>Bibliothek</a></li>
-				<li data-role="list-divider">Info-Center</li>
-					<li><a href="info_general.html"><i class="fa fa-fw fa-info"></i>Allgemeine Infos</a></li>
-					<li><a href="info_staff.html"><i class="fa fa-fw fa-group"></i>Mitarbeiter</a></li>
-					<li><a href="info_buildings.html"><i class="fa fa-fw fa-institution"></i>Gebäudeplan</a></li>
-					<li><a href="sport.html"><i class="fa fa-fw fa-dribbble"></i>Sportangebote</a></li>
-					<li><a href="info_wlan.html"><i class="fa fa-fw fa-wifi"></i>WLAN-Konfiguration</a></li>
-				<li data-role="list-divider">Tools</li>
-					<li><a href="room_search.html" ><i class="fa fa-fw fa-map-signs"></i>Leeren Raum finden</a></li>
-					<li><a href="settings.html"><i class="fa fa-fw fa-cogs"></i>Einstellungen</a></li>
-					<li><a href="about.html"><i class="fa fa-fw fa-info"></i>Über die App</a></li>
+</head>
+
+<body>
+
+	<!--- MENU -->
+	<div data-role="panel" id="panelMenu" data-theme="a" data-display="overlay" data-position="left">
+		<ul data-role="listview">
+			<li data-role="list-divider">Hauptmenü</li>
+			<li><a href="main.html"><i class="fa fa-fw fa-home"></i>Startseite</a></li>
+			<li><a href="news.html"><i class="fa fa-fw fa-newspaper-o"></i>News</a></li>
+			<li><a href="timetable.html"><i class="fa fa-fw fa-calendar"></i>Stundenplan</a></li>
+			<li><a href="canteen.html"><i class="fa fa-fw fa-cutlery"></i>Mensa-Angebot</a></li>
+			<li><a href="mail.html"><i class="fa fa-fw fa-envelope"></i>Postfach</a></li>
+			<li><a href="qis.html"><i class="fa fa-fw fa-graduation-cap"></i>QIS</a></li>
+			<li><a href="library.html"><i class="fa fa-fw fa-book"></i>Bibliothek</a></li>
+			<li data-role="list-divider">Info-Center</li>
+			<li><a href="info_general.html"><i class="fa fa-fw fa-info"></i>Allgemeine Infos</a></li>
+			<li><a href="info_staff.html"><i class="fa fa-fw fa-group"></i>Mitarbeiter</a></li>
+			<li><a href="info_buildings.html"><i class="fa fa-fw fa-institution"></i>Gebäudeplan</a></li>
+			<li><a href="sport.html"><i class="fa fa-fw fa-dribbble"></i>Sportangebote</a></li>
+			<li><a href="info_wlan.html"><i class="fa fa-fw fa-wifi"></i>WLAN-Konfiguration</a></li>
+			<li data-role="list-divider">Tools</li>
+			<li><a href="room_search.html"><i class="fa fa-fw fa-map-signs"></i>Leeren Raum finden</a></li>
+			<li><a href="settings.html"><i class="fa fa-fw fa-cogs"></i>Einstellungen</a></li>
+			<li><a href="about.html"><i class="fa fa-fw fa-info"></i>Über die App</a></li>
+		</ul>
+	</div>
+	<!--- MENU -->
+	<div id="overlayer"></div>
+
+	<div id="index" data-role="page" data-theme="b">
+
+		<!--- HEADER -->
+		<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
+			<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-bars fa-lg"></i></a>
+			<h1>HTWK App</h1>
+		</div>
+		<!--- HEADER -->
+
+		<div role="main" class="ui-content">
+			<ul class="nativeDroidCards">
+				<li id="mensaCard" data-cards-type="text">
+					<h1>Mensaangebot des Tages</h1>
+					<hr/>
+					<img src="images/food.jpg" style="width: 100%;">
+					<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b "><i class="fa fa-cutlery fa-lg fa-fw"></i> Details</a>
+					<hr/>
+				</li>
+				<li>
+					<h1>Wir suchen dich!</h1>
+					<hr/>
+					<p>Auch du kannst uns auf vielfältige Weise bei der App unterstützen. Wenn du interessiert bist:</p>
+					<a href="about.html" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a>
+					<hr/>
+				</li>
+				<li id="HTWKNews" data-cards-type="text" class="HtwkImage"></li>
+				<li id="HTWKEvents" data-cards-type="text" class="HtwkImage"></li>
+				<li id="LVZNews" data-cards-type="text"></li>
 			</ul>
 		</div>
-		<!--- MENU -->
-		<div id="overlayer"></div>
 
-		<div id="index" data-role="page" data-theme="b">
+	</div>
 
-			<!--- HEADER -->
-			<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
-				<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-bars fa-lg"></i></a>
-				<h1>HTWK App</h1>
-			</div>
-			<!--- HEADER -->
-
-			<div role="main" class="ui-content">
-				<ul class="nativeDroidCards">
-					<li id="mensaCard" data-cards-type="text">
-						<h1>Mensaangebot des Tages</h1><hr/>
-						<img src="images/food.jpg" style="width: 100%;">
-						<a href="canteen.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b "><i class="fa fa-cutlery fa-lg fa-fw"></i> Details</a><hr/>
-					</li>
-					<li>
-						<h1>Wir suchen dich!</h1><hr/>
-						<p>Auch du kannst uns auf vielfältige Weise bei der App unterstützen. Wenn du interessiert bist:</p>
-						<a href="about.html" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a>
-						<hr/>
-					</li>
-					<li id="HTWKNews" data-cards-type="text" class="HtwkImage"></li>
-					<li id="HTWKEvents" data-cards-type="text" class="HtwkImage"></li>
-					<li id="LVZNews" data-cards-type="text"></li>
-				</ul>
-			</div>
-
+	<!-- ## SIGNIN DIALOG ## -->
+	<div id="signInDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
+		<div data-role="header" data-theme="a">
+			<h2>Authentifizierung</h2>
 		</div>
+		<div style="padding:10px 20px;">
+			<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
 
-		<!-- ## SIGNIN DIALOG ## -->
-		<div id="signInDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
-	    <div data-role="header" data-theme="a">
-	   		<h2>Authentifizierung</h2>
-	   	</div>
-      <div style="padding:10px 20px;">
-	 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie sich zunächst anmelden!</h4>
-
-	 	 		<form id="signInDialog_form">
-		 	 		<input type="text" id="signInDialog_username" value="" placeholder="Nutzername" autofocus required>
-		 	 		<input type="password" id="signInDialog_password" value="" placeholder="Passwort" autocomplete="off" required>
-		 	 		<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Ok</button>
-		 	 		<button id="signInDialog_abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
-	 	 		</form>
- 	 		</div>
+			<form id="signInDialog_form">
+				<input type="text" id="signInDialog_username" value="" placeholder="Nutzername" autofocus required>
+				<input type="password" id="signInDialog_password" value="" placeholder="Passwort" autocomplete="off" required>
+				<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Ok</button>
+				<button id="signInDialog_abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
+			</form>
 		</div>
-		<!-- ## SIGNIN DIALOG ## -->
-	</body>
+	</div>
+	<!-- ## SIGNIN DIALOG ## -->
+</body>
+
 </html>
 <!--##############################################################################################-->
 <script type="application/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
@@ -111,17 +121,16 @@
 <script type="application/javascript" src="js/staff.js"></script>
 <script type="application/javascript" src="js/gmaps.js"></script>-->
 <script type="application/javascript">
-
 	var analytics;
 
 	// AJAX Setup
 	$.ajaxSetup(CONFIG.AJAX);
 
 	// GENERAL Setup
-	$( document )
+	$(document)
 		.ready(function() {
 
-			$.mobile.defaultPageTransition   = "fade";
+			$.mobile.defaultPageTransition = "fade";
 			$.mobile.defaultDialogTransition = "fade";
 			$.mobile.buttonMarkup.hoverDelay = 0;
 			$.mobile.changePage.defaults.allowSamePageTransition = true;
@@ -134,7 +143,7 @@
 		})
 		.on("deviceready", function() {
 			navigator.splashscreen.hide();
-			if(WURFL.is_mobile){
+			if (WURFL.is_mobile) {
 				analytics = window.analytics;
 				analytics.startTrackerWithId('UA-49336195-2');
 				analytics.trackView('index');
@@ -143,17 +152,17 @@
 		// Header Update on Page Switch
 		.on("pageshow", "div:jqmData(role='page')", function() {
 			var o = $("body").pagecontainer("getActivePage");
-	  	o.find("div.header h1").text(o.jqmData("title"));
+			o.find("div.header h1").text(o.jqmData("title"));
 		})
 		// External Link Handling
 		.on("click", "a.external", openInExternalBrowser)
 		// Open Panal by swiping from the left side
 		.on("swiperight", function(event) {
-			if(event.swipestart.coords[0] < 15) {
+			if (event.swipestart.coords[0] < 15) {
 				$("#panelMenu").panel("open");
-   		}
+			}
 		});
-		/* alternative version for "Open Panal by swiping from the left side"
+	/* alternative version for "Open Panal by swiping from the left side"
 		.on("touchstart", function(e) {
    		var xPos = e.originalEvent.touches[0].pageX;
 			var yPos = e.originalEvent.touches[0].pageY;
@@ -164,41 +173,47 @@
    		}
 		});*/
 
-		// Deactivate Website behind the Panel
-		$("#panelMenu").panel({beforeopen: function() {
-			var o = $("body");
-			o.find(".ui-page").css("position","fixed").css("overflow-y","hidden");
-			o.find(".ui-panel-dismiss").css("position","fixed").css("overflow-y","hidden");
-			var overlayer = $("#overlayer");
-			var newOverlayer = overlayer.clone().removeClass().show().addClass("overlayer-in");
-			overlayer.remove();
-			o.append(newOverlayer);
-		}})
-		.panel({beforeclose: function() {
-			$("#overlayer").removeClass("overlayer-in").addClass("overlayer-out");
-		}})
-		.panel({close: function() {
-			var o = $("body");
-			o.find(".ui-page").css("position","relative").css("overflow-y","visible");
-			o.find(".ui-panel-dismiss").css("position","relative").css("overflow-y","visible");
-			$("#overlayer").hide();
-		}});
+	// Deactivate Website behind the Panel
+	$("#panelMenu").panel({
+			beforeopen: function() {
+				var o = $("body");
+				o.find(".ui-page").css("position", "fixed").css("overflow-y", "hidden");
+				o.find(".ui-panel-dismiss").css("position", "fixed").css("overflow-y", "hidden");
+				var overlayer = $("#overlayer");
+				var newOverlayer = overlayer.clone().removeClass().show().addClass("overlayer-in");
+				overlayer.remove();
+				o.append(newOverlayer);
+			}
+		})
+		.panel({
+			beforeclose: function() {
+				$("#overlayer").removeClass("overlayer-in").addClass("overlayer-out");
+			}
+		})
+		.panel({
+			close: function() {
+				var o = $("body");
+				o.find(".ui-page").css("position", "relative").css("overflow-y", "visible");
+				o.find(".ui-panel-dismiss").css("position", "relative").css("overflow-y", "visible");
+				$("#overlayer").hide();
+			}
+		});
 
 	// SignIn Dialog
-	$( "#signInDialog_abort" ).on("click", function () {
-			$("#signInDialog").popup("close");
-			$("#panelMenu").panel("open");
-		});
+	$("#signInDialog_abort").on("click", function() {
+		$("#signInDialog").popup("close");
+		$("#panelMenu").panel("open");
+	});
 
 	// ## Index Page #############################################################
 	var indexLastReload = 0;
 
 	$("#index")
 		.on("pagecreate", loadParameters)
-		.on("pageshow", function () {
+		.on("pageshow", function() {
 			var time = new Date().getTime();
 
-			if(indexLastReload < (time - 900000)){ //15 min.
+			if (indexLastReload < (time - 900000)) { //15 min.
 				loadingIn();
 				getCurrentPlanWeek();
 				fillCards();
@@ -206,54 +221,55 @@
 			}
 		});
 
-	function getCurrentPlanWeek(){
+	function getCurrentPlanWeek() {
 
 		$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.timetable + "cal")
-		 .done(function(data, status, jqXHR) {
+			.done(function(data, status, jqXHR) {
 
-			defaultErrorHandling(data, status, jqXHR);
-			GLOBAL.DATE.currentPlanWeek = data.current;
-		 })
-		 .fail(ajaxErrorHandler);
+				defaultErrorHandling(data, status, jqXHR);
+				GLOBAL.DATE.currentPlanWeek = data.current;
+			})
+			.fail(ajaxErrorHandler);
 	}
 
-	/*
+	/**
 	 * Fills all corresponding cards (named as arguments) with content
 	 *
 	 */
-	function fillCards(){
-			fillMensaCard();
-			fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig");
-			fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
-			fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
+	function fillCards() {
+		fillMensaCard();
+		fillCard("rss.lvz.news", "LVZNews", "News der LVZ Leipzig");
+		fillCard("rss.htwk.1", "HTWKEvents", "Kommende HTWK Veranstaltungen");
+		fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
 	}
 
-	/*
+	/**
 	 * Fills the mensa card
 	 */
-	function fillMensaCard(){
+	function fillMensaCard() {
 
 		$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa + "/" + CONFIG.MENSA.defaultCanteen)
-		 .done(function (data, status, jqXHR) {
+			.done(function(data, status, jqXHR) {
 
-    	if(!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date'){
-				ajaxErrorHandler(data, status, jqXHR); return;
-			}
+				if (!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date') {
+					ajaxErrorHandler(data, status, jqXHR);
+					return;
+				}
 
-			var meals;
-			if(isEmpty(data.dayContent)){
-				meals = "<p>Heute gibt es leider keine Angebote :-(</p>";
-			} else {
-				meals = data.dayContent.map(function(meal){
-					var line = isEmpty(meal.ingredients) ? "" : "<p>"+meal.ingredients.join(", ").replace(/\[\d*\]/gi,"")+"</p>";
-					return line;
-				});
-			}
+				var meals;
+				if (isEmpty(data.dayContent)) {
+					meals = "<p>Heute gibt es leider keine Angebote :-(</p>";
+				} else {
+					meals = data.dayContent.map(function(meal) {
+						var line = isEmpty(meal.ingredients) ? "" : "<p>" + meal.ingredients.join(", ").replace(/\[\d*\]/gi, "") + "</p>";
+						return line;
+					});
+				}
 
-			$("#mensaCard").find("p").remove(); //remove for reload after 15 min.
-			$("#mensaCard").find("img").after(meals);
+				$("#mensaCard").find("p").remove(); //remove for reload after 15 min.
+				$("#mensaCard").find("img").after(meals);
 			})
-	   .fail(ajaxErrorHandler);
+			.fail(ajaxErrorHandler);
 	}
 
 	/**
@@ -266,40 +282,40 @@
 	function fillCard(feed, card, heading) {
 
 		$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news + '/get?feed=' + feed + '&limit=2')
-		 .done(function(data, status, jqXHR) {
+			.done(function(data, status, jqXHR) {
 
-			defaultErrorHandling(data, status, jqXHR);
+				defaultErrorHandling(data, status, jqXHR);
 
-			var divs = "<h1>"+heading+"</h1><hr>";
+				var divs = "<h1>" + heading + "</h1><hr>";
 
-			divs += data.responseData.feed.entries.map(function(entry){
-				if(isEmpty(entry.content)) {
-					return "";
-				} else {
-					var imgs = entry.content.match(/<img .*?\/?>/); //Get all images
-					var img;
-					if(!isEmpty(imgs)){
-						img = imgs[0].match(/src=".*?\/?"/)[0]; //Extract src property
-						img = img.substring(5,img.length-1).replace("http","https").split(",")[0]; //extract URL as String
-						img = '<img class="card-image" src="https://wit.wurfl.io/' + addhttp(img) + '">';
+				divs += data.responseData.feed.entries.map(function(entry) {
+					if (isEmpty(entry.content)) {
+						return "";
+					} else {
+						var imgs = entry.content.match(/<img .*?\/?>/); //Get all images
+						var img;
+						if (!isEmpty(imgs)) {
+							img = imgs[0].match(/src=".*?\/?"/)[0]; //Extract src property
+							img = img.substring(5, img.length - 1).replace("http", "https").split(",")[0]; //extract URL as String
+							img = '<img class="card-image" src="https://wit.wurfl.io/' + addhttp(img) + '">';
+						}
+						var content = entry.content.replace(/(<([^>]+)>)/ig, "").slice(0, 300); //Remove all HTML tags, Cut to 300 Signs
+
+						content = '<strong>' + entry.title + '</strong>' +
+							'<div>' + img + '<p>' + content + '...</p></div>' +
+							'<a href="' + entry.link + '" class="external" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a><hr>';
+						return content;
 					}
-					var content = entry.content.replace(/(<([^>]+)>)/ig,"").slice(0, 300); //Remove all HTML tags, Cut to 300 Signs
+				}).join("");
 
-					content = '<strong>'+entry.title+'</strong>'+
-										'<div>'+img+'<p>'+content+'...</p></div>'+
-										'<a href="'+entry.link+'" class="external" style="clear: both;" data-role="button"><i class="fa fa-plus-circle fa-fw fa-lg"></i> Weiterlesen...</a><hr>';
-					return content;
-				}
-			}).join("");
+				$("#" + card)
+					.empty() //empty for reload after 15 min
+					.append(divs)
+					.trigger("create");
 
-			$("#"+card)
-				.empty() //empty for reload after 15 min
-				.append(divs)
-				.trigger("create");
-
-			loadingOut();
-	   })
-		 .fail(ajaxErrorHandler);
+				loadingOut();
+			})
+			.fail(ajaxErrorHandler);
 	}
 
 	function addhttp(url) {

@@ -29,52 +29,52 @@
 	</div>
 
 	<script>
-		$( "#news_page" )
+		$("#news_page")
 			.on("pagecreate", initNewsView)
-			.on("pageshow", function () {
-				if(!GLOBAL.INIT.news) loadingIn();
+			.on("pageshow", function() {
+				if (!GLOBAL.INIT.news) loadingIn();
 				$("#btn_refresh")
 					.off()
 					.on("click", function() {
 						$("#news_select").change();
-				 	});
-				if(WURFL.is_mobile)
+					});
+				if (WURFL.is_mobile)
 					analytics.trackView('news');
 			});
 
-		$( "#news_select" )
+		$("#news_select")
 			.change(function() {
-				changeNewsFeed($(this).val(),false);
+				changeNewsFeed($(this).val(), false);
 			});
 
-		$( "#news_btn_more" )
+		$("#news_btn_more")
 			.click(function() {
-				changeNewsFeed($("#news_select").val(),true);
+				changeNewsFeed($("#news_select").val(), true);
 			});
 
 		/**
 		 * Fetches Data from the Server to fill the News-View. Calls changeNewsFeed.
 		 */
 		function initNewsView() {
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news)
-			 .done(function(data, status, jqXHR) {
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news)
+				.done(function(data, status, jqXHR) {
 					defaultErrorHandling(data, status, jqXHR);
 
-					var opts = data.map(function(entry){
-						return '<option value="'+entry.id+'">'+GLOBAL.NEWS.titles[entry.id]+'</option>';
+					var opts = data.map(function(entry) {
+						return '<option value="' + entry.id + '">' + GLOBAL.NEWS.titles[entry.id] + '</option>';
 					}).join("");
 
-					$( "#news_select" )
+					$("#news_select")
 						.empty()
 						.append(opts)
-						.find("option[value='"+CONFIG.NEWS.defaultFeed+"']")
+						.find("option[value='" + CONFIG.NEWS.defaultFeed + "']")
 						.prop("selected", true).end()
 						.selectmenu("refresh")
 						.change();
 
 					GLOBAL.INIT.news = true;
-			  })
-			 .fail(ajaxErrorHandler);
+				})
+				.fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -90,17 +90,20 @@
 
 			loadingIn();
 
-			if(more === true) {
+			if (more === true) {
 				remove = false;
 				offset = $('#news_content_list li').length;
 			}
 
-			$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.news+"/get?", {feed: feed, offset: offset})
-			 .done(function(data, status, jqXHR) {
+			$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.news + "/get?", {
+					feed: feed,
+					offset: offset
+				})
+				.done(function(data, status, jqXHR) {
 					defaultErrorHandling(data, status, jqXHR);
-				 	createNewsEntries(data.responseData.feed.entries, remove);
-			  })
-			 .fail(ajaxErrorHandler);
+					createNewsEntries(data.responseData.feed.entries, remove);
+				})
+				.fail(ajaxErrorHandler);
 		}
 
 		/**
@@ -113,40 +116,44 @@
 			var list = $("#news_content_list");
 			var listlength = list.find("li").length;
 
-			var entries = data.map(function(entry){
+			var entries = data.map(function(entry) {
 				var date = createDateTimeStamp(new Date(entry.publishedDate));
 				var link = isEmpty(entry.content) ? 'popup" data-rel="popup"' : ++listlength + '"';
-				var lis =	'<li><a href="#news_'+link+'>'+
-									'	<h3>'+entry.title+'</h3>'+
-									'	<p>'+entry.contentSnippet+'</p>'+
-									'	<p><small>'+date+'</small></p>'+
-									'</a></li>';
-				var div = '<div id="news_'+link+' data-role="page" data-theme="b" data-title="News" data-subpage="true" class="newsdetails">'+
-									'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
-									'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
-									'		<h1>HTWK App</h1>'+
-									'	</div>'+
-	    						'	<div role="main" class="ui-content">'+
-	    						'		<ul class="nativeDroidCards">'+
-	    						'			<li data-cards-type="text">'+
-	    						'				<h1>'+entry.title+'</h1><hr/>'+
-	    						'				<p>'+entry.content+'<br/><br/></p>'+
-	    						'				<h6>'+date+'</h6>'+
-	    						'				<p><b>Quelle:</b> <a href="'+entry.link+'" class="ui-btn ui-btn-b ui-mini external"><i class="fa fa-link fa-lg fa-fw"></i> Link zur Nachricht</a></p>'+
-	    						'			</li>'+
-	    						'		</ul>'+
-	    						'	</div>'+
-	    						'</div>';
-				return [lis,div];
+				var lis = '<li><a href="#news_' + link + '>' +
+					'	<h3>' + entry.title + '</h3>' +
+					'	<p>' + entry.contentSnippet + '</p>' +
+					'	<p><small>' + date + '</small></p>' +
+					'</a></li>';
+				var div = '<div id="news_' + link + ' data-role="page" data-theme="b" data-title="News" data-subpage="true" class="newsdetails">' +
+					'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">' +
+					'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>' +
+					'		<h1>HTWK App</h1>' +
+					'	</div>' +
+					'	<div role="main" class="ui-content">' +
+					'		<ul class="nativeDroidCards">' +
+					'			<li data-cards-type="text">' +
+					'				<h1>' + entry.title + '</h1><hr/>' +
+					'				<p>' + entry.content + '<br/><br/></p>' +
+					'				<h6>' + date + '</h6>' +
+					'				<p><b>Quelle:</b> <a href="' + entry.link + '" class="ui-btn ui-btn-b ui-mini external"><i class="fa fa-link fa-lg fa-fw"></i> Link zur Nachricht</a></p>' +
+					'			</li>' +
+					'		</ul>' +
+					'	</div>' +
+					'</div>';
+				return [lis, div];
 			});
 
-			var lis = entries.map(function(arr){return arr[0];}).join("");
-			var divs = $(entries.map(function(arr){return arr[1];}).join(""));
+			var lis = entries.map(function(arr) {
+				return arr[0];
+			}).join("");
+			var divs = $(entries.map(function(arr) {
+				return arr[1];
+			}).join(""));
 			var as = divs.find("div.ui-content").find("a");
 
-			if(!isEmpty(as)){
+			if (!isEmpty(as)) {
 				as.addClass("external").end();
-				for(var i = 0; i < as.length ; i++){
+				for (var i = 0; i < as.length; i++) {
 					var a = $(as[i]);
 					a.attr('href', addhttp(a.attr('href')));
 				}
@@ -154,9 +161,9 @@
 			divs.find("img").css("max-width", "100%").css("height", "auto");
 
 
-			if(remove === true) {
+			if (remove === true) {
 				list.empty();
-				$( "div.newsdetails" ).remove();
+				$("div.newsdetails").remove();
 			}
 
 			list.append(lis)

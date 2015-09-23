@@ -8,87 +8,107 @@
 	<div role="main" class="ui-content">
 		<div id="mail_inbox">
 			<br/>
-			<ul id="mail_list" data-role="listview"></ul><br/><br/>
+			<ul id="mail_list" data-role="listview"></ul>
+			<br/>
+			<br/>
 			<a id="mail_btn_more" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-arrow-d">Mehr</a>
 		</div>
 		<div>
 			<form id="mail_sendForm">
 				<input type="email" data-clear-btn="false" id="mail_new_to" value="" placeholder="Empfänger" required>
-				<input type="text" id="mail_new_cc" value="" placeholder="Kopie an" >
+				<input type="text" id="mail_new_cc" value="" placeholder="Kopie an">
 				<input type="text" id="mail_new_subject" value="" placeholder="Betreff" required>
 				<textarea id="mail_new_content" placeholder="Ihr Text ..." required></textarea>
 			</form>
 		</div>
 
 		<div data-role="popup" id="mail_popupDialog" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
-		    <div data-role="header" data-theme="a">
-			    <h2>Wirklich senden?</h2>
-		    </div>
-		    <div style="padding:10px 20px;">
-					<h3>Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
-					<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
-					<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Senden</a>
-		    </div>
+			<div data-role="header" data-theme="a">
+				<h2>Wirklich senden?</h2>
+			</div>
+			<div style="padding:10px 20px;">
+				<h3>Sind Sie sich sicher, dass Sie die Nachricht versenden wollen?</h3>
+				<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
+				<a href="#" id="btn_mail_really" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Senden</a>
+			</div>
 		</div>
 	</div>
 
 	<div id="emailDialog" data-role="popup" data-dismissible="false" data-theme="a" data-overlay-theme="a" data-transition="pop" class="ui-corner-all">
-	    <div data-role="header" data-theme="a">
-	   		<h2>E-Mail Adresse</h2>
-	   	</div>
-      <div style="padding:10px 20px;">
-	 	 		<h4>Damit Sie diesen Dienst nutzen können, müssen Sie ihre E-Mail Adresse angeben! Ausschließlich eine HTWK E-Mail Adresse nach dem Muster:<br><br>Mitarbeiter: max.muster@htwk-leipzig.de<br>Studenten: max.muster@stud.htwk-leipzig.de<br><br>wird funktionieren.</h4>
-
-	 	 		<form id="emailDialog_form">
-		 	 		<input type="email" id="emailDialog_inputEmail" placeholder="max.muster@stud.htwk-leipzig.de" value="" autofocus required>
-					<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Speichern</button>
-					<button id="emailDialog_abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
-				</form>
- 	 		</div>
+		<div data-role="header" data-theme="a">
+			<h2>E-Mail Adresse</h2>
 		</div>
+		<div style="padding:10px 20px;">
+			<h4>Damit Sie diesen Dienst nutzen können, müssen Sie ihre E-Mail Adresse angeben! Ausschließlich eine HTWK E-Mail Adresse nach dem Muster:
+				<br>
+				<br>Mitarbeiter: max.muster@htwk-leipzig.de
+				<br>Studenten: max.muster@stud.htwk-leipzig.de
+				<br>
+				<br>wird funktionieren.</h4>
+
+			<form id="emailDialog_form">
+				<input type="email" id="emailDialog_inputEmail" placeholder="max.muster@stud.htwk-leipzig.de" value="" autofocus required>
+				<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check">Speichern</button>
+				<button id="emailDialog_abort" type="button" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-back">Abbrechen</button>
+			</form>
+		</div>
+	</div>
 
 	<div id="mail_footer" data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
 		<div data-role="navbar">
 			<ul>
 				<li><a id="btn_mail_abort" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-back">Abbrechen</a></li>
 				<li><a id="btn_mail_write" href="#" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-mail">Neue Mail</a></li>
-				<li><button id="btn_mail_send" type="submit" form="mail_sendForm" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-forward">Senden</button></li>
+				<li>
+					<button id="btn_mail_send" type="submit" form="mail_sendForm" class="ui-btn ui-mini ui-corner-all ui-shadow ui-btn-icon-left ui-icon-forward">Senden</button>
+				</li>
 			</ul>
 		</div>
 	</div>
 
 	<script>
-		$( "#mail_page" )
+		$("#mail_page")
 			.on("pagecreate", function() {
 				$("#mail_popupDialog").trigger("create").enhanceWithin().popup();
 				$("#emailDialog").trigger("create").enhanceWithin().popup();
 				$("#mail_sendForm").hide();
 				$("#btn_mail_abort").hide();
 				$("#btn_mail_send").hide();
-				$("#btn_refresh").off().on("click", function() {if(!isEmpty(CONFIG.AUTH.email)) initMailView(false); else emailDialogPopup();});
+				$("#btn_refresh").off().on("click", function() {
+					if (!isEmpty(CONFIG.AUTH.email)) initMailView(false);
+					else emailDialogPopup();
+				});
 			})
 			.on("pageshow", function() {
 
-				if( isEmpty(CONFIG.AUTH.credentials))
-	    		openSignInDialog(function(){setTimeout(emailDialogPopup, 3000);});
-	    	else {
-	    		if(isEmpty(CONFIG.AUTH.email))
-		    		emailDialogPopup();
-	    		else {
-	    			if(GLOBAL.INIT.mail === false)
+				if (isEmpty(CONFIG.AUTH.credentials))
+					openSignInDialog(function() {
+						setTimeout(emailDialogPopup, 3000);
+					});
+				else {
+					if (isEmpty(CONFIG.AUTH.email))
+						emailDialogPopup();
+					else {
+						if (GLOBAL.INIT.mail === false)
 							initMailView(false);
 					}
-	    	}
+				}
 
-	    	if(WURFL.is_mobile)
-		    	analytics.trackView('mail');
-			 });
+				if (WURFL.is_mobile)
+					analytics.trackView('mail');
+			});
 
-		$("#btn_mail_write").on("click", function() { if(!isEmpty(CONFIG.AUTH.email)) showMailSendForm(false); else emailDialogPopup();});
+		$("#btn_mail_write").on("click", function() {
+			if (!isEmpty(CONFIG.AUTH.email)) showMailSendForm(false);
+			else emailDialogPopup();
+		});
 
 		$("#btn_mail_abort").on("click", showMailInBox);
 
-		$("#mail_btn_more").click(function () { if(!isEmpty(CONFIG.AUTH.email)) initMailView(true); else emailDialogPopup();});
+		$("#mail_btn_more").click(function() {
+			if (!isEmpty(CONFIG.AUTH.email)) initMailView(true);
+			else emailDialogPopup();
+		});
 
 		$("#mail_sendForm").submit(function() {
 			event.preventDefault();
@@ -106,24 +126,26 @@
 			$("#mail_popupDialog").popup("close");
 
 			loadingIn("Ihre Mail wird versendet ...");
-			$.post(CONFIG.SERVER.base+CONFIG.SERVER.mails+
-				"?credentials="+CONFIG.AUTH.credentials+"&salt="+CONFIG.AUTH.salt+
-				"&to="+to+"&cc="+cc+
-				"&subject="+subject+"&message="+content+
-				"&from="+CONFIG.AUTH.email)
-			 .done(function(data, status, jqXHR) {emailWorkaround(data, false);})
-			.fail(function(jqxhr, textStatus, error){ //Hack, because the Server doesn't respond with an empty JSON object --> Can't check for exceptions on Server-Side, have to assume that everything is alright
-				console.log(jqxhr.status);
-				if(jqxhr.status == 200)
-					emailWorkaround(jqxhr, true);
-				else
-					ajaxErrorHandler();
+			$.post(CONFIG.SERVER.base + CONFIG.SERVER.mails +
+					"?credentials=" + CONFIG.AUTH.credentials + "&salt=" + CONFIG.AUTH.salt +
+					"&to=" + to + "&cc=" + cc +
+					"&subject=" + subject + "&message=" + content +
+					"&from=" + CONFIG.AUTH.email)
+				.done(function(data, status, jqXHR) {
+					emailWorkaround(data, false);
+				})
+				.fail(function(jqxhr, textStatus, error) { //Hack, because the Server doesn't respond with an empty JSON object --> Can't check for exceptions on Server-Side, have to assume that everything is alright
+					console.log(jqxhr.status);
+					if (jqxhr.status == 200)
+						emailWorkaround(jqxhr, true);
+					else
+						ajaxErrorHandler();
 				});
 		});
 
-		function emailWorkaround(data, jump){
+		function emailWorkaround(data, jump) {
 			loadingOut();
-			if(jump || isEmpty(data.exception))
+			if (jump || isEmpty(data.exception))
 				loadingIn("Ihre Mail wurde erfolgreich versendet!", true);
 			else
 				loadingIn("Beim Versenden der Mail ist ein Fehler aufgetreten!", true);
@@ -133,21 +155,24 @@
 		}
 		//*************************************************
 		function emailDialogPopup() {
-			if(isEmpty(CONFIG.AUTH.email))
-				$("#emailDialog").popup("open", { positionTo: "window", transition: "pop" });
+			if (isEmpty(CONFIG.AUTH.email))
+				$("#emailDialog").popup("open", {
+					positionTo: "window",
+					transition: "pop"
+				});
 		}
 
-		$("#emailDialog_form").submit(function (event){
+		$("#emailDialog_form").submit(function(event) {
 			event.preventDefault();
 			CONFIG.AUTH.email = $("#emailDialog_inputEmail").val();
 			saveParameters();
-			$( "#emailDialog" ).popup("close");
+			$("#emailDialog").popup("close");
 			initMailView(false);
 		});
 
 		$("#emailDialog_abort").on("click", function() {
-			$( "#emailDialog" ).popup("close");
-			$( "#panelMenu" ).panel("open");
+			$("#emailDialog").popup("close");
+			$("#panelMenu").panel("open");
 		});
 
 		/**
@@ -161,7 +186,7 @@
 			var subj = tmp.find("span.mail-subject").text();
 
 			$("#mail_new_to").val(from);
-			$("#mail_new_subject").val("Re: "+subj);
+			$("#mail_new_subject").val("Re: " + subj);
 
 			history.back();
 			showMailSendForm(true);
@@ -184,11 +209,11 @@
 		 * Display Mail Send-Formular.
 		 */
 		function showMailSendForm(answer) {
-			if(isEmpty(answer)) answer = false;
+			if (isEmpty(answer)) answer = false;
 
-			if(!answer) $("#mail_new_to").val("");
+			if (!answer) $("#mail_new_to").val("");
 			$("#mail_new_cc").val("");
-			if(!answer) $("#mail_new_subject").val("");
+			if (!answer) $("#mail_new_subject").val("");
 			$("#mail_new_content").val("");
 
 			$("#mail_inbox").hide();
@@ -209,30 +234,30 @@
 			var offset = 0;
 			var remove = true;
 
-			if(more == true) {
+			if (more == true) {
 				remove = false;
 				offset = $('#mail_list li a').length;
 			}
 
-			if(!isEmpty(CONFIG.AUTH.credentials)) {
+			if (!isEmpty(CONFIG.AUTH.credentials)) {
 				loadingIn();
-				$.getJSON(CONFIG.SERVER.base+CONFIG.SERVER.mailg, {
-					credentials: CONFIG.AUTH.credentials,
-					salt: CONFIG.AUTH.salt,
-					offset: offset}
-				)
-				.done(function(data, status, jqXHR) {
-					if(isEmpty(data.exception)) {
-					 	fillMailList(data, remove);
-						loadingOut();
-						GLOBAL.INIT.mail = true;
-					} else {
-						loadingOut();
-						loadingIn("Es konnten keine Mails abgerufen werden!", true);
-						setTimeout(loadingOut, 3000);
-					}
-				})
-				.fail(ajaxErrorHandler);
+				$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mailg, {
+						credentials: CONFIG.AUTH.credentials,
+						salt: CONFIG.AUTH.salt,
+						offset: offset
+					})
+					.done(function(data, status, jqXHR) {
+						if (isEmpty(data.exception)) {
+							fillMailList(data, remove);
+							loadingOut();
+							GLOBAL.INIT.mail = true;
+						} else {
+							loadingOut();
+							loadingIn("Es konnten keine Mails abgerufen werden!", true);
+							setTimeout(loadingOut, 3000);
+						}
+					})
+					.fail(ajaxErrorHandler);
 			}
 		};
 
@@ -244,13 +269,13 @@
 			var body = $("body");
 			var list = $("#mail_list");
 
-			if(!isEmpty(data)) {
-				if(remove) {
+			if (!isEmpty(data)) {
+				if (remove) {
 					list.empty();
 					body.find("div.maildetails").remove();
 				}
 
-				for(var k in data) {
+				for (var k in data) {
 					mail = data[k];
 
 					// Format: Thu Oct 09 14:54:21 <CEST,CET> 2008
@@ -286,16 +311,16 @@
 		 */
 		function createMailEntry(mail, sdate) {
 			var li = "";
-			var time = mail.sendDate.getHours()+":"+mail.sendDate.getMinutes();
+			var time = mail.sendDate.getHours() + ":" + mail.sendDate.getMinutes();
 
-			if(sdate.getTime()!=mail.sendDate.getTime())
-				li += '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count">'+createDateStamp(mail.sendDate)+'</li>';
+			if (sdate.getTime() != mail.sendDate.getTime())
+				li += '<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-li-has-count">' + createDateStamp(mail.sendDate) + '</li>';
 
-			li += '<li><a href="#mail_'+mail.id+'" class="ui-btn ui-btn-icon-right ui-icon-carat-r">'+
-						'	<h2>'+mail.subject+'</h2>'+
-						'	<p><strong>'+escape(mail.from)+'</strong></p>'+
-						'	<p class="ui-li-aside"><strong>'+time+'</strong></p>'+
-						'</a></li>';
+			li += '<li><a href="#mail_' + mail.id + '" class="ui-btn ui-btn-icon-right ui-icon-carat-r">' +
+				'	<h2>' + mail.subject + '</h2>' +
+				'	<p><strong>' + escape(mail.from) + '</strong></p>' +
+				'	<p class="ui-li-aside"><strong>' + time + '</strong></p>' +
+				'</a></li>';
 
 			return li;
 		};
@@ -313,29 +338,29 @@
 
 			subj = escape(mail.subject);
 
-			toList = mail.toList?mail.toList.toString():"";
+			toList = mail.toList ? mail.toList.toString() : "";
 			toList = toList.replace(/[;:]/g, "").split(",").toString();
 			toList = escape(toList);
 
-			msg = 	'<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">'+mail.message+'</pre></div>';
+			msg = '<div style="max-width:100%;max-height:100%;overflow:auto;"><pre style="white-space:pre-wrap;">' + mail.message + '</pre></div>';
 
-			div = $('<div id="mail_'+mail.id+'" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="b">'+
-							'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">'+
-							'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>'+
-							'		<h1>HTWK App</h1>'+
-							'	</div>'+
-							'	<div data-role="content">'+
-							'		<ul class="nativeDroidCards">'+
-							'			<li>'+
-  						'				<p><strong>Von: </strong><span class="mail-from">'+from+'</span></br>'+
-  						'				<strong>An: </strong>'+toList+'</br>'+
-  						'				<strong>Betreff: </strong><span class="mail-subject">'+subj+'</span></br>'+
-  						'				</p><hr>'+msg+
-  						'				<hr><a href="#" class="btn_mail_answer ui-btn ui-btn-b ui-corner-all ui-shadow">Antworten</a>'+
-  						'			</li>'+
-							'		</ul>'+
-							'	</div>'+
-							'</div>');
+			div = $('<div id="mail_' + mail.id + '" data-role="page" data-title="Mail" data-subpage="true" class="maildetails" data-theme="b">' +
+				'	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">' +
+				'		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>' +
+				'		<h1>HTWK App</h1>' +
+				'	</div>' +
+				'	<div data-role="content">' +
+				'		<ul class="nativeDroidCards">' +
+				'			<li>' +
+				'				<p><strong>Von: </strong><span class="mail-from">' + from + '</span></br>' +
+				'				<strong>An: </strong>' + toList + '</br>' +
+				'				<strong>Betreff: </strong><span class="mail-subject">' + subj + '</span></br>' +
+				'				</p><hr>' + msg +
+				'				<hr><a href="#" class="btn_mail_answer ui-btn ui-btn-b ui-corner-all ui-shadow">Antworten</a>' +
+				'			</li>' +
+				'		</ul>' +
+				'	</div>' +
+				'</div>');
 
 			div.find("a.btn_mail_answer").click(answerMail);
 

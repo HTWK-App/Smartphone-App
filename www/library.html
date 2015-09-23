@@ -1,26 +1,27 @@
 <div id="library_page" data-role="page" data-title="Bibliothek" data-theme="b" data-dom-cache="true">
 
   <style>
-    #library_search{
+    #library_search {
       padding: 5px 0 5px 30px;
     }
 
-    #library_search_form label{
+    #library_search_form label {
       position: absolute;
       left: 17px;
       top: 59px;
     }
   </style>
 
-	<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
-		<a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
-		<h1>HTWK App</h1>
-	</div>
+  <div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b" class="header">
+    <a href="#panelMenu" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all btn_menu"><i class="fa fa-bars fa-lg"></i></a>
+    <h1>HTWK App</h1>
+  </div>
 
-	<div role="main" class="ui-content">
+  <div role="main" class="ui-content">
     <ul class="nativeDroidCards">
       <li data-cards-type="text">
-        <h1>Literatursuche</h1><hr>
+        <h1>Literatursuche</h1>
+        <hr>
         <form id="library_search_form">
           <label data-role="none" for="library_search"><i class="fa fa-search"></i></label>
           <input id="library_search" type="text" placeholder="Suche..." autofocus required>
@@ -31,39 +32,47 @@
         <button id="library_login" type="button"><i class="fa fa-fw fa-link"></i>Zum Login</button>
       </li>
       <li data-cards-type="text">
-        <h1>Literaturangebot</h1><hr>
-        <p>Die HTWK bietet eine ganze Palette von Literaturressourcen an, die nicht alle über das KAPRI durchsucht werden können. Sucht ihr nach <strong>IEEE Standards</strong>, <strong>Zeitschriften</strong>, <strong>Patenten</strong> oder etwas ganz anderem? Schaut doch einfach mal in der Digitalen Bibliothek vorbei!</p>
+        <h1>Literaturangebot</h1>
+        <hr>
+        <p>Die HTWK bietet eine ganze Palette von Literaturressourcen an, die nicht alle über das KAPRI durchsucht werden können. Sucht ihr nach
+          <strong>IEEE Standards</strong>,
+          <strong>Zeitschriften</strong>,
+          <strong>Patenten</strong> oder etwas ganz anderem? Schaut doch einfach mal in der Digitalen Bibliothek vorbei!</p>
         <a href="https://www.htwk-leipzig.de/de/biblio/rech-start/" class="ui-btn ui-corner-all external"><i class="fa fa-fw fa-link"></i>Digitale Bibliothek</a>
-        <br><h1>Literaturverwaltung</h1><hr>
-        <p>Gerade für Abschlussarbeiten bieten sich Literaturmanagementprogramme an, die eure Literatur sammeln, die nötigen Ausschnitte kopieren und verwalten. Die HTWK Bibliothek bietet dabei das Programm <strong>Citavi</strong> an, für das von der Bibliothek Schulungen durchgeführt werden. Alternativ bietet sich die Web-Anwendung <strong>BibSonomy</strong> an.</p>
+        <br>
+        <h1>Literaturverwaltung</h1>
+        <hr>
+        <p>Gerade für Abschlussarbeiten bieten sich Literaturmanagementprogramme an, die eure Literatur sammeln, die nötigen Ausschnitte kopieren und verwalten. Die HTWK Bibliothek bietet dabei das Programm
+          <strong>Citavi</strong> an, für das von der Bibliothek Schulungen durchgeführt werden. Alternativ bietet sich die Web-Anwendung
+          <strong>BibSonomy</strong> an.</p>
         <a href="https://www.htwk-leipzig.de/de/biblio/schulung/literaturverwaltung/" class="ui-btn ui-corner-all external"><i class="fa fa-fw fa-link"></i>Citavi Schulung</a>
         <a href="http://www.bibsonomy.org/" class="ui-btn ui-corner-all external"><i class="fa fa-fw fa-link"></i>BibSonomy</a>
       </li>
     </ul>
-	</div>
+  </div>
 
-	<script>
-  	$( "#building_page" )
-  		.on("pagecreate", function(){})
-  		.on("pageshow", function() {
-  			loadingIn();
-				if(WURFL.is_mobile)
-					analytics.trackView('library');
-  		 });
+  <script>
+    $("#building_page")
+      .on("pagecreate", function() {})
+      .on("pageshow", function() {
+        loadingIn();
+        if (WURFL.is_mobile)
+          analytics.trackView('library');
+      });
 
-    $("#library_search_form").submit( function(event){
+    $("#library_search_form").submit(function(event) {
       event.preventDefault();
       var searchTerm = $("#library_search_form input").val();
-      var url =  'http://kapri.htwk-leipzig.de/primo_library/libweb/action/search.do?fn=search&ct=search&initialSearch=true&mode=Basic&tab=default_tab&indx=1&dum=true&srt=rank&vid=49LEIPHTWK_VU1&frbg=&tb=t&vl%28freeText0%29=' + searchTerm.replace(' ','+') + '&scp.scps=scope%3A%2849LEIPHTWK%29%2CEbscoLocal49LEIPHTWK%2Cprimo_central_multiple_fe';
-      window.open( url, "_system", "location=yes");
+      var url = 'http://kapri.htwk-leipzig.de/primo_library/libweb/action/search.do?fn=search&ct=search&initialSearch=true&mode=Basic&tab=default_tab&indx=1&dum=true&srt=rank&vid=49LEIPHTWK_VU1&frbg=&tb=t&vl%28freeText0%29=' + searchTerm.replace(
+        ' ', '+') + '&scp.scps=scope%3A%2849LEIPHTWK%29%2CEbscoLocal49LEIPHTWK%2Cprimo_central_multiple_fe';
+      window.open(url, "_system", "location=yes");
     })
 
-    $("#library_login").on("click", function(event){
+    $("#library_login").on("click", function(event) {
       event.preventDefault();
-      var url = 'https://htwk-shib.hosted.exlibrisgroup.com/pds?lang=ger&func=load-login&institute=49LEIPHTWK_SHIB&url=http://kapri.htwk-leipzig.de/primo_library/libweb/action/login.do?targetURL=http://kapri.htwk-leipzig.de/primo_library/libweb/action/search.do?mode=Basic&vid=49LEIPHTWK_VU1&tab=default_tab&';
-      window.open( url, "_system", "location=yes");
+      var url =
+        'https://htwk-shib.hosted.exlibrisgroup.com/pds?lang=ger&func=load-login&institute=49LEIPHTWK_SHIB&url=http://kapri.htwk-leipzig.de/primo_library/libweb/action/login.do?targetURL=http://kapri.htwk-leipzig.de/primo_library/libweb/action/search.do?mode=Basic&vid=49LEIPHTWK_VU1&tab=default_tab&';
+      window.open(url, "_system", "location=yes");
     })
-
-
-	</script>
+  </script>
 </div>
