@@ -50,7 +50,6 @@
 			</ul>
 		</div>
 		<!--- MENU -->
-
 		<div id="overlayer"></div>
 
 		<div id="index" data-role="page" data-theme="b">
@@ -132,7 +131,7 @@
 			$("#panelMenu").enhanceWithin().panel();
 			$("#signInDialog").trigger("create").enhanceWithin().popup();
 
-			$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=addhttp"); // There has to be a callback, that is not required to do something
+			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=addhttp"); // There has to be a callback, that is not required to do something
 		})
 		.on("deviceready", function() {
 			navigator.splashscreen.hide();
@@ -150,14 +149,13 @@
 		// External Link Handling
 		.on("click", "a.external", openInExternalBrowser);
 
-		//TODO: Verify on Android (works on Firefox / Chrome)
-		//Swipe right to open panel
-		$(document).on("swiperight", function() {
-		$("#panelMenu").panel("open");
-		});
-		// Swipe left to close panel
-		$(document).on("swipeleft", page, function() {
-			$("#panelMenu").panel("close");
+		// Detect swipe from left screen side (15px range)
+		$(document).on('touchstart', function(e) {
+   	var xPos = e.originalEvent.touches[0].pageX;
+		//
+		if(xPos < 15) {
+			$("#panelMenu").panel("open");
+   		}
 		});
 
 		// Deactivate Website behind the Panel

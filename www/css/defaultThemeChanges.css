@@ -29,7 +29,8 @@ body, input, select, textarea, button, .ui-btn {
 	color: white;
 	text-shadow: none;
 }
-/*new stuff */
+
+/*****new stuff*****/
 .ui-header {
 	padding-top: 9.5px;
 }
@@ -46,10 +47,6 @@ body, input, select, textarea, button, .ui-btn {
 .ui-bar-b {
 	height: 56px; /*56px; = android design spec*/
  }
-
- .ui-panel {
-background-color: white;
-}
 
 /************************** Header/Footer styling */
 
