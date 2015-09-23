@@ -151,10 +151,14 @@
 
 		// Detect swipe from left screen side (15px range)
 		$(document).on('touchstart', function(e) {
-   	var xPos = e.originalEvent.touches[0].pageX;
-		//
-		if(xPos < 15) {
-			$("#panelMenu").panel("open");
+   		var xPos = e.originalEvent.touches[0].pageX;
+			var yPos = e.originalEvent.touches[0].pageY;
+			var sHight = $(window).height();
+			// 30px barriers on +/- y-axis
+			if(xPos < 15 && yPos > 30 && yPos < sHight - 30) {
+				$("#panelMenu").panel("open");
+				console.log(yPos);
+				console.log(sHight);
    		}
 		});
 
