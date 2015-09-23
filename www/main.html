@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>HTWK App</title>
@@ -14,6 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="css/HTWK-App.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.icons.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.custom.structure.min.css" defer>
+		<!--<link rel="stylesheet" type="text/css" href="css/defaultThemeChanges.css" defer>-->
 		<link rel="stylesheet" type="text/css" href="css/defaultThemeChanges.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" defer>
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto" defer>
@@ -49,7 +50,6 @@
 			</ul>
 		</div>
 		<!--- MENU -->
-
 		<div id="overlayer"></div>
 
 		<div id="index" data-role="page" data-theme="b">
@@ -131,7 +131,7 @@
 			$("#panelMenu").enhanceWithin().panel();
 			$("#signInDialog").trigger("create").enhanceWithin().popup();
 
-			$.getScript( "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=addhttp"); // There has to be a callback, that is not required to do something
+			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&callback=addhttp"); // There has to be a callback, that is not required to do something
 		})
 		.on("deviceready", function() {
 			navigator.splashscreen.hide();
@@ -148,6 +148,19 @@
 		})
 		// External Link Handling
 		.on("click", "a.external", openInExternalBrowser);
+
+		// Detect swipe from left screen side (15px range)
+		$(document).on("touchstart", function(e) {
+   		var xPos = e.originalEvent.touches[0].pageX;
+			var yPos = e.originalEvent.touches[0].pageY;
+			var sHight = $(window).height();
+			// 30px barriers on +/- y-axis
+			if(xPos < 15 && yPos > 30 && yPos < sHight - 30) {
+				$("#panelMenu").panel("open");
+				//console.log(yPos);
+				//console.log(sHight);
+   		}
+		});
 
 		// Deactivate Website behind the Panel
 		$("#panelMenu").panel({beforeopen: function() {
@@ -183,7 +196,7 @@
 		.on("pageshow", function () {
 			var time = new Date().getTime();
 
-			if(indexLastReload < (time - 900000)){ //15 minuits
+			if(indexLastReload < (time - 900000)){ //15 min.
 				loadingIn();
 				getCurrentPlanWeek();
 				fillCards();
@@ -202,7 +215,7 @@
 		 .fail(ajaxErrorHandler);
 	}
 
-	/**
+	/*
 	 * Fills all corresponding cards (named as arguments) with content
 	 *
 	 */
@@ -213,7 +226,7 @@
 			fillCard("rss.htwk.3", "HTWKNews", "Neuste HTWK Nachrichten");
 	}
 
-	/**
+	/*
 	 * Fills the mensa card
 	 */
 	function fillMensaCard(){
@@ -235,7 +248,7 @@
 				});
 			}
 
-			$("#mensaCard").find("p").remove(); //remove for reload after 15 Minuits
+			$("#mensaCard").find("p").remove(); //remove for reload after 15 min.
 			$("#mensaCard").find("img").after(meals);
 			})
 	   .fail(ajaxErrorHandler);
@@ -278,7 +291,7 @@
 			}).join("");
 
 			$("#"+card)
-				.empty() //empty for reload after 15 Minuits
+				.empty() //empty for reload after 15 min
 				.append(divs)
 				.trigger("create");
 
