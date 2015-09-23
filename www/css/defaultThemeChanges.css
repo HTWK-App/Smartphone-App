@@ -29,6 +29,27 @@ body, input, select, textarea, button, .ui-btn {
 	color: white;
 	text-shadow: none;
 }
+/*new stuff */
+.ui-header {
+	padding-top: 9.5px;
+}
+
+.fa {
+	padding-top: 10.5px;
+}
+
+.ui-page-theme-b .ui-footer .ui-btn:focus {
+	background-color: #2196f3;
+	border-color: #2196f3;
+ }
+
+.ui-bar-b {
+	height: 56px; /*56px; = android design spec*/
+ }
+
+ .ui-panel {
+background-color: white;
+}
 
 /************************** Header/Footer styling */
 
@@ -51,16 +72,12 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	border-color: #2196f3;
 	color: white;
 	border: none;
-	padding: 16px;
 }
 
 .ui-page-theme-b .ui-header .ui-title {
 	text-align: left;
-	padding-left: 72px;
-	padding-top: 4px;
-	padding-bottom: 20px;
+	padding-left: 50px;
 	margin-left: 0;
-	height: 36px; /*56px; = android design spec*/
 }
 
 .ui-page-theme-b .ui-footer .ui-title {
@@ -200,7 +217,7 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 	background-color: #ffffff;
 }
 
-.card-image{
+.card-image {
 	float: left;
 	min-width: 300px;
 	max-width: 300px;
@@ -227,8 +244,7 @@ a.ui-btn-left.ui-btn.ui-btn-inline.ui-corner-all.ui-mini,
 .ui-page-theme-b .nativeDroidCards li p > .ui-btn:hover,
 .ui-page-theme-b .nativeDroidCards li form button,
 .ui-page-theme-b .nativeDroidCards li form button:hover {
-	color: #2196f3
-;
+	color: #2196f3;
 	background-color: #ffffff;
 	border: none;
 	border-radius: 0;
