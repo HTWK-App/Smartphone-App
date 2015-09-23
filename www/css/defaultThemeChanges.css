@@ -32,7 +32,8 @@ body, input, select, textarea, button, .ui-btn {
 
 /*****new stuff*****/
 .ui-header {
-	padding-top: 9.5px;
+	padding-top: 1.2px;
+	font-size: 1.4em;
 }
 
 .fa {
@@ -42,7 +43,7 @@ body, input, select, textarea, button, .ui-btn {
 .ui-page-theme-b .ui-footer .ui-btn:focus {
 	background-color: #2196f3;
 	border-color: #2196f3;
- }
+}
 
 .ui-bar-b {
 	height: 56px; /*56px; = android design spec*/
