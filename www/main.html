@@ -162,16 +162,6 @@
 				$("#panelMenu").panel("open");
 			}
 		});
-	/* alternative version for "Open Panal by swiping from the left side"
-		.on("touchstart", function(e) {
-   		var xPos = e.originalEvent.touches[0].pageX;
-			var yPos = e.originalEvent.touches[0].pageY;
-			var sHight = $(window).height();
-			// 30px barriers on +/- y-axis
-			if(xPos < 15 && yPos > 30 && yPos < sHight - 30) {
-				$("#panelMenu").panel("open");
-   		}
-		});*/
 
 	// Deactivate Website behind the Panel
 	$("#panelMenu").panel({
@@ -293,7 +283,7 @@
 						return "";
 					} else {
 						var imgs = entry.content.match(/<img .*?\/?>/); //Get all images
-						var img;
+						var img = "";
 						if (!isEmpty(imgs)) {
 							img = imgs[0].match(/src=".*?\/?"/)[0]; //Extract src property
 							img = img.substring(5, img.length - 1).replace("http", "https").split(",")[0]; //extract URL as String
