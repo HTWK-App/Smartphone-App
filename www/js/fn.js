@@ -296,7 +296,7 @@ function loadParameters() {
   help = localStorage.getItem("defaultCanteen");
   if (!isEmpty(help)) CONFIG.MENSA.defaultCanteen = help;
   help = localStorage.getItem("timetable");
-  if (!isEmpty(help)) CONFIG.TIMETABLE = JSON.parse(help);
+  if (!isEmpty(help)) CONFIG.TIMETABLE.faculty = JSON.parse(help).faculty;
 }
 
 function saveParameters() {

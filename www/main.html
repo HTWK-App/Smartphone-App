@@ -114,8 +114,8 @@
 <script type="application/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
 <script type="application/javascript" src="js/lib/jquery.mobile.custom.min.js"></script>
 <script type="application/javascript" src="js/compressed.min.js"></script>
-<script type="application/javascript" src="js/lib/wurfl.js"></script>
-<!--<script type="application/javascript" src="js/config.js"></script>
+<!--<script type="application/javascript" src="js/lib/wurfl.js"></script>
+<script type="application/javascript" src="js/config.js"></script>
 <script type="application/javascript" src="js/fn.js"></script>
 <script type="application/javascript" src="js/building.js"></script>
 <script type="application/javascript" src="js/staff.js"></script>
@@ -218,6 +218,7 @@
 
 				defaultErrorHandling(data, status, jqXHR);
 				GLOBAL.DATE.currentPlanWeek = data.current;
+				CONFIG.TIMETABLE.semester = data.semester;
 			})
 			.fail(ajaxErrorHandler);
 	}
@@ -240,26 +241,18 @@
 
 		$.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa + "/" + CONFIG.MENSA.defaultCanteen)
 			.done(function(data, status, jqXHR) {
-
-				if (!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date') {
-					ajaxErrorHandler(data, status, jqXHR);
-					return;
-				}
-
-				var meals;
-				if (isEmpty(data.dayContent)) {
-					meals = "<p>Heute gibt es leider keine Angebote :-(</p>";
-				} else {
-					meals = data.dayContent.map(function(meal) {
-						var line = isEmpty(meal.ingredients) ? "" : "<p>" + meal.ingredients.join(", ").replace(/\[\d*\]/gi, "") + "</p>";
-						return line;
-					});
-				}
+				var meals = data.dayContent.map(function(meal) {
+					var line = isEmpty(meal.ingredients) ? "" : "<p>" + meal.ingredients.join(", ").replace(/\[\d*\]/gi, "") + "</p>";
+					return line;
+				});
 
 				$("#mensaCard").find("p").remove(); //remove for reload after 15 min.
 				$("#mensaCard").find("img").after(meals);
 			})
-			.fail(ajaxErrorHandler);
+			.fail(function(jqxhr, textStatus, error){
+				$("#mensaCard").find("p").remove(); //remove for reload after 15 min.
+				$("#mensaCard").find("img").after('<p>Heute gibt es leider keine Angebote :-(</p>');
+			});
 	}
 
 	/**

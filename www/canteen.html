@@ -151,11 +151,6 @@
 		function fillCanteenDay(id, date) {
 			return $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mensa + "/" + id + "/" + createServerDateStamp(date))
 				.done(function(data, status, jqXHR) {
-					if (!isEmpty(data.exception) && data.exception != 'javax.naming.directory.InvalidAttributeValueException: no entries found for given date') {
-						ajaxErrorHandler(data, status, jqXHR, dayEmpty(date));
-						return;
-					}
-
 					var meals = '<ul data-nativedroid-plugin="cards" class="nativeDroidCards">';
 
 					if (isEmpty(data.dayContent)) {
@@ -206,7 +201,19 @@
 
 					loadingOut();
 				})
-				.fail(ajaxErrorHandler);
+				.fail(function(){
+					var meals = '<ul data-nativedroid-plugin="cards" class="nativeDroidCards">'+
+						'<li data-cards-type="text">' +
+						'	<div class="inset">' +
+						'		<p>Leider sind keine Angebote verfügbar :-(</p>' +
+						'	</div>' +
+						'</li></ul>';
+
+					$("#canteen_page div.canteen_content").filter(":jqmData(day='" + getWeekDay(date).id + "')")
+						.empty()
+						.append(meals)
+						.trigger("create");
+				});
 		}
 
 		function dayEmpty(date) {
