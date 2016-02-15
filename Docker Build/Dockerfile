@@ -1,8 +1,5 @@
-FROM ubuntu:14.04.2
-MAINTAINER Roy Meissner <rmeissn@gmail.com>
-
-# Prevent some error messages
-ENV DEBIAN_FRONTEND noninteractive
+FROM ubuntu:14.04
+MAINTAINER Roy Meissner <roymeissn@gmail.com>
 
 RUN apt-get update && apt-get -y upgrade
 
@@ -18,7 +15,7 @@ RUN apt-get -y install git wget npm ant lib32stdc++6 lib32z1
 # ----------------- #
 
 # Fix NodeJS and install cordova
-RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g cordova@5.0.0
+RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g cordova@6.0.0
 
 ## Create a user for the web app
 RUN adduser --gecos "Application" --disabled-password cordova
@@ -47,7 +44,7 @@ RUN chmod +x /home/cordova/build.sh
 
 RUN apt-get autoremove -y wget && apt-get -y clean && \
 		rm -rf /var/lib/apt/lists/*
-		
+
 # -------- #
 #   Run!   #
 # -------- #
