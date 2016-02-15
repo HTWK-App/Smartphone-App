@@ -6,59 +6,60 @@
  *
  * UTF-8
  */
+'use strict';
 
 var CONFIG = {
 
   SERVER: {
     // LIVE *****
-    base: "https://htwk-app.imn.htwk-leipzig.de/",
+    base: 'https://htwk-app.imn.htwk-leipzig.de/',
     // LOCAL *****
-    //base: "http://localhost:8080/app/",
-    staff: "info/staff/",
-    builds: "info/building",
-    sport: "info/sport",
-    academical: "info/academical/",
-    news: "news",
-    weather: "weather?location=",
-    mensa: "mensa",
-    timetable: "timetable/",
-    auth: "auth",
-    qis: "qis/get",
-    room: "room/",
-    mailg: "mailbox/get",
-    mailn: "mailbox/new",
-    mails: "mailbox/send",
-    pushnotification: "auth/push"
+    //base: 'http://localhost:8080/app/',
+    staff: 'info/staff/',
+    builds: 'info/building',
+    sport: 'info/sport',
+    academical: 'info/academical/',
+    news: 'news',
+    weather: 'weather?location=',
+    mensa: 'mensa',
+    timetable: 'timetable/',
+    auth: 'auth',
+    qis: 'qis/get',
+    room: 'room/',
+    mailg: 'mailbox/get',
+    mailn: 'mailbox/new',
+    mails: 'mailbox/send',
+    pushnotification: 'auth/push'
   },
   LANGUAGE: {
-    availableShort: ["de_DE", "en_EN"],
-    availableLong: ["Deutsch", "English"],
-    set: "de_DE"
+    availableShort: ['de_DE', 'en_EN'],
+    availableLong: ['Deutsch', 'English'],
+    set: 'de_DE'
   },
   AUTH: {
-    username: "",
-    password: "",
-    credentials: "",
-    salt: "",
-    email: "",
+    username: '',
+    password: '',
+    credentials: '',
+    salt: '',
+    email: '',
     checking: false,
     correct: false
   },
   PUSH: {
-    senderId: "1058861665734",
+    senderId: '1058861665734',
     enabled: false,
-    regid: "",
+    regid: '',
     registered: false,
     STATUS: {
-      1000: "pushRequest",
-      2000: "newNews",
-      4001: "newMail"
+      1000: 'pushRequest',
+      2000: 'newNews',
+      4001: 'newMail'
     }
   },
 
   GENERAL: {
     student: true,
-    name: ""
+    name: ''
   },
   TIMETABLE: {
     semester: null,
@@ -103,17 +104,17 @@ var CONFIG = {
     temporary: []
   },
   NEWS: {
-    defaultFeed: "rss.htwk.3"
+    defaultFeed: 'rss.htwk.3'
   },
   MENSA: {
     defaultCanteen: 118
   },
   AJAX: {
-    scriptCharset: "utf-8",
-    contentType: "application/json; charset=utf-8",
+    scriptCharset: 'utf-8',
+    contentType: 'application/json; charset=utf-8',
     headers: {
-      "Accept": "application/json; charset=utf-8",
-      "Content-Type": "application/json; charset=utf-8"
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json; charset=utf-8'
     }
   }
 };
@@ -142,37 +143,37 @@ var GLOBAL = {
     formats: {
       regexp: /(\d{4})(\d{2})(\d{2})/,
       // RegExp Result from YYYYMMDD
-      en: "$1-$2-$3",
-      de: "$3.$2.$1"
+      en: '$1-$2-$3',
+      de: '$3.$2.$1'
     },
     weekdays: {
       0: {
-        id: "Son",
-        name: "Sonntag"
+        id: 'Son',
+        name: 'Sonntag'
       },
       1: {
-        id: "Mon",
-        name: "Montag"
+        id: 'Mon',
+        name: 'Montag'
       },
       2: {
-        id: "Tue",
-        name: "Dienstag"
+        id: 'Tue',
+        name: 'Dienstag'
       },
       3: {
-        id: "Wed",
-        name: "Mittwoch"
+        id: 'Wed',
+        name: 'Mittwoch'
       },
       4: {
-        id: "Thu",
-        name: "Donnerstag"
+        id: 'Thu',
+        name: 'Donnerstag'
       },
       5: {
-        id: "Fri",
-        name: "Freitag"
+        id: 'Fri',
+        name: 'Freitag'
       },
       6: {
-        id: "Sat",
-        name: "Samstag"
+        id: 'Sat',
+        name: 'Samstag'
       }
     },
     currentWeek: null, //Array with weekdays
@@ -180,21 +181,21 @@ var GLOBAL = {
   },
   NEWS: {
     titles: {
-      "rss.digiboard": "HTWK Digiboard",
-      "rss.eit.1": "EIT Kolloquien-Termine",
-      "rss.eit.2": "EIT Kolloquien-Nachrichten",
-      "rss.htwk.1": "HTWK Veranstaltungen",
-      "rss.htwk.2": "HTWK Stellenausschreibungen",
-      "rss.htwk.3": "HTWK Nachrichten",
-      "rss.imn.1": "IMN Nachrichten",
-      "rss.imn.2": "IMN Verteidigungen",
-      "rss.imn.3": "IMN Termine",
-      "rss.me.1": "ME Fachschaftsrat",
-      "rss.medien": "ME Nachrichten",
-      "rss.sport": "Sportportal",
-      "rss.stura": "HTWK Studentenrat",
-      "rss.wiwi": "WiWi Fachschaftsrats-Termine",
-      "rss.lvz.news": "LVZ Leipzig Nachrichten"
+      'rss.digiboard': 'HTWK Digiboard',
+      'rss.eit.1': 'EIT Kolloquien-Termine',
+      'rss.eit.2': 'EIT Kolloquien-Nachrichten',
+      'rss.htwk.1': 'HTWK Veranstaltungen',
+      'rss.htwk.2': 'HTWK Stellenausschreibungen',
+      'rss.htwk.3': 'HTWK Nachrichten',
+      'rss.imn.1': 'IMN Nachrichten',
+      'rss.imn.2': 'IMN Verteidigungen',
+      'rss.imn.3': 'IMN Termine',
+      'rss.me.1': 'ME Fachschaftsrat',
+      'rss.medien': 'ME Nachrichten',
+      'rss.sport': 'Sportportal',
+      'rss.stura': 'HTWK Studentenrat',
+      'rss.wiwi': 'WiWi Fachschaftsrats-Termine',
+      'rss.lvz.news': 'LVZ Leipzig Nachrichten'
     }
   },
   MAIL: {

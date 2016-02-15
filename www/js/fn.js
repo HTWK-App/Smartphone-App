@@ -5,6 +5,7 @@
  *
  * UTF-8
  */
+'use strict';
 
 /**
  * Capitalize first Letter in String.
@@ -25,7 +26,7 @@ function capitalize(str) {
  * @return Boolean
  */
 function isEmpty(val) {
-  return (val === "" ||
+  return (val === '' ||
     val === {} ||
     val === null ||
     val === undefined ||
@@ -46,10 +47,10 @@ function createServerDateStamp(date) {
   var mm = date.getMonth() + 1; //January is 0!
   var yyyy = date.getFullYear();
 
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
 
-  return yyyy + "" + mm + "" + dd;
+  return yyyy + '' + mm + '' + dd;
 }
 
 /**
@@ -66,8 +67,8 @@ function createDateStamp(date) {
   var mm = date.getMonth() + 1; //January is 0!
   var yyyy = date.getFullYear();
 
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
 
   return GLOBAL.DATE.weekdays[date.getDay()].name + ', ' + dd + '.' + mm + '.' + yyyy;
 }
@@ -103,13 +104,13 @@ function createDateTimeStamp(date) {
   var mi = date.getMinutes();
   var ss = date.getSeconds();
 
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-  if (hh < 10) hh = "0" + hh;
-  if (mi < 10) mi = "0" + mi;
-  if (ss < 10) ss = "0" + ss;
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+  if (hh < 10) hh = '0' + hh;
+  if (mi < 10) mi = '0' + mi;
+  if (ss < 10) ss = '0' + ss;
 
-  return (dd + "." + mm + "." + yyyy + " " + hh + ":" + mi + ":" + ss);
+  return (dd + '.' + mm + '.' + yyyy + ' ' + hh + ':' + mi + ':' + ss);
 }
 
 /**
@@ -169,11 +170,11 @@ function getWeekDay(date) {
  * @return escaped String
  */
 function escape(str) {
-  return str.replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return str.replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 /**
@@ -187,15 +188,15 @@ function loadingIn(msg, textonly) {
     textonly = false;
   }
   if (isEmpty(msg)) {
-    msg = "Daten werden abgerufen";
+    msg = 'Daten werden abgerufen';
   }
 
-  $.mobile.loading("show", {
+  $.mobile.loading('show', {
     text: msg,
     textVisible: true,
     textonly: textonly,
     disabled: true,
-    theme: "a"
+    theme: 'a'
   });
 }
 
@@ -203,24 +204,24 @@ function loadingIn(msg, textonly) {
  * Hide Loading-Spinner.
  */
 function loadingOut() {
-  $.mobile.loading("hide");
+  $.mobile.loading('hide');
 }
 
 function openSignInDialog(success) {
-  $("#signInDialog_form").off()
+  $('#signInDialog_form').off()
     .submit(function(event) {
       event.preventDefault();
-      saveUsernamePassword($("#signInDialog_username").val(), $("#signInDialog_password").val(), function() {
-        $("#signInDialog").popup("close");
+      saveUsernamePassword($('#signInDialog_username').val(), $('#signInDialog_password').val(), function() {
+        $('#signInDialog').popup('close');
         if ($.isFunction(success)) success.call(this);
       });
     });
 
-  $("#signInDialog")
-    .css("display", "block")
-    .popup("open", {
-      positionTo: "window",
-      transition: "pop"
+  $('#signInDialog')
+    .css('display', 'block')
+    .popup('open', {
+      positionTo: 'window',
+      transition: 'pop'
     });
 }
 
@@ -233,34 +234,34 @@ function openSignInDialog(success) {
  * @param Function fail ... Failure Callback
  */
 function saveUsernamePassword(username, password, done, fail) {
-  loadingIn("Ihre Einstellungen werden gespeichert...");
+  loadingIn('Ihre Einstellungen werden gespeichert...');
 
   CONFIG.AUTH.username = username;
   CONFIG.AUTH.checking = true;
 
-  $.post(CONFIG.SERVER.base + CONFIG.SERVER.auth + "?username=" + username + "&password=" + password)
+  $.post(CONFIG.SERVER.base + CONFIG.SERVER.auth + '?username=' + username + '&password=' + password)
     .done(function(data, status, jqXHR) {
       CONFIG.AUTH.credentials = data.encryptedCredentials;
       CONFIG.AUTH.salt = data.salt;
 
       loadingOut();
-      loadingIn("Es wird geprüft, ob ihre Daten korrekt sind...");
+      loadingIn('Es wird geprüft, ob ihre Daten korrekt sind...');
 
-      $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mailg + "?credentials=" + CONFIG.AUTH.credentials + "&salt=" + CONFIG.AUTH.salt + "&offset=1")
+      $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.mailg + '?credentials=' + CONFIG.AUTH.credentials + '&salt=' + CONFIG.AUTH.salt + '&offset=1')
         .done(function(data, status, jqXHR) {
           loadingOut();
           if (!isEmpty(data.exception)) {
-            CONFIG.AUTH.username = "";
-            CONFIG.AUTH.credentials = "";
-            CONFIG.AUTH.salt = "";
+            CONFIG.AUTH.username = '';
+            CONFIG.AUTH.credentials = '';
+            CONFIG.AUTH.salt = '';
             CONFIG.AUTH.correct = false;
             CONFIG.AUTH.checking = false;
-            loadingIn("Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!", true);
+            loadingIn('Ihre Daten waren inkorrekt. Bitte versuchen Sie es erneut!', true);
           } else {
             CONFIG.AUTH.correct = true;
             CONFIG.AUTH.checking = false;
             saveParameters();
-            loadingIn("Ihre Daten waren korrekt und wurden gespeichert!", true);
+            loadingIn('Ihre Daten waren korrekt und wurden gespeichert!', true);
           }
           setTimeout(loadingOut, 3000);
 
@@ -276,47 +277,47 @@ function saveUsernamePassword(username, password, done, fail) {
  * @param Event e ... Click-Event of Link
  */
 function openInExternalBrowser(e) {
-  window.open($(e.target).attr("href"), "_system", "location=yes");
+  window.open($(e.target).attr('href'), '_system', 'location=yes');
   e.preventDefault();
 }
 
 function loadParameters() {
-  var help = localStorage.getItem("username");
+  var help = localStorage.getItem('username');
   if (!isEmpty(help)) CONFIG.AUTH.username = help;
-  help = localStorage.getItem("credentials");
+  help = localStorage.getItem('credentials');
   if (!isEmpty(help)) CONFIG.AUTH.credentials = help;
-  help = localStorage.getItem("salt");
+  help = localStorage.getItem('salt');
   if (!isEmpty(help)) CONFIG.AUTH.salt = help;
-  help = localStorage.getItem("email");
+  help = localStorage.getItem('email');
   if (!isEmpty(help)) CONFIG.AUTH.email = help;
-  help = localStorage.getItem("language");
+  help = localStorage.getItem('language');
   if (!isEmpty(help)) CONFIG.LANGUAGE.set = help;
-  help = localStorage.getItem("defaultFeed");
+  help = localStorage.getItem('defaultFeed');
   if (!isEmpty(help)) CONFIG.NEWS.defaultFeed = help;
-  help = localStorage.getItem("defaultCanteen");
+  help = localStorage.getItem('defaultCanteen');
   if (!isEmpty(help)) CONFIG.MENSA.defaultCanteen = help;
-  help = localStorage.getItem("timetable");
+  help = localStorage.getItem('timetable');
   if (!isEmpty(help)) CONFIG.TIMETABLE.faculty = JSON.parse(help).faculty;
 }
 
 function saveParameters() {
-  localStorage.setItem("username", CONFIG.AUTH.username);
-  localStorage.setItem("credentials", CONFIG.AUTH.credentials);
-  localStorage.setItem("salt", CONFIG.AUTH.salt);
-  localStorage.setItem("email", CONFIG.AUTH.email);
-  localStorage.setItem("language", CONFIG.LANGUAGE.set);
-  localStorage.setItem("defaultFeed", CONFIG.NEWS.defaultFeed);
-  localStorage.setItem("defaultCanteen", CONFIG.MENSA.defaultCanteen);
-  localStorage.setItem("timetable", JSON.stringify(CONFIG.TIMETABLE));
+  localStorage.setItem('username', CONFIG.AUTH.username);
+  localStorage.setItem('credentials', CONFIG.AUTH.credentials);
+  localStorage.setItem('salt', CONFIG.AUTH.salt);
+  localStorage.setItem('email', CONFIG.AUTH.email);
+  localStorage.setItem('language', CONFIG.LANGUAGE.set);
+  localStorage.setItem('defaultFeed', CONFIG.NEWS.defaultFeed);
+  localStorage.setItem('defaultCanteen', CONFIG.MENSA.defaultCanteen);
+  localStorage.setItem('timetable', JSON.stringify(CONFIG.TIMETABLE));
 }
 
 function ajaxErrorHandler(data, status, jqXHR, callback) {
   loadingOut();
-  var text = "Leider ist ein Fehler aufgetreten. Versuchen Sie es später erneut!";
+  var text = 'Leider ist ein Fehler aufgetreten. Versuchen Sie es später erneut!';
   loadingIn(text, true);
   setTimeout(loadingOut, 4000);
   setTimeout(function() {
-    $("#panelMenu").panel("open");
+    $('#panelMenu').panel('open');
   }, 4500);
   if ($.isFunction(callback))
     callback.call(this);

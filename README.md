@@ -5,7 +5,7 @@ Smartphone-App
 [![Language](https://img.shields.io/badge/language-JS%20ECMA2015-lightgrey.svg)]()
 [![Language](https://img.shields.io/badge/language-CSS3-lightgrey.svg)]()
 [![Framework](https://img.shields.io/badge/framework-jQueryMobile%201.4.5-blue.svg)](https://jquerymobile.com/)
-[![Lines of Code](https://img.shields.io/badge/loc-~3270-lightgrey.svg)]()
+[![Lines of Code](https://img.shields.io/badge/loc-~3350-lightgrey.svg)]()
 
 This is the sourcecode of the Smartphone application of the Leipzig University of Applied Sciences. An up-to-date build is hosted at [https://htwk-app.imn.htwk-leipzig.de/app](https://htwk-app.imn.htwk-leipzig.de/app).
 

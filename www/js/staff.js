@@ -4,6 +4,8 @@
  * @ param Int id ... ID of the Staff Member
  *
  */
+'use strict';
+
 function loadStaffDetails(id) {
   if (WURFL.is_mobile)
     analytics.trackView('staff#' + id);
@@ -13,7 +15,7 @@ function loadStaffDetails(id) {
     .done(function(data, status, jqXHR) {
       defaultErrorHandling(data, status, jqXHR);
 
-      var name = data.name.split(", ");
+      var name = data.name.split(', ');
       var div = '<div id="staff_' + id + '" data-role="page" data-theme="b" data-subpage="true" data-title="Mitarbeiter & Professoren" class="staffdetails">' +
         '	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">' +
         '		<a href="#" data-rel="back" class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all"><i class="fa fa-reply fa-lg"></i></a>' +
@@ -48,16 +50,16 @@ function loadStaffDetails(id) {
         '	</div>' +
         '</div>';
 
-      div = $(div).on("pagehide", function() {
+      div = $(div).on('pagehide', function() {
         $(this).remove();
       });
 
-      $("body")
+      $('body')
         .append(div)
-        .trigger("create");
+        .trigger('create');
 
       $.mobile.initializePage();
-      $.mobile.changePage("#staff_" + id);
+      $.mobile.changePage('#staff_' + id);
 
       loadingOut();
     })

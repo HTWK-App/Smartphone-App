@@ -1,3 +1,4 @@
+'use strict';
 var GMAPS = {
   destination: [],
   mapcontainer: null,
@@ -28,7 +29,7 @@ var GMAPS = {
       center: dest,
       zoom: 16
     };
-    var map = new google.maps.Map(GMAPS.mapcontainer.find(".map-canvas")[0], mapOptions);
+    var map = new google.maps.Map(GMAPS.mapcontainer.find('.map-canvas')[0], mapOptions);
     var marker = new google.maps.Marker({
       position: dest,
       map: map
@@ -51,7 +52,7 @@ var GMAPS = {
       scrollwheel: false,
       mapTypeId: google.maps.MapTypeId.WALKING
     };
-    var map = new google.maps.Map(GMAPS.mapcontainer.find(".map-canvas")[0], mapOptions);
+    var map = new google.maps.Map(GMAPS.mapcontainer.find('.map-canvas')[0], mapOptions);
     var directionsDisplay = new google.maps.DirectionsRenderer({
       map: map
     });

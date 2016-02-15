@@ -4,16 +4,18 @@
  * @ param Event e
  *
  */
+'use strict';
+
 function buildingLoadBuildingDetails(id) {
   if (WURFL.is_mobile) {
     analytics.trackView('building#' + id);
   }
   loadingIn();
 
-  $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.builds + "/" + id)
+  $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.builds + '/' + id)
     .done(function(data, status, jqXHR) {
 
-      var desc = isEmpty(data.description[0]) ? "" : data.description[0] + "</br>";
+      var desc = isEmpty(data.description[0]) ? '' : data.description[0] + '</br>';
 
       var div = '<div id="building_' + id + '" data-role="page" data-theme="b" data-subpage="true" data-title="Gebäude" data-destination="' + data.latLng.replace(/ /, '') + '">' +
         '	<div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" class="header">' +
@@ -45,21 +47,21 @@ function buildingLoadBuildingDetails(id) {
 
       div = $(div);
 
-      $("body")
+      $('body')
         .append(div)
-        .trigger("create");
+        .trigger('create');
 
-      div.on("pageshow", function() {
-          var thi = $(this);
+      div.on('pageshow', function() {
+        var thi = $(this);
 
-          GMAPS.initGmap(thi.attr('data-destination').split(','), thi);
-        })
-        .on("pagehide", function() {
-          $(this).remove();
-        });
+        GMAPS.initGmap(thi.attr('data-destination').split(','), thi);
+      })
+      .on('pagehide', function() {
+        $(this).remove();
+      });
 
       $.mobile.initializePage();
-      $.mobile.changePage("#building_" + id);
+      $.mobile.changePage('#building_' + id);
 
       loadingOut();
     })
