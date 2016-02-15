@@ -1,0 +1,34 @@
+{
+  "name": "HTWK-App",
+  "version": "1.14.5",
+  "description": "Smartphone-Application of the HTWK Leipzig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HTWK-App/Smartphone-App"
+  },
+  "bugs": "https://github.com/HTWK-App/Smartphone-App/issues",
+  "author": "Roy Meissner (https://rmeissn.github.io/)",
+  "license": "GPL-3.0",
+  "main": "server.js",
+  "scripts": {
+    "clean": "rm -R ./node_modules/",
+    "lint": "eslint -c .eslintrc ./**/*.js",
+    "pretest": "npm run lint",
+    "test": "echo There is nothing to do",
+    "countLOC": "sloc -f cli-table -k total,source,comment,empty -e node_modules\\|www/js/lib\\|www/images\\|www/fonts\\|www/css ./",
+    "countLOC:details": "sloc -f cli-table -d -e node_modules\\|www/js/lib\\|www/images\\|www/fonts\\|www/css ./",
+    "minify:js": "uglifyjs ./www/js/lib/wurfl.js ./www/js/config.js ./www/js/fn.js ./www/js/building.js ./www/js/staff.js ./www/js/gmaps.js --compress -o ./www/js/compressed.min.js",
+    "minify:css": "cleancss ./www/css/defaultThemeChanges.css -o ./www/css/defaultThemeChanges.min.css"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": "5.5.x"
+  },
+  "devDependencies": {
+    "clean-css": "^3.4.9",
+    "eslint": "^1.10.3",
+    "pushstate-server": "^1.8.1",
+    "sloc": "^0.1.10",
+    "uglify-js": "^2.6.1"
+  }
+}
