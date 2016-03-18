@@ -8,8 +8,11 @@ cd /home/cordova/Smartphone-App/
 
 git pull
 
-cordova platform add android
+npm install
+npm run addPlatforms
+npm run build
+#cordova platform add android
 
-cordova build android --release
+#cordova build android --release
 
 cp /home/cordova/Smartphone-App/platforms/android/build/outputs/apk/android-release-unsigned.apk /home/cordova/APK/HTWKApp-release-unsigned.apk

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run -it --rm  -v ~/.www/Smartphone-App/:/home/cordova/Smartphone-App/ cordova/htwk-app
+docker run -it --rm  -v ~/.git/Smartphone-App/:/home/cordova/Smartphone-App/ cordova/htwk-app

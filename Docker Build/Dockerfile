@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM node:5.6-slim
 MAINTAINER Roy Meissner <roymeissn@gmail.com>
 
 RUN apt-get update && apt-get -y upgrade
@@ -8,14 +8,14 @@ RUN apt-get update && apt-get -y upgrade
 # ---------------- #
 
 RUN apt-get -y install openjdk-7-jdk
-RUN apt-get -y install git wget npm ant lib32stdc++6 lib32z1
+RUN apt-get -y install git wget ant lib32stdc++6 lib32z1
 
 # ----------------- #
 #   Configuration   #
 # ----------------- #
 
 # Fix NodeJS and install cordova
-RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g cordova@6.0.0
+#RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g cordova@6.0.0
 
 ## Create a user for the web app
 RUN adduser --gecos "Application" --disabled-password cordova

@@ -11,16 +11,20 @@
   "license": "GPL-3.0",
   "main": "server.js",
   "scripts": {
+    "addPlatforms": "cordova platform add android",
+    "build": "cordova build android --release",
+    "build:dev": "cordova build android",
     "clean": "rm -R ./node_modules/",
     "lint": "eslint -c .eslintrc ./**/*.js",
-    "pretest": "npm run lint",
     "test": "echo There is nothing to do",
     "countLOC": "sloc -f cli-table -k total,source,comment,empty -e node_modules\\|www/js/lib\\|www/images\\|www/fonts\\|www/css ./ && echo missing files: && sloc -f cli-table -k total,source,comment,empty ./www/css/defaultThemeChanges.css",
     "countLOC:details": "sloc -f cli-table -d -e node_modules\\|www/js/lib\\|www/images\\|www/fonts\\|www/css ./ && sloc -f cli-table -d ./www/css/defaultThemeChanges.css",
     "minify:js": "echo Not working yet! && #uglifyjs ./www/js/lib/wurfl.js ./www/js/config.js ./www/js/fn.js ./www/js/building.js ./www/js/staff.js ./www/js/gmaps.js --compress -o ./www/js/compressed.min.js",
     "minify:css": "cleancss ./www/css/defaultThemeChanges.css -o ./www/css/defaultThemeChanges.min.css"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cordova": "^6.0.x"
+  },
   "engines": {
     "node": "^5.5.x"
   },
