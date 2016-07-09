@@ -10,7 +10,7 @@ git pull
 
 npm install
 npm run addPlatforms
-npm run build
+npm run build:dev
 #cordova platform add android
 
 #cordova build android

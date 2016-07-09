@@ -1,4 +1,4 @@
-FROM node:5.6-slim
+FROM node:6.2-slim
 MAINTAINER Roy Meissner <roymeissn@gmail.com>
 
 RUN apt-get update && apt-get -y upgrade
@@ -14,9 +14,6 @@ RUN apt-get -y install git wget ant lib32stdc++6 lib32z1
 #   Configuration   #
 # ----------------- #
 
-# Fix NodeJS and install cordova
-#RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g cordova@6.0.0
-
 ## Create a user for the web app
 RUN adduser --gecos "Application" --disabled-password cordova
 RUN mkdir /home/cordova/APK
@@ -29,7 +26,7 @@ RUN cd /home/cordova/ && \
     wget $ANDROID_SDK && tar -xzvf $ANDROID_SDK_FILENAME && \
     rm $ANDROID_SDK_FILENAME
 
-RUN echo "y" | /home/cordova/android-sdk-linux/tools/android update sdk -u --all --filter platform-tools,android-23,build-tools-23.0.2,extra-google-google_play_services
+RUN echo "y" | /home/cordova/android-sdk-linux/tools/android update sdk -u --all --filter platform-tools,android-23,build-tools-23.0.3
 
 RUN cd /home/cordova/ && git clone https://github.com/HTWK-App/Smartphone-App.git
 WORKDIR /home/cordova/Smartphone-App
