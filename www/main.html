@@ -143,11 +143,11 @@
 		})
 		.on("deviceready", function() {
 			navigator.splashscreen.hide();
-			if (WURFL.is_mobile) {
+			/*if (WURFL.is_mobile) {
 				analytics = window.analytics;
 				analytics.startTrackerWithId('UA-49336195-2');
 				analytics.trackView('index');
-			}
+			}*/
 		})
 		// Header Update on Page Switch
 		.on("pageshow", "div:jqmData(role='page')", function() {

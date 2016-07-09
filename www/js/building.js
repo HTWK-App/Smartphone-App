@@ -7,9 +7,9 @@
 'use strict';
 
 function buildingLoadBuildingDetails(id) {
-  if (WURFL.is_mobile) {
+  /*if (WURFL.is_mobile) {
     analytics.trackView('building#' + id);
-  }
+  }*/
   loadingIn();
 
   $.getJSON(CONFIG.SERVER.base + CONFIG.SERVER.builds + '/' + id)

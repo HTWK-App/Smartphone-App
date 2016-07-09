@@ -51,8 +51,8 @@
 				} else if ($("#actualWeek").attr("data-week") != -1) {
 					timetableGetDayData();
 				}
-				if (WURFL.is_mobile)
-					analytics.trackView('timetable');
+				/*if (WURFL.is_mobile)
+					analytics.trackView('timetable');*/
 			})
 			.on("swipeleft", nextDay)
 			.on("swiperight", prevDay);

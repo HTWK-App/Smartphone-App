@@ -42,9 +42,9 @@
 			.on("pagecreate", initCanteenView)
 			.on("pageshow", function() {
 				if (!GLOBAL.INIT.mensa) loadingIn();
-				if (WURFL.is_mobile) {
+				/*if (WURFL.is_mobile) {
 					analytics.trackView('mensa');
-				}
+				}*/
 			})
 			.on("click", "#canteen_nav a", function(e) {
 				$("#canteen_page")
