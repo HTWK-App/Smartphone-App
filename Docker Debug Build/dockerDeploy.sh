@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t cordova/htwk-app ./
+sudo ocker build -t cordova/htwk-app ./
